@@ -1,0 +1,6 @@
+{
+    "main": "osu.js",
+    "dependencies" : {
+        "nodesu" : " https://github.com/nicholastay/nodesu.git"
+    }
+}
