@@ -1,0 +1,26 @@
+{
+  "name": "clara-owo",
+  "version": "0.0.1",
+  "description": "A Extensible Discord.JS bot.",
+  "main": "bot.js",
+  "scripts": {
+    "test": "node bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sr229/owo-whats-this.git"
+  },
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "author": "sr229",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sr229/owo-whats-this/issues"
+  },
+  "homepage": "https://github.com/sr229/owo-whats-this#readme",
+  "dependencies": {
+    "discord.js": "^9.3.0"
+  }
+}
