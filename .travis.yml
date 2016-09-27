@@ -1,11 +1,5 @@
 sudo: required
 dist: trusty
-addons:
-  apt:
-    packages:
-      - nodejs-legacy
-      - npm
-      - node
 language: node_js
 node_js:
   - "6"
@@ -15,4 +9,5 @@ install:
 - npm -v
 - babel -v
 - mkdir bin
+script :
 - npm build
