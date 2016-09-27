@@ -4,7 +4,7 @@
   "description": "A Extensible Discord.JS bot.",
   "main": "bot.js",
   "scripts": {
-    "build": "babel bot.js -w -d bin "
+    "build": "./node_modules/.bin/babel bot.js -w -d bin"
   },
   "repository": {
     "type": "git",

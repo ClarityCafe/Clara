@@ -5,9 +5,9 @@ node_js:
   - "6.1"
   - "6.6"
 install:
-- npm -g install
+- npm install -S
 - npm -v
-- babel -v
+- ./node_modules/.bin/babel -v
 - mkdir bin
 script :
  - npm run build
