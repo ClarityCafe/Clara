@@ -14,4 +14,4 @@ install:
 - babel -v
 - mkdir bin
 script :
-- npm build
+ - babel bot.js -w -d bin 
