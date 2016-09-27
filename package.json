@@ -4,7 +4,6 @@
   "description": "A Extensible Discord.JS bot.",
   "main": "bot.js",
   "scripts": {
-    "build": "babel src -d lib"
   },
   "repository": {
     "type": "git",
