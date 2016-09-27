@@ -1,17 +1,13 @@
 sudo: required
 dist: trusty
-addons:
-  apt:
-    packages:
-       - babel
 language: node_js
 node_js:
-  - "6"
   - "6.1"
+  - "6.6"
 install:
 - npm -g install
 - npm -v
 - babel -v
 - mkdir bin
 script :
- - babel bot.js -w -d bin 
+ - npm run build
