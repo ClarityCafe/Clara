@@ -1,4 +1,4 @@
-# owo-whats-this
+# owo-whats-this [![Build Status](https://travis-ci.org/sr229/owo-whats-this.svg?branch=master)](https://travis-ci.org/sr229/owo-whats-this)
 a really experimental (and borked) Discord.js bot wirtten in EsNEXT (Es6)
 
 # Running
