@@ -5,7 +5,7 @@ node_js:
   - "6.1"
   - "6.6"
 install:
--cd project
+- cd project
 - npm install -S
 - npm -v
 - ./node_modules/.bin/babel -v
