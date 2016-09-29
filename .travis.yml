@@ -5,10 +5,9 @@ node_js:
   - "6.1"
   - "6.6"
 install:
-- cd project
+- cd owo-whats-this
 - npm install -S
 - npm -v
-- ./node_modules/.bin/babel -v
 - mkdir bin
 script :
  - npm run build
