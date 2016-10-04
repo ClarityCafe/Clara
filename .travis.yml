@@ -10,4 +10,4 @@ install:
 - node --v8-options | grep harm
 - mkdir out
 script :
-- /home/travis/.nvm/node/v6.6.0/lib/clara-owo/node_modules/.bin/babel bot.js -d out  
+- /node_modules/.bin/babel bot.js -d out  
