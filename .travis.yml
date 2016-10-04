@@ -10,5 +10,4 @@ install:
 - mkdir out
 - npm install -g babel-cli
 script :
-- babel bot.js -D -d out
-- echo awau
+- babel src -D -d out

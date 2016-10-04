@@ -1,2 +1,11 @@
+# dir for modules
+
 node_modules
+
+#vscode config
+
 .vscode
+
+# dir spewed out for babel
+
+out
