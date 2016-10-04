@@ -7,7 +7,6 @@ node_js:
 install:
 - npm -g install -S
 - npm -v
-- node --v8-options | grep harm
 - mkdir out
 - npm install -g babel-cli
 script :
