@@ -5,9 +5,7 @@ node_js:
   - "6.1"
   - "6.6"
 install:
-- cd owo-whats-this
 - npm -g install -S
 - npm -v
 - node --v8-options | grep harm
-- node --use-strict $(node --v8-options | grep harm | awk '{print $1}' | xargs
-
+- node --use-strict $(node --v8-options | grep harm | awk "{print $1}" | xargs
