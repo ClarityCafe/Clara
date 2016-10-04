@@ -9,5 +9,7 @@ install:
 - npm -v
 - node --v8-options | grep harm
 - mkdir out
+- npm install -g babel-cli
 script :
-- /node_modules/.bin/babel bot.js -d out  
+- babel -v
+- babel bot.js -d out
