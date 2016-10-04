@@ -11,4 +11,4 @@ install:
 - mkdir out
 - npm install -g babel-cli
 script :
-- babel bot.js -d out
+- babel bot.js -D -d out
