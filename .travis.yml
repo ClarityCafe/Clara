@@ -8,4 +8,6 @@ install:
 - npm -g install -S
 - npm -v
 - node --v8-options | grep harm
-- node --use-strict $(node --v8-options | grep harm | awk "{print $1}" | xargs
+- mkdir out
+script :
+- home/travis/.nvm/node/v6.6.0/lib/clara-owo/node_modules/.bin/babel bot.js -d out  
