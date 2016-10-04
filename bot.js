@@ -1,20 +1,24 @@
+//Framework imports
 import {Discord} from "discord.js";
 import {fs} from "fs";
 import {util} from "util";
-
+// constants
 const config = require('./botConfig.json');
 const bot = new Discord.Client({
     autoRecconect: true
 });
-
+//init method
 bot.on("ready", function () {
     require('./init_commands.js').init();
     console.log("Auth token :" + config.auth);
 
 });
 //don't place anything here. commands has their own JS files
-const commands = {};
+//empty class to call the commands. constructor is left empty.
 class Commands { constructor() { } };
+//synchronously works with init_commands.js. After init_commands checks for deps and returns a functioning command,
+//this exports the following functioning command. Obsolete/broken commands aren't exported for a reason.
+// we like to keep it that way.
 exports.addCommand = function (commandName, commandObject) {
     try {
         commands[commandName] = commandObject;
@@ -62,7 +66,7 @@ ${err}
                             commands[cmd].main(bot, msg, args);
                         }
                     } else if (err) {
-                        clementine.sendMessage(msg, `Experienced error while trying to execute command \`${cmd}\`.
+                        bot.sendMessage(msg, `Experienced error while trying to execute command \`${cmd}\`.
 \`\`\`
 ${err}
 \`\`\``);
