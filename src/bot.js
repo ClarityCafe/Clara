@@ -1,3 +1,9 @@
+/*
+Flan ES6 by Capuccino
+Original ES5 code by Ovyerus and MokouFujiwara
+Licensed under MIT.
+Copyright (c) 2016-2016 Capuccino, Ovyerus, MokouFujiwara, et al.
+*/ 
 //Framework imports
 import {Discord} from "discord.js";
 import {fs} from "fs";
