@@ -4,12 +4,12 @@ exports.commands = [
 
 //a bunch of logic floors
 function calcUptime() {
-    const time = 0;
-    const days = 0;
-    const hrs = 0;
-    const min = 0;
-    const sec = 0;
-    const temp = Math.floor(bot.uptime / 1000);
+    var time = 0;
+    var days = 0;
+    var hrs = 0;
+    var min = 0;
+    var sec = 0;
+    var temp = Math.floor(bot.uptime / 1000);
     sec = temp % 60;
     temp = Math.floor(temp/ 60);
     min = temp % 60;

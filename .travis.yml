@@ -11,4 +11,4 @@ install:
 - npm install -g babel-cli
 - npm install -g babel-preset-es2015
 script :
-- babel src -D -d out
+- babel src --no-comments --minified -D -d out
