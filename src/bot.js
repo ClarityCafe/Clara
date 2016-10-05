@@ -83,6 +83,6 @@ ${err}
     }
 
     if (msg.content.startsWith("<@" + bot.user.id + "> prefix")) {
-        clementine.reply(msg.channel.id, "***My prefix is *** `" + prefix + "`!");
+        bot.reply(msg.channel.id, "***My prefix is *** `" + prefix + "`!");
     }
 })
