@@ -1,7 +1,7 @@
 const gulp = require('gulp');
 const babel = require('gulp-babel');
  
-gulp.task('default', () => {
+gulp.task('build', () => {
     return gulp.src('src')
         .pipe(babel({
             presets: ['es2015']
