@@ -10,7 +10,8 @@ install:
 - mkdir out
 - npm install -g babel-cli
 - npm install babel-preset-es2015 --save
-- npm install -g gulp gulp-babel 
+- npm install -g gulp-cli gulp-babel 
+- npm install gulp
 script :
 - babel src --no-comments --minified -D -d out
 - gulp build
