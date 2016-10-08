@@ -27,6 +27,7 @@
     "discord.js": "^9.3.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
-    "node-es-module-loader": "^0.1.9"
+    "node-es-module-loader": "^0.1.9",
+    "node-json-db": "^0.7.3"
   }
 }
