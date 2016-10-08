@@ -8,14 +8,12 @@ var talkbot = new cleverbot();
 cleverbot.prepare(function() {});
 
 exports.talk = {
-	 name : "talk",
-    usage: "<message>",
     desc: "Talk directly to the bot",
     longDesc: "talk to the bot",
-    main: function(bot, msg, suffix) {
-			 var conv = suffix.split(" ");
-        talkbot.write(conv, function(response) {
-            bot.sendMessage(msg.channel, response.message)
-        })
+    usage: "<message>",
+    main: function(bot, ctx) {
+        talkbot.write(ctx.suffix, function(response) {
+            ctx.msg.channel.sendMessage(response.message);
+        });
     }
 }
