@@ -3,34 +3,32 @@
     Original ES5 code by Ovyerus and MokouFujiwara
     Licensed under MIT.
     Copyright (c) 2016-2016 Capuccino, Ovyerus, MokouFujiwara, et al.
-*/ 
+*/
 
 // Framework imports
-import {Discord} from "discord.js";
-import {fs} from "fs";
-import {util} from "util";
-import {JsonDB} from 'node-json-db';
+import { Discord } from "discord.js";
+import { fs } from "fs";
+import { util } from "util";
+import { JsonDB } from 'node-json-db';
 
 // Constants
 const config = require('./config.json');
-const bot = new Discord.Client({
-    autoReconnect: true
-});
+const bot = new Discord.Client();
 const data = new JsonDB('data', true, true);
 
 // Init method
-bot.on("ready", function () {
+bot.on("ready", () => {
     require('./init_commands.js').init();
     console.log("Auth token: " + config.auth);
-    if (!data.data.admins) data.push('/', {admins: []}, false);
-    if (!data.data.blacklist) data.push('/', {blacklist: []}, false);
-	bot.config = config;
-	bot.data = data;
+    if (!data.data.admins) data.push('/', { admins: [] }, false);
+    if (!data.data.blacklist) data.push('/', { blacklist: [] }, false);
+    bot.config = config;
+    bot.data = data;
 });
 
 // Don't place anything here, commands have their own JS files.
 // Empty class to call the commands, constructor is left empty.
-class Commands { constructor() { } };
+class Commands { constructor() {} };
 
 // Synchronously works with init_commands.js. After init_commands checks for deps and returns a functioning command,
 // this exports the following functioning command. Obsolete/broken commands aren't exported for a reason.
@@ -53,22 +51,22 @@ bot.on("message", () => {
         const cmd = args.shift();
         const suffix = args.join(' ');
         if (commands[cmd] !== undefined) {
-			if (data.getData('/blacklist').indexOf(msg.author.id) !== -1) return;
+            if (data.getData('/blacklist').indexOf(msg.author.id) !== -1) return;
             try {
                 if (commands[cmd].adminOnly && data.getData('/admins').indexOf(msg.author.id) !== -1) {
-                    commands[cmd].main(bot, {msg: msg, args: args, suffix: suffix});
+                    commands[cmd].main(bot, { msg: msg, args: args, suffix: suffix });
                 } else if (commands[cmd].adminOnly && data.data.getData('/admins').indexOf(msg.author.id) === -1) {
                     msg.channel.sendMessage('That command is restricted to the bot owner/s.');
                 } else {
-                    commands[cmd].main(bot, {msg: msg, args: args, suffix: suffix});
+                    commands[cmd].main(bot, { msg: msg, args: args, suffix: suffix });
                 }
             } catch (err) {
                 console.log(err);
-				var errMsg = `Unexpected error while executing commmand \`${cmd}\`\n`;
-				errMsg += '```js\n';
-				errMsg += err + '\n';
-				errMsg += '```';
-				msg.channel.sendMessage(errMsg);
+                var errMsg = `Unexpected error while executing commmand \`${cmd}\`\n`;
+                errMsg += '```js\n';
+                errMsg += err + '\n';
+                errMsg += '```';
+                msg.channel.sendMessage(errMsg);
             }
         }
     }
