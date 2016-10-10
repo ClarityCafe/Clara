@@ -20,7 +20,7 @@ if you've used Babel before, it's really easy.
 
 then navigate to your ``out`` folder and run ``node bot.js``.
 
-NOTE: you need a installation of Node v6.6.0 or v6.1.0, this is possible by installing [nvm](http://nvm.sh)and make the following Node Environments your default (you can only set one).
+NOTE: you need a installation of Node v6.6.0 or v6.1.0, this is possible by installing [nvm](http://nvm.sh) and make the following Node Environments your default (you can only set one).
 Linux users require this since the official packages in some distros like Ubuntu only has 4.x.x. We hadn't tested against 4.xx.
 
 # Testing
