@@ -9,7 +9,7 @@ install:
 - npm -v
 - mkdir out
 - npm install -g babel-cli
-- npm install babel-preset-es2015 --save
+- npm install  babel-preset-latest --save
 - npm install -g gulp-cli gulp-babel 
 - npm install gulp gulp-babel --save
 script :
