@@ -13,7 +13,8 @@ $ npm install babel-preset-es2015 --save
 
 then run:
 ```sh
-$ babel -D -d out --no-comments src```
+$ babel -D -d out --no-comments src
+```
 
 if you've used Babel before, it's really easy.
 
