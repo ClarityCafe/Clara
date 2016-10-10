@@ -5,8 +5,9 @@ A really experimental (and borked) Discord.js bot written in EsNEXT (Es6)
 
 From a fresh download/clone, you cannot run the script directly. You have to compile it using [Babel](https://babeljs.io/) in order to make it work through Node.js
 
-append to you terminal the following:
+append to your terminal the following:
 ```sh
+$ npm install --save
 $ npm install -g babel-cli babel
 $ npm install babel-preset-es2015 --save
 ```
