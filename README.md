@@ -10,6 +10,7 @@ append to you terminal the following:
 $ npm install -g babel-cli babel
 $ npm install babel-preset-es2015 --save
 ```
+
 then run:
 ```sh
 $ babel -D -d out --no-comments src```
