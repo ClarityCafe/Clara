@@ -1,0 +1,9 @@
+{
+  "globalDependencies": {
+    "node": "registry:dt/node#6.0.0+20160619064643"
+  },
+  "homepage": "https://github.com/hydrabolt/discord.js",
+  "main": "discord.js.d.ts",
+  "name": "discord.js",
+  "version": "8.0.0"
+}

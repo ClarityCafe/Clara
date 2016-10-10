@@ -13,7 +13,7 @@ import { JsonDB } from 'node-json-db';
 
 // Constants
 const config = require('./config.json');
-const bot = new discord.Client();
+const bot = new Discord.Client();
 const data = new JsonDB('data', true, true);
 
 // Init method
