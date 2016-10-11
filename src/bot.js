@@ -5,19 +5,19 @@
     Copyright (c) 2016-2016 Capuccino, Ovyerus, MokouFujiwara, et al.
 */
 
-// Framework imports
-import { Discord } from "discord.js";
-import { fs } from "fs";
-import { util } from "util";
-import { JsonDB } from 'node-json-db';
+//Framework imports
+const { Discord } = require("discord.js");
+const { fs } = require("fs");
+const { util } = require("util");
+const { JsonDB } = require("node-json-db");
 
-// Constants
+//Constants
 const config = require('./config.json');
 const bot = new Discord.Client();
 const data = new JsonDB('data', true, true);
 
-// Init method
-bot.on("ready", () => {
+//Init
+bot.on('ready', () => {
     require('./init_commands.js').init();
     console.log("Auth token: " + config.auth);
     if (!data.data.admins) data.push('/', { admins: [] }, false);
@@ -25,11 +25,8 @@ bot.on("ready", () => {
     bot.config = config;
     bot.data = data;
 });
-
-// Don't place anything here, commands have their own JS files.
-// Empty class to call the commands, constructor is left empty.
-class Commands { constructor() {} };
-
+//Don't place anything here, commands have their own JS files.
+var commands = {};
 // Synchronously works with init_commands.js. After init_commands checks for deps and returns a functioning command,
 // this exports the following functioning command. Obsolete/broken commands aren't exported for a reason.
 // We like to keep it that way.
@@ -43,7 +40,6 @@ export function addCommand(commandName, commandObject) {
 export function commandCount() {
     return Object.keys(commands).length;
 };
-
 bot.on("message", () => {
     //giant ass CMD thing CP'ed from flan-chanbot.
     if (msg.content.startsWith(config.prefix)) {
