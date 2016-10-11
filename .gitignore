@@ -9,3 +9,7 @@ node_modules
 # dir spewed out for babel
 
 out
+
+#Intellisense 
+
+jsconfig.json
