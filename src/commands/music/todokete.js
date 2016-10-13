@@ -21,10 +21,8 @@ var music = {
     streams: {};
 }
 fs.mkdir('songs', 0777, function(err) {
-if (err) {
-if (err.code == "EEXIST") return;
-else throw err;
-}
+    if (err) {
+        if (err.code == "EEXIST") return;
+        else throw err;
+    }
 });
-});
-})
