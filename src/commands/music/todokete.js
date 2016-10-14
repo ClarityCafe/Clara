@@ -34,3 +34,10 @@ exports.summon = {
     }
 
 }
+exports.disconnect = {
+    desc : "make the bot leave (Admin Only)",
+    longDesc: " make the bot disconnect out of a specific VC. You mast be in the AdminList",
+    main: function (bot , ctx){
+        bot.destroy();
+    }
+}
