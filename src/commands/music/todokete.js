@@ -24,9 +24,9 @@ var votes = {};
 exports.summon = {
     desc: 'summon the bot to a voice channel',
     longDesc: 'summon the bot to specific voice channel. you need to be in the target channel to summon the bot there.',
-    main: function (bot, ctx) {
+    main: function(bot, ctx) {
         voice_channel_id = bot.servers[serverID].members[userID].voice_channel_id;
-        bot.joinVoiceChannel(voice_channel_id, function () {
+        bot.joinVoiceChannel(voice_channel_id, function() {
             summoners[serverID] = userID;
             voice_channel[serverID] = voice_channel_id;
             ctx.msg.channel.sendMessage("Ready to Play, Imouto!");
@@ -35,9 +35,9 @@ exports.summon = {
 
 }
 exports.disconnect = {
-    desc : "make the bot leave (Admin Only)",
+    desc: "make the bot leave (Admin Only)",
     longDesc: " make the bot disconnect out of a specific VC. You mast be in the AdminList",
-    main: function (bot , ctx){
+    main: function(bot, ctx) {
         bot.destroy();
     }
 }
