@@ -1,6 +1,6 @@
 {
     "main": "osu.js",
-    "dependencies" : {
-        "nodesu" : ""
+    "dependencies": {
+        "nodesu": "0.6.0"
     }
 }
