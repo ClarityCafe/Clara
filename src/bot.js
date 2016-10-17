@@ -30,14 +30,14 @@ var commands = {};
 // Synchronously works with init_commands.js. After init_commands checks for deps and returns a functioning command,
 // this exports the following functioning command. Obsolete/broken commands aren't exported for a reason.
 // We like to keep it that way.
-export function addCommand(commandName, commandObject) {
+exports.addCommand = function(commandName, commandObject) {
     try {
         commands[commandName] = commandObject;
     } catch (err) {
         console.log(err);
     }
 }
-export function commandCount() {
+exports.commandCount = function() {
     return Object.keys(commands).length;
 };
 bot.on("message", () => {
