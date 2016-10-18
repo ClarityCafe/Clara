@@ -30,6 +30,7 @@
     "gulp-babel": "^6.1.2",
     "node-es-module-loader": "^0.1.9",
     "node-json-db": "^0.7.3",
+    "nodesu": "^0.6.0",
     "npm": "^3.10.8"
   }
 }
