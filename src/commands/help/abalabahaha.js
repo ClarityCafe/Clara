@@ -20,16 +20,16 @@ exports.help = {
                     helpThing += command;
                 }
             }
-            ctx.sendMessage(msg, "Help has been sent to your DMs.")
-            ctx.sendMessage(msg.author.id, helpStart + helpThing);
-        } else if (args.length === 1) {
+            ctx.msg.channel.sendMessage(msg, "Help has been sent to your DMs.")
+            ctx.msg.author.sendMessage(helpStart + helpThing);
+        } else if (ctx.args.length === 1) {
             var cmd = commands[args[0]];
             if (cmd !== undefined && cmd.usage !== undefined) {
                 ctx.sendMessage(msg, util.format("**%s %s** - %s", cmd.name, cmd.usage, cmd.longDesc));
             } else if (cmd !== undefined) {
                 ctx.sendMessage(msg, util.format("**%s** - %s", cmd.name, cmd.longDesc));
             } else if (cmd === undefined) {
-                ctx.reply(msg, "I'm sorry, but that command does not seem to exist.");
+                ctx.msg.reply(msg, "I'm sorry, but that command does not seem to exist.");
             }
         }
     }
