@@ -8,7 +8,7 @@ exports.commands = [
 
 const Nodesu = require("nodesu");
 const config = require("../../config.json");
-var api = new Nodesu.client(config.osuApiKey);
+var api = new Nodesu.client();
 
 exports.osu = {
     desc: "your osu!standard stats",
@@ -49,7 +49,7 @@ exports.mania = {
 exports.taiko = {
     desc: "your osu!taiko stats",
     usage: '<osu! username>',
-    main: function (bot, ctx) {
+    main: function(bot, ctx) {
         if (ctx.args) {
             api.user.get(ctx.args[0], Nodesu.Mode.osu).then(data => ctx.msg.channel.sendMessage(data));
         } else {
