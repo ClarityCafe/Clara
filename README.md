@@ -23,7 +23,6 @@ if you've used Babel before, it's really easy.</strike> We are working on a way 
 NOTE: you need a installation of Node v6.6.0 or v6.1.0, this is possible by installing [nvm](http://nvm.sh) and make the following Node Environments your default (you can only set one).
 Linux users require this since the official packages in some distros like Ubuntu only has 4.x.x. We hadn't tested against 4.xx.
 
-# Testing
+# Contributing
 
-Contributions/commits/PRs are tested by Travis CI. If your PR fails, it won't be merged until it is fixed.
-This is to make sure the cocurrent code would work on optimum state.
+Check out CONTRIBUTING.md for guidelines 
