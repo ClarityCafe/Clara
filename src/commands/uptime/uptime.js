@@ -2,7 +2,7 @@ exports.commands = [
     "uptime"
 ];
 
-import {parseMs} from '../../utilities.js';
+const parseMs = require('../../utilities.js');
 
 exports.uptime = {
     desc: "Check uptime of the bot",

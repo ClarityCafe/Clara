@@ -6,10 +6,10 @@
 */
 
 //Framework imports
-const { Discord } = require("discord.js");
-const { fs } = require("fs");
-const { util } = require("util");
-const { JsonDB } = require("node-json-db");
+const Discord = require("discord.js");
+const fs = require("fs");
+const util = require("util");
+const JsonDB = require("node-json-db");
 
 //Constants
 const config = require('./config.json');
@@ -40,7 +40,7 @@ exports.addCommand = function(commandName, commandObject) {
 exports.commandCount = function() {
     return Object.keys(commands).length;
 };
-bot.on("message", () => {
+bot.on("message", msg => {
     //giant ass CMD thing CP'ed from flan-chanbot.
     if (msg.content.startsWith(config.prefix)) {
         const args = msg.content.substring(config.prefix.length, msg.content.length).split(' ');
