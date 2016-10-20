@@ -1,0 +1,6 @@
+{
+    "main": "azusa.js",
+    "dependencies": {
+        "random-cat": "1.0.1"
+    }
+}

@@ -13,3 +13,7 @@ out
 #Intellisense 
 
 jsconfig.json
+
+#IntelliJ
+
+.idea
