@@ -8,6 +8,7 @@ install:
 - npm -g install -S
 - npm -v
 - mkdir out
+- npm install -g standard
 - npm install -g babel-cli
 - npm install  babel-preset-latest --save
 - npm install -g gulp-cli gulp-babel 
@@ -15,4 +16,5 @@ install:
 script :
 - gulp build
 - babel src --no-comments --minified -D -d out
+- standard --fix
 
