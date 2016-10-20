@@ -21,3 +21,5 @@ this is to make sure to prevent clutter.
 
 we use Travis for Code Verification. If your code fails at runtime.
 It will not be merged until it's fixed.
+
+there's exception if the linter is a bitch.
