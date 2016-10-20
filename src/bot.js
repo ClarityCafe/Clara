@@ -71,5 +71,16 @@ bot.on("message", msg => {
         bot.reply(msg.channel.id, "***My prefix is *** `" + coinfig.prefix + "`!");
     }
 });
+// if bot disconnects, this would pass up
+bot.on("disconnected", () => {
+    console.log("disconnected!, retrying...");
+    try {
+        !config.useEmail ? bot.login(config.token) : bot.login(config.email, config.password);
+    } catch (err) {
+        //let it terminate. PM2 will re-start the bot automatically.
+        console.log("I tried. terminating...");
+        process.exit(0);
+    }
+});
 
 !config.useEmail ? bot.login(config.token) : bot.login(config.email, config.password);
