@@ -23,3 +23,11 @@ we use Travis for Code Verification. If your code fails at runtime.
 It will not be merged until it's fixed.
 
 there's exception if the linter is a bitch.
+
+We use three different programs to check your PR's validity:
+
+- Babel (Minification and Linting)
+- Standard.js (NPM Coding Styling Suggestions)
+- ESLint (Linting using ECMA-262 guidelines)
+
+you need to pass at least one (1)in order to get your PR merged.
