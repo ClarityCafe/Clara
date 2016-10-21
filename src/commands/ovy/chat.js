@@ -13,7 +13,7 @@ exports.talk = {
     usage: "<message>",
     main: function(bot, ctx) {
         talkbot.write(ctx.suffix, function(response) {
-            ctx.msg.channel.sendMessage(response.message);
+            ctx.msg.channel.makeMessage(response.message);
         });
     }
 }

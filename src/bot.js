@@ -40,7 +40,7 @@ exports.addCommand = function(commandName, commandObject) {
 exports.commandCount = function() {
     return Object.keys(commands).length;
 };
-bot.on("message", msg => {
+bot.on("createdMessage", msg => {
     //giant ass CMD thing CP'ed from flan-chanbot.
     if (msg.content.startsWith(config.prefix)) {
         const args = msg.content.substring(config.prefix.length, msg.content.length).split(' ');
