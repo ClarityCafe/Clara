@@ -68,7 +68,7 @@ bot.on("createdMessage", msg => {
     }
 
     if (msg.content.startsWith("<@" + bot.user.id + "> prefix")) {
-        bot.reply(msg.channel.id, "***My prefix is *** `" + coinfig.prefix + "`!");
+        bot.reply(msg.channel.id, "***My prefix is *** `" + config.prefix + "`!");
     }
 });
 // if bot disconnects, this would pass up
