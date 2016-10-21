@@ -7,6 +7,6 @@ exports.nyaa = {
     longDesc: "Ny- Nyaaaaaaaaaaaaaaaaaaaaaaaaaa~",
     main: function(bot, ctx) {
         var url = azusa.get();
-        ctx.msg.channel.sendMessage(url + ` Nyaaaaaaaaaaaaaaaaaaaaaaaaaa~!`);
+        ctx.msg.channel.sendMessage(url);
     }
 }
