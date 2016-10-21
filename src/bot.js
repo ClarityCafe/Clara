@@ -13,7 +13,7 @@ const JsonDB = require("node-json-db");
 
 //Constants
 const config = require('./config.json');
-const bot = new Discord();
+const bot = new Discord(config.token);
 const data = new JsonDB('data', true, true);
 
 //Init
@@ -83,4 +83,5 @@ bot.on("disconnected", () => {
     }
 });
 
-!config.useEmail ? bot.connect(config.token) : bot.connect(config.email, config.password);
+bot.connect()
+// !config.useEmail ? bot.connect(config.token) : bot.connect(config.email, config.password); (EMAIL UNSUPPORTED)
