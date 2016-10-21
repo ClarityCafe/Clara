@@ -1,3 +1,9 @@
+/*
+ * chat.js - Talk with the bot using the CleverBot API.
+ * Based from chalda/DiscordBot.
+ * Contributed by Capuccino, Ovyerus.
+ * Core Command Module for owo-whats-this
+ */
 "use strict";
 exports.commands = [
     "talk"

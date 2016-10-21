@@ -1,3 +1,10 @@
+/*
+ * choose - make the bot choose your stupid life decisions
+ * Contributed by Capuccino
+ * Core Command Module for owo-whats-this 
+ */
+
+'use strict';
 exports.commands = [
     "choose",
 ];

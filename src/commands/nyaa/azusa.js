@@ -1,3 +1,9 @@
+/*
+ * The Nyaaa~! Command
+ * Contributed by Capuccino.
+ * Core Command Module for owo-whats-this
+ */
+
 exports.commands = [
     "nyaa"
 ];
