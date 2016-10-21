@@ -6,14 +6,14 @@
 */
 
 //Framework imports
-const Discord = require("discord.js");
+const Discord = require("discord-htc");
 const fs = require("fs");
 const util = require("util");
 const JsonDB = require("node-json-db");
 
 //Constants
 const config = require('./config.json');
-const bot = new Discord.Client();
+const bot = new DHTC();
 const data = new JsonDB('data', true, true);
 
 //Init
@@ -62,7 +62,7 @@ bot.on("message", msg => {
                 errMsg += '```js\n';
                 errMsg += err + '\n';
                 errMsg += '```';
-                msg.channel.sendMessage(errMsg);
+                msg.channel.makeMessage(errMsg);
             }
         }
     }
@@ -75,12 +75,12 @@ bot.on("message", msg => {
 bot.on("disconnected", () => {
     console.log("disconnected!, retrying...");
     try {
-        !config.useEmail ? bot.login(config.token) : bot.login(config.email, config.password);
+        !config.useEmail ? bot.connect(config.token) : bot.connect(config.email, config.password);
     } catch (err) {
         //let it terminate. PM2 will re-start the bot automatically.
         console.log("I tried. terminating...");
-        process.exit(0);
+        process.exit(1);
     }
 });
 
-!config.useEmail ? bot.login(config.token) : bot.login(config.email, config.password);
+!config.useEmail ? bot.connect(config.token) : bot.connect(config.email, config.password);
