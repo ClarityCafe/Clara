@@ -7,7 +7,7 @@ exports.help = {
     longDesc: "The help command. Give it an argument to see more information about a command.",
     usage: "[command]",
     main: function(bot, ctx) {
-        if (args.length === 0) {
+        if (ctx.args.length === 0) {
             var helpStart = util.format("%s - %s\n", config.botName, config.botDesc);
             var helpThing = "";
             var cmd;
