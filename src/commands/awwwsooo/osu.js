@@ -5,6 +5,9 @@ exports.commands = [
     "taiko",
     "ctb"
 ];
+
+//inb4 untested code
+//blame Ovy if this doesn't work'
 try {
     const Nodesu = require("nodesu");
     const config = require("../../config.json");
