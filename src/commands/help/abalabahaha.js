@@ -1,3 +1,11 @@
+/* 
+ * Help Command  
+ * Original code by Mumiji and Ovyerus
+ * Contributed and ported by Capuccino
+ * Core Command Module for owo-whats-this
+ */
+
+"use strict";
 exports.commands = [
     "help"
 ];

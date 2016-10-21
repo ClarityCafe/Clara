@@ -1,5 +1,11 @@
-/* global process */
-
+/*
+ * owo-whats this - Command Init File
+ * based from chalda/DiscordBot
+ * Contributed by :
+ * Capuccino (discord.js , discord.htc)
+ * 
+ * Licensed under MIT. Copyright (c) 2016 Capuccino, Ovyerus and the repository contributors.
+ */
 var fs = require('fs'),
     path = require('path');
 

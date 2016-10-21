@@ -10,4 +10,16 @@ Linux users require this since the official packages in some distros like Ubuntu
 
 # Contributing
 
-Check out CONTRIBUTING.md for guidelines. 
+Check out CONTRIBUTING.md for guidelines.
+
+#Licensing
+
+The underlying source code is licensed under MIT.
+
+
+Copyright (c) 2016 Capuccino , Ovyerus and the repository contributors.
+
+
+see LICENSE.
+
+

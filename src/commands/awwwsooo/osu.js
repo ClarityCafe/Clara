@@ -1,3 +1,10 @@
+/*
+ * osu - osu!stats checker
+ * powered by Nodesu.
+ * Contributed by Capuccino.
+ * Complementary Community Command Module for owo-whats-this and osu!Discord. 
+ */
+
 'use strict';
 exports.commands = [
     "osu",

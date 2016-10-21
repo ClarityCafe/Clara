@@ -1,9 +1,12 @@
 /*
-    Flan ES6 by Capuccino
-    Original ES5 code by Ovyerus and MokouFujiwara
-    Licensed under MIT.
-    Copyright (c) 2016 Capuccino, Ovyerus and the repository contributors.
-*/
+ * owo-whats this - Core file 
+ * Contributed by :
+ * Capuccino (discord.js , discord.htc)
+ * Ovyerus (discord.js)
+ * nekonez (discord.htc)
+ * 
+ * Licensed under MIT. Copyright (c) 2016 Capuccino, Ovyerus and the repository contributors.
+ */
 
 //Framework imports
 const Discord = require("discord.js");
