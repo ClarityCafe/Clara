@@ -13,7 +13,7 @@ const JsonDB = require("node-json-db");
 
 //Constants
 const config = require('./config.json');
-const bot = new DHTC();
+const bot = new Discord();
 const data = new JsonDB('data', true, true);
 
 //Init
