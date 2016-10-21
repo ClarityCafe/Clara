@@ -6,14 +6,14 @@
 */
 
 //Framework imports
-const Discord = require("discord-htc");
+const Discord = require("discord.js");
 const fs = require("fs");
 const util = require("util");
 const JsonDB = require("node-json-db");
 
 //Constants
 const config = require('./config.json');
-const bot = new Discord(config.token);
+const bot = new Discord.Client();
 const data = new JsonDB('data', true, true);
 
 //Init
@@ -40,7 +40,7 @@ exports.addCommand = function(commandName, commandObject) {
 exports.commandCount = function() {
     return Object.keys(commands).length;
 };
-bot.on("createdMessage", msg => {
+bot.on("message", msg => {
     //giant ass CMD thing CP'ed from flan-chanbot.
     if (msg.content.startsWith(config.prefix)) {
         const args = msg.content.substring(config.prefix.length, msg.content.length).split(' ');
@@ -62,7 +62,7 @@ bot.on("createdMessage", msg => {
                 errMsg += '```js\n';
                 errMsg += err + '\n';
                 errMsg += '```';
-                msg.channel.makeMessage(errMsg);
+                msg.channel.sendMessage(errMsg);
             }
         }
     }
@@ -72,18 +72,15 @@ bot.on("createdMessage", msg => {
     }
 });
 // if bot disconnects, this would pass up
-/*
 bot.on("disconnected", () => {
     console.log("disconnected!, retrying...");
     try {
-        !config.useEmail ? bot.connect(config.token) : bot.connect(config.email, config.password);
+        !config.useEmail ? bot.login(config.token) : bot.login(config.email, config.password);
     } catch (err) {
         //let it terminate. PM2 will re-start the bot automatically.
         console.log("I tried. terminating...");
-        process.exit(1);
+        process.exit(0);
     }
 });
-*/
 
-bot.connect()
-// !config.useEmail ? bot.connect(config.token) : bot.connect(config.email, config.password); (EMAIL UNSUPPORTED)
+!config.useEmail ? bot.login(config.token) : bot.login(config.email, config.password);
