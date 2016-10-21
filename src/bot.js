@@ -40,6 +40,9 @@ exports.addCommand = function(commandName, commandObject) {
 exports.commandCount = function() {
     return Object.keys(commands).length;
 };
+
+//TODO : fix errors on command handler
+
 bot.on("message", msg => {
     //giant ass CMD thing CP'ed from flan-chanbot.
     if (msg.content.startsWith(config.prefix)) {
@@ -79,7 +82,7 @@ bot.on("disconnected", () => {
     } catch (err) {
         //let it terminate. PM2 will re-start the bot automatically.
         console.log("I tried. terminating...");
-        process.exit(0);
+        process.exit(1);
     }
 });
 
