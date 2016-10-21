@@ -15,9 +15,9 @@ exports.osu = {
     usage: '<osu! username>',
     main: function(bot, ctx) {
         if (ctx.args) {
-            api.user.get(ctx.args[0], Nodesu.Mode.osu).then(data => ctx.msg.channel.makeMessage(data));
+            api.user.get(ctx.args[0], Nodesu.Mode.osu).then(data => ctx.msg.channel.sendMessage(data));
         } else {
-            ctx.msg.channel.makeMessage('Please enter an argument to use as a name.');
+            ctx.msg.channel.sendMessage('Please enter an argument to use as a name.');
         }
     }
 }
@@ -27,9 +27,9 @@ exports.ctb = {
     usage: '<osu! username>',
     main: function(bot, ctx) {
         if (ctx.args) {
-            api.user.get(ctx.args[0], Nodesu.Mode.ctb).then(data => ctx.msg.channel.makeMessage(data));
+            api.user.get(ctx.args[0], Nodesu.Mode.ctb).then(data => ctx.msg.channel.sendMessage(data));
         } else {
-            ctx.msg.channel.makeMessage('Please enter an argument to use as a name.');
+            ctx.msg.channel.sendMessage('Please enter an argument to use as a name.');
         }
     }
 }
@@ -39,9 +39,9 @@ exports.mania = {
     usage: '<osu! username>',
     main: function(bot, ctx) {
         if (ctx.args) {
-            api.user.get(ctx.args[0], Nodesu.Mode.osu).then(data => ctx.msg.channel.makeMessage(data));
+            api.user.get(ctx.args[0], Nodesu.Mode.osu).then(data => ctx.msg.channel.sendMessage(data));
         } else {
-            ctx.msg.channel.makeMessage('Please enter an argument to use as a name.');
+            ctx.msg.channel.sendMessage('Please enter an argument to use as a name.');
         }
     }
 }
@@ -51,9 +51,9 @@ exports.taiko = {
     usage: '<osu! username>',
     main: function(bot, ctx) {
         if (ctx.args) {
-            api.user.get(ctx.args[0], Nodesu.Mode.osu).then(data => ctx.msg.channel.makeMessage(data));
+            api.user.get(ctx.args[0], Nodesu.Mode.osu).then(data => ctx.msg.channel.sendMessage(data));
         } else {
-            ctx.msg.channel.makeMessage('Please enter an argument to use as a name.');
+            ctx.msg.channel.sendMessage('Please enter an argument to use as a name.');
         }
     }
 }
