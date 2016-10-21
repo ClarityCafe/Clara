@@ -5,10 +5,11 @@ exports.commands = [
     "taiko",
     "ctb"
 ];
-
-const Nodesu = require("nodesu");
-const config = require("../../config.json");
-var api = new Nodesu.client();
+try {
+    const Nodesu = require("nodesu");
+    const config = require("../../config.json");
+    var api = new Nodesu.client(config.osuApiKey);
+} catch (err) {}
 
 exports.osu = {
     desc: "your osu!standard stats",
