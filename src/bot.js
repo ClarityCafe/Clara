@@ -72,6 +72,7 @@ bot.on("createdMessage", msg => {
     }
 });
 // if bot disconnects, this would pass up
+/*
 bot.on("disconnected", () => {
     console.log("disconnected!, retrying...");
     try {
@@ -82,6 +83,7 @@ bot.on("disconnected", () => {
         process.exit(1);
     }
 });
+*/
 
 bot.connect()
 // !config.useEmail ? bot.connect(config.token) : bot.connect(config.email, config.password); (EMAIL UNSUPPORTED)
