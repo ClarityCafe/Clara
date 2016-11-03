@@ -22,7 +22,7 @@ const data = new JsonDB('data', true, true);
 //Init
 bot.on('ready', () => {
     require('./init_commands.js').init();
-    console.log("Auth token: " + config.auth);
+    console.log("Readying up! Initializing commands...");
     if (!data.data.admins) data.push('/', { admins: [] }, false);
     if (!data.data.blacklist) data.push('/', { blacklist: [] }, false);
     bot.config = config;
@@ -33,14 +33,14 @@ var commands = {};
 // Synchronously works with init_commands.js. After init_commands checks for deps and returns a functioning command,
 // this exports the following functioning command. Obsolete/broken commands aren't exported for a reason.
 // We like to keep it that way.
-exports.addCommand = function(commandName, commandObject) {
+exports.addCommand = function (commandName, commandObject) {
     try {
         commands[commandName] = commandObject;
     } catch (err) {
         console.log(err);
     }
 }
-exports.commandCount = function() {
+exports.commandCount = function () {
     return Object.keys(commands).length;
 };
 
