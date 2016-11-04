@@ -1,10 +1,10 @@
 /*
- * owo-whats this - Core file 
+ * owo-whats this - Core file
  * Contributed by :
  * Capuccino (discord.js , discord.htc)
  * Ovyerus (discord.js)
  * nekonez (discord.htc)
- * 
+ *
  * Licensed under MIT. Copyright (c) 2016 Capuccino, Ovyerus and the repository contributors.
  */
 
@@ -88,5 +88,10 @@ bot.on("disconnected", () => {
         process.exit(1);
     }
 });
+
+bot.on("guildMemberAdd", (member) => {
+  //TODO: add a better guild exclusion
+return config.AllowGreets ? ctx.msg.author("Welcome to " + guild.name + "!!!") : null;
+}
 
 !config.useEmail ? bot.login(config.token) : bot.login(config.email, config.password);
