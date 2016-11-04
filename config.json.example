@@ -1,6 +1,7 @@
 {
-	"token": "", 
+	"token": "",
 	"prefix": "?",
+	"AllowGreets": true,
 	"osuApiKey": "get one at osu.ppy.sh",
 	"useEmail": false,
 	"email": "email",
