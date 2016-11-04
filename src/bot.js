@@ -92,6 +92,6 @@ bot.on("disconnected", () => {
 bot.on("guildMemberAdd", (member) => {
   //TODO: add a better guild exclusion
 return config.AllowGreets ? ctx.msg.author("Welcome to " + guild.name + "!!!") : null;
-}
+});
 
 !config.useEmail ? bot.login(config.token) : bot.login(config.email, config.password);
