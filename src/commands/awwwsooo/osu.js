@@ -5,6 +5,8 @@
  * Complementary Community Command Module for owo-whats-this and osu!Discord. 
  */
 
+//TODO: fix this.
+
 'use strict';
 exports.commands = [
     "osu",
