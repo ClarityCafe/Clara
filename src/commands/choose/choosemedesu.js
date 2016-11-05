@@ -10,6 +10,7 @@ exports.commands = [
 ];
 
 exports.choose = {
+    name: "choose",
     //I would smack Recchan if this doesn't work uwu.
     description: "Just like decide, only it selects through a set of given parameters.",
     usage: "<option(minimum of 2)>",

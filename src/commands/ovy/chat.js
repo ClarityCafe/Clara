@@ -14,6 +14,7 @@ var talkbot = new cleverbot();
 cleverbot.prepare(function() {});
 
 exports.talk = {
+    name: "talk",
     desc: "Talk directly to the bot",
     longDesc: "talk to the bot",
     usage: "<message>",

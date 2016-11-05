@@ -51,15 +51,15 @@ commands.help = {
                     }
                 }
                 ctx.msg.channel.sendMessage("Help has been sent to your DMs.")
-                ctx.msg.channel.sendMessage(msg.author.id, helpStart + helpThing);
+                ctx.msg.author.sendMessage(helpStart + helpThing);
             } else if (args.length === 1) {
                 var cmd = commands[args[0]];
                 if (cmd !== undefined && cmd.usage !== undefined) {
                     ctx.msg.channelsendMessage(util.format("**%s %s** - %s", cmd.name, cmd.usage, cmd.longDesc));
                 } else if (cmd !== undefined) {
-                    ctx.msg.channel.sendMessage(msg, util.format("**%s** - %s", cmd.name, cmd.longDesc));
+                    ctx.msg.channel.sendMessage(util.format("**%s** - %s", cmd.name, cmd.longDesc));
                 } else if (cmd === undefined) {
-                    ctx.msg.reply("I'm sorry, but that command does not seem to exist.");
+                    ctx.msg.sendMessage("I'm sorry, but that command does not seem to exist.");
                 }
             }
         }
@@ -108,7 +108,7 @@ bot.on("message", msg => {
     }
 
     if (msg.content.startsWith("<@" + bot.user.id + "> prefix")) {
-        bot.reply(msg.channel.id, "***My prefix is *** `" + config.prefix + "`!");
+        ctx.reply("***My prefix is *** `" + config.prefix + "`!");
     }
 });
 // if bot disconnects, this would pass up

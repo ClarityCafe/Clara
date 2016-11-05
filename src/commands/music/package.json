@@ -1,8 +1,0 @@
-{
-    "main": "todokete.js",
-    "dependencies": {
-        "stream": "0.0.2",
-        "request": "2.75.0",
-        "youtube-dl": "1.11.1"
-    }
-}
