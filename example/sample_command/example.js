@@ -6,6 +6,7 @@ exports.commands = [
 
 // Example ping command
 exports.ping = {
+    name: '', // Mandatory - Name for the Command. Parsed by help
     desc: '', // Mandatory - Description displayed in the main help command.
     longDesc: '', // Optional - Description used in 'help [command name]'. If not supplied, default description will be used
     adminOnly: true, // Optional - Boolean. Make the command only work for those who are in the adminlist. Recommended if your command is volatile and recommended only for those who are mentally sane to use it. Implementation Coming soon.
