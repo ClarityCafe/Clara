@@ -9,8 +9,9 @@ exports.commands = [
 ];
 const azusa = require('random-cat');
 exports.nyaa = {
+    name: "nyaa",
     desc: "Nyaaa!",
-    longDesc: "Ny- Nyaaaaaaaaaaaaaaaaaaaaaaaaaa~",
+    longDesc: "Returns a picture of a cat from LoremPixel",
     main: function(bot, ctx) {
         var url = azusa.get({
             // just to make sure Gus never whines

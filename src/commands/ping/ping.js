@@ -1,10 +1,11 @@
 exports.commands = [
-    "ping"
-]
-/*
-insert useless command here 
-*/
+        "ping"
+    ]
+    /*
+    insert useless command here 
+    */
 exports.ping = {
+    name: "ping",
     desc: "Ping!",
     longDesc: "Ping the bot and check it's latency",
     main: function(bot, ctx) {

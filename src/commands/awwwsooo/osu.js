@@ -21,9 +21,12 @@ try {
     const Nodesu = require("nodesu");
     const config = require("../../config.json");
     var api = new Nodesu.client(config.osuApiKey);
-} catch (err) {}
+} catch (err) {
+    null;
+}
 
 exports.osu = {
+    name: "osu",
     desc: "your osu!standard stats",
     usage: '<osu! username>',
     main: function(bot, ctx) {
@@ -36,6 +39,7 @@ exports.osu = {
 }
 
 exports.ctb = {
+    name: "ctb",
     desc: "your osu!ctach stats",
     usage: '<osu! username>',
     main: function(bot, ctx) {
@@ -48,6 +52,7 @@ exports.ctb = {
 }
 
 exports.mania = {
+    name: "mania",
     desc: "your osu!mania stats",
     usage: '<osu! username>',
     main: function(bot, ctx) {
@@ -60,6 +65,7 @@ exports.mania = {
 }
 
 exports.taiko = {
+    name: "taiko",
     desc: "your osu!taiko stats",
     usage: '<osu! username>',
     main: function(bot, ctx) {
