@@ -1,11 +1,12 @@
-exports.commands =[
+exports.commands = [
     "wiki"
 ];
 
 var Wiki = require('wikijs');
 
 exports.wiki = {
-    description: "Returns the summary of the first matching search result from Wikipedia",
+    name: "wiki",
+    desc: "Returns the summary of the first matching search result from Wikipedia",
     usage: "<search term>",
     main: function(bot, ctx) {
         var query = ctx.suffix;

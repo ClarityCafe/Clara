@@ -7,18 +7,17 @@
 exports.commands = [
     "nyaa"
 ];
-const azusa = require('random-cat');
+const request = require('request');
 exports.nyaa = {
     name: "nyaa",
     desc: "Nyaaa!",
     longDesc: "Returns a picture of a cat from LoremPixel",
-    main: function(bot, ctx) {
-        var url = azusa.get({
-            // just to make sure Gus never whines
-            //about ant-sized images.
-            width: 1080,
-            height: 1920
+    main: (bot, ctx) => {
+        request('http://random.cat/meow', (err, res, body) => {
+            if (!err && res.statusCode === 200) {
+                var kitty = JSON.parse(body).file;
+                ctx.msg.channel.sendMessage(kitty);
+            }
         });
-        ctx.msg.channel.sendMessage(url);
     }
 }
