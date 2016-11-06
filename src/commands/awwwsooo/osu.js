@@ -17,13 +17,9 @@ exports.commands = [
 
 //inb4 untested code
 //blame Ovy if this doesn't work'
-try {
-    const Nodesu = require("nodesu");
-    const config = require("../../config.json");
-    var api = new Nodesu.client(config.osuApiKey);
-} catch (err) {
-    null;
-}
+const Nodesu = require("nodesu");
+const config = require("../../config.json");
+var api = new Nodesu.client(config.osuApiKey);
 
 exports.osu = {
     name: "osu",
