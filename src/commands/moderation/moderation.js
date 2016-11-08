@@ -12,7 +12,7 @@ exports.commands = [
 exports.kick = {
         name: "kick",
         desc: `Kick a person in your server (staff only). Needs 'Manage Users' role.`,
-        usage: "<User Mention>"
+        usage: "<User Mention>",
         main: (bot, ctx) => {
             if (ctx.msg.guild) {
                 if (ctx.msg.mentions.users.length === 0) {
