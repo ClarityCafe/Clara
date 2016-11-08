@@ -27,7 +27,7 @@ exports.kick = {
                     }
                 }
             }
-        }
+        },
         exports.ban = {
             name: "ban",
             desc: `Bans a user from the server. Requires the bot to have the "Administrator" or the "Manage Users" Permission`,
