@@ -8,3 +8,14 @@ exports.commands = [
   "anime",
   "userlist"
 ];
+
+const app = require("./client.js");
+
+exports.anime = {
+  name: "anime",
+  desc: "returns a anime from MyAnimeList",
+  usage: '<Anime>',
+  main : (bot,ctx) => {
+  
+    }
+}
