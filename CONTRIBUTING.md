@@ -9,7 +9,7 @@ otherwise you will indefinitely crash the bot at init.
 # Code Styling
 
 We follow the ES6 and the ES5 Standards coding structure. We recommend
-you to folloe the Standard Node.js guidelines on coding.
+you to follow the Standard Node.js guidelines on coding.
 
 
 # Pull Requests
@@ -27,6 +27,6 @@ there's exception if the linter is a bitch.
 We use two different programs to check your PR's validity:
 
 - Babel (Minification and Linting)
-- ESLint (Linting using ECMA-262 guidelines)
+- ESLint (Linting using ECMA-262 guidelines)[Soon]
 
 you need to pass at least one (1)in order to get your PR merged.
