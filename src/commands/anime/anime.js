@@ -5,17 +5,25 @@
 */
 
 exports.commands = [
-  "anime",
-  "userlist"
+    "anime",
+    "userlist"
 ];
 
-const app = require("./client.js");
+const xml = require('xml2js');
+const request = require('request');
 
 exports.anime = {
-  name: "anime",
-  desc: "returns a anime from MyAnimeList",
-  usage: '<Anime>',
-  main : (bot,ctx) => {
-  
+    name: "anime",
+    desc: " return a name of the anime from MyAnimeList",
+    usage: "<Anime Name>",
+    main: (bot, ctx) => {
+        var query = ctx.suffix;
+        request(`https://myanimelist.net /api/anime|manga/search.xml?q=${query} `, (err, res, body) => {
+            if (!err && res.statusCode === 200) {
+                var title = xml.parseString(xml, { tagNameProcessors: [title] }, () => {
+                  //insert Putin Code here.
+                })
+            }
+        })
     }
 }
