@@ -1,4 +1,4 @@
-# owo-whats-this [![Build Status](https://travis-ci.org/sr229/owo-whats-this.svg?branch=master)](https://travis-ci.org/sr229/owo-whats-this)
+# owo-whats-this [![Build Status](https://travis-ci.org/owo-dev-team/owo-whats-this.svg?branch=master)](https://travis-ci.org/owo-dev-team/owo-whats-this)
 A really experimental (and borked) Discord.js bot written in ECMAScript 6
 
 # Building and Running
