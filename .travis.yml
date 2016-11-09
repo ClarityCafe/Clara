@@ -2,8 +2,8 @@ sudo: required
 dist: trusty
 language: node_js
 node_js:
-  - "6.1"
-  - "6.6"
+  - "6.9"
+  - "7.1"
 install:
 - npm -g install -S
 - npm -v
@@ -14,6 +14,6 @@ install:
 - npm install -g gulp-cli gulp-babel 
 - npm install gulp gulp-babel --save
 script :
-- gulp build
+- eslint ./src/commands
 - babel src --no-comments --minified -D -d out
 
