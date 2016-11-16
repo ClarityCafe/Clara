@@ -1,26 +1,35 @@
 /*
  * chat.js - Talk with the bot using the CleverBot API.
  * Based from chalda/DiscordBot.
+ * 
  * Contributed by Capuccino, Ovyerus.
- * Core Command Module for owo-whats-this
  */
-"use strict";
+
+
 exports.commands = [
-    "talk"
+    'talk'
 ];
 
-var cleverbot = require("cleverbot-node");
-var talkbot = new cleverbot();
-cleverbot.prepare(function() {});
+const Cleverbot = require('cleverbot-node');
+const Promise = require('bluebird');
+
+var talkbot = new Cleverbot();
+
+Cleverbot.prepare(() => {});
 
 exports.talk = {
-    name: "talk",
-    desc: "Talk directly to the bot",
-    longDesc: "talk to the bot",
-    usage: "<message>",
-    main: function(bot, ctx) {
-        talkbot.write(ctx.suffix, function(response) {
-            ctx.msg.channel.sendMessage(response.message);
+    desc: 'Talk to the bot as if it were a human (sorta).',
+    fullDesc: 'Uses the Cleverbot API to simulate a conversation with another human.',
+    usage: '<message>',
+    main: (bot, ctx) => {
+        return new Promise((resolve, reject) => {
+            if (ctx.suffix.length === 0) {
+                ctx.msg.channel.sendMessage('Please enter a message to use to talk with.').then(() => reject([new Error('No message given.')])).catch(reject);
+            } else {
+                talkbot.write(ctx.suffix, (response) => {
+                    ctx.msg.channel.sendMessage(response.message).then(() => resolve()).catch(reject);
+                });
+            }
         });
     }
 }

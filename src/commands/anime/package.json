@@ -1,8 +1,6 @@
 {
-  "main": "anime.js",
-  "dependencies": {
-    "lodash.filter": "^4.4.0",
-    "request": "^2.72.0",
-    "xml2js": "^0.4.16"
-  }
+    "main": "anime.js",
+    "dependencies": {
+        "malapi": "^0.0.3"
+    }
 }

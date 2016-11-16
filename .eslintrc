@@ -16,10 +16,6 @@
         "quotes": [
             "warn",
             "double"
-        ],
-        "semi": [
-            "warn",
-            "always"
         ]
     }
 }

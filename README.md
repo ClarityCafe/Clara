@@ -1,25 +1,24 @@
 # owo-whats-this [![Build Status](https://travis-ci.org/owo-dev-team/owo-whats-this.svg?branch=master)](https://travis-ci.org/owo-dev-team/owo-whats-this)
-A really experimental (and borked) Discord.js bot written in ECMAScript 6
+A really experimental (and borked) Discord.JS bot written in ECMAScript 6
 
-# Building and Running
-This Script has been proven to work on Node v6 and above
-We cannot assure complete functionality on Node v4 and below.
+# Running
 
-NOTE: you need a installation of Node.js from the *NVM Repository*, this is possible by installing [nvm](http://nvm.sh) and make the following Node Environments your default (you can only set one).
-Linux users require this since the official packages in some distros like Ubuntu only has 4.x.x. 
+In order to run this bot, you will need one of the most recent versions of Node.JS. Anything that is 6.x.x or above should work, but it's best to make sure that your Node version is the latest stable version.
+
+NOTE: Any version of Node.JS that is below 6.x.x **WILL NOT WORK** due to this bot relying on things that are present in ES6.
+
+If you are running this on Linux, you may need to install [Node Version Manager](http://nvm.sh) in order to get the latest version, as the official packages in some distros like Ubuntu and Debian only have a version of 4.x.x.
 
 # Contributing
 
 Check out CONTRIBUTING.md for guidelines.
 
-#Licensing
+# Licensing
 
-The underlying source code is licensed under MIT.
+The underlying source code is licensed under the [MIT License](https://en.wikipedia.org/wiki/MIT_License).
 
+Copyright &copy; 2016 Capuccino, Ovyerus and the repository contributors.
 
-Copyright (c) 2016 Capuccino , Ovyerus and the repository contributors.
-
-
-see LICENSE.
+See [LICENSE](LICENSE) for full license.
 
 

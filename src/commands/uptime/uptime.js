@@ -1,14 +1,16 @@
 exports.commands = [
-    "uptime"
+    'uptime'
 ];
 
-const parseMs = require('../../utilities.js');
+const Promise = require('bluebird');
+const util = require(`${_baseDir}/lib/util.js`);
 
 exports.uptime = {
-    name: "uptime",
-    desc: "Check uptime of the bot",
-    longDesc: "Used to check the bot's operation length",
-    main: function(bot, ctx) {
-        ctx.msg.channel.sendMessage(parseMs(bot.uptime));
+    desc: 'Check uptime of the bot.',
+    fullDesc: "Used to check the bot's operation length.",
+    main: (bot, ctx) => {
+        return new Promise((resolve, reject) => {
+            ctx.msg.channel.sendMessage(`\`${util.msToTime(bot.uptime)}\``).then(() => resolve()).catch(err => reject([err]));
+        });
     }
 }

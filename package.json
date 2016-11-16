@@ -21,17 +21,10 @@
   },
   "homepage": "https://github.com/sr229/owo-whats-this#readme",
   "dependencies": {
-    "babel": "^6.5.2",
-    "babel-cli": "^6.14.0",
-    "babel-preset-es2015": "^6.14.0",
-    "babel-preset-latest": "^6.16.0",
-    "cluster": "^0.7.7",
+    "bluebird": "^3.4.6",
+    "chalk": "^1.1.3",
     "discord.js": "^9.3.1",
     "eslint": "^3.9.1",
-    "express": "^4.14.0",
-    "node-es-module-loader": "^0.1.9",
-    "node-json-db": "^0.7.3",
-    "nodesu": "^0.6.0",
-    "npm": "^3.10.8"
+    "node-json-db": "^0.7.3"
   }
 }
