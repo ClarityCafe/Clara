@@ -14,10 +14,10 @@ At the top of the command file, have a multi-line comment with the command file 
  */
 ```
 
-Next, define all the modules used in the whole command file, as well as any variables that are going to be used in the commands that don"t need/cant be put directly in the functions. Make sure to always include `bluebird` as `Promise` as this is used in all commands for async and is faster than standard ES6 Promises.
+Next, define all the modules used in the whole command file, as well as any variables that are going to be used in the commands that don't need/cant be put directly in the functions. Make sure to always include `bluebird` as `Promise` as this is used in all commands for async and is faster than standard ES6 Promises.
 
 ```js
-const Promise = require("bluebird");
+const Promise = require('bluebird');
 ... 
 ```
 
@@ -25,7 +25,7 @@ After that comes `exports.commands` which is an array used to define the command
 
 ```js
 exports.commands = [
-    "ping"
+    'ping'
 ];
 ```
 
@@ -43,11 +43,11 @@ If you reject the Promise with the error in an array, it will not send an error 
 
 ```js
 exports.ping = {
-    desc: "Ping!",
-    longDesc: "Ping the bot and check it"s latency.",
+    desc: 'Ping!',
+    longDesc: "Ping the bot and check it's latency.",
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.sendMessage("Pong!").then(m => {
+            ctx.msg.channel.sendMessage('Pong!').then(m => {
                 m.edit(`Pong! \`${m.timestamp - ctx.msg.timestamp}ms\``).then(() => resolve()).catch(err => reject([err]));
             }).catch(err => reject([err]));
         });
@@ -64,18 +64,18 @@ In the end, the whole code (for this example) should look like this.
  * Contributed by Capuccino, Ovyerus.
  */
 
-const Promise = require("bluebird");
+const Promise = require('bluebird');
 
 exports.commands = [
-    "ping"
+    'ping'
 ];
 
 exports.ping = {
-    desc: "Ping!",
-    longDesc: "Ping the bot and check it"s latency.",
+    desc: 'Ping!',
+    longDesc: "Ping the bot and check it's latency.",
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.sendMessage("Pong!").then(m => {
+            ctx.msg.channel.sendMessage('Pong!').then(m => {
                 m.edit(`Pong! \`${m.timestamp - ctx.msg.timestamp}ms\``).then(() => resolve()).catch(err => reject([err]));
             }).catch(err => reject([err]));
         });
@@ -85,7 +85,7 @@ exports.ping = {
 
 # CTX Object
 
-`ctx` stands for "context"
+`ctx` stands for 'context'
 
 This object is a standard JavaScript object with 5 properties.
 - `msg`: [[Discord.JS Message Object]](https://discord.js.org/#!/docs/tag/master/class/Message) - Standard Discord.JS message object.
