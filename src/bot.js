@@ -9,18 +9,18 @@
  */
 
 // Framework imports
-const Discord = require('discord.js');
-const JsonDB = require('node-json-db');
-const Promise = require('bluebird');
-const chalk = require('chalk');
-const fs = require('fs');
-const util = require('util');
+const Discord = require("discord.js");
+const JsonDB = require("node-json-db");
+const Promise = require("bluebird");
+const chalk = require("chalk");
+const fs = require("fs");
+const util = require("util");
 
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
 const bot = new Discord.Client();
 exports.bot = bot;
-const data = new JsonDB('../data', true, true);
+const data = new JsonDB("../data", true, true);
 
 // eyes
 global._baseDir = __dirname;
@@ -42,27 +42,27 @@ function loggerPrefix(msg) {
 }
 
 function handleCmdErr(msg, cmd, err) {
-    logger.warn(loggerPrefix(msg) + `Error when running command '${cmd}':\n${err instanceof Array ? err[0] : err}`)
+    logger.warn(loggerPrefix(msg) + `Error when running command "${cmd}":\n${err instanceof Array ? err[0] : err}`)
     if ((err instanceof Array) === false) {
-        var errMsg = `Unexpected error while executing command '${cmd}'\n`;
-        errMsg += '```js\n';
-        errMsg += err + '\n';
-        errMsg += '```';
+        var errMsg = `Unexpected error while executing command "${cmd}"\n`;
+        errMsg += "```js\n";
+        errMsg += err + "\n";
+        errMsg += "```";
         msg.channel.sendMessage(errMsg);
     }
 }
 
 // Init
-bot.on('ready', () => {
+bot.on("ready", () => {
     commandLoader.init().then(() => {
-        logger.info(`Loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? 'command' : 'commands'}.`);
+        logger.info(`Loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? "command" : "commands"}.`);
         logger.info(`${bot.user.username} is connected to Discord and ready to use.`);
-        logger.info(`Current prefix is '${config.mainPrefix}'`);
+        logger.info(`Current prefix is "${config.mainPrefix}"`);
     }).catch(err => {
         console.error(`Experienced error while loading commands: ${err}`);
     });
-    if (!data.data.admins) data.push('/', { admins: [] }, false);
-    if (!data.data.blacklist) data.push('/', { blacklist: [] }, false);
+    if (!data.data.admins) data.push("/", { admins: [] }, false);
+    if (!data.data.blacklist) data.push("/", { blacklist: [] }, false);
     bot.internal.config = config;
     bot.internal.data = data;
 });
@@ -71,22 +71,22 @@ bot.on('ready', () => {
 bot.on("message", msg => {
     if (msg.author.id === bot.user.id || msg.author.bot) return;
     require(`${__dirname}/lib/prefixParser.js`)(msg.content).then(content => {
-        if (!msg.guild && content == undefined) logger.custom('cyan', 'dm', loggerPrefix(msg) + msg.cleanContent);
+        if (!msg.guild && content == undefined) logger.custom("cyan", "dm", loggerPrefix(msg) + msg.cleanContent);
         if (content == undefined) return;
 
-        var args = content.split(' ');
+        var args = content.split(" ");
         var cmd = args.shift();
-        var suffix = args.join(' ');
+        var suffix = args.join(" ");
         var guildBot;
-        msg.guild ? guildBot = msg.guild.members.find('id', bot.user.id) : guildBot = null;
+        msg.guild ? guildBot = msg.guild.members.find("id", bot.user.id) : guildBot = null;
         var ctx = {msg: msg, args: args, cmd: cmd, suffix: suffix, guildBot: guildBot};
 
         if (bot.commands[cmd]) {
             logger.cmd(loggerPrefix(msg) + msg.cleanContent);
 
-            if (bot.commands[cmd].adminOnly && (msg.author.id === config.ownerID || data.getData('/admins').indexOf(msg.author.id) !== -1)) {
+            if (bot.commands[cmd].adminOnly && (msg.author.id === config.ownerID || data.getData("/admins").indexOf(msg.author.id) !== -1)) {
                 bot.commands[cmd].main(bot, ctx).then(() => {
-                    logger.cmd(loggerPrefix(msg) + `Successfully ran owner command '${cmd}'`);
+                    logger.cmd(loggerPrefix(msg) + `Successfully ran owner command "${cmd}"`);
                 }).catch(err => {
                     handleCmdErr(msg, cmd, err);
                 });
@@ -94,20 +94,20 @@ bot.on("message", msg => {
                 msg.channel.sendMessage(`You do not have permission to do that.`);
             } else {
                 bot.commands[cmd].main(bot, ctx).then(() => {
-                    logger.cmd(loggerPrefix(msg) + `Successfully ran command '${cmd}'`);
+                    logger.cmd(loggerPrefix(msg) + `Successfully ran command "${cmd}"`);
                 }).catch(err => {
                    handleCmdErr(msg, cmd, err);
                 })
             }
         }
     }).catch(err => {
-        console.error(`${chalk.redBg('prefixParser')}: Failed to parse message for prefix: ${err}`);
+        console.error(`${chalk.redBg("prefixParser")}: Failed to parse message for prefix: ${err}`);
     });
 });
 
 // Handle disconnect
-bot.on('disconnected', () => {
-    console.log('disconnected from Discord, retrying...');
+bot.on("disconnected", () => {
+    console.log("disconnected from Discord, retrying...");
     bot.login(config.token).catch(err => {
         console.log(`Error when attempting to reconnect to Discord, terminating...\n${err}`);
         process.exit(1);

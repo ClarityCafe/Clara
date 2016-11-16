@@ -10,14 +10,14 @@
  */
 
 // Dependancies
-const fs = require('fs');
-const path = require('path');
-const Promise = require('bluebird');
-const cp = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const Promise = require("bluebird");
+const cp = require("child_process");
 const logger = require(`${__dirname}/logger.js`);
 
 // Variables
-var commandsDirectory = 'commands';
+var commandsDirectory = "commands";
 var commandFolders;
 var commandDependencies = [];
 var noLoad = [];
@@ -42,8 +42,8 @@ function preloadCommands() {
 		var deps = [];
 		for (let awoo of commandFolders) {
 			var cmdFiles = fs.readdirSync(`${_baseDir}/${commandsDirectory}/${awoo}`);
-			if (cmdFiles.indexOf('package.json') === -1) {
-				logger.customError('commandLoader/preloadCommands', `Skipping over '${awoo}' due to missing package.json`);
+			if (cmdFiles.indexOf("package.json") === -1) {
+				logger.customError("commandLoader/preloadCommands", `Skipping over "${awoo}" due to missing package.json`);
 				noLoad.push(awoo);
 			} else {
 				var jsooon = fs.readFileSync(`${_baseDir}/${commandsDirectory}/${awoo}/package.json`);
@@ -60,11 +60,11 @@ function preloadCommands() {
 			}
 		};
 		if (deps.length > 0) {
-			deps = deps.join(' ');
-			logger.custom('blue', 'commandLoader/preloadCommands', `Installing dependencies for commands, this may take a while...\nDependencies: ${deps}`);
+			deps = deps.join(" ");
+			logger.custom("blue", "commandLoader/preloadCommands", `Installing dependencies for commands, this may take a while...\nDependencies: ${deps}`);
 			cp.exec(`npm i ${deps}`, (err, stdout, stderr) => {
-				if (err) logger.customError('commandLoader/preloadCommands', `Error when trying to install dependencies: ${err}`);
-				if (stderr) logger.customError('commandLoader/preloadCommands', `Error when trying to install dependencies: ${stderr}`);
+				if (err) logger.customError("commandLoader/preloadCommands", `Error when trying to install dependencies: ${err}`);
+				if (stderr) logger.customError("commandLoader/preloadCommands", `Error when trying to install dependencies: ${stderr}`);
 				resolve();
 			});
 		} else {
@@ -83,7 +83,7 @@ function loadCommands() {
 				commandPackage = require(`${_baseDir}/${commandsDirectory}/${cmdFolder}/package.json`);
 				command = require(`${_baseDir}/${commandsDirectory}/${cmdFolder}/${commandPackage.main}`);
 			} catch(err) {
-				logger.customError('commandLoader/loadCommands', `Experienced error while loading command '${cmdFolder}', skipping...\n${err}`);
+				logger.customError("commandLoader/loadCommands", `Experienced error while loading command "${cmdFolder}", skipping...\n${err}`);
 				noLoad.push(awoo);
 			}
 			if (command) {
@@ -91,13 +91,13 @@ function loadCommands() {
 					for (let cmd of command.commands) {
 						if (command[cmd]) {
 							bot.addCommand(cmd, command[cmd]).then(() => {
-								logger.custom('blue', 'commandLoader/loadCommands', `Successfully loaded command '${cmd}'`);
-							}).catch(err => logger.customError('commandLoader/loadCommands', `Error when attempting to load command '${cmd}':\n${err}`));
+								logger.custom("blue", "commandLoader/loadCommands", `Successfully loaded command "${cmd}"`);
+							}).catch(err => logger.customError("commandLoader/loadCommands", `Error when attempting to load command "${cmd}":\n${err}`));
 						}
 					};
 					resolve();
 				} else {
-					logger.customError('commandLoader/loadCommands', `Command '${cmdFolder}' not properly set up, skipping...\nCommand array not found.`);
+					logger.customError("commandLoader/loadCommands", `Command "${cmdFolder}" not properly set up, skipping...\nCommand array not found.`);
 				}
 			}
 		};
@@ -106,9 +106,9 @@ function loadCommands() {
 
 exports.init = () => {
 	return new Promise((resolve, reject) => {
-		logger.custom('blue', 'commandLoader/init', 'Preloading commands.');
+		logger.custom("blue", "commandLoader/init", "Preloading commands.");
 		preloadCommands().then(() => {
-			logger.custom('blue', 'commandLoader/init', 'Loading commands.');
+			logger.custom("blue", "commandLoader/init", "Loading commands.");
 			loadCommands().then(() => {
 				resolve();
 			}).catch(reject);

@@ -7,14 +7,14 @@
  * Licensed under MIT. Copyright (c) 2016 Capuccino, Ovyerus and the repository contributors.
  */
 
-const fs = require('fs');
-const path = require('path');
-const Promise = require('bluebird');
+const fs = require("fs");
+const path = require("path");
+const Promise = require("bluebird");
 const bot = require(`${_baseDir}/bot.js`).bot;
 
 function parse(content) {
     return new Promise((resolve, reject) => {
-        if (typeof content !== 'string') reject(new Error('content is not a string'));
+        if (typeof content !== "string") reject(new Error("content is not a string"));
 
         var oldContent = content;
         var prefixes = JSON.parse(fs.readFileSync(`${_baseDir}/prefixes.json`));
