@@ -4,34 +4,34 @@
  * Contributed by Capuccino, Ovyerus.
  */
 
-const Promise = require('bluebird');
+const Promise = require("bluebird");
 
 exports.commands = [
     // Define the names of your commands here.
-    'ping',
-    'pong'
+    "ping",
+    "pong"
 ];
 
 // Example ping command.
 exports.ping = {
-    desc: '',
-    fullDesc: '',
+    desc: "",
+    fullDesc: "",
     adminOnly: true,
-    usage: '',
+    usage: "",
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.sendMessage('Ping!').then(() => resolve()).catch(err => reject([err]));
+            ctx.msg.channel.sendMessage("Ping!").then(() => resolve()).catch(err => reject([err]));
         });
     }
 }
 
 // Example pong command (demonstrating a full command, and multiple commands in a file).
 exports.pong = {
-    desc: 'Ping!',
-    fullDesc: 'Simple response command.',
+    desc: "Ping!",
+    fullDesc: "Simple response command.",
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.sendMessage('Pong!').then(() => resolve()).catch(err => reject([err]));
+            ctx.msg.channel.sendMessage("Pong!").then(() => resolve()).catch(err => reject([err]));
         });
     }
 }

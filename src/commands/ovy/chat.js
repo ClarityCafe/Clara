@@ -7,24 +7,24 @@
 
 
 exports.commands = [
-    'talk'
+    "talk"
 ];
 
-const Cleverbot = require('cleverbot-node');
-const Promise = require('bluebird');
+const Cleverbot = require("cleverbot-node");
+const Promise = require("bluebird");
 
 var talkbot = new Cleverbot();
 
 Cleverbot.prepare(() => {});
 
 exports.talk = {
-    desc: 'Talk to the bot as if it were a human (sorta).',
-    fullDesc: 'Uses the Cleverbot API to simulate a conversation with another human.',
-    usage: '<message>',
+    desc: "Talk to the bot as if it were a human (sorta).",
+    fullDesc: "Uses the Cleverbot API to simulate a conversation with another human.",
+    usage: "<message>",
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.sendMessage('Please enter a message to use to talk with.').then(() => reject([new Error('No message given.')])).catch(reject);
+                ctx.msg.channel.sendMessage("Please enter a message to use to talk with.").then(() => reject([new Error("No message given.")])).catch(reject);
             } else {
                 talkbot.write(ctx.suffix, (response) => {
                     ctx.msg.channel.sendMessage(response.message).then(() => resolve()).catch(reject);
