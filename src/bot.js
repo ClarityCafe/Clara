@@ -1,131 +1,117 @@
 /*
  * owo-whats this - Core file
- * Contributed by :
- * Capuccino (discord.js , discord.htc)
- * Ovyerus (discord.js)
- * nekonez (discord.htc)
+ * 
+ * Contributed by:
+ * | Capuccino
+ * | Ovyerus
  *
  * Licensed under MIT. Copyright (c) 2016 Capuccino, Ovyerus and the repository contributors.
  */
 
-//Framework imports
-const Discord = require("discord.js");
-const fs = require("fs");
-const util = require("util");
-const JsonDB = require("node-json-db");
+// Framework imports
+const Discord = require('discord.js');
+const JsonDB = require('node-json-db');
+const Promise = require('bluebird');
+const chalk = require('chalk');
+const fs = require('fs');
+const util = require('util');
 
-//Constants
-const config = require('./config.json');
+// Setup stuff
+const config = require(`${__dirname}/config.json`);
 const bot = new Discord.Client();
-const data = new JsonDB('data', true, true);
+exports.bot = bot;
+const data = new JsonDB('../data', true, true);
 
-//Init
-bot.on('ready', () => {
-    require('./init_commands.js').init();
-    console.log("Readying up! Initializing commands...");
-    if (!data.data.admins) data.push('/', { admins: [] }, false);
-    if (!data.data.blacklist) data.push('/', { blacklist: [] }, false);
-    bot.config = config;
-    bot.data = data;
-});
-//Don't place anything here, commands have their own JS files.
-var commands = {};
-//somehow Help doesn't work outside the core file. TODO: allow Help to work outside the core file.
-commands.help = {
-        name: "help",
-        desc: "This help command.",
-        longDesc: "The help command. Give it an argument to see more information about a command.",
-        usage: "[command]",
-        main: (bot, ctx) => {
-            if (ctx.args.length === 0) {
-                var helpStart = util.format("%s - %s\n", config.botName, config.botDesc);
-                var helpThing = "";
-                var cmd;
-                for (cmd in commands) {
-                    if (commands[cmd].usage !== undefined) {
-                        var command = util.format("**%s %s** - %s\n", commands[cmd].name, commands[cmd].usage, commands[cmd].desc);
-                        helpThing += command;
-                    } else {
-                        var command = util.format("**%s** - %s\n", commands[cmd].name, commands[cmd].desc);
-                        helpThing += command;
-                    }
-                }
-                ctx.msg.channel.sendMessage("Help has been sent to your DMs.")
-                ctx.msg.author.sendMessage(helpStart + helpThing);
-            } else if (args.length === 1) {
-                var cmd = commands[args[0]];
-                if (cmd !== undefined && cmd.usage !== undefined) {
-                    ctx.msg.channelsendMessage(util.format("**%s %s** - %s", cmd.name, cmd.usage, cmd.longDesc));
-                } else if (cmd !== undefined) {
-                    ctx.msg.channel.sendMessage(util.format("**%s** - %s", cmd.name, cmd.longDesc));
-                } else if (cmd === undefined) {
-                    ctx.msg.sendMessage("I'm sorry, but that command does not seem to exist.");
-                }
-            }
-        }
-    }
-    // Synchronously works with init_commands.js. After init_commands checks for deps and returns a functioning command,
-    // this exports the following functioning command. Obsolete/broken commands aren't exported for a reason.
-    // We like to keep it that way.
-exports.addCommand = function(commandName, commandObject) {
-    try {
-        commands[commandName] = commandObject;
-    } catch (err) {
-        console.log(err);
+// eyes
+global._baseDir = __dirname;
+
+// Custom imports
+const commandLoader = require(`${__dirname}/lib/commandLoader.js`);
+const commandsMod = require(`${__dirname}/lib/commands.js`);
+const logger = require(`${__dirname}/lib/logger.js`);
+exports.addCommand = commandsMod.addCommand;
+exports.removeCommand = commandsMod.removeCommand;
+
+bot.internal = {};
+bot.internal.logger = logger;
+bot.commands = commandsMod.commands;
+
+// Functions
+function loggerPrefix(msg) {
+    return msg.guild ? `${msg.guild.name} | ${msg.channel.name} > ${msg.author.username}#${msg.author.discriminator} (${msg.author.id}): ` : `Direct Message > ${msg.author.username}#${msg.author.discriminator} (${msg.author.id}): `;
+}
+
+function handleCmdErr(msg, cmd, err) {
+    logger.warn(loggerPrefix(msg) + `Error when running command '${cmd}':\n${err instanceof Array ? err[0] : err}`)
+    if ((err instanceof Array) === false) {
+        var errMsg = `Unexpected error while executing command '${cmd}'\n`;
+        errMsg += '```js\n';
+        errMsg += err + '\n';
+        errMsg += '```';
+        msg.channel.sendMessage(errMsg);
     }
 }
-exports.commandCount = function() {
-    return Object.keys(commands).length;
-};
 
-//TODO : fix errors on command handler
+// Init
+bot.on('ready', () => {
+    commandLoader.init().then(() => {
+        logger.info(`Loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? 'command' : 'commands'}.`);
+        logger.info(`${bot.user.username} is connected to Discord and ready to use.`);
+        logger.info(`Current prefix is '${config.mainPrefix}'`);
+    }).catch(err => {
+        console.error(`Experienced error while loading commands: ${err}`);
+    });
+    if (!data.data.admins) data.push('/', { admins: [] }, false);
+    if (!data.data.blacklist) data.push('/', { blacklist: [] }, false);
+    bot.internal.config = config;
+    bot.internal.data = data;
+});
 
+// Command handler
 bot.on("message", msg => {
-    //giant ass CMD thing CP'ed from flan-chanbot.
-    if (msg.content.startsWith(config.prefix)) {
-        const args = msg.content.substring(config.prefix.length, msg.content.length).split(' ');
-        const cmd = args.shift();
-        const suffix = args.join(' ');
-        if (commands[cmd] !== undefined) {
-            if (data.getData('/blacklist').indexOf(msg.author.id) !== -1) return;
-            try {
-                if (commands[cmd].adminOnly && data.getData('/admins').indexOf(msg.author.id) !== -1) {
-                    commands[cmd].main(bot, { msg: msg, args: args, suffix: suffix });
-                } else if (commands[cmd].adminOnly && data.data.getData('/admins').indexOf(msg.author.id) === -1) {
-                    msg.channel.sendMessage('That command is restricted to the bot owner/s.');
-                } else {
-                    commands[cmd].main(bot, { msg: msg, args: args, suffix: suffix });
-                }
-            } catch (err) {
-                console.log(err);
-                var errMsg = `Unexpected error while executing commmand \`${cmd}\`\n`;
-                errMsg += '```js\n';
-                errMsg += err + '\n';
-                errMsg += '```';
-                msg.channel.sendMessage(errMsg);
+    if (msg.author.id === bot.user.id || msg.author.bot) return;
+    require(`${__dirname}/lib/prefixParser.js`)(msg.content).then(content => {
+        if (!msg.guild && content == undefined) logger.custom('cyan', 'dm', loggerPrefix(msg) + msg.cleanContent);
+        if (content == undefined) return;
+
+        var args = content.split(' ');
+        var cmd = args.shift();
+        var suffix = args.join(' ');
+        var guildBot;
+        msg.guild ? guildBot = msg.guild.members.find('id', bot.user.id) : guildBot = null;
+        var ctx = {msg: msg, args: args, cmd: cmd, suffix: suffix, guildBot: guildBot};
+
+        if (bot.commands[cmd]) {
+            logger.cmd(loggerPrefix(msg) + msg.cleanContent);
+
+            if (bot.commands[cmd].adminOnly && (msg.author.id === config.ownerID || data.getData('/admins').indexOf(msg.author.id) !== -1)) {
+                bot.commands[cmd].main(bot, ctx).then(() => {
+                    logger.cmd(loggerPrefix(msg) + `Successfully ran owner command '${cmd}'`);
+                }).catch(err => {
+                    handleCmdErr(msg, cmd, err);
+                });
+            } else if (bot.commands[cmd].adminOnly) {
+                msg.channel.sendMessage(`You do not have permission to do that.`);
+            } else {
+                bot.commands[cmd].main(bot, ctx).then(() => {
+                    logger.cmd(loggerPrefix(msg) + `Successfully ran command '${cmd}'`);
+                }).catch(err => {
+                   handleCmdErr(msg, cmd, err);
+                })
             }
         }
-    }
-
-    if (msg.content.startsWith("<@" + bot.user.id + "> prefix")) {
-        ctx.reply("***My prefix is *** `" + config.prefix + "`!");
-    }
+    }).catch(err => {
+        console.error(`${chalk.redBg('prefixParser')}: Failed to parse message for prefix: ${err}`);
+    });
 });
-// if bot disconnects, this would pass up
-bot.on("disconnected", () => {
-    console.log("disconnected!, retrying...");
-    try {
-        !config.useEmail ? bot.login(config.token) : bot.login(config.email, config.password);
-    } catch (err) {
-        //let it terminate. PM2 will re-start the bot automatically.
-        console.log("I tried. terminating...");
+
+// Handle disconnect
+bot.on('disconnected', () => {
+    console.log('disconnected from Discord, retrying...');
+    bot.login(config.token).catch(err => {
+        console.log(`Error when attempting to reconnect to Discord, terminating...\n${err}`);
         process.exit(1);
-    }
+    });
 });
 
-bot.on("guildMemberAdd", (member) => {
-    //TODO: add a better guild exclusion
-    return config.AllowGreets ? ctx.msg.author("Welcome to " + guild.name + "!!!") : null;
-});
-
-!config.useEmail ? bot.login(config.token) : bot.login(config.email, config.password);
+bot.login(config.token);
