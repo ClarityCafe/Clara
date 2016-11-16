@@ -11,8 +11,8 @@ Information on properly creating commands for the bot can be found [here](exampl
 
 # Code Styling
 
-To fit in with the "theme" of the bot, please use any ES6 features where possible/needed, e.g. arrow functions, template strings, promises, etc.
-Remember, arrow functions don't change `this`, so if for some reason you need `this` changed, eg. using a library which does so, then you"ll need to use the regular `function() {}`.
+To fit in with the 'theme' of the bot, please use any ES6 features where possible/needed, e.g. arrow functions, template strings, promises, etc.
+Remember, arrow functions don't change `this`, so if for some reason you need `this` changed, eg. using a library which does so, then you'll need to use the regular `function() {}`.
 
 Also, please make sure to follow the way that the code in the repository is set out for consistency.
 
@@ -22,5 +22,5 @@ Please fork this repository, make your changes, and then submit a pull request t
 
 # Code Verification
 
-We use Travis for Code Verification. If your code fails at runtime, it will not be merged until it"s fixed.
+We use Travis for Code Verification. If your code fails at runtime, it will not be merged until it's fixed.
 There's an exception if the linter is a bitch.

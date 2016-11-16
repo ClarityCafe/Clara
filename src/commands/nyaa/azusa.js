@@ -5,18 +5,18 @@
  */
 
 exports.commands = [
-    "nyaa"
+    'nyaa'
 ];
 
-const Promise = require("bluebird");
-const request = require("request");
+const Promise = require('bluebird');
+const request = require('request');
 
 exports.nyaa = {
-    desc: "Nyaaa!",
-    fullDesc: "Gets an image from random.cat",
+    desc: 'Nyaaa!',
+    fullDesc: 'Gets an image from random.cat',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            request("http://random.cat/meow", (err, res, body) => {
+            request('http://random.cat/meow', (err, res, body) => {
                 if (err) {
                     reject(err);
                 } else if (res.statusCode !== 200) {
