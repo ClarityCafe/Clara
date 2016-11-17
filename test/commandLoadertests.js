@@ -9,7 +9,7 @@ jasmine.describe("loadCommandsTest", () => {
  
 jasmine.it("expectations_vs_reality", () => {
 
-    expect(awau).toBe("pass");
-    expect(awoo).toBe("faille");
+    jasmine.expect(awau).toBe("pass");
+    jasmine.expect(awoo).toBe("faille");
     })
 })
