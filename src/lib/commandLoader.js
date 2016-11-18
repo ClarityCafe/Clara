@@ -21,6 +21,7 @@ var commandsDirectory = 'commands';
 var commandFolders;
 var commandDependencies = [];
 var noLoad = [];
+var commandsFrom = {};
 
 function getDirectories(dir) {
 	return new Promise((resolve, reject) => {
@@ -84,13 +85,13 @@ function loadCommands() {
 				command = require(`${_baseDir}/${commandsDirectory}/${cmdFolder}/${commandPackage.main}`);
 			} catch(err) {
 				logger.customError('commandLoader/loadCommands', `Experienced error while loading command '${cmdFolder}', skipping...\n${err}`);
-				noLoad.push(awoo);
 			}
 			if (command) {
 				if (command.commands) {
 					for (let cmd of command.commands) {
 						if (command[cmd]) {
 							bot.addCommand(cmd, command[cmd]).then(() => {
+                                commandsFrom[cmd] = `${cmdFolder}/${commandPackage.main}`;
 								logger.custom('blue', 'commandLoader/loadCommands', `Successfully loaded command '${cmd}'`);
 							}).catch(err => logger.customError('commandLoader/loadCommands', `Error when attempting to load command '${cmd}':\n${err}`));
 						}
@@ -115,3 +116,5 @@ exports.init = () => {
 		}).catch(reject);
 	});
 }
+
+exports.commandsFrom = commandsFrom;

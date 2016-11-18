@@ -17,10 +17,10 @@ function parse(content) {
         if (typeof content !== 'string') reject(new Error('content is not a string'));
 
         var oldContent = content;
-        var prefixes = JSON.parse(fs.readFileSync(`${_baseDir}/prefixes.json`));
+        var prefixes = JSON.parse(fs.readFileSync(`${_baseDir}/data/prefixes.json`));
         prefixes.push(`<@${bot.user.id}> `);
         
-        if (!content.startsWith(bot.internal.config.mainPrefix)) {
+        if (!content.startsWith(bot.config.mainPrefix)) {
             for (let i in prefixes) {
                 if (content.startsWith(prefixes[i])) {
                     content = content.substring(prefixes[i].length);
@@ -28,7 +28,7 @@ function parse(content) {
                 }
             }
         } else {
-            content = content.substring(bot.internal.config.mainPrefix.length);
+            content = content.substring(bot.config.mainPrefix.length);
         }
 
         if (content !== oldContent) {

@@ -22,7 +22,7 @@ function custom(colour, name, message) {
 }
 
 function customError(name, message) {
-    console.error(`${chalk.red(name)} ${chalk.red(message)}`);
+    console.error(`${chalk.bgRed(name)} ${chalk.red(message)}`);
 }
 
 exports.info = info;
