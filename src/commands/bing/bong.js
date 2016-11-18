@@ -9,7 +9,7 @@ exports.commands = [
 ];
 
 //can't we use ES6 memes here?
-const bing = require("bing");
+const bing = require("node-bing-api")({});
 const Promise = require("bluebird");
 const logger = require(`${_baseDir}/lib/logger.js`);
 
@@ -22,7 +22,7 @@ exports.bing = {
             function searchTerm(search) {
                 //placeholder for now
                 //refer to http://www.bing.com/developers/s/apibasics.html
-                //and https://github.com/jwalgran/bing
+                //and https://github.com/goferito/node-bing-api
             }
         })
     }
