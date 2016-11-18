@@ -31,4 +31,4 @@ exports.bing = {
     }
 },
 
-//refer to https://github.com/goferito/node-bing-api for API usage.
+// refer to https://github.com/goferito/node-bing-api for API usage
