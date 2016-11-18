@@ -5,6 +5,10 @@ Look at the `package.json` for other commands to see the structure of them.
 
 Any modules that are used by several commands/the main bot/whatever, go into the `lib` folder.
 
+`data` is used for any data files by various commands, bot, etc.
+
+`logs` is for the logs output by pm2.
+
 ## Creating Commands
 
 Information on properly creating commands for the bot can be found [here](example/sample_command/README.md).
