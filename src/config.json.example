@@ -2,5 +2,6 @@
 	"token": "",
 	"ownerID": "",
 	"mainPrefix": "?",
-	"osuApiKey": ""
+	"osuApiKey": "",
+	"debug": false
 }

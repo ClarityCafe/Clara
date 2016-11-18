@@ -10,31 +10,46 @@
 
 // Framework imports
 const Discord = require('discord.js');
-const JsonDB = require('node-json-db');
 const Promise = require('bluebird');
 const chalk = require('chalk');
 const fs = require('fs');
 const util = require('util');
 
-// Setup stuff
-const config = require(`${__dirname}/config.json`);
-const bot = new Discord.Client();
-exports.bot = bot;
-const data = new JsonDB('../data', true, true);
-
-// eyes
 global._baseDir = __dirname;
 
-// Custom imports
+// Custom modules
 const commandLoader = require(`${__dirname}/lib/commandLoader.js`);
 const commandsMod = require(`${__dirname}/lib/commands.js`);
 const logger = require(`${__dirname}/lib/logger.js`);
+
+// Setup stuff
+const config = require(`${__dirname}/config.json`);
+const bot = new Discord.Client();
+
+try {
+    require.resolve(`${__dirname}/data/data.json`);
+} catch(err) {
+    fs.writeFile(`${__dirname}/data/data.json`, JSON.stringify({admins: [], blacklist: []}), e => {
+        if (e) {
+            throw e;
+        } else {
+            logger.info('Created data.json file.');
+        }
+    });
+}
+
 exports.addCommand = commandsMod.addCommand;
 exports.removeCommand = commandsMod.removeCommand;
+exports.bot = bot;
 
-bot.internal = {};
-bot.internal.logger = logger;
+bot.logger = logger;
 bot.commands = commandsMod.commands;
+bot.isAdmin = (userID) => {
+    return thingy = JSON.parse(fs.readFileSync(`${__dirname}/data/data.json`)).admins
+}
+bot.isOwner = (userID) => {
+    return userID === config.ownerID;
+}
 
 // Functions
 function loggerPrefix(msg) {
@@ -42,7 +57,7 @@ function loggerPrefix(msg) {
 }
 
 function handleCmdErr(msg, cmd, err) {
-    logger.warn(loggerPrefix(msg) + `Error when running command '${cmd}':\n${err instanceof Array ? err[0] : err}`)
+    logger.warn(loggerPrefix(msg) + `Error when running command '${cmd}':\n${err instanceof Array ? config.debug ? err[0].stack : err[0] : config.debug ? err.stack : err}`)
     if ((err instanceof Array) === false) {
         var errMsg = `Unexpected error while executing command '${cmd}'\n`;
         errMsg += '```js\n';
@@ -55,21 +70,20 @@ function handleCmdErr(msg, cmd, err) {
 // Init
 bot.on('ready', () => {
     commandLoader.init().then(() => {
+        var altPrefixes = JSON.parse(fs.readFileSync(`${__dirname}/data/prefixes.json`));
         logger.info(`Loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? 'command' : 'commands'}.`);
         logger.info(`${bot.user.username} is connected to Discord and ready to use.`);
-        logger.info(`Current prefix is '${config.mainPrefix}'`);
+        logger.info(`Main prefix is '${config.mainPrefix}', can also use @mention.`);
+        logger.info(`${altPrefixes.length > 0 ? `Alternative prefixes: '${altPrefixes.join("', ")}'`: 'No alternative prefixes.'}`);
     }).catch(err => {
         console.error(`Experienced error while loading commands: ${err}`);
     });
-    if (!data.data.admins) data.push('/', { admins: [] }, false);
-    if (!data.data.blacklist) data.push('/', { blacklist: [] }, false);
-    bot.internal.config = config;
-    bot.internal.data = data;
+    bot.config = config;
 });
 
 // Command handler
 bot.on("message", msg => {
-    if (msg.author.id === bot.user.id || msg.author.bot) return;
+    if (msg.author.id === bot.user.id || msg.author.bot || JSON.stringify(fs.readFileSync(`${__dirname}/data/data.json`)).indexOf(msg.author.id) > -1) return;
     require(`${__dirname}/lib/prefixParser.js`)(msg.content).then(content => {
         if (!msg.guild && content == undefined) logger.custom('cyan', 'dm', loggerPrefix(msg) + msg.cleanContent);
         if (content == undefined) return;
@@ -84,7 +98,7 @@ bot.on("message", msg => {
         if (bot.commands[cmd]) {
             logger.cmd(loggerPrefix(msg) + msg.cleanContent);
 
-            if (bot.commands[cmd].adminOnly && (msg.author.id === config.ownerID || data.getData('/admins').indexOf(msg.author.id) !== -1)) {
+            if (bot.commands[cmd].adminOnly && (bot.isOwner(msg.author.id) || bot.isAdmin(msg.author.id))) {
                 bot.commands[cmd].main(bot, ctx).then(() => {
                     logger.cmd(loggerPrefix(msg) + `Successfully ran owner command '${cmd}'`);
                 }).catch(err => {
@@ -101,7 +115,7 @@ bot.on("message", msg => {
             }
         }
     }).catch(err => {
-        console.error(`${chalk.redBg('prefixParser')}: Failed to parse message for prefix: ${err}`);
+        logger.customError('prefixParser', `Failed to parse message for prefix: ${err}`);
     });
 });
 
