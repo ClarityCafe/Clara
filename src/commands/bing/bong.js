@@ -23,9 +23,10 @@ exports.bing = {
                 //this would return only the top search result
                 //any other entries are disregarded
                 bing.web(`${ctx.suffix}`,{top: 1, skip: 0}, (err,res,body) => {
-                    var searchResult = body.webPages.value[0,1];
+                    var searchResultHeader = body.webPages.value[0];
+                    var searchResultBody = body.webPages.value[1];
                     //TODO : Embeds
-                    ctx.msg.channel.sendMessage(searchResult).then(() => resolve()).catch(err => reject([err]));
+                    ctx.msg.channel.sendMessage(searchResult , searchResultBody).then(() => resolve()).catch(err => reject([err]));
                 })
             })
         }
