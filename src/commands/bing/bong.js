@@ -24,6 +24,7 @@ exports.bing = {
                 //any other entries are disregarded
                 bing.web(`${ctx.suffix}`,{top: 1, skip: 0}, (err,res,body) => {
                     var searchResult = body.webPages.value[0,1];
+                    //TODO : Embeds
                     ctx.msg.channel.sendMessage(searchResult).then(() => resolve()).catch(err => reject([err]));
                 })
             })
