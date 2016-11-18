@@ -14,7 +14,7 @@ const config = require(`${__baseDir}/config.json`);
 const Promise = require("bluebird");
 
 exports.bing = {
-    desc: "queries a search team from Bing.",
+    desc: "queries a search term from Bing.",
     fullDesc: "searches using a term provided using Bing.",
     usage: "<Search term>",
     main: (bot, ctx) => {
