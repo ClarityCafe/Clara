@@ -32,7 +32,7 @@ exports.osu = {
                 osu.get_user({u: ctx.args[0]}, res => {
                     var user = res[0];
                     if (user.user_id == undefined) {
-                        ctx.msg.channel.sendMessage('That user could not be found.').then(() => {
+                        ctx.msg.channel.sendMessage(`there was no user matching "${ctx.args}".`).then(() => {
                             reject([new Error('User was not found.')]);
                         }).catch(err => reject([err]));
                     } else {
@@ -80,7 +80,7 @@ exports.ctb = {
                 osu.get_user({u: ctx.args[0], m: 2}, res => {
                     var user = res[0];
                     if (user.user_id == undefined) {
-                        ctx.msg.channel.sendMessage('That user could not be found.').then(() => {
+                        ctx.msg.channel.sendMessage(`there was no user matching "${ctx.args}".`).then(() => {
                             reject([new Error('User was not found.')]);
                         }).catch(err => reject([err]));
                     } else {
@@ -127,7 +127,7 @@ exports.mania = {
                 osu.get_user({u: ctx.args[0], m: 2}, res => {
                     var user = res[0];
                     if (user.user_id == undefined) {
-                        ctx.msg.channel.sendMessage('That user could not be found.').then(() => {
+                        ctx.msg.channel.sendMessage(`there was no user matching "${ctx.args}".`).then(() => {
                             reject([new Error('User was not found.')]);
                         }).catch(err => reject([err]));
                     } else {
