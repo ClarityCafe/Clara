@@ -174,7 +174,7 @@ exports.taiko = {
                 osu.get_user({u: ctx.args[0], m: 1}, res => {
                     var user = res[0];
                     if (user.user_id == undefined) {
-                        ctx.msg.channel.sendMessage('That user could not be found.').then(() => {
+                        ctx.msg.channel.sendMessage(`there was no user matching "${ctx.args}".`).then(() => {
                             reject([new Error('User was not found.')]);
                         }).catch(err => reject([err]));
                     } else {
