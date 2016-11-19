@@ -18,6 +18,8 @@ exports.commands = [
     "ctb"
 ];
 
+//TODO: Embeds
+
 exports.osu = {
     desc: "Retrive stats for osu!'s standard mode for a user.",
     fullDesc: "Uses the osu! API to get information for osu!'s standard mode for a user.",
