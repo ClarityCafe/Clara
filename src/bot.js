@@ -26,6 +26,7 @@ const logger = require(`${__dirname}/lib/logger.js`);
 const config = require(`${__dirname}/config.json`);
 const bot = new Discord.Client();
 
+// Create data files
 try {
     require.resolve(`${__dirname}/data/data.json`);
 } catch(err) {
@@ -33,7 +34,19 @@ try {
         if (e) {
             throw e;
         } else {
-            logger.info('Created data.json file.');
+            logger.info('Created data.json.');
+        }
+    });
+}
+
+try {
+    require.resolve(`${__dirname}/data/prefixes.json`);
+} catch(err) {
+    fs.writeFile(`${__dirname}/data/prefixes.json`, JSON.stringify([]), e => {
+        if (e) {
+            throw e;
+        } else {
+            logger.info('Created prefixes.json.');
         }
     });
 }

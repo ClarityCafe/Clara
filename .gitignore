@@ -52,7 +52,8 @@ jsconfig.json
 
 # Configuration
 src/config.json
-src/data.json
+src/data/data.json
+src/data/prefixes.json
 
 # test data for owo-whats-this
 out
