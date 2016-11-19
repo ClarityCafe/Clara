@@ -9,13 +9,18 @@
     },
     "rules": {
         "no-console": "off",
-        "linebreak-style": [
-            "warn",
-            "windows"
-        ],
         "quotes": [
-            "warn",
-            "double"
-        ]
+            "error",
+            "single",
+			{"avoidEscape": true, "allowTemplateLiterals": true}
+        ],
+		"semi": [
+		    "warn",
+			"always"
+		],
+		"indent": [
+		    "error",
+			4
+		]
     }
 }
