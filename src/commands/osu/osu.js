@@ -18,8 +18,6 @@ exports.commands = [
     "ctb"
 ];
 
-//TODO: Embeds
-
 exports.osu = {
     desc: "Retrive stats for osu!'s standard mode for a user.",
     fullDesc: "Uses the osu! API to get information for osu!'s standard mode for a user.",
@@ -33,8 +31,8 @@ exports.osu = {
             } else {
                 osu.get_user({u: ctx.args[0]}, res => {
                     var user = res[0];
-                    if (user.user_id == undefined) {
-                        ctx.msg.channel.sendMessage(`there was no user matching "${ctx.args}".`).then(() => {
+                    if (user == undefined || user.user_id == undefined) {
+                        ctx.msg.channel.sendMessage('A user with that name or ID could not be found.').then(() => {
                             reject([new Error('User was not found.')]);
                         }).catch(err => reject([err]));
                     } else {
@@ -81,8 +79,8 @@ exports.ctb = {
             } else {
                 osu.get_user({u: ctx.args[0], m: 2}, res => {
                     var user = res[0];
-                    if (user.user_id == undefined) {
-                        ctx.msg.channel.sendMessage(`there was no user matching "${ctx.args}".`).then(() => {
+                    if (user == undefined || user.user_id == undefined) {
+                        ctx.msg.channel.sendMessage('A user with that name or ID could not be found.').then(() => {
                             reject([new Error('User was not found.')]);
                         }).catch(err => reject([err]));
                     } else {
@@ -128,8 +126,8 @@ exports.mania = {
             } else {
                 osu.get_user({u: ctx.args[0], m: 2}, res => {
                     var user = res[0];
-                    if (user.user_id == undefined) {
-                        ctx.msg.channel.sendMessage(`there was no user matching "${ctx.args}".`).then(() => {
+                    if (user == undefined || user.user_id == undefined) {
+                        ctx.msg.channel.sendMessage('A user with that name or ID could not be found.').then(() => {
                             reject([new Error('User was not found.')]);
                         }).catch(err => reject([err]));
                     } else {
@@ -175,8 +173,8 @@ exports.taiko = {
             } else {
                 osu.get_user({u: ctx.args[0], m: 1}, res => {
                     var user = res[0];
-                    if (user.user_id == undefined) {
-                        ctx.msg.channel.sendMessage(`there was no user matching "${ctx.args}".`).then(() => {
+                    if (user == undefined || user.user_id == undefined) {
+                        ctx.msg.channel.sendMessage('A user with that name or ID could not be found.').then(() => {
                             reject([new Error('User was not found.')]);
                         }).catch(err => reject([err]));
                     } else {
