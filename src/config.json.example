@@ -4,5 +4,8 @@
 	"mainPrefix": "?",
 	"osuApiKey": "",
 	"bingAPIKey: "",
-	"debug": false
+	"debug": false,
+	"useEmail": false,
+	"email": "",
+	"password": ""
 }

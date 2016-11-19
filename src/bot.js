@@ -128,4 +128,4 @@ bot.on('disconnected', () => {
     });
 });
 
-bot.login(config.token);
+!config.useEmail ? bot.login(config.token) : bot.login(config.email, config.password);
