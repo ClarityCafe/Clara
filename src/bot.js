@@ -70,7 +70,7 @@ function loggerPrefix(msg) {
 }
 
 function handleCmdErr(msg, cmd, err) {
-    logger.warn(loggerPrefix(msg) + `Error when running command '${cmd}':\n${err instanceof Array ? config.debug ? err[0].stack : err[0] : config.debug ? err.stack : err}`)
+    logger.warn(loggerPrefix(msg) + `Error when running command '${cmd}':\n${err instanceof Array ? config.debug : err[0].stack ? err[0] : config.debug ? err.stack : err}`);
     if ((err instanceof Array) === false) {
         var errMsg = `Unexpected error while executing command '${cmd}'\n`;
         errMsg += '```js\n';
@@ -95,7 +95,7 @@ bot.on('ready', () => {
 });
 
 // Command handler
-bot.on("message", msg => {
+bot.on('message', msg => {
     if (msg.author.id === bot.user.id || msg.author.bot || JSON.stringify(fs.readFileSync(`${__dirname}/data/data.json`)).indexOf(msg.author.id) > -1) return;
     require(`${__dirname}/lib/prefixParser.js`)(msg.content).then(content => {
         if (!msg.guild && content == undefined) logger.custom('cyan', 'dm', loggerPrefix(msg) + msg.cleanContent);
