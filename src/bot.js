@@ -58,7 +58,7 @@ exports.bot = bot;
 bot.logger = logger;
 bot.commands = commandsMod.commands;
 bot.isAdmin = (userID) => {
-    return thingy = JSON.parse(fs.readFileSync(`${__dirname}/data/data.json`)).admins
+    return JSON.parse(fs.readFileSync(`${__dirname}/data/data.json`)).admins.indexOf(userID) !== -1;
 }
 bot.isOwner = (userID) => {
     return userID === config.ownerID;
@@ -96,7 +96,7 @@ bot.on('ready', () => {
 
 // Command handler
 bot.on('message', msg => {
-    if (msg.author.id === bot.user.id || msg.author.bot || JSON.stringify(fs.readFileSync(`${__dirname}/data/data.json`)).indexOf(msg.author.id) > -1) return;
+    if (msg.author.id === bot.user.id || msg.author.bot || JSON.parse(fs.readFileSync(`${__dirname}/data/data.json`)).blacklist.indexOf(msg.author.id) > -1) return;
     require(`${__dirname}/lib/prefixParser.js`)(msg.content).then(content => {
         if (!msg.guild && content == undefined) logger.custom('cyan', 'dm', loggerPrefix(msg) + msg.cleanContent);
         if (content == undefined) return;
