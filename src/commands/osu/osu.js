@@ -24,12 +24,12 @@ exports.osu = {
     usage: '<osu! username/id>',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            if (ctx.args.length === 0) {
+            if (ctx.suffix.length === 0) {
                 ctx.msg.channel.sendMessage('Please give me a name to search with.').then(() => {
                     reject([new Error('No arguments were given.')]);
                 }).catch(err => reject([err]));
             } else {
-                osu.get_user({u: ctx.args[0]}, res => {
+                osu.get_user({u: ctx.suffix[0]}, res => {
                     var user = res[0];
                     if (user == undefined || user.user_id == undefined) {
                         ctx.msg.channel.sendMessage('A user with that name or ID could not be found.').then(() => {
@@ -72,12 +72,12 @@ exports.ctb = {
     usage: '<osu! username/id>',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            if (ctx.args.length === 0) {
+            if (ctx.suffix.length === 0) {
                 ctx.msg.channel.sendMessage('Please give me a name to search with.').then(() => {
                     reject([new Error('No arguments were given.')]);
                 }).catch(err => reject([err]));
             } else {
-                osu.get_user({u: ctx.args[0], m: 2}, res => {
+                osu.get_user({u: ctx.suffix[0], m: 2}, res => {
                     var user = res[0];
                     if (user == undefined || user.user_id == undefined) {
                         ctx.msg.channel.sendMessage('A user with that name or ID could not be found.').then(() => {
@@ -119,12 +119,12 @@ exports.mania = {
     usage: '<osu! username/id>',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            if (ctx.args.length === 0) {
+            if (ctx.suffix.length === 0) {
                 ctx.msg.channel.sendMessage('Please give me a name to search with.').then(() => {
                     reject([new Error('No arguments were given.')]);
                 }).catch(err => reject([err]));
             } else {
-                osu.get_user({u: ctx.args[0], m: 2}, res => {
+                osu.get_user({u: ctx.suffix[0], m: 2}, res => {
                     var user = res[0];
                     if (user == undefined || user.user_id == undefined) {
                         ctx.msg.channel.sendMessage('A user with that name or ID could not be found.').then(() => {
@@ -166,12 +166,12 @@ exports.taiko = {
     usage: '<osu! username/id>',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            if (ctx.args.length === 0) {
+            if (ctx.suffix.length === 0) {
                 ctx.msg.channel.sendMessage('Please give me a name to search with.').then(() => {
                     reject([new Error('No arguments were given.')]);
                 }).catch(err => reject([err]));
             } else {
-                osu.get_user({u: ctx.args[0], m: 1}, res => {
+                osu.get_user({u: ctx.suffix[0], m: 1}, res => {
                     var user = res[0];
                     if (user == undefined || user.user_id == undefined) {
                         ctx.msg.channel.sendMessage('A user with that name or ID could not be found.').then(() => {
