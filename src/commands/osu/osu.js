@@ -29,7 +29,7 @@ exports.osu = {
                     reject([new Error('No arguments were given.')]);
                 }).catch(err => reject([err]));
             } else {
-                osu.get_user({u: ctx.suffix[0]}, res => {
+                osu.get_user({u: ctx.suffix}, res => {
                     var user = res[0];
                     if (user == undefined || user.user_id == undefined) {
                         ctx.msg.channel.sendMessage('A user with that name or ID could not be found.').then(() => {
@@ -77,7 +77,7 @@ exports.ctb = {
                     reject([new Error('No arguments were given.')]);
                 }).catch(err => reject([err]));
             } else {
-                osu.get_user({u: ctx.suffix[0], m: 2}, res => {
+                osu.get_user({u: ctx.suffix, m: 2}, res => {
                     var user = res[0];
                     if (user == undefined || user.user_id == undefined) {
                         ctx.msg.channel.sendMessage('A user with that name or ID could not be found.').then(() => {
@@ -124,7 +124,7 @@ exports.mania = {
                     reject([new Error('No arguments were given.')]);
                 }).catch(err => reject([err]));
             } else {
-                osu.get_user({u: ctx.suffix[0], m: 2}, res => {
+                osu.get_user({u: ctx.suffix, m: 2}, res => {
                     var user = res[0];
                     if (user == undefined || user.user_id == undefined) {
                         ctx.msg.channel.sendMessage('A user with that name or ID could not be found.').then(() => {
@@ -171,7 +171,7 @@ exports.taiko = {
                     reject([new Error('No arguments were given.')]);
                 }).catch(err => reject([err]));
             } else {
-                osu.get_user({u: ctx.suffix[0], m: 1}, res => {
+                osu.get_user({u: ctx.suffix, m: 1}, res => {
                     var user = res[0];
                     if (user == undefined || user.user_id == undefined) {
                         ctx.msg.channel.sendMessage('A user with that name or ID could not be found.').then(() => {
