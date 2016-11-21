@@ -1,7 +1,0 @@
-{
-    "main":"bong.js",
-    "dependencies": {
-        "node-bing-api" : "^3.0.1",
-        "bluebird": "^3.4.6"
-    }
-}
