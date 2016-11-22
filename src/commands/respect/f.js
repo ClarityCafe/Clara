@@ -8,7 +8,8 @@ const Promise = require('bluebird');
 const utils = require(`${_baseDir}/lib/utils.js`);
 
 exports.commands = [
-    'f'
+    'f',
+    'rip'
 ];
 
 exports.f = {
@@ -21,6 +22,22 @@ exports.f = {
                 ctx.msg.channel.sendMessage(`**${utils.formatUsername(ctx.msg.member)}** has paid their respects for \`${ctx.cleanSuffix}\``).then(() => resolve()).catch(err => reject([err]));
             } else {
                 ctx.msg.channel.sendMessage(`**${utils.formatUsername(ctx.msg.member)}** has paid their respects.`).then(() => resolve()).catch(err => reject([err]));
+            }
+        });
+    }
+}
+
+exports.rip = {
+    desc: 'Rest in pieces.',
+    fullDesc: 'Lets something rest in peace.',
+    usage: '[thing]',
+    main: (bot, ctx) => {
+        return new Promise((resolve, reject) => {
+            if (ctx.cleanSuffix) {
+                var owo = encodeURI(`https://ripme.xyz/#${ctx.cleanSuffix}`);
+                ctx.msg.channel.sendMessage(`<${owo}> Forever rest in peace.`).then(() => resolve()).catch(err => reject([err]));
+            } else {
+                ctx.msg.channel.sendMessage('Forever rest in peace.').then(() => resolve()).catch(err => reject([err]));
             }
         });
     }
