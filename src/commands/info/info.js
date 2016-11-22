@@ -29,6 +29,7 @@ exports.info = {
             infoTxt += `Uptime: ${utils.msToTime(bot.uptime)}\n`
             infoTxt += `Memory Usage: ${prettyBytes(process.memoryUsage().rss)}\n`;
             infoTxt += `Version: ${version}\n`;
+            infoTxt += 'Source: https://github.com/owo-dev-team/owo-whats-this/\n';
             infoTxt += '```';
             ctx.msg.channel.sendMessage(infoTxt).then(() => resolve()).catch(err => reject([err]));
         });
