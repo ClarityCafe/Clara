@@ -16,7 +16,7 @@ exports.ping = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             ctx.msg.channel.sendMessage('Pong!').then(m => {
-                m.edit(`Pong! \`${m.timestamp - ctx.msg.timestamp}ms\``).then(() => resolve()).catch(err => reject([err]));
+                m.edit(`Pong! \`${m.createdTimestamp - ctx.msg.createdTimestamp}ms\``).then(() => resolve()).catch(err => reject([err]));
             }).catch(err => reject([err]));
         });
     }
