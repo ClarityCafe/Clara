@@ -6,6 +6,7 @@
 
 const Promise = require('bluebird');
 const fs = require('fs');
+const utils = require(`${_baseDir}/lib/utils.js`);
 
 exports.commands = [
     'prefixes'
@@ -27,7 +28,7 @@ exports.prefixes = {
                 prfxTxt += '```';
                 ctx.msg.channel.sendMessage(prfxTxt).then(() => resolve()).catch(err => reject([err]));
             } else {
-                if (!bot.isOwner(ctx.msg.author.id) || !bot.isAdmin(ctx.msg.author.id)) {
+                if (!utils.isOwner(ctx.msg.author.id) || !utils.isAdmin(ctx.msg.author.id)) {
                     ctx.msg.channel.sendMessage('You do not have permission to do that.').then(() => {
                         reject([new Error('User is not owner or bot admin.')]);
                     }).catch(err => reject([err]));

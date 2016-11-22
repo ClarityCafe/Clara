@@ -5,6 +5,7 @@
  */
 
 const Promise = require('bluebird');
+const Discord = require('discord.js');
 const util = require('util');
 
 exports.commands = [

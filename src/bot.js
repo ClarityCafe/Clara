@@ -21,6 +21,7 @@ global._baseDir = __dirname;
 const commandLoader = require(`${__dirname}/lib/commandLoader.js`);
 const commandsMod = require(`${__dirname}/lib/commands.js`);
 const logger = require(`${__dirname}/lib/logger.js`);
+const utils = require(`${__dirname}/lib/utils.js`);
 
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
@@ -57,21 +58,15 @@ exports.bot = bot;
 
 bot.logger = logger;
 bot.commands = commandsMod.commands;
-bot.isAdmin = (userID) => {
-    return JSON.parse(fs.readFileSync(`${__dirname}/data/data.json`)).admins.indexOf(userID) !== -1;
-}
-bot.isOwner = (userID) => {
-    return userID === config.ownerID;
-}
 
 // Functions
 function loggerPrefix(msg) {
-    return msg.guild ? `${msg.guild.name} | ${msg.channel.name} > ${msg.author.username}#${msg.author.discriminator} (${msg.author.id}): ` : `Direct Message > ${msg.author.username}#${msg.author.discriminator} (${msg.author.id}): `;
+    return msg.guild ? `${msg.guild.name} | ${msg.channel.name} > ${utils.formatUsername(msg.author)} (${msg.author.id}): ` : `Direct Message > ${utils.formatUsername(msg.author)} (${msg.author.id}): `;
 }
 
 function handleCmdErr(msg, cmd, err) {
     logger.warn(loggerPrefix(msg) + `Error when running command '${cmd}':\n${err instanceof Array ? config.debug : err[0].stack ? err[0] : config.debug ? err.stack : err}`);
-    if ((err instanceof Array) === false) {
+    if (!(err instanceof Array)) {
         var errMsg = `Unexpected error while executing command '${cmd}'\n`;
         errMsg += '```js\n';
         errMsg += err + '\n';
@@ -96,22 +91,30 @@ bot.on('ready', () => {
 
 // Command handler
 bot.on('message', msg => {
-    if (msg.author.id === bot.user.id || msg.author.bot || JSON.parse(fs.readFileSync(`${__dirname}/data/data.json`)).blacklist.indexOf(msg.author.id) > -1) return;
+    if (msg.author.id === bot.user.id || msg.author.bot || utils.isBlacklisted(msg.author.id)) return;
+    if (!msg.guild) {
+        logger.custom('cyan', 'dm', loggerPrefix(msg) + msg.cleanContent);
+        return;
+    }
+
     require(`${__dirname}/lib/prefixParser.js`)(msg.content).then(content => {
-        if (!msg.guild && content == undefined) logger.custom('cyan', 'dm', loggerPrefix(msg) + msg.cleanContent);
         if (content == undefined) return;
 
         var args = content.split(' ');
         var cmd = args.shift();
         var suffix = args.join(' ');
+        var cleanSuffix = msg.cleanContent.split(' ');
+        cleanSuffix.splice(0, 1);
+        cleanSuffix = cleanSuffix.join(' ');
+        console.log(cleanSuffix);
         var guildBot;
         msg.guild ? guildBot = msg.guild.members.find('id', bot.user.id) : guildBot = null;
-        var ctx = {msg: msg, args: args, cmd: cmd, suffix: suffix, guildBot: guildBot};
+        var ctx = {msg: msg, args: args, cmd: cmd, suffix: suffix, cleanSuffix: cleanSuffix, guildBot: guildBot};
 
         if (bot.commands[cmd]) {
             logger.cmd(loggerPrefix(msg) + msg.cleanContent);
 
-            if (bot.commands[cmd].adminOnly && (bot.isOwner(msg.author.id) || bot.isAdmin(msg.author.id))) {
+            if (bot.commands[cmd].adminOnly && (utils.isOwner(msg.author.id) || utils.isAdmin(msg.author.id))) {
                 bot.commands[cmd].main(bot, ctx).then(() => {
                     logger.cmd(loggerPrefix(msg) + `Successfully ran owner command '${cmd}'`);
                 }).catch(err => {
@@ -128,7 +131,7 @@ bot.on('message', msg => {
             }
         }
     }).catch(err => {
-        logger.customError('prefixParser', `Failed to parse message for prefix: ${err}`);
+        logger.customError('prefixParser', `Failed to parse message for prefix: ${err}${config.debug ? `\n${err.stack}` : ''}`);
     });
 });
 

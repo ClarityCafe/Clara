@@ -92,4 +92,5 @@ This object is a standard JavaScript object with 5 properties.
 - `args`: [Array] - Contains every word that the user entered after the command. If the user did not have anything, will just be empty.
 - `cmd`: [String] - The name of the command used. Passed in case it is needed for some reason.
 - `suffix`: [String] - All the words in `args` but joined together in one string with spaces.
+- `cleanSuffix`: [String] - Suffix but with resolved content.
 - `guildBot`: [[Discord.JS GuildMember Object](https://discord.js.org/#!/docs/tag/master/class/GuildMember)|Null] - The member object of the bot for the message guild. Returns `null` if it is a DM.

@@ -8,7 +8,7 @@ const Promise = require('bluebird');
 const prettyBytes = require('pretty-bytes');
 const path = require('path');
 const fs = require('fs');
-const util = require(`${_baseDir}/lib/util.js`);
+const utils = require(`${_baseDir}/lib/utils.js`);
 const version = JSON.parse(fs.readFileSync(path.join(_baseDir, '../package.json'))).version;
 
 exports.commands = [
@@ -26,7 +26,7 @@ exports.info = {
             infoTxt += `Channels: ${bot.channels.size}\n`;
             infoTxt += `Users Seen: ${bot.users.size}\n\n`;
             infoTxt += '% Other %\n';
-            infoTxt += `Uptime: ${util.msToTime(bot.uptime)}\n`
+            infoTxt += `Uptime: ${utils.msToTime(bot.uptime)}\n`
             infoTxt += `Memory Usage: ${prettyBytes(process.memoryUsage().rss)}\n`;
             infoTxt += `Version: ${version}\n`;
             infoTxt += '```';
