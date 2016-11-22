@@ -1,19 +1,27 @@
+/*
+ * f.js - Pay respects.
+ * 
+ * Contributed by Capuccino and Ovyerus.
+ */
+
+const Promise = require('bluebird');
+const utils = require(`${_baseDir}/lib/utils.js`);
+
 exports.commands = [
-  "f"
+    'f'
 ];
 
-const Promise = require("bluebird");
-
 exports.f = {
-  desc: "pay respects",
-  fullDesc: "pay respects, you can add something specific to whom/what to pay respects.",
-  main: (bot, ctx) => {
-    return new Promise((resolve,reject) => {
-      if (ctx.suffix.length === 0) {
-      ctx.msg.channel.sendMessage(`${ctx.msg.author} has paid respects`).then(() => resolve()).catch(err => reject([err]));
-      } else if (ctx.suffix) {
-        ctx.msg.channel.sendMessage(`${ctx.msg.author} has paid respects for ${ctx.suffix}`).then(() => resolve()).catch(err => reject([err]));
-      }
-    });
-  }
+    desc: 'Pay respects.',
+    fullDesc: 'Pay your respects. You can also optionally pay your respects to a specific thing.',
+    usage: '[object for respects]',
+    main: (bot, ctx) => {
+        return new Promise((resolve, reject) => {
+            if (ctx.cleanSuffix) {
+                ctx.msg.channel.sendMessage(`**${utils.formatUsername(ctx.msg.member)}** has paid their respects for \`${ctx.cleanSuffix}\``).then(() => resolve()).catch(err => reject([err]));
+            } else {
+                ctx.msg.channel.sendMessage(`**${utils.formatUsername(ctx.msg.member)}** has paid their respects.`).then(() => resolve()).catch(err => reject([err]));
+            }
+        });
+    }
 }
