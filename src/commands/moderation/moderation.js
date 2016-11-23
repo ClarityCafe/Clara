@@ -101,7 +101,7 @@ exports.ban = {
                                 }
                             });
                             if (banned > 0) {
-                             ctx.msg.channel.sendMessage(`Banned **${banned}** members.`).then(() => resolve()).catch(err => reject([err]));
+                                ctx.msg.channel.sendMessage(`Banned **${banned}** members.`).then(() => resolve()).catch(err => reject([err]));
                             } else {
                                 resolve();
                             }

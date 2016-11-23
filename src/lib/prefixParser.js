@@ -8,7 +8,6 @@
  */
 
 const fs = require('fs');
-const path = require('path');
 const Promise = require('bluebird');
 const bot = require(`${_baseDir}/bot.js`).bot;
 
@@ -24,7 +23,7 @@ function parse(content) {
             for (let i in prefixes) {
                 if (content.startsWith(prefixes[i])) {
                     content = content.substring(prefixes[i].length);
-                    break
+                    break;
                 }
             }
         } else {

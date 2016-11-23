@@ -1,4 +1,3 @@
-const path = require('path');
 const fs = require('fs');
 const Discord = require('discord.js');
 const config = require(`${_baseDir}/config.json`);
