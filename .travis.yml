@@ -5,8 +5,21 @@ node_js:
   - "6.9"
   - "7.1"
 install:
-- npm install -S
+
+- npm -g install -S
+
 - npm -v
-- npm install -g eslint
+
+- mkdir out
+
+- npm install -g standard
+
+- npm install -g babel-cli
+
+- npm install  babel-preset-latest --save
+
+- npm install babel --save
+
 script :
-- eslint ./src/commands
+
+- babel src --no-comments --minified -D -d out
