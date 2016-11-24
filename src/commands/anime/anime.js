@@ -6,7 +6,6 @@
 
 const Promise = require('bluebird');
 const mal = require('malapi').Anime;
-const logger = require(`${_baseDir}/lib/logger.js`);
 
 exports.commands = [
     'anime'
@@ -62,93 +61,3 @@ exports.anime = {
         });
     }
 }
-
-/*
-Anime {
-    title: 'Byousoku 5 Centimeter',
-    id: '1689',
-    image: 'https://myanimelist.cdn-dena.com/images/anime/6/73426.jpg',
-    detailsLink: 'https://myanimelist.net/anime/1689/Byousoku_5_Centimeter',
-    episodesLink: 'https://myanimelist.net/anime/1689/Byousoku_5_Centimeter/episode',
-    alternativeTitles: {
-        japanese: ['Japanese: 秒速５センチメートル'],
-        english: ['English: 5 Centimeters Per Second'],
-        synoynms: ['Synonyms: Five Centimeters Per Second',
-            ' Byousoku 5 Centimeter - a chain of short stories about their distance',
-            ' 5 Centimetres Per Second',
-            ' 5 cm per second'
-        ]
-    },
-    type: 'Movie',
-    episodes: '3',
-    status: 'Finished Airing',
-    aired: 'Feb 16, 2007 to Mar 3, 2007',
-    genres: ['Drama', 'Romance', 'Slice of Life'],
-    classification: 'PG-13 - Teens 13 or older',
-    statistics: {
-        score: {
-            value: '8.11',
-            count: '201,962'
-        },
-        popularity: '#87',
-        members: '317,986',
-        favorites: '6,545',
-        ranking: '#406'
-    },
-    synopsis: 'Takaki Toono and Akari Shinohara, two very close friends and classmates, are torn apart when Akari\'s family is transferred t
-    another region of Japan due to her family\ 's job. Despite separation, they continue to keep in touch through mail. When Takaki finds out 
-    hat his family is also moving,
-    he decides to meet with Akari one last time.\r\ n\ r\ nAs years pass by,
-    they
-    continue down their own paths,
-    t
-    eir distance slowly growing wider and their contact with one another fades.Yet,
-    they keep remembering one another and the times they have
-    shared together,
-    wondering
-    if they will have the chance to meet once again.\r\ n\ r\ n[Written by MAL Rewrite]
-    ',                             
-    studios: ['CoMix Wave Films'],
-    adaptations: [{
-        type: 'Adaptation',
-        name: [Object]
-    }, {
-        type: 'Summary',
-        name: [Object]
-    }],
-    characters: [{
-        name: 'Toono, Takaki',
-        role: 'Main',
-        actor: 'Mizuhashi, Kenji',
-        language: 'Japanese'
-    }, {
-        name: 'Sumida, Kanae',
-        role: 'Main',
-        actor: 'Hanamura, Satomi',
-        language: 'Japanese'
-    }, {
-        name: 'Shinohara, Akari',
-        role: 'Main',
-        actor: 'Onoue, AyakaKondo, Yoshimi',
-        language: 'JapaneseJapanese'
-    }, {
-        name: 'Sumida, Sister',
-        role: 'Supporting',
-        actor: 'Mizuno, Risa',
-        language: 'Japanese'
-    }],
-    staff: [{
-        name: 'Chung, Jin Ho',
-        role: [Object]
-    }, {
-        name: 'Shinkai, Makoto',
-        role: [Object]
-    }, {
-        name: 'Foster, Steven',
-        role: [Object]
-    }, {
-        name: 'Yamazaki, Masayoshi',
-        role: [Object]
-    }]
-}
-*/

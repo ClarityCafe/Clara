@@ -19,7 +19,7 @@ exports.prefixes = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.args.length === 0 || !/^(add|remove)$/.test(ctx.args[0])) {
-                var prefixes = JSON.parse(fs.readFileSync(`${_baseDir}/data/prefixes.json`));
+                let prefixes = JSON.parse(fs.readFileSync(`${_baseDir}/data/prefixes.json`));
                 prefixes.unshift('@mention');
                 prefixes.unshift(bot.config.mainPrefix);
                 var prfxTxt = `**${prefixes.length}** prefixes available\n`;
@@ -34,7 +34,7 @@ exports.prefixes = {
                     }).catch(err => reject([err]));
                 } else {
                     if (ctx.args[0] === 'add') {
-                        var prefixes = JSON.parse(fs.readFileSync(`${_baseDir}/data/prefixes.json`));
+                        let prefixes = JSON.parse(fs.readFileSync(`${_baseDir}/data/prefixes.json`));
                         ctx.args.shift();
                         if ((ctx.args.join(' ') === bot.config.mainPrefix || ctx.args.join(' ') === '@mention') || prefixes.indexOf(ctx.args.join(' ')) !== -1) {
                             ctx.msg.channel.sendMessage('That prefix already exists').then(() => {
@@ -51,7 +51,7 @@ exports.prefixes = {
                             });
                         }
                     } else if (ctx.args[0] === 'remove') {
-                         var prefixes = JSON.parse(fs.readFileSync(`${_baseDir}/data/prefixes.json`));
+                        let prefixes = JSON.parse(fs.readFileSync(`${_baseDir}/data/prefixes.json`));
                         ctx.args.shift();
                         if (ctx.args.join(' ') === bot.config.mainPrefix || ctx.args.join(' ') === '@mention') {
                             ctx.msg.channel.sendMessage('You cannot remove an internal prefix.').then(() => {
@@ -67,7 +67,7 @@ exports.prefixes = {
                                 if (err) {
                                     reject(err);
                                 } else {
-                                    ctx.msg.channel.sendMessage(`Prefix \`${ctx.args.join(' ')}\` successfully removed.`).then(() => resolve()).catch(err => reject([err]));''
+                                    ctx.msg.channel.sendMessage(`Prefix \`${ctx.args.join(' ')}\` successfully removed.`).then(() => resolve()).catch(err => reject([err]));
                                 }
                             });
                         }
