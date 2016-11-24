@@ -21,7 +21,7 @@ exports.help = {
                 var alphabeticalSort = [];
                 helpTxt += `; ${bot.user.username} Help\n`;
                 for (let command in bot.commands) {
-                     alphabeticalSort.push(command);
+                    alphabeticalSort.push(command);
                 }
                 alphabeticalSort.sort();
                 for (let command of alphabeticalSort) {
@@ -35,7 +35,7 @@ exports.help = {
             } else {
                 if (!bot.commands[ctx.args[0]]) {
                     ctx.msg.channel.sendMessage('That command does not exist. Make sure to check your spelling.').then(() => {
-                        reject([new Error('Command does not exist.')])
+                        reject([new Error('Command does not exist.')]);
                     }).catch(err => reject[err]);
                 } else {
                     let cmd = bot.commands[ctx.args[0]];

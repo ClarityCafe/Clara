@@ -10,10 +10,7 @@
 
 // Framework imports
 const Discord = require('discord.js');
-const Promise = require('bluebird');
-const chalk = require('chalk');
 const fs = require('fs');
-const util = require('util');
 
 global._baseDir = __dirname;
 
@@ -126,8 +123,8 @@ bot.on('message', msg => {
                 bot.commands[cmd].main(bot, ctx).then(() => {
                     logger.cmd(loggerPrefix(msg) + `Successfully ran command '${cmd}'`);
                 }).catch(err => {
-                   handleCmdErr(msg, cmd, err);
-                })
+                    handleCmdErr(msg, cmd, err);
+                });
             }
         }
     }).catch(err => {

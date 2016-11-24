@@ -7,15 +7,14 @@
 const config = require(`${_baseDir}/config.json`);
 const osu = require('osu')(config.osuApiKey);
 const iso3166 = require('iso-3166-1-alpha-2');
-const request = require('request');
 
 var commaRegex = /\B(?=(\d{3})+(?!\d))/g; // Thank you Brayzure uwu
 
 exports.commands = [
-    "osu",
-    "mania",
-    "taiko",
-    "ctb"
+    'osu',
+    'mania',
+    'taiko',
+    'ctb'
 ];
 
 exports.osu = {
