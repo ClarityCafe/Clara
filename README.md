@@ -1,4 +1,7 @@
 # owo-whats-this [![Build Status](https://travis-ci.org/owo-dev-team/owo-whats-this.svg?branch=master)](https://travis-ci.org/owo-dev-team/owo-whats-this)
+
+[Support us on Patreon!](https://www.patreon.com/capuccino) | [Discord Server](https://discord.gg/9utV8gn)
+
 A really experimental (and borked) Discord.JS bot written in ECMAScript 6
 
 # Running
