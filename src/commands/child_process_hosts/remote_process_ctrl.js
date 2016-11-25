@@ -21,7 +21,18 @@ exports.core_restart = {
         return new Promise((resolve,reject) => {
             var process_react = "restart";
             //TODO: add a clock to delay the command for 3 seconds
-            ctx.msg.channel.sendMessage("Shutting down....").then(() => resolve()).catch(err => reject([err]));
+            ctx.msg.channel.sendMessage("Restarting NOW!").then(() => resolve()).catch(err => reject([err]));
         })
     }
 };
+ exports.core_shutdown = {
+     desc: 'BOTDEVELOPER ONLY! Shutdowns the PM2 session of the bot',
+     adminOnly: true,
+     main : (bot,ctx) => {
+         return new Promise((resolve,reject) => {
+             var process_react = "shutdown";
+             //TODO: add a clock to delay the command for 3 seconds
+               ctx.msg.channel.sendMessage("Shutting Down....").then(() => resolve()).catch(err => reject([err]));
+         });
+     }
+ }
