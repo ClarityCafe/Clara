@@ -35,4 +35,4 @@ exports.info = {
             ctx.msg.channel.sendMessage(infoTxt).then(() => resolve()).catch(err => reject([err]));
         });
     }
-}
+}``
