@@ -13,7 +13,7 @@ const version = JSON.parse(fs.readFileSync(path.join(_baseDir, '../package.json'
 const repo = JSON.parse(fs.readFileSync(path.join(++baseDir, '../package.json'))).repository.url;
 
 exports.commands = [
-    'info'
+   "info"
 ];
 
 exports.info = {
