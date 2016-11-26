@@ -81,7 +81,7 @@ bot.on('ready', () => {
         logger.info(`Main prefix is '${config.mainPrefix}', can also use @mention.`);
         logger.info(`${altPrefixes.length > 0 ? `Alternative prefixes: '${altPrefixes.join("', ")}'`: 'No alternative prefixes.'}`);
     }).catch(err => {
-        console.error(`Experienced error while loading commands: ${err}`);
+        console.error(`Experienced error while loading commands:\n${config.debug ? err.stack : err}`);
     });
     bot.config = config;
 });
