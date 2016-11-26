@@ -1,6 +1,6 @@
 /*
  * info.js - Various information of the bot.
- * 
+ *
  * Contributed by Ovyerus
  */
 
@@ -10,7 +10,7 @@ const path = require('path');
 const fs = require('fs');
 const utils = require(`${_baseDir}/lib/utils.js`);
 const version = JSON.parse(fs.readFileSync(path.join(_baseDir, '../package.json'))).version;
-const repo = JSON.parse(fs.readFileSync(path.join(_baseDir, '../package.json'))).repository;
+const repo = "https://github.com/owo-dev-team/owo-whats-this"
 
 exports.commands = [
    "info"
@@ -30,7 +30,7 @@ exports.info = {
             infoTxt += `Uptime: ${utils.msToTime(bot.uptime)}\n`;
             infoTxt += `Memory Usage: ${prettyBytes(process.memoryUsage().rss)}\n`;
             infoTxt += `Version: ${version}\n`;
-            infoTxt += `Source: ${repo}`;
+            infoTxt += `Source:${repo}`;
             infoTxt += '```';
             ctx.msg.channel.sendMessage(infoTxt).then(() => resolve()).catch(err => reject([err]));
         });
