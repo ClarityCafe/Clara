@@ -10,7 +10,7 @@ const path = require('path');
 const fs = require('fs');
 const utils = require(`${_baseDir}/lib/utils.js`);
 const version = JSON.parse(fs.readFileSync(path.join(_baseDir, '../package.json'))).version;
-const repo = JSON.parse(fs.readFileSync(path.join(++baseDir, '../package.json'))).repository.url;
+const repo = JSON.parse(fs.readFileSync(path.join(__baseDir, '../package.json'))).repository.url;
 
 exports.commands = [
    "info"
