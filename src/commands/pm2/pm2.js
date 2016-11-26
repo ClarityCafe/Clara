@@ -7,6 +7,7 @@
 
 const Promise = require('bluebird');
 const ovy = require('child_process');
+var process_react = "";
 const bot = ovy.exec('pm2', [process_react,'bot']);
 
 exports.command = [
