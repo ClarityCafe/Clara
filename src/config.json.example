@@ -3,7 +3,6 @@
 	"ownerID": "",
 	"mainPrefix": "?",
 	"osuApiKey": "",
-	"bingAPIKey: "",
 	"debug": false,
 	"useEmail": false,
 	"email": "",
