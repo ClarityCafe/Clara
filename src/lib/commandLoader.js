@@ -83,7 +83,7 @@ function loadCommands() {
                 commandPackage = require(`${_baseDir}/${commandsDirectory}/${cmdFolder}/package.json`);
                 command = require(`${_baseDir}/${commandsDirectory}/${cmdFolder}/${commandPackage.main}`);
             } catch(err) {
-                logger.customError('commandLoader/loadCommands', `Experienced error while loading command '${cmdFolder}', skipping...\n${err}`);
+                logger.customError('commandLoader/loadCommands', `Experienced error while loading command '${cmdFolder}', skipping...\n${bot.config.debug ? err.stack : err}`);
             }
             if (command) {
                 if (command.commands) {
@@ -92,7 +92,7 @@ function loadCommands() {
                             bot.addCommand(cmd, command[cmd]).then(() => {
                                 commandsFrom[cmd] = `${cmdFolder}/${commandPackage.main}`;
                                 logger.custom('blue', 'commandLoader/loadCommands', `Successfully loaded command '${cmd}'`);
-                            }).catch(err => logger.customError('commandLoader/loadCommands', `Error when attempting to load command '${cmd}':\n${err}`));
+                            }).catch(err => logger.customError('commandLoader/loadCommands', `Error when attempting to load command '${cmd}':\n${bot.config.debug ? err.stack : err}`));
                         }
                     }
                     resolve();

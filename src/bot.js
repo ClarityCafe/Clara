@@ -55,6 +55,7 @@ exports.bot = bot;
 
 bot.logger = logger;
 bot.commands = commandsMod.commands;
+bot.config = config;
 
 // Functions
 function loggerPrefix(msg) {
@@ -83,7 +84,6 @@ bot.on('ready', () => {
     }).catch(err => {
         console.error(`Experienced error while loading commands:\n${config.debug ? err.stack : err}`);
     });
-    bot.config = config;
 });
 
 // Command handler
@@ -135,7 +135,9 @@ bot.on('message', msg => {
 // Handle disconnect
 bot.on('disconnected', () => {
     console.log('disconnected from Discord, retrying...');
-    bot.login(config.token).catch(err => {
+    var p;
+    !config.useEmail ? p = bot.login(config.token) : p = bot.login(config.email, config.password);
+    p.catch(err => {
         console.log(`Error when attempting to reconnect to Discord, terminating...\n${err}`);
         process.exit(1);
     });
