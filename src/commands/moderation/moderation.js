@@ -37,16 +37,21 @@ exports.kick = {
                         } else {
                             var kicked = 0;
                             ctx.msg.mentions.users.forEach(m => {
-                                if (m.kickable) {
-                                    m.kick().then(() => kicked++).catch(err => {
-                                        var errMsg = `Unable to kick **${m.username}#${m.discriminator}**\n`;
-                                        errMsg += '```js\n';
-                                        errMsg += err + '\n';
-                                        errMsg += '```';
-                                        ctx.msg.channel.sendMessage(errMsg);
-                                    });
+                                if (m.id !== bot.user.id) {
+                                    if (m.kickable) {
+                                        m.kick().then(() => kicked++).catch(err => {
+                                            var errMsg = `Unable to kick **${m.username}#${m.discriminator}**\n`;
+                                            errMsg += '```js\n';
+                                            errMsg += err + '\n';
+                                            errMsg += '```';
+                                            ctx.msg.channel.sendMessage(errMsg);
+                                        });
+                                    } else {
+                                        ctx.msg.channel.sendMessage(`I do not have sufficient permission to kick **${m.nickname ?  m.nickname : m.username}#${m.discriminator}**`);
+                                    }
                                 } else {
-                                    ctx.msg.channel.sendMessage(`I do not have sufficient permission to kick **${m.nickname ? m.nickname : m.username}#${m.discriminator}**`);
+                                    console.log('owo whats this? trying to kick myself? ayy lmao.');
+                                    ctx.msg.channel.sendMessage("lol no im not gonna kick myself.");
                                 }
                             });
                             if (kicked > 0) {
@@ -88,16 +93,21 @@ exports.ban = {
                         } else {
                             var banned = 0;
                             ctx.msg.mentions.users.forEach(m => {
-                                if (m.bannable) {
-                                    m.ban().then(() => banned++).catch(err => {
-                                        var errMsg = `Unable to ban **${m.username}#${m.discriminator}**\n`;
-                                        errMsg += '```js\n';
-                                        errMsg += err + '\n';
-                                        errMsg += '```';
-                                        ctx.msg.channel.sendMessage(errMsg);
-                                    });
+                                if (m.id !== bot.user.id) {
+                                    if (m.bannable) {
+                                        m.ban().then(() => banned++).catch(err => {
+                                            var errMsg = `Unable to ban **${m.username}#${m.discriminator}**\n`;
+                                            errMsg += '```js\n';
+                                            errMsg += err + '\n';
+                                            errMsg += '```';
+                                            ctx.msg.channel.sendMessage(errMsg);
+                                        });
+                                    } else {
+                                        ctx.msg.channel.sendMessage(`I do not have sufficient permission to ban **${m.nickname ? m.nickname : m.username}#${m.discriminator}**`);
+                                    }
                                 } else {
-                                    ctx.msg.channel.sendMessage(`I do not have sufficient permission to ban **${m.nickname ? m.nickname : m.username}#${m.discriminator}**`);
+                                    console.log('owo whats this? trying to ban myself? ayy lmao.');
+                                    ctx.msg.channel.sendMessage("lol no im not gonna ban myself.");
                                 }
                             });
                             if (banned > 0) {
