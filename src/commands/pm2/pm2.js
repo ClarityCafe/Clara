@@ -6,13 +6,7 @@
  */
 
 const Promise = require('bluebird');
-<<<<<<< 2d143ce7ce0edc13193ec91dee8932febc5e84fc
-const ovy = require('child_process');
-var process_react = "";
-const bot = ovy.exec('pm2', [process_react,'bot']);
-=======
 const pm2 = require('pm2');
->>>>>>> commiting bc git is bich when rebasing :/
 
 exports.command = [
     'pm2'
