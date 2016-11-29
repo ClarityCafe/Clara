@@ -1,6 +1,0 @@
-{
-    "main": "pm2",
-    "dependencies": {
-        "pm2": "^2.1.5"
-    }
-}
