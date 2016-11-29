@@ -15,7 +15,6 @@ const fs = require('fs');
 global._baseDir = __dirname;
 
 // Custom modules
-const commandLoader = require(`${__dirname}/lib/commandLoader.js`);
 const commandsMod = require(`${__dirname}/lib/commands.js`);
 const logger = require(`${__dirname}/lib/logger.js`);
 const utils = require(`${__dirname}/lib/utils.js`);
@@ -75,7 +74,7 @@ function handleCmdErr(msg, cmd, err) {
 
 // Init
 bot.on('ready', () => {
-    commandLoader.init().then(() => {
+    require(`${__dirname}/lib/commandLoader.js`).init().then(() => {
         var altPrefixes = JSON.parse(fs.readFileSync(`${__dirname}/data/prefixes.json`));
         logger.info(`Loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? 'command' : 'commands'}.`);
         logger.info(`${bot.user.username} is connected to Discord and ready to use.`);
