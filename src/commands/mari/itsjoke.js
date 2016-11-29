@@ -18,7 +18,7 @@ exports.itsjoke = {
     usage: "<It's Joke>",
     main: (bot, ctx) => {
         return new Promise((reject, resolve) => {
-            ctx.msg.channel.sendFile('../res/itsjoke.png', 'itsjoke.png');
+            ctx.msg.channel.sendFile('../res/itsjoke.png', 'itsjoke.png').then(() => resolve()).catch(err => reject([err]));
         })
     }
 }
