@@ -9,6 +9,8 @@ exports.commands = [
     "disconnect",
 ];
 
+const Promise = require('bluebird');
+
 exports.play = {
     desc: "nani sore wat the fuck are u doing ovy aaaaaaa",
     usage: "<YT Link/Song Link>",
