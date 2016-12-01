@@ -52,7 +52,7 @@ function preloadCommands() {
                     for (let awau in pkg.dependencies) {
                         try {
                             require.resolve(awau);
-                        } catch(err) {
+                        } catch (err) {
                             if (deps.indexOf(awau) === -1) deps.push(awau);
                         }
                     }
@@ -63,6 +63,7 @@ function preloadCommands() {
             deps = deps.join(' ');
             logger.custom('blue', 'commandLoader/preloadCommands', `Installing dependencies for commands, this may take a while...\nDependencies: ${deps}`);
             cp.exec(`npm i ${deps}`, (err, stdout, stderr) => {
+                if (stdout) logger.custom("green", `${stdout}`);
                 if (err) logger.customError('commandLoader/preloadCommands', `Error when trying to install dependencies: ${err}`);
                 if (stderr) logger.customError('commandLoader/preloadCommands', `Error when trying to install dependencies: ${stderr}`);
                 resolve();
@@ -82,7 +83,7 @@ function loadCommands() {
             try {
                 commandPackage = require(`${_baseDir}/${commandsDirectory}/${cmdFolder}/package.json`);
                 command = require(`${_baseDir}/${commandsDirectory}/${cmdFolder}/${commandPackage.main}`);
-            } catch(err) {
+            } catch (err) {
                 logger.customError('commandLoader/loadCommands', `Experienced error while loading command '${cmdFolder}', skipping...\n${bot.config.debug ? err.stack : err}`);
             }
             if (command) {
