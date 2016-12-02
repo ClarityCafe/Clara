@@ -1,12 +1,12 @@
 /* Music Command
- * 
+ *
  * Contributed by Capuccino
  *
  */
 exports.commands = [
-    'play',
-    'skip',
-    'disconnect'
+    "play",
+    "skip",
+    "disconnect",
 ];
 
 const Promise = require('bluebird');
