@@ -2,6 +2,8 @@ const Promise = require('bluebird');
 
 const commands = {};
 
+//TODO: always overwrite command object when there is a existing one present
+
 function addCommand(cmdName, cmdObject) {
     return new Promise((resolve, reject) => {
         if (typeof cmdName !== 'string') reject(new Error('cmdName is not a string'));
