@@ -22,7 +22,7 @@ exports.play = {
     main: (bot, ctx) => {
         return new Promise((reject, resolve) => {
             if (ctx.suffix) {
-                ytdl('')
+                ytdl('');
             }
         });
     }
