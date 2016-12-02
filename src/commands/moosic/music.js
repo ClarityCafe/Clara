@@ -21,9 +21,9 @@ exports.play = {
     usage: '<YT Link/Song Link>',
     main: (bot, ctx) => {
         return new Promise((reject, resolve) => {
-            if (ctx.suffix) {
-                ytdl('');
-            }
-        });
-    }
+                if (ctx.suffix) {
+
+        }
+    });
+}
 };
