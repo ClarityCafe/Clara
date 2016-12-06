@@ -12,13 +12,14 @@ function addCommand(cmdName, cmdObject) {
         if (commands[cmdName] == undefined) {
             commands[cmdName] = cmdObject;
             resolve(commands[cmdName]);
-        } else {
+        }
+        else {
             reject(new Error(`'${cmdName}' already exists in the command object.`));
         }
     });
 }
 
-function removeCommand(cmdName) {
+/* function removeCommand(cmdName) {
     return new Promise((resolve, reject) => {
         if (typeof cmdName !== 'string') reject(new Error('cmdName is not a string.'));
         if (!commands[cmdName]) reject(new Error(`'${cmdName}' does not exist in the command object.`));
@@ -27,8 +28,8 @@ function removeCommand(cmdName) {
         delete commands[cmdName];
         resolve(cmdName);
     });
-}
+}  */
 
 exports.commands = commands;
 exports.addCommand = addCommand;
-exports.removeCommand = removeCommand;
+// exports.removeCommand = removeCommand;
