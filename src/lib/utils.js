@@ -44,6 +44,12 @@ function isBlacklisted(userID) {
     return JSON.parse(fs.readFileSync(`${_baseDir}/data/data.json`)).blacklist.indexOf(userID) !== -1;
 }
 
+function dateParser(date){
+    //TODO: add a comprehensive parser to translate the Z value"
+    new Date ();
+}
+
+exports.dateParser = date;
 exports.msToTime = msToTime;
 exports.formatUsername = formatUsername;
 exports.isOwner = isOwner;
