@@ -49,7 +49,7 @@ function dateParser(date){
     new Date ();
 }
 
-exports.dateParser = date;
+exports.dateParser = dateParser;
 exports.msToTime = msToTime;
 exports.formatUsername = formatUsername;
 exports.isOwner = isOwner;
