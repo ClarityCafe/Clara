@@ -5,6 +5,7 @@
  */
 
 const Promise = require('bluebird');
+const os = require('os');
 const prettyBytes = require('pretty-bytes');
 const path = require('path');
 const fs = require('fs');
@@ -27,6 +28,9 @@ exports.info = {
             infoTxt += `Users Seen: ${bot.users.size}\n\n`;
             infoTxt += '% Other %\n';
             infoTxt += `Uptime: ${utils.msToTime(bot.uptime)}\n`;
+            infoTxt += `System Time : ${utils.date}\n`;
+            infoTxt += `OS Release : ${os.release()}\n`;
+            infoTxt += `OS Platform : ${os.platform()}\n`
             infoTxt += `Memory Usage: ${prettyBytes(process.memoryUsage().rss)}\n`;
             infoTxt += `Version: ${version}\n`;
             infoTxt += "Source: https://github.com/owo-dev-team/owo-whats-this";
