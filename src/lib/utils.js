@@ -46,7 +46,7 @@ function isBlacklisted(userID) {
 
 function dateParser(date){
     //TODO: add a comprehensive parser to translate the Z value"
-    new Date ();
+    return new Date ();
 }
 
 exports.dateParser = dateParser;
