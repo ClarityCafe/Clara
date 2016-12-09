@@ -13,9 +13,9 @@ exports.command = [
 const Promise = require('bluebird');
 
 exports.itsjoke = {
-    desc: `it's Joke!`,
-    longDesc: `it's Joke!`,
-    usage: `<It's Joke>`,
+    desc: "it's Joke!",
+    longDesc: "it's Joke!",
+    usage: "<It's Joke>",
     main: (bot, ctx) => {
         return new Promise((reject, resolve) => {
             ctx.msg.channel.sendFile('../res/528.jpg', 'itsjoke.png').then(() => resolve()).catch(err => reject([err]));
