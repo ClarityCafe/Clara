@@ -9,7 +9,7 @@ function addCommand(cmdName, cmdObject) {
         if (typeof cmdName !== 'string') reject(new Error('cmdName is not a string'));
         if ((cmdObject instanceof Object) !== true) reject(new Error('cmdObject is not an object'));
 
-        if (commands[cmdName] === 'null') {
+        if (commands[cmdName] === 'undefined') {
             commands[cmdName] = cmdObject;
             resolve(commands[cmdName]);
         }
