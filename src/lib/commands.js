@@ -32,4 +32,5 @@ function removeCommand(cmdName) {
 
 exports.commands = commands;
 exports.addCommand = addCommand;
+exports.removeCommand = removeCommand
 
