@@ -62,3 +62,7 @@ out
 .settings
 .project
 data.json 
+
+# Nodetori files    
+
+config.json
