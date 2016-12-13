@@ -13,7 +13,7 @@ const utils = require(`${_baseDir}/lib/utils.js`);
 const version = JSON.parse(fs.readFileSync(path.join(_baseDir, '../package.json'))).version;
 
 exports.commands = [
-   "info"
+    'info'
 ];
 
 exports.info = {
@@ -28,14 +28,14 @@ exports.info = {
             infoTxt += `Users Seen: ${bot.users.size}\n\n`;
             infoTxt += '% Other %\n';
             infoTxt += `Uptime: ${utils.msToTime(bot.uptime)}\n`;
-            infoTxt += `System Time : ${utils.date}\n`;
+            infoTxt += `System Time : ${new Date()}\n`;
             infoTxt += `OS Release : ${os.release()}\n`;
-            infoTxt += `OS Platform : ${os.platform()}\n`
+            infoTxt += `OS Platform : ${os.platform()}\n`;
             infoTxt += `Memory Usage: ${prettyBytes(process.memoryUsage().rss)}\n`;
             infoTxt += `Version: ${version}\n`;
-            infoTxt += "Source: https://github.com/owo-dev-team/owo-whats-this";
+            infoTxt += 'Source: https://github.com/owo-dev-team/owo-whats-this';
             infoTxt += '```';
             ctx.msg.channel.sendMessage(infoTxt).then(() => resolve()).catch(err => reject([err]));
         });
     }
-}``
+}``;
