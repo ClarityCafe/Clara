@@ -3,7 +3,6 @@ const Promise = require('bluebird');
 const commands = {};
 
 //TODO: always overwrite command object when there is a existing one present
-//old functions to add/remove commands. DO NOT REMOVE until the classes are tested to work properly!
 
 function addCommand(cmdName, cmdObject) {
     return new Promise((resolve, reject) => {
