@@ -27,7 +27,7 @@ jasmine.describe('loadCommandsTest', () => {
                     logger.info(`Dry-run command parsing has finished, loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? 'command' : 'commands' }`);
                     return awau;
                 }).catch(err => {
-                    console.error(`experienced an error with a command!`);
+                    console.error(`experienced an error with a command! ${err}`);
                     return owo;
                 });
             });
