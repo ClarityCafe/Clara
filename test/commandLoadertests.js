@@ -5,29 +5,30 @@
  * Contributed by Capuccino
  * 
  */
+global._baseDir = __dirname;
 
 const jasmine = require('jasmine');
 const Discord = require('discord.js');
 const Promise = require('bluebird');
 const bot = new Discord.Client();
-const logger = require(`${__dirname}/logger.js`);
-const commandLoader = require(`${__dirname}/src/lib/commandLoader`);
-const commands = require(`${__dirname}/src/lib/commands.js`);
+const logger = require(`${__dirname}/lib/logger.js`);
+const commandLoader = require(`${__dirname}/lib/commandLoader`);
+const commands = require(`${__dirname}/lib/commands.js`);
 
 var awau = [];
 
 var owo = [];
 
-jasmine.describe('loadCommandsTest', () => {
-    jasmine.it('simulate_bot', () => {
+describe('loadCommandsTest', () => {
+    it('simulate_bot', () => {
         return new Promise((resolve, reject) => {
             bot.on('ready', () => {
                 logger.info('dummy bot initialized');
                 require(commandLoader).init().then(() => {
                     logger.info(`Dry-run command parsing has finished, loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? 'command' : 'commands'}`);
                     resolve();
-                    jasmine.expect(owo).toBe(0);
-                    jasmine.expect(awau).toBe(`${Object.keys(bot.commands).length}`);
+                    expect(owo).toBe(0);
+                    expect(awau).toBe(`${Object.keys(bot.commands).length}`);
                 }).catch(err => {
                     console.error(`experienced an error with a command! ${err}`);
                     reject([err]);

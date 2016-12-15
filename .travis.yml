@@ -22,4 +22,6 @@ install:
 
 script :
 
+- jasmine ./test/commandLoadertests.js
+
 - babel src --no-comments --minified -D -d out
