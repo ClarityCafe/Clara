@@ -26,7 +26,7 @@ notifications:
   webhooks:
     urls:
       - https://canary.discordapp.com/api/webhooks/258976487443529738/WndRBOaB6Uqm-EDGbWDabtYW7jBeP2dUfIzR8Fjjitm2-AusDLYJ2wBTpRpbT8Xq60iT/travisci
-      - https://canary.discordapp.com/api/webhooks/258976487443529738/WndRBOaB6Uqm-EDGbWDabtYW7jBeP2dUfIzR8Fjjitm2-AusDLYJ2wBTpRpbT8Xq60iT/notifications
+      - https://canary.discordapp.com/api/webhooks/258976487443529738/WndRBOaB6Uqm-EDGbWDabtYW7jBeP2dUfIzR8Fjjitm2-AusDLYJ2wBTpRpbT8Xq60iT/events
     
     template: "%{repository} (%{commit}) : %{message} %{foo} - Build details: %{build_url}" #template used by the webhook to format msg
     on_success: always # default: always
