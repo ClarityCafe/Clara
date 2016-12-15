@@ -27,7 +27,7 @@ jasmine.describe('loadCommandsTest', () => {
                     logger.info(`Dry-run command parsing has finished, loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? 'command' : 'commands'}`);
                     resolve();
                     jasmine.expect(owo).toBe(0);
-                    jasmine.expect(awau).toBe(`${Object.Keys}.length`);
+                    jasmine.expect(awau).toBe(`${Object.keys(bot.commands).length}`);
                 }).catch(err => {
                     console.error(`experienced an error with a command! ${err}`);
                     reject([err]);
