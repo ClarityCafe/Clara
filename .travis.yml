@@ -20,6 +20,8 @@ install:
 
 - npm install babel --save
 
+- npm -g install jasmine
+
 notifications:
   webhooks:
     urls:
