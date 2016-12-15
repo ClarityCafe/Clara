@@ -23,9 +23,11 @@ jasmine.describe('loadCommandsTest', () => {
         return new Promise((resolve, reject) => {
             bot.on('ready', () => {
                 logger.info('dummy bot initialized');
-                require.resolve(commandLoader).init().then(() => {
+                require(commandLoader).init().then(() => {
                     logger.info(`Dry-run command parsing has finished, loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? 'command' : 'commands'}`);
-                    return awau = Object.keys(bot.commands).length;
+                    resolve();
+                    jasmine.expect(owo).toBe(0);
+                    jasmine.expect(awau).toBe(`${Object.Keys}.length`);
                 }).catch(err => {
                     console.error(`experienced an error with a command! ${err}`);
                     reject([err]);
@@ -37,6 +39,4 @@ jasmine.describe('loadCommandsTest', () => {
             exports.bot = bot;
         });
     });
-    jasmine.expect(awau).toBe(`${Object.Keys}.length`);
-    jasmine.expect(owo).toBe(0);
 });
