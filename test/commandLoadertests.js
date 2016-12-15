@@ -37,5 +37,5 @@ jasmine.describe('loadCommandsTest', () => {
         });
     });
 });
-jasmine.expect();
-jasmine.expect();
+jasmine.expect(awau).toBe (`${Object.Keys}.length`);
+jasmine.expect(owo).toBe(0) ;
