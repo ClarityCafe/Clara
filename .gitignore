@@ -64,5 +64,6 @@ out
 data.json 
 
 # Nodetori files    
-
 config.json
+/data
+prefixes.json
