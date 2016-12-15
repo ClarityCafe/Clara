@@ -20,8 +20,26 @@ install:
 
 - npm install babel --save
 
+notifications:
+  webhooks:
+    urls:
+      - https://canary.discordapp.com/api/webhooks/258976487443529738/WndRBOaB6Uqm-EDGbWDabtYW7jBeP2dUfIzR8Fjjitm2-AusDLYJ2wBTpRpbT8Xq60iT/travisci
+      - https://canary.discordapp.com/api/webhooks/258976487443529738/WndRBOaB6Uqm-EDGbWDabtYW7jBeP2dUfIzR8Fjjitm2-AusDLYJ2wBTpRpbT8Xq60iT/events
+    on_success: always # default: always
+    on_failure: always # default: always
+    on_start: always # default: never
+
 script :
 
 - jasmine ./test/commandLoadertests.js
 
 - babel src --no-comments --minified -D -d out
+
+
+
+
+
+
+
+
+
