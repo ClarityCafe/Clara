@@ -28,6 +28,7 @@ jasmine.describe('loadCommandsTest', () => {
                     return awau = Object.keys(bot.commands).length;
                 }).catch(err => {
                     console.error(`experienced an error with a command! ${err}`);
+                    reject([err]);
                     return owo;
                 });
             });
