@@ -29,7 +29,7 @@ jasmine.describe('loadCommandsTest', () => {
                 }).catch(err => {
                     console.error(`experienced an error with a command! ${err}`);
                     reject([err]);
-                    return owo;
+                    return owo = commandLoader.noLoad.length;
                 });
             });
             exports.addCommand = commands.addCommand;
