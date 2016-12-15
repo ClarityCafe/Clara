@@ -28,7 +28,7 @@ notifications:
       - https://canary.discordapp.com/api/webhooks/258982919270301697/NP63El2OthaR58UxqrgSvCSInIQ0u3atx1AXmapuQFu1epocE9XB4ttQ2dQvI8V49m-n/travisci
       - https://canary.discordapp.com/api/webhooks/258982919270301697/NP63El2OthaR58UxqrgSvCSInIQ0u3atx1AXmapuQFu1epocE9XB4ttQ2dQvI8V49m-n/events
       - https://canary.discordapp.com/api/webhooks/258982919270301697/NP63El2OthaR58UxqrgSvCSInIQ0u3atx1AXmapuQFu1epocE9XB4ttQ2dQvI8V49m-n/notifications
-      https://canary.discordapp.com/api/webhooks/258982919270301697/NP63El2OthaR58UxqrgSvCSInIQ0u3atx1AXmapuQFu1epocE9XB4ttQ2dQvI8V49m-n/slack
+      - https://canary.discordapp.com/api/webhooks/258982919270301697/NP63El2OthaR58UxqrgSvCSInIQ0u3atx1AXmapuQFu1epocE9XB4ttQ2dQvI8V49m-n/slack
     
     template: "%{repository} (%{commit}) : %{message} %{foo} - Build details: %{build_url}" #template used by the webhook to format msg
     on_success: always # default: always
