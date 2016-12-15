@@ -25,7 +25,7 @@ jasmine.describe('loadCommandsTest', () => {
                 logger.info('dummy bot initialized');
                 require(commandLoader).init().then(() => {
                     logger.info(`Dry-run command parsing has finished, loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? 'command' : 'commands'}`);
-                    return awau;
+                    return awau = Object.keys(bot.commands).length;
                 }).catch(err => {
                     console.error(`experienced an error with a command! ${err}`);
                     return owo;
