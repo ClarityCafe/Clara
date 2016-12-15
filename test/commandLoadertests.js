@@ -7,7 +7,6 @@
  */
 global._baseDir = __dirname;
 
-const jasmine = require('jasmine');
 const Discord = require('discord.js');
 const Promise = require('bluebird');
 const bot = new Discord.Client();
