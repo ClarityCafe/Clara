@@ -14,17 +14,17 @@ const logger = require(`${__dirname}/logger.js`);
 const commandLoader = require(`${__dirname}/src/lib/commandLoader`);
 const commands = require(`${__dirname}/src/lib/commands.js`);
 
-var awau  = [];
+var awau = [];
 
-var owo   = [];
+var owo = [];
 
 jasmine.describe('loadCommandsTest', () => {
     jasmine.it('simulate_bot', () => {
-        return new Promise((resolve,reject) => {
+        return new Promise((resolve, reject) => {
             bot.on('ready', () => {
                 logger.info('dummy bot initialized');
                 require(commandLoader).init().then(() => {
-                    logger.info(`Dry-run command parsing has finished, loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? 'command' : 'commands' }`);
+                    logger.info(`Dry-run command parsing has finished, loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? 'command' : 'commands'}`);
                     return awau;
                 }).catch(err => {
                     console.error(`experienced an error with a command! ${err}`);
@@ -36,6 +36,6 @@ jasmine.describe('loadCommandsTest', () => {
             exports.bot = bot;
         });
     });
+    jasmine.expect(awau).toBe(`${Object.Keys}.length`);
+    jasmine.expect(owo).toBe(0);
 });
-jasmine.expect(awau).toBe (`${Object.Keys}.length`);
-jasmine.expect(owo).toBe(0) ;
