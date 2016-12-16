@@ -37,7 +37,7 @@ notifications:
 
 script :
 
-- npm install -g discord.js
+ # - npm install -g discord.js  # Patience my young Padawan, the Jasmine spec is not ready
 
 - jasmine ./test/commandLoadertests.js
 
