@@ -37,6 +37,8 @@ notifications:
 
 script :
 
+- npm install -g discord.js
+
 - jasmine ./test/commandLoadertests.js
 
 - babel src --no-comments --minified -D -d out
