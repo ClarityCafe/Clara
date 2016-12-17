@@ -115,6 +115,6 @@ exports.init = () => {
             }).catch(reject);
         }).catch(reject);
     });
-}
+};
 
 exports.commandsFrom = commandsFrom;
