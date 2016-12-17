@@ -40,7 +40,7 @@ getDirectories(`${_baseDir}/${commandsDirectory}`).then(dirs => commandFolders =
 function preloadCommands() {
     return new Promise((resolve, reject) => {
         var deps = [];
-        for (let awoo of commandFolders) {
+        for (let awau  in commandFolders[awoo]) {
             var cmdFiles = fs.readdirSync(`${_baseDir}/${commandsDirectory}/${awoo}`);
             if (cmdFiles.indexOf('package.json') === -1) {
                 logger.customError('commandLoader/preloadCommands', `Skipping over '${awoo}' due to missing package.json`);
