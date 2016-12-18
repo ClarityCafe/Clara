@@ -9,12 +9,10 @@ function addCommand(cmdName, cmdObject) {
         if (typeof cmdName !== 'string') reject(new Error('cmdName is not a string'));
         if ((cmdObject instanceof Object) !== true) reject(new Error('cmdObject is not an object'));
 
-        if (commands[cmdName] == 'undefined') {
+        if (commands[cmdName] == undefined) {
             commands[cmdName] = cmdObject;
-            addCommand (commands[cmdName]);
             resolve(commands[cmdName]);
-        }
-        else {
+        } else {
             reject(new Error(`'${cmdName}' already exists in the command object.`));
         }
     });
@@ -30,7 +28,6 @@ function removeCommand(cmdName) {
         resolve(cmdName);
     });
 }
-
 
 exports.commands = commands;
 exports.addCommand = addCommand;
