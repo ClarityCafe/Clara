@@ -12,7 +12,7 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 
-global._baseDir = __dirname;
+global.__baseDir = __dirname;
 
 // Custom modules
 const commandsMod = require(`${__dirname}/lib/commands.js`);
