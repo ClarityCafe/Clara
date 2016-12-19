@@ -1,6 +1,6 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const config = require(`${_baseDir}/config.json`);
+const config = require(`${__baseDir}/config.json`);
 
 function msToTime(ms) {
     var time = ms / 1000;
@@ -33,7 +33,7 @@ function formatUsername(user) {
 }
 
 function isAdmin(userID) {
-    return JSON.parse(fs.readFileSync(`${_baseDir}/data/data.json`)).admins.indexOf(userID) !== -1;
+    return JSON.parse(fs.readFileSync(`${__baseDir}/data/data.json`)).admins.indexOf(userID) !== -1;
 }
 
 function isOwner(userID) {
@@ -41,7 +41,7 @@ function isOwner(userID) {
 }
 
 function isBlacklisted(userID) {
-    return JSON.parse(fs.readFileSync(`${_baseDir}/data/data.json`)).blacklist.indexOf(userID) !== -1;
+    return JSON.parse(fs.readFileSync(`${__baseDir}/data/data.json`)).blacklist.indexOf(userID) !== -1;
 }
 
 exports.msToTime = msToTime;
