@@ -155,7 +155,7 @@ function createDepArray (commandsDirectory) {
 //command Preloader
 function preloadCommands() {
     return new Promise ((resolve,reject) => {
-
+        
     });
 }
 
