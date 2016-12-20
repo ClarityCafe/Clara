@@ -94,7 +94,7 @@ bot.on('message', msg => {
     }
 
     require(`${__dirname}/lib/prefixParser.js`)(msg.content).then(content => {
-        if (content == undefined) return;
+        if (content ===  undefined) return;
 
         var args = content.split(' ');
         var cmd = args.shift();
