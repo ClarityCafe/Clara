@@ -9,14 +9,14 @@
 
 const fs = require('fs');
 const Promise = require('bluebird');
-const bot = require(`${_baseDir}/bot.js`).bot;
+const bot = require(`${__baseDir}/bot.js`).bot;
 
 function parse(content) {
     return new Promise((resolve, reject) => {
         if (typeof content !== 'string') reject(new Error('content is not a string'));
 
         var oldContent = content;
-        var prefixes = JSON.parse(fs.readFileSync(`${_baseDir}/data/prefixes.json`));
+        var prefixes = JSON.parse(fs.readFileSync(`${__baseDir}/data/prefixes.json`));
         prefixes.push(`<@${bot.user.id}> `);
         
         if (!content.startsWith(bot.config.mainPrefix)) {
