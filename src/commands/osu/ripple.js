@@ -12,7 +12,8 @@
     'taiko.ripple'
  ];
  
- const osu = require ('./ripple.lib/Client.js').Client;
+ const Nodesu = require ('./ripple.lib/Client.js');
+ const osu = new Nodesu.Client(config.RippleApiKey);
  
  exports.osu.ripple = {
     //TODO: add proper lib here lel
