@@ -114,3 +114,29 @@ exports.skip = {
     }
 };
 
+exports.queue = {
+    desc : 'queue a song without playing it',
+    longDesc: 'queues a song, but doesnt play it',
+    main : (bot, ctx) => {
+        return new Promise((resolve,reject) => {
+            //get the queue
+            const queue = getQueue(msg.guild.id);
+            //get the status
+           let queueStatus = 'Stopped';
+           const voiceConnection =  bot.voiceConnections.get(ctx.msg.guild.id);
+           if(voiceConnection !== null && voiceConnection != undefined){
+               queueStatus = voiceConnection.paused ? 'Paused' : 'Playing';
+
+               //send status
+               ctx.mg.channel.sendMessage(`Queue Status : ${queueStatus}`).then(() => resolve()).catch(err => ([err]));
+           }
+        });
+    }
+}
+
+function executeQueue(bot,ctx,queue) {
+    return new Promise((resolve,reject) => {
+        const voiceConnection = bot.voiceConnections.get(ctx.msg.guild.id);
+
+        })
+}
