@@ -109,7 +109,7 @@ exports.skip = {
             if(voiceConnection.player.dispatcher)voiceConnection.player.dispatcher.resume();
             voiceConnection.player.dispatcher.end();
 
-            ctx.msg.channel.sendMessage(`Skipped ${toSkip}.`);
+            ctx.msg.channel.sendMessage(`Skipped ${toSkip}.`).then(()=> resolve()).catch(err => ([err]));
         }
     }
 };
