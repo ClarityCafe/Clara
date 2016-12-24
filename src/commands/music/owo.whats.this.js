@@ -85,3 +85,32 @@ exports.play = {
         });
     }
 };
+
+exports.skip = {
+    desc: 'skip a playing song',
+    longDesc: 'skips a playing song in the voice channel',
+    main: (bot,ctx) => {
+        const vc = bot.voiceConnections.get(ctx.msg.guild.id);
+        if (vc === null) {
+            return ctx.msg.channel(`Nee-san! why're you skipping at nothing?`).then(()=>{
+                reject([new Error('Client has no songs to skip.')]);
+            }).catch(err => ([err]));
+            //lessgoparse the queue again like we didn't care uwu
+            const queue = getQueue(ctx.msg.guild.id);
+            //get it to skip shit
+            let toSkip = 1; //skip one song only
+            if(!isNaN(ctx.suffix) && parseInt(ctx.suffix) > 0){
+                toSkip = parseInt(ctx.suffix);
+            }          
+            toSkip = Math.min(toSkip,queue.length);
+            //skip
+            queue.splice(0, toSkip - 1);
+            //resume and stop playing(?)this didn't make sense at all lol
+            if(voiceConnection.player.dispatcher)voiceConnection.player.dispatcher.resume();
+            voiceConnection.player.dispatcher.end();
+
+            ctx.msg.channel.sendMessage(`Skipped ${toSkip}.`);
+        }
+    }
+};
+
