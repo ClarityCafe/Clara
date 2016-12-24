@@ -5,17 +5,17 @@
   original codebase by Einadin, modified for owo-whats-this by Capuccino
 */
 
-const YoutubeDL = require('youtube-dl');
+const disco = require('youtube-dl');
 const Request = require('request');
 const Promise = require('bluebird');
 
 exports.commands = [
-    "play",
-    "skip",
-    "queue",
-    "pause",
-    "resume",
-    "volume"
+    'play',
+    'skip',
+    'queue',
+    'pause',
+    'resume',
+    'volume'
 ];
 
 let options = false;
@@ -40,21 +40,48 @@ exports.play = {
     longDesc: "play a song thru YT (or smth else?)",
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            var summoner = msg.guilds.channels.filter((v) => v.type === "voice").filter((v) => v.members.exists("id", ctx.msg.author.id));
-            if (arr.length === 0) {
-                ctx.msg.channel.sendMessage("You need to be in a voice channel to summon me!").then(() => {
+            var summoner = ctx.msg.guilds.channels.filter((v) => v.type === 'voice').filter((v) => v.members.exists('id', ctx.msg.author.id));
+            if (summoner.length === 0) {
+                ctx.msg.channel.sendMessage('You need to be in a voice channel to summon me!').then(() => {
                     reject([new Error(`user does not meet proper criteria to perform this action`)]).reject(err => ([err]));
                 }); if(!suffix){
                     ctx.msg.channel.sendMessage().then(()=> {
-                        reject([new Error("Bot has no files to parse and play.")]);
+                        reject([new Error('Bot has no files to parse and play.')]);
                     }).reject(err => ([err]));
                 }
                 //get the queue
                 const queue = getQueue(ctx.msg.guild.id);
+
+                //check if queue reached permitted size
+                if (queue.length >= MAX_QUEUE_SIZE) {
+                    return ctx.msg.channel.sendMessage('Maximum queue size has been reached!').then(()=> {
+                        reject([new Error('client has reached permitted queue size')]);
+                    }).catch(err => ([err]));
+                }
+                //search info and parse
+                ctx.msg.channel.sendMessage('searching... this may take a while...').then(response => {
+                    //assume search is keyword-based if http:// wasn't detected
+                    if(!suffix.toLowerCase().startsWith('http')) {
+                        suffix = 'gvsearch1:' + suffix;
+                    }
+                    //get info from YTDL
+                    disco.getInfo(suffix, ['q', '--no-warnings','--force-ipv4'], (err,info) => {
+                        //verify if it exists
+                        if(err || info.format.id === undefined || info.format.id.startsWith(0)){
+                            return response.edit('this keyword/video link is invalid!');
+                        }
+                        //queue video if exists 
+                        response.edit(`queued ${info.title}`).then((resp) => {
+                            queue.push(info);
+                            //play if only one element in queue
+                            if (queue.length === 1) {
+                                executeQueue(client, ctx, queue);
+                                resp.delete(1000);
+                            }
+                        }).catch(err => ([err]));
+                    });
+                }).catch(err => ([err]));
             }
         });
-    },
-
-    function wrap(text) {
-    return '```\n' + text.replace(/`/g, '`' + String.fromCharCode(8203)) + '\n```';
-}
+    }
+};
