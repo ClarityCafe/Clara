@@ -137,6 +137,32 @@ exports.queue = {
 function executeQueue(bot,ctx,queue) {
     return new Promise((resolve,reject) => {
         const voiceConnection = bot.voiceConnections.get(ctx.msg.guild.id);
-
-        })
+        if (queue.length === 0) {
+        ctx.msg.channel.sendMessage('Playback finished!').then(() => resolve()).catch (err => ([err]));
+           }
+           //leave the voice channel
+        const voiceConnection = bot.voiceConnections.get(ctx.msg.guild.id);
+        if(voiceConnection != null){
+            //check if the user is in VC
+            var voiceChannel = getAuthorVoiceChannel(ctx.msg);
+            if(voiceChannel != null) {
+                voiceChannel.join().then(connection => {
+                    resolve(connection);
+                }).catch(err => ([err]));
+            } else {
+                //just clear the queue and do nothing
+                queue.splice(0, queue.length);
+                reject([new Error('User is not onspecified VC, exiting')]);
+            }
+          } else {
+            resolve(voiceConnection);
+        }
+        });
 }
+ function getAuthorVoiceChannel(ctx) {
+    return new Promise((resolve,reject) => {
+    var voiceChannelArray = ctx.msg.guild.channels.filter((v)=>v.type) == 'voice');
+    if(voiceChannelArray.length = 0) return null;
+    else return voiceChannelArray[0];
+        }
+});
