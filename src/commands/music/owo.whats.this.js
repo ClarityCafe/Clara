@@ -132,7 +132,7 @@ exports.queue = {
            }
         });
     }
-}
+};
 
 function executeQueue(bot,ctx,queue) {
     return new Promise((resolve,reject) => {
@@ -157,7 +157,7 @@ function executeQueue(bot,ctx,queue) {
           } else {
             resolve(voiceConnection);
         }
-     })
+     });
 }
 
 exports.volume = {
@@ -193,8 +193,9 @@ exports.volume = {
             }
         }
     }
-  }
+  };
 }
+
 
  function getAuthorVoiceChannel(ctx) {
     return new Promise((resolve,reject) => {
@@ -202,4 +203,4 @@ exports.volume = {
     if(voiceChannelArray.length = 0) return null;
     else return voiceChannelArray[0];
         }
-})
+});
