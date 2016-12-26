@@ -6,7 +6,7 @@
 */
 
 const disco = require('youtube-dl');
-const Request = require('request');
+const request = require('request');
 const Promise = require('bluebird');
 
 exports.commands = [
