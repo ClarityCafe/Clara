@@ -44,7 +44,7 @@ exports.play = {
             if (summoner.length === 0) {
                 ctx.msg.channel.sendMessage('You need to be in a voice channel to summon me!').then(() => {
                     reject([new Error(`user does not meet proper criteria to perform this action`)]).reject(err => ([err]));
-                }); if(!suffix){
+                }); if(!ctx.suffix){
                     ctx.msg.channel.sendMessage().then(()=> {
                         reject([new Error('Bot has no files to parse and play.')]);
                     }).reject(err => ([err]));
@@ -61,11 +61,11 @@ exports.play = {
                 //search info and parse
                 ctx.msg.channel.sendMessage('searching... this may take a while...').then(response => {
                     //assume search is keyword-based if http:// wasn't detected
-                    if(!suffix.toLowerCase().startsWith('http')) {
-                        suffix = 'gvsearch1:' + suffix;
+                    if(!ctx.suffix.toLowerCase().startsWith('http')) {
+                        ctx.suffix = 'gvsearch1:' + suffix;
                     }
                     //get info from YTDL
-                    disco.getInfo(suffix, ['q', '--no-warnings','--force-ipv4'], (err,info) => {
+                    disco.getInfo(ctx.suffix, ['q', '--no-warnings','--force-ipv4'], (err,info) => {
                         //verify if it exists
                         if(err || info.format.id === undefined || info.format.id.startsWith(0)){
                             return response.edit('this keyword/video link is invalid!');
