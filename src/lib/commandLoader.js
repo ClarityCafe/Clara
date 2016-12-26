@@ -12,8 +12,8 @@
 
 //TODO: fix Symbol:Iterator error
 
-/*
-// Dependancies
+
+// Dependencies
 const fs = require('fs');
 const path = require('path');
 const cp = require('child_process');
@@ -119,58 +119,4 @@ exports.init = () => {
         }).catch(reject);
     });
 };
-*/
-//imports
-const fs  = require('fs');
-const path = require('path');
-const npm = require('npm');
-const child_process = require('child_process');
-const logger = require(`${__dirname}/logger.js`);
-//function to get the dirs
-function getDirectories(dir) {
-    return new Promise((resolve, reject) => {
-        fs.readdir(dir, (err, files) => {
-            if (err) {
-                reject(err);
-            } else {
-                var numnum = files.filter(file => fs.statSync(path.join(dir, file)).isDirectory());
-                resolve(numnum);
-            }
-        });
-    });
-}
-getDirectories(`${__baseDir}/${commandsDirectory}`).then(dirs => commandFolders = dirs);
-//empty vars (or not)
-var commandsDirectory = 'commands';
-var commandFolders;
-var commandsFrom = {}; //just a property
-var deps = []; //usually handles the dependencies called out
 
-//makes the Dependency array
-function createDepArray (commandsDirectory) {
-    var dep = require(commandsDirectory);
-    if (!dep.dependencies) return [];
-    var deps = [];
-    for (var mod in dep.dependencies) {
-        deps.push(mod + '@' + dep.dependencies[mod]);
-    }
-    return deps;
-}
-//command Preloader
-function preloadCommands() {
-    return new Promise ((resolve,reject) => {
-        
-    });
-}
-
-
-
-
-getDirectories(`${__baseDir}/${commandsDirectory}`).then(dirs => commandFolders = dirs);
-
-
-
-
-
-
-exports.commandsFrom = commandsFrom;
