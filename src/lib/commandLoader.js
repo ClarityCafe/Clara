@@ -10,9 +10,6 @@
  *
  */
 
-//TODO: fix Symbol:Iterator error
-
-
 // Dependencies
 const fs = require('fs');
 const path = require('path');
