@@ -27,6 +27,7 @@ const bot = new Discord.Client();
 try {
     require.resolve(`${__dirname}/data/data.json`);
 } catch(err) {
+    fs.mkdirSync(`${__dirname}/data/`);
     fs.writeFile(`${__dirname}/data/data.json`, JSON.stringify({admins: [], blacklist: []}), e => {
         if (e) {
             throw e;
