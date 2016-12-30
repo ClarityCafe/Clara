@@ -38,8 +38,6 @@ function getDirectories(dir) {
     });
 }
 
-getDirectories(`${__baseDir}/${commandsDirectory}`).then(dirs => commandFolders = dirs);
-
 function preloadCommands() {
     return new Promise((resolve, reject) => {
         var deps = [];
@@ -110,11 +108,14 @@ function loadCommands() {
 
 exports.init = () => {
     return new Promise((resolve, reject) => {
-        logger.custom('blue', 'commandLoader/init', 'Preloading commands.');
-        preloadCommands().then(() => {
-            logger.custom('blue', 'commandLoader/init', 'Loading commands.');
-            loadCommands().then(() => {
-                resolve();
+        getDirectories(`${__baseDir}/${commandsDirectory}`).then(dirs => {
+            commandFolders = dirs
+            logger.custom('blue', 'commandLoader/init', 'Preloading commands.');
+            preloadCommands().then(() => {
+                logger.custom('blue', 'commandLoader/init', 'Loading commands.');
+                loadCommands().then(() => {
+                    resolve();
+                }).catch(reject);
             }).catch(reject);
         }).catch(reject);
     });
