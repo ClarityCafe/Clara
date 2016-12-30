@@ -172,32 +172,34 @@ exports.volume = {
                 reject([new Error('Cannot change volume, no media file playing.')]);
                 }).catch(err => ([err]));
             //set the volume
-            if(voiceConnection.player.dispatcher) {
-                if(ctx.suffix === '') {
-                    var displayVolume = Math.pow(voiceConnection.player.dispatcher, 0.6020600085251697) * 100.0;
-                    ctx.msg.channel.sendMessage(`Current volume is ${displayVolume} %`).then(()=> resolve()).catch(err => ([err]))
-                } else {
-                    if(ctx.suffix.toLowerCase().indexOf('db') === -1){
-                        if(ctx.suffix.indexOf('%') === -1){
-                            if(ctx.suffix > 1) ctx.suffix/= 100.0;
+            if (voiceConnection.player.dispatcher) {
+                if (ctx.suffix !== '') {
+                    if (ctx.suffix.toLowerCase().indexOf('db') === -1) {
+                        if (ctx.suffix.indexOf('%') === -1) {
+                            if (ctx.suffix > 1) ctx.suffix /= 100.0;
                             voiceConnection.player.dispatcher.setVolumeLogarithmic(ctx.suffix);
                         } else {
                             var nani = ctx.suffix.split('%')[0];
-                            voiceConnection.player.dispatcher.setVolumeLogarithmic(nani/100.0);
-                        } else {
+                            voiceConnection.player.dispatcher.setVolumeLogarithmic(nani / 100.0);
+                        }
+                    else
+                        {
                             var value = ctx.suffix.toLowerCase().split('db')[0];
                             voiceConnection.player.dispatcher.setVolumeDecibels(value);
                         }
+                    } else {
+                        var displayVolume = Math.pow(voiceConnection.player.dispatcher, 0.6020600085251697) * 100.0;
+                        ctx.msg.channel.sendMessage(`Current volume is ${displayVolume} %`).then(() => resolve()).catch(err => ([err]))
                     }
                 }
             }
         }
-    }
-  };
+        }
+    };
 }
 
 
- function getAuthorVoiceChannel(ctx) {
+function getAuthorVoiceChannel(ctx) {
     return new Promise((resolve,reject) => {
     var voiceChannelArray = ctx.msg.guild.channels.filter((v)=>v.type) == 'voice');
     if(voiceChannelArray.length = 0) return null;
