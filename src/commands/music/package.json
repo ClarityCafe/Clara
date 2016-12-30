@@ -1,0 +1,7 @@
+{
+  "main": "owo.whats.this.js",
+  "dependencies": {
+    "request" : " ",
+    "youtube-dl":" "
+  }
+}
