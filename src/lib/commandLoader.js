@@ -10,14 +10,12 @@
  *
  */
 
-//TODO: fix Symbol:Iterator error
-
-
 // Dependencies
 const fs = require('fs');
 const path = require('path');
 const cp = require('child_process');
 const logger = require(`${__dirname}/logger.js`);
+const config = require(`${__baseDir}/config.json`);
 
 // Variables
 var commandsDirectory = 'commands';
@@ -85,7 +83,7 @@ function loadCommands() {
                 commandPackage = require(`${__baseDir}/${commandsDirectory}/${cmdFolder}/package.json`);
                 command = require(`${__baseDir}/${commandsDirectory}/${cmdFolder}/${commandPackage.main}`);
             } catch (err) {
-                logger.customError('commandLoader/loadCommands', `Experienced error while loading command '${cmdFolder}', skipping...\n${bot.config.debug ? err.stack : err}`);
+                logger.customError('commandLoader/loadCommands', `Experienced error while loading command '${cmdFolder}', skipping...\n${config.debug ? err.stack : err}`);
             }
             if (command) {
                 if (command.commands) {
@@ -94,7 +92,7 @@ function loadCommands() {
                             bot.addCommand(cmd, command[cmd]).then(() => {
                                 commandsFrom[cmd] = `${cmdFolder}/${commandPackage.main}`;
                                 logger.custom('blue', 'commandLoader/loadCommands', `Successfully loaded command '${cmd}'`);
-                            }).catch(err => logger.customError('commandLoader/loadCommands', `Error when attempting to load command '${cmd}':\n${bot.config.debug ? err.stack : err}`));
+                            }).catch(err => logger.customError('commandLoader/loadCommands', `Error when attempting to load command '${cmd}':\n${config.debug ? err.stack : err}`));
                         }
                     }
                     resolve();
