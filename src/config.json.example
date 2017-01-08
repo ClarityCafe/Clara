@@ -3,8 +3,5 @@
 	"ownerID": "",
 	"mainPrefix": "?",
 	"osuApiKey": "",
-	"debug": false,
-	"useEmail": false,
-	"email": "",
-	"password": ""
+	"debug": false
 }
