@@ -26,10 +26,10 @@ exports.prefixes = {
                 prfxTxt += '```js\n';
                 prfxTxt += `'${prefixes.join("',\n'")}'\n`;
                 prfxTxt += '```';
-                ctx.msg.channel.sendMessage(prfxTxt).then(() => resolve()).catch(err => reject([err]));
+                ctx.msg.channel.createMessage(prfxTxt).then(() => resolve()).catch(err => reject([err]));
             } else {
                 if (!utils.isOwner(ctx.msg.author.id) || !utils.isAdmin(ctx.msg.author.id)) {
-                    ctx.msg.channel.sendMessage('You do not have permission to do that.').then(() => {
+                    ctx.msg.channel.createMessage('You do not have permission to do that.').then(() => {
                         reject([new Error('User is not owner or bot admin.')]);
                     }).catch(err => reject([err]));
                 } else {
@@ -37,7 +37,7 @@ exports.prefixes = {
                         let prefixes = JSON.parse(fs.readFileSync(`${_baseDir}/data/prefixes.json`));
                         ctx.args.shift();
                         if ((ctx.args.join(' ') === bot.config.mainPrefix || ctx.args.join(' ') === '@mention') || prefixes.indexOf(ctx.args.join(' ')) !== -1) {
-                            ctx.msg.channel.sendMessage('That prefix already exists').then(() => {
+                            ctx.msg.channel.createMessage('That prefix already exists').then(() => {
                                 reject([new Error('Prefix already exists.')]);
                             }).catch(err => reject([err]));
                         } else {
@@ -46,7 +46,7 @@ exports.prefixes = {
                                 if (err) {
                                     reject(err);
                                 } else {
-                                    ctx.msg.channel.sendMessage(`Prefix \`${ctx.args.join(' ')}\` successfully added.`).then(() => resolve()).catch(err => reject([err]));
+                                    ctx.msg.channel.createMessage(`Prefix \`${ctx.args.join(' ')}\` successfully added.`).then(() => resolve()).catch(err => reject([err]));
                                 }
                             });
                         }
@@ -54,11 +54,11 @@ exports.prefixes = {
                         let prefixes = JSON.parse(fs.readFileSync(`${_baseDir}/data/prefixes.json`));
                         ctx.args.shift();
                         if (ctx.args.join(' ') === bot.config.mainPrefix || ctx.args.join(' ') === '@mention') {
-                            ctx.msg.channel.sendMessage('You cannot remove an internal prefix.').then(() => {
+                            ctx.msg.channel.createMessage('You cannot remove an internal prefix.').then(() => {
                                 reject([new Error('User tried to remove internal prefix.')]);
                             }).catch(err => reject([err]));
                         } else if (prefixes.indexOf(ctx.args.join(' ')) === -1) {
-                            ctx.msg.channel.sendMessage('That prefix does not exist').then(() => {
+                            ctx.msg.channel.createMessage('That prefix does not exist').then(() => {
                                 reject([new Error('Prefix does not exist')]);
                             }).catch(err => reject([err]));
                         } else {
@@ -67,7 +67,7 @@ exports.prefixes = {
                                 if (err) {
                                     reject(err);
                                 } else {
-                                    ctx.msg.channel.sendMessage(`Prefix \`${ctx.args.join(' ')}\` successfully removed.`).then(() => resolve()).catch(err => reject([err]));
+                                    ctx.msg.channel.createMessage(`Prefix \`${ctx.args.join(' ')}\` successfully removed.`).then(() => resolve()).catch(err => reject([err]));
                                 }
                             });
                         }

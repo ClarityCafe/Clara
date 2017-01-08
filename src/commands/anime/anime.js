@@ -40,21 +40,21 @@ exports.anime = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix) {
-                ctx.msg.channel.sendMessage('Please give me something to search with.').then(() => {
+                ctx.msg.channel.createMessage('Please give me something to search with.').then(() => {
                     reject([new Error('No arguments given.')]);
                 }).catch(err => reject([err]));
             } else {
                 if (/^\d+$/.test(ctx.suffix)) {
                     mal.fromId(Number(ctx.suffix)).then(animu => {
-                        ctx.msg.channel.sendMessage(animeBlock(animu)).then(() => resolve()).catch(err => reject([err]));
+                        ctx.msg.channel.createMessage(animeBlock(animu)).then(() => resolve()).catch(err => reject([err]));
                     }).catch(reject);
                 } else if (/^https?:\/\/myanimelist\.net\/anime\/\d+\/.+$/.test(ctx.suffix)) {
                     mal.fromUrl(ctx.suffix).then(animu => {
-                        ctx.msg.channel.sendMessage(animeBlock(animu)).then(() => resolve()).catch(err => reject([err]));
+                        ctx.msg.channel.createMessage(animeBlock(animu)).then(() => resolve()).catch(err => reject([err]));
                     }).catch(reject);
                 } else {
                     mal.fromName(ctx.suffix).then(animu => {
-                        ctx.msg.channel.sendMessage(animeBlock(animu)).then(() => resolve()).catch(err => reject([err]));
+                        ctx.msg.channel.createMessage(animeBlock(animu)).then(() => resolve()).catch(err => reject([err]));
                     }).catch(reject);
                 }
             }

@@ -47,7 +47,7 @@ exports.ping = {
     longDesc: "Ping the bot and check it's latency.",
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.sendMessage('Pong!').then(m => {
+            ctx.msg.channel.createMessage('Pong!').then(m => {
                 m.edit(`Pong! \`${m.timestamp - ctx.msg.timestamp}ms\``).then(() => resolve()).catch(err => reject([err]));
             }).catch(err => reject([err]));
         });
@@ -75,7 +75,7 @@ exports.ping = {
     longDesc: "Ping the bot and check it's latency.",
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.sendMessage('Pong!').then(m => {
+            ctx.msg.channel.createMessage('Pong!').then(m => {
                 m.edit(`Pong! \`${m.timestamp - ctx.msg.timestamp}ms\``).then(() => resolve()).catch(err => reject([err]));
             }).catch(err => reject([err]));
         });

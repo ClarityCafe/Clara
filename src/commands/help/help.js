@@ -29,12 +29,12 @@ exports.help = {
                     helpTxt += `"${command}"${cmd.usage ? ` ${cmd.usage}` : ''} - "${cmd.desc}"\n`;
                 }
                 helpTxt += '```';
-                ctx.msg.channel.sendMessage('Sending the help message to your DMs').then(() => {
-                    ctx.msg.author.sendMessage(helpTxt).then(() => resolve()).catch(reject);
+                ctx.msg.channel.createMessage('Sending the help message to your DMs').then(() => {
+                    ctx.msg.author.createMessage(helpTxt).then(() => resolve()).catch(reject);
                 });
             } else {
                 if (!bot.commands[ctx.args[0]]) {
-                    ctx.msg.channel.sendMessage('That command does not exist. Make sure to check your spelling.').then(() => {
+                    ctx.msg.channel.createMessage('That command does not exist. Make sure to check your spelling.').then(() => {
                         reject([new Error('Command does not exist.')]);
                     }).catch(err => reject[err]);
                 } else {
@@ -42,7 +42,7 @@ exports.help = {
                     var cmdHelp = '```armasm\n';
                     cmdHelp += `"${ctx.args[0]}"${cmd.usage ? ` ${cmd.usage}` : ''} - "${cmd.fullDesc ? cmd.fullDesc : cmd.desc}"\n`;
                     cmdHelp += '```';
-                    ctx.msg.channel.sendMessage(cmdHelp).then(() => resolve()).catch(err => resolve([err]));
+                    ctx.msg.channel.createMessage(cmdHelp).then(() => resolve()).catch(err => resolve([err]));
                 }
             }
         });

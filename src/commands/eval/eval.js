@@ -20,15 +20,15 @@ exports.eval = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.sendMessage('Please give arguments to evaluate.').then(() => {
+                ctx.msg.channel.createMessage('Please give arguments to evaluate.').then(() => {
                     reject([new Error('No arguments given.')]);
                 }).catch(err => reject([err]));
             } else {
                 var evalArgs = ctx.suffix;
-        
+
                 try {
                     var returned = eval(evalArgs);
-                    var str = util.inspect(returned, {depth: 1});
+                    var str = util.inspect(returned, { depth: 1 });
                     str = str.replace(new RegExp(bot.token, 'gi'), '(token)');
 
                     if (str.length > 1900) {
@@ -41,14 +41,14 @@ exports.eval = {
                     sentMessage += `Output: ${str}\n`;
                     sentMessage += '```';
 
-                    ctx.msg.channel.sendMessage(sentMessage).then(() => resolve()).catch(err => reject([err]));
-                } catch(err) {
+                    ctx.msg.channel.createMessage(sentMessage).then(() => resolve()).catch(err => reject([err]));
+                } catch (err) {
                     var errMessage = '```js\n';
                     errMessage += `Input: ${evalArgs}\n\n`;
                     errMessage += `${err}\n`;
                     errMessage += '```';
 
-                    ctx.msg.channel.sendMessage(errMessage).then(() => reject([err])).catch(e => reject([e]));
+                    ctx.msg.channel.createMessage(errMessage).then(() => reject([err])).catch(e => reject([e]));
                 }
             }
         });

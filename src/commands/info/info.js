@@ -35,7 +35,7 @@ exports.info = {
             infoTxt += `Version: ${version}\n`;
             infoTxt += 'Source: https://github.com/owo-dev-team/owo-whats-this';
             infoTxt += '```';
-            ctx.msg.channel.sendMessage(infoTxt).then(() => resolve()).catch(err => reject([err]));
+            ctx.msg.channel.createMessage(infoTxt).then(() => resolve()).catch(err => reject([err]));
         });
     }
 }``;
