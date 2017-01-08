@@ -42,10 +42,10 @@ exports.play = {
         return new Promise((resolve, reject) => {
             var summoner = ctx.msg.guilds.channels.filter((v) => v.type === 'voice').filter((v) => v.members.exists('id', ctx.msg.author.id));
             if (summoner.length === 0) {
-                ctx.msg.channel.sendMessage('You need to be in a voice channel to summon me!').then(() => {
+                ctx.msg.channel.createMessage('You need to be in a voice channel to summon me!').then(() => {
                     reject([new Error(`user does not meet proper criteria to perform this action`)]).reject(err => ([err]));
-                }); if(!ctx.suffix){
-                    ctx.msg.channel.sendMessage().then(()=> {
+                }); if (!ctx.suffix) {
+                    ctx.msg.channel.createMessage().then(() => {
                         reject([new Error('Bot has no files to parse and play.')]);
                     }).reject(err => ([err]));
                 }
@@ -54,20 +54,20 @@ exports.play = {
 
                 //check if queue reached permitted size
                 if (queue.length >= MAX_QUEUE_SIZE) {
-                    return ctx.msg.channel.sendMessage('Maximum queue size has been reached!').then(()=> {
+                    return ctx.msg.channel.createMessage('Maximum queue size has been reached!').then(() => {
                         reject([new Error('client has reached permitted queue size')]);
                     }).catch(err => ([err]));
                 }
                 //search info and parse
-                ctx.msg.channel.sendMessage('searching... this may take a while...').then(response => {
+                ctx.msg.channel.createMessage('searching... this may take a while...').then(response => {
                     //assume search is keyword-based if http:// wasn't detected
-                    if(!ctx.suffix.toLowerCase().startsWith('http')) {
+                    if (!ctx.suffix.toLowerCase().startsWith('http')) {
                         ctx.suffix = 'gvsearch1:' + suffix;
                     }
                     //get info from YTDL
-                    disco.getInfo(ctx.suffix, ['q', '--no-warnings','--force-ipv4'], (err,info) => {
+                    disco.getInfo(ctx.suffix, ['q', '--no-warnings', '--force-ipv4'], (err, info) => {
                         //verify if it exists
-                        if(err || info.format.id === undefined || info.format.id.startsWith(0)){
+                        if (err || info.format.id === undefined || info.format.id.startsWith(0)) {
                             return response.edit('this keyword/video link is invalid!');
                         }
                         //queue video if exists 
@@ -89,63 +89,63 @@ exports.play = {
 exports.skip = {
     desc: 'skip a playing song',
     longDesc: 'skips a playing song in the voice channel',
-    main: (bot,ctx) => {
+    main: (bot, ctx) => {
         const vc = bot.voiceConnections.get(ctx.msg.guild.id);
         if (vc === null) {
-            return ctx.msg.channel(`Nee-san! why're you skipping at nothing?`).then(()=>{
+            return ctx.msg.channel(`Nee-san! why're you skipping at nothing?`).then(() => {
                 reject([new Error('Client has no songs to skip.')]);
             }).catch(err => ([err]));
             //lessgoparse the queue again like we didn't care uwu
             const queue = getQueue(ctx.msg.guild.id);
             //get it to skip shit
             let toSkip = 1; //skip one song only
-            if(!isNaN(ctx.suffix) && parseInt(ctx.suffix) > 0){
+            if (!isNaN(ctx.suffix) && parseInt(ctx.suffix) > 0) {
                 toSkip = parseInt(ctx.suffix);
-            }          
-            toSkip = Math.min(toSkip,queue.length);
+            }
+            toSkip = Math.min(toSkip, queue.length);
             //skip
             queue.splice(0, toSkip - 1);
             //resume and stop playing(?)this didn't make sense at all lol
-            if(voiceConnection.player.dispatcher)voiceConnection.player.dispatcher.resume();
+            if (voiceConnection.player.dispatcher) voiceConnection.player.dispatcher.resume();
             voiceConnection.player.dispatcher.end();
 
-            ctx.msg.channel.sendMessage(`Skipped ${toSkip}.`).then(()=> resolve()).catch(err => ([err]));
+            ctx.msg.channel.createMessage(`Skipped ${toSkip}.`).then(() => resolve()).catch(err => ([err]));
         }
     }
 };
 
 exports.queue = {
-    desc : 'queue a song without playing it',
+    desc: 'queue a song without playing it',
     longDesc: 'queues a song, but doesnt play it',
-    main : (bot, ctx) => {
-        return new Promise((resolve,reject) => {
+    main: (bot, ctx) => {
+        return new Promise((resolve, reject) => {
             //get the queue
             const queue = getQueue(msg.guild.id);
             //get the status
-           let queueStatus = 'Stopped';
-           const voiceConnection =  bot.voiceConnections.get(ctx.msg.guild.id);
-           if(voiceConnection !== null && voiceConnection != undefined){
-               queueStatus = voiceConnection.paused ? 'Paused' : 'Playing';
+            let queueStatus = 'Stopped';
+            const voiceConnection = bot.voiceConnections.get(ctx.msg.guild.id);
+            if (voiceConnection !== null && voiceConnection != undefined) {
+                queueStatus = voiceConnection.paused ? 'Paused' : 'Playing';
 
-               //send status
-               ctx.mg.channel.sendMessage(`Queue Status : ${queueStatus}`).then(() => resolve()).catch(err => ([err]));
-           }
+                //send status
+                ctx.mg.channel.createMessage(`Queue Status : ${queueStatus}`).then(() => resolve()).catch(err => ([err]));
+            }
         });
     }
 };
 
-function executeQueue(bot,ctx,queue) {
-    return new Promise((resolve,reject) => {
+function executeQueue(bot, ctx, queue) {
+    return new Promise((resolve, reject) => {
         const voiceConnection = bot.voiceConnections.get(ctx.msg.guild.id);
         if (queue.length === 0) {
-        ctx.msg.channel.sendMessage('Playback finished!').then(() => resolve()).catch (err => ([err]));
-           }
-           //leave the voice channel
+            ctx.msg.channel.createMessage('Playback finished!').then(() => resolve()).catch(err => ([err]));
+        }
+        //leave the voice channel
         const voiceConnection = bot.voiceConnections.get(ctx.msg.guild.id);
-        if(voiceConnection != null){
+        if (voiceConnection != null) {
             //check if the user is in VC
             var voiceChannel = getAuthorVoiceChannel(ctx.msg);
-            if(voiceChannel != null) {
+            if (voiceChannel != null) {
                 voiceChannel.join().then(connection => {
                     resolve(connection);
                 }).catch(err => ([err]));
@@ -154,34 +154,34 @@ function executeQueue(bot,ctx,queue) {
                 queue.splice(0, queue.length);
                 reject([new Error('User is not onspecified VC, exiting')]);
             }
-          } else {
+        } else {
             resolve(voiceConnection);
         }
-     });
+    });
 }
 
 exports.volume = {
-    desc : 'adjust the volume',
-    longDesc : 'adjust the playback volume of the bot',
-    usage : '<volume in percent/dB format>',
-    main : (bot, ctx) => {
-        return new Promise((resolve,reject) => {
-        const voiceConnection = bot.voiceConnections.get(ctx.msg.guild.id);
-        if(voiceConnection === null ){
-            return ctx.msg.channel.sendMessage('No music to play').then(() => {
-                reject([new Error('Cannot change volume, no media file playing.')]);
+    desc: 'adjust the volume',
+    longDesc: 'adjust the playback volume of the bot',
+    usage: '<volume in percent/dB format>',
+    main: (bot, ctx) => {
+        return new Promise((resolve, reject) => {
+            const voiceConnection = bot.voiceConnections.get(ctx.msg.guild.id);
+            if (voiceConnection === null) {
+                return ctx.msg.channel.createMessage('No music to play').then(() => {
+                    reject([new Error('Cannot change volume, no media file playing.')]);
                 }).catch(err => ([err]));
-            //set the volume
-            if (voiceConnection.player.dispatcher) {
-                if (ctx.suffix !== '') {
-                    if (ctx.suffix.toLowerCase().indexOf('db') === -1) {
-                        if (ctx.suffix.indexOf('%') === -1) {
-                            if (ctx.suffix > 1) ctx.suffix /= 100.0;
-                            voiceConnection.player.dispatcher.setVolumeLogarithmic(ctx.suffix);
-                        } else {
-                            var nani = ctx.suffix.split('%')[0];
-                            voiceConnection.player.dispatcher.setVolumeLogarithmic(nani / 100.0);
-                        }
+                //set the volume
+                if (voiceConnection.player.dispatcher) {
+                    if (ctx.suffix !== '') {
+                        if (ctx.suffix.toLowerCase().indexOf('db') === -1) {
+                            if (ctx.suffix.indexOf('%') === -1) {
+                                if (ctx.suffix > 1) ctx.suffix /= 100.0;
+                                voiceConnection.player.dispatcher.setVolumeLogarithmic(ctx.suffix);
+                            } else {
+                                var nani = ctx.suffix.split('%')[0];
+                                voiceConnection.player.dispatcher.setVolumeLogarithmic(nani / 100.0);
+                            }
                     else
                         {
                             var value = ctx.suffix.toLowerCase().split('db')[0];
@@ -189,20 +189,20 @@ exports.volume = {
                         }
                     } else {
                         var displayVolume = Math.pow(voiceConnection.player.dispatcher, 0.6020600085251697) * 100.0;
-                        ctx.msg.channel.sendMessage(`Current volume is ${displayVolume} %`).then(() => resolve()).catch(err => ([err]))
+                        ctx.msg.channel.createMessage(`Current volume is ${displayVolume} %`).then(() => resolve()).catch(err => ([err]))
                     }
                 }
             }
         }
         }
-    };
+};
 }
 
 
 function getAuthorVoiceChannel(ctx) {
-    return new Promise((resolve,reject) => {
-    var voiceChannelArray = ctx.msg.guild.channels.filter((v)=>v.type) == 'voice');
-    if(voiceChannelArray.length = 0) return null;
+    return new Promise((resolve, reject) => {
+        var voiceChannelArray = ctx.msg.guild.channels.filter((v) => v.type) == 'voice');
+    if (voiceChannelArray.length = 0) return null;
     else return voiceChannelArray[0];
-        }
+}
 });

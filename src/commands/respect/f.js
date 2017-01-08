@@ -19,9 +19,9 @@ exports.f = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.cleanSuffix) {
-                ctx.msg.channel.sendMessage(`**${utils.formatUsername(ctx.msg.member)}** has paid their respects for \`${ctx.cleanSuffix}\``).then(() => resolve()).catch(err => reject([err]));
+                ctx.msg.channel.createMessage(`**${utils.formatUsername(ctx.msg.member)}** has paid their respects for \`${ctx.cleanSuffix}\``).then(() => resolve()).catch(err => reject([err]));
             } else {
-                ctx.msg.channel.sendMessage(`**${utils.formatUsername(ctx.msg.member)}** has paid their respects.`).then(() => resolve()).catch(err => reject([err]));
+                ctx.msg.channel.createMessage(`**${utils.formatUsername(ctx.msg.member)}** has paid their respects.`).then(() => resolve()).catch(err => reject([err]));
             }
         });
     }
@@ -35,9 +35,9 @@ exports.rip = {
         return new Promise((resolve, reject) => {
             if (ctx.cleanSuffix) {
                 var owo = encodeURI(`https://ripme.xyz/#${ctx.cleanSuffix}`);
-                ctx.msg.channel.sendMessage(`<${owo}> Forever rest in peace.`).then(() => resolve()).catch(err => reject([err]));
+                ctx.msg.channel.createMessage(`<${owo}> Forever rest in peace.`).then(() => resolve()).catch(err => reject([err]));
             } else {
-                ctx.msg.channel.sendMessage('Forever rest in peace.').then(() => resolve()).catch(err => reject([err]));
+                ctx.msg.channel.createMessage('Forever rest in peace.').then(() => resolve()).catch(err => reject([err]));
             }
         });
     }

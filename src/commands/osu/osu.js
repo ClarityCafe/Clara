@@ -24,14 +24,14 @@ exports.osu = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.sendMessage('Please give me a name to search with.').then(() => {
+                ctx.msg.channel.createMessage('Please give me a name to search with.').then(() => {
                     reject([new Error('No arguments were given.')]);
                 }).catch(err => reject([err]));
             } else {
-                osu.get_user({u: ctx.suffix}, res => {
+                osu.get_user({ u: ctx.suffix }, res => {
                     var user = res[0];
                     if (user == undefined || user.user_id == undefined) {
-                        ctx.msg.channel.sendMessage('A user with that name or ID could not be found.').then(() => {
+                        ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(() => {
                             reject([new Error('User was not found.')]);
                         }).catch(err => reject([err]));
                     } else {
@@ -55,7 +55,7 @@ exports.osu = {
                         osuser += `        A Count: ${user.count_rank_a ? user.count_rank_a.replace(commaRegex, ',') : 'none'}\n`;
                         osuser += '```';
                         osuser += `http://a.ppy.sh/${user.user_id}`;
-                        ctx.msg.channel.sendMessage(osuser).then(() => {
+                        ctx.msg.channel.createMessage(osuser).then(() => {
                             resolve();
                         }).catch(err => reject([err]));
                     }
@@ -72,14 +72,14 @@ exports.ctb = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.sendMessage('Please give me a name to search with.').then(() => {
+                ctx.msg.channel.createMessage('Please give me a name to search with.').then(() => {
                     reject([new Error('No arguments were given.')]);
                 }).catch(err => reject([err]));
             } else {
-                osu.get_user({u: ctx.suffix, m: 2}, res => {
+                osu.get_user({ u: ctx.suffix, m: 2 }, res => {
                     var user = res[0];
                     if (user == undefined || user.user_id == undefined) {
-                        ctx.msg.channel.sendMessage('A user with that name or ID could not be found.').then(() => {
+                        ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(() => {
                             reject([new Error('User was not found.')]);
                         }).catch(err => reject([err]));
                     } else {
@@ -102,7 +102,7 @@ exports.ctb = {
                         osuser += `        S Count: ${user.count_rank_s ? user.count_rank_s.replace(commaRegex, ',') : 'none'}\n`;
                         osuser += `        A Count: ${user.count_rank_a ? user.count_rank_a.replace(commaRegex, ',') : 'none'}\n`;
                         osuser += '```';
-                        ctx.msg.channel.sendMessage(osuser).then(() => {
+                        ctx.msg.channel.createMessage(osuser).then(() => {
                             resolve();
                         }).catch(err => reject([err]));
                     }
@@ -119,14 +119,14 @@ exports.mania = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.sendMessage('Please give me a name to search with.').then(() => {
+                ctx.msg.channel.createMessage('Please give me a name to search with.').then(() => {
                     reject([new Error('No arguments were given.')]);
                 }).catch(err => reject([err]));
             } else {
-                osu.get_user({u: ctx.suffix, m: 2}, res => {
+                osu.get_user({ u: ctx.suffix, m: 2 }, res => {
                     var user = res[0];
                     if (user == undefined || user.user_id == undefined) {
-                        ctx.msg.channel.sendMessage('A user with that name or ID could not be found.').then(() => {
+                        ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(() => {
                             reject([new Error('User was not found.')]);
                         }).catch(err => reject([err]));
                     } else {
@@ -149,7 +149,7 @@ exports.mania = {
                         osuser += `        S Count: ${user.count_rank_s ? user.count_rank_s.replace(commaRegex, ',') : 'none'}\n`;
                         osuser += `        A Count: ${user.count_rank_a ? user.count_rank_a.replace(commaRegex, ',') : 'none'}\n`;
                         osuser += '```';
-                        ctx.msg.channel.sendMessage(osuser).then(() => {
+                        ctx.msg.channel.createMessage(osuser).then(() => {
                             resolve();
                         }).catch(err => reject([err]));
                     }
@@ -166,14 +166,14 @@ exports.taiko = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.sendMessage('Please give me a name to search with.').then(() => {
+                ctx.msg.channel.createMessage('Please give me a name to search with.').then(() => {
                     reject([new Error('No arguments were given.')]);
                 }).catch(err => reject([err]));
             } else {
-                osu.get_user({u: ctx.suffix, m: 1}, res => {
+                osu.get_user({ u: ctx.suffix, m: 1 }, res => {
                     var user = res[0];
                     if (user == undefined || user.user_id == undefined) {
-                        ctx.msg.channel.sendMessage('A user with that name or ID could not be found.').then(() => {
+                        ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(() => {
                             reject([new Error('User was not found.')]);
                         }).catch(err => reject([err]));
                     } else {
@@ -196,7 +196,7 @@ exports.taiko = {
                         osuser += `        S Count: ${user.count_rank_s ? user.count_rank_s.replace(commaRegex, ',') : 'none'}\n`;
                         osuser += `        A Count: ${user.count_rank_a ? user.count_rank_a.replace(commaRegex, ',') : 'none'}\n`;
                         osuser += '```';
-                        ctx.msg.channel.sendMessage(osuser).then(() => {
+                        ctx.msg.channel.createMessage(osuser).then(() => {
                             resolve();
                         }).catch(err => reject([err]));
                     }
