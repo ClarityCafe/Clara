@@ -1,5 +1,5 @@
 const fs = require('fs');
-const Discord = require('discord.js');
+const Eris = require('eris');
 const config = require(`${__baseDir}/config.json`);
 
 function msToTime(ms) {
@@ -25,11 +25,7 @@ function msToTime(ms) {
 }
 
 function formatUsername(user) {
-    if (user instanceof Discord.GuildMember) {
-        return user.nickname ? `${user.nickname}#${user.user.discriminator}` : `${user.username}#${user.user.discriminator}`;
-    } else {
-        return `${user.username}#${user.discriminator}`;
-    }
+    return user instanceof Eris.Member ? `${user.nick ? user.nick : user.user.username}#${user.user.discriminator}` : `${user.username}#${user.discriminator}`;
 }
 
 function isAdmin(userID) {
