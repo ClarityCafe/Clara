@@ -35,18 +35,18 @@ function getDirectories(dir) {
     });
 }
 
-getDirectories(`${_baseDir}/${commandsDirectory}`).then(dirs => commandFolders = dirs);
+getDirectories(`${__baseDir}/${commandsDirectory}`).then(dirs => commandFolders = dirs);
 
 function preloadCommands() {
     return new Promise((resolve, reject) => {
         var deps = [];
         for (let awoo of commandFolders) {
-            var cmdFiles = fs.readdirSync(`${_baseDir}/${commandsDirectory}/${awoo}`);
+            var cmdFiles = fs.readdirSync(`${__baseDir}/${commandsDirectory}/${awoo}`);
             if (cmdFiles.indexOf('package.json') === -1) {
                 logger.customError('commandLoader/preloadCommands', `Skipping over '${awoo}' due to missing package.json`);
                 noLoad.push(awoo);
             } else {
-                var jsooon = fs.readFileSync(`${_baseDir}/${commandsDirectory}/${awoo}/package.json`);
+                var jsooon = fs.readFileSync(`${__baseDir}/${commandsDirectory}/${awoo}/package.json`);
                 var pkg = JSON.parse(jsooon);
                 if (Object.keys(pkg.dependencies).length > 0) {
                     for (let awau in pkg.dependencies) {
@@ -75,13 +75,13 @@ function preloadCommands() {
 
 function loadCommands() {
     return new Promise((resolve, reject) => {
-        var bot = require(`${_baseDir}/bot.js`);
+        var bot = require(`${__baseDir}/bot.js`);
         for (let cmdFolder of commandFolders) {
             if (noLoad.indexOf(cmdFolder) !== -1) continue;
             var command, commandPackage;
             try {
-                commandPackage = require(`${_baseDir}/${commandsDirectory}/${cmdFolder}/package.json`);
-                command = require(`${_baseDir}/${commandsDirectory}/${cmdFolder}/${commandPackage.main}`);
+                commandPackage = require(`${__baseDir}/${commandsDirectory}/${cmdFolder}/package.json`);
+                command = require(`${__baseDir}/${commandsDirectory}/${cmdFolder}/${commandPackage.main}`);
             } catch (err) {
                 logger.customError('commandLoader/loadCommands', `Experienced error while loading command '${cmdFolder}', skipping...\n${err}`);
             }
