@@ -128,7 +128,7 @@ exports.queue = {
                 queueStatus = voiceConnection.paused ? 'Paused' : 'Playing';
 
                 //send status
-                ctx.mg.channel.createMessage(`Queue Status : ${queueStatus}`).then(() => resolve()).catch(err => ([err]));
+                ctx.msg.channel.createMessage(`Queue Status : ${queueStatus}`).then(() => resolve()).catch(err => ([err]));
             }
         });
     }
