@@ -6,11 +6,12 @@
  * 
  */
 
+const Promise = require('bluebird');
+const fs = require('fs');
+
 exports.command = [
     'itsjoke'
 ];
-
-const Promise = require('bluebird');
 
 exports.itsjoke = {
     desc: "it's Joke!",
@@ -18,7 +19,7 @@ exports.itsjoke = {
     usage: "<It's Joke!>",
     main: (bot, ctx) => {
         return new Promise((reject, resolve) => {
-            ctx.msg.channel.createMessage(msg.channel.id, "It's joke!", {file: fs.readFileSync('file.png'), name: 'joke.png'});.then(() => resolve()).catch(err => reject([err]));
+            ctx.msg.channel.createMessage("It's joke!", {file: fs.readFileSync('../res/528.jpg'), name: 'joke.png'});.then(() => resolve()).catch(err => reject([err]));
         });
     }
 };
