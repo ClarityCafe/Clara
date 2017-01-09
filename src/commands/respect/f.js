@@ -5,7 +5,7 @@
  */
 
 const Promise = require('bluebird');
-const utils = require(`${_baseDir}/lib/utils.js`);
+const utils = require(`${__baseDir}/lib/utils.js`);
 
 exports.commands = [
     'f',
