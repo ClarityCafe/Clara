@@ -18,7 +18,7 @@ exports.itsjoke = {
     usage: "<It's Joke!>",
     main: (bot, ctx) => {
         return new Promise((reject, resolve) => {
-            ctx.msg.channel.createMessage('../res/528.jpg', 'itsjoke.png').then(() => resolve()).catch(err => reject([err]));
+            ctx.msg.channel.createMessage(msg.channel.id, "It's joke!", {file: fs.readFileSync('file.png'), name: 'joke.png'});.then(() => resolve()).catch(err => reject([err]));
         });
     }
 };
