@@ -30,7 +30,9 @@ exports.help = {
                 }
                 helpTxt += '```';
                 ctx.msg.channel.createMessage('Sending the help message to your DMs').then(() => {
-                    ctx.msg.author.createMessage(helpTxt).then(() => resolve()).catch(reject);
+                    ctx.msg.author.getDMChannel().then(dm => {
+                        dm.createMessage(helpTxt).then(() => resolve()).catch(reject);
+                    }).catch(reject);
                 });
             } else {
                 if (!bot.commands[ctx.args[0]]) {
