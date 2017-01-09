@@ -14,9 +14,6 @@ exports.command = [
 ];
 
 
-const fs = require('fs');
-const Promise = require('bluebird');
-
 exports.itsjoke = {
     desc: "it's Joke!",
     longDesc: "it's Joke!",
