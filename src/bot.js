@@ -26,9 +26,9 @@ const bot = new Eris(config.token);
 // Create data files
 try {
     require.resolve(`${__dirname}/data/data.json`);
-} catch (err) {
+} catch(err) {
     fs.mkdirSync(`${__dirname}/data/`);
-    fs.writeFile(`${__dirname}/data/data.json`, JSON.stringify({ admins: [], blacklist: [] }), e => {
+    fs.writeFile(`${__dirname}/data/data.json`, JSON.stringify({admins: [], blacklist: []}), e => {
         if (e) {
             throw e;
         } else {
@@ -39,7 +39,7 @@ try {
 
 try {
     require.resolve(`${__dirname}/data/prefixes.json`);
-} catch (err) {
+} catch(err) {
     fs.writeFile(`${__dirname}/data/prefixes.json`, JSON.stringify([]), e => {
         if (e) {
             throw e;
@@ -80,14 +80,14 @@ bot.on('ready', () => {
         logger.info(`Loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? 'command' : 'commands'}.`);
         logger.info(`${bot.user.username} is connected to Discord and ready to use.`);
         logger.info(`Main prefix is '${config.mainPrefix}', can also use @mention.`);
-        logger.info(`${altPrefixes.length > 0 ? `Alternative prefixes: '${altPrefixes.join("', ")}'` : 'No alternative prefixes.'}`);
+        logger.info(`${altPrefixes.length > 0 ? `Alternative prefixes: '${altPrefixes.join("', ")}'`: 'No alternative prefixes.'}`);
     }).catch(err => {
         console.error(`Experienced error while loading commands:\n${config.debug ? err.stack : err}`);
     });
 });
 
 // Command handler
-bot.on('message', msg => {
+bot.on('messageCreate', msg => {
     if (msg.author.id === bot.user.id || msg.author.bot || utils.isBlacklisted(msg.author.id)) return;
     if (!msg.guild) {
         logger.custom('cyan', 'dm', loggerPrefix(msg) + msg.cleanContent);
@@ -106,7 +106,7 @@ bot.on('message', msg => {
         console.log(cleanSuffix);
         var guildBot;
         msg.guild ? guildBot = msg.guild.members.find('id', bot.user.id) : guildBot = null;
-        var ctx = { msg: msg, args: args, cmd: cmd, suffix: suffix, cleanSuffix: cleanSuffix, guildBot: guildBot };
+        var ctx = {msg: msg, args: args, cmd: cmd, suffix: suffix, cleanSuffix: cleanSuffix, guildBot: guildBot};
 
         if (bot.commands[cmd]) {
             logger.cmd(loggerPrefix(msg) + msg.cleanContent);
@@ -133,14 +133,12 @@ bot.on('message', msg => {
 });
 
 // Handle disconnect
-bot.on('disconnected', () => {
+bot.on('disconnect', () => {
     console.log('disconnected from Discord, retrying...');
-    var p;
-    !config.useEmail ? p = bot.login(config.token) : p = bot.login(config.email, config.password);
-    p.catch(err => {
+    bot.connect().catch(err => {
         console.log(`Error when attempting to reconnect to Discord, terminating...\n${err}`);
         process.exit(1);
     });
 });
 
-bot.connect;
+bot.connect();

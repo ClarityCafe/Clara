@@ -15,7 +15,7 @@ const Promise = require('bluebird');
 
 var talkbot = new Cleverbot();
 
-Cleverbot.prepare(() => { });
+Cleverbot.prepare(() => {});
 
 exports.talk = {
     desc: 'Talk to the bot as if it were a human (sorta).',

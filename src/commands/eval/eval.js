@@ -28,7 +28,7 @@ exports.eval = {
 
                 try {
                     var returned = eval(evalArgs);
-                    var str = util.inspect(returned, { depth: 1 });
+                    var str = util.inspect(returned, {depth: 1});
                     str = str.replace(new RegExp(bot.token, 'gi'), '(token)');
 
                     if (str.length > 1900) {
@@ -42,7 +42,7 @@ exports.eval = {
                     sentMessage += '```';
 
                     ctx.msg.channel.createMessage(sentMessage).then(() => resolve()).catch(err => reject([err]));
-                } catch (err) {
+                } catch(err) {
                     var errMessage = '```js\n';
                     errMessage += `Input: ${evalArgs}\n\n`;
                     errMessage += `${err}\n`;
