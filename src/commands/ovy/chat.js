@@ -10,26 +10,30 @@ exports.commands = [
     'talk'
 ];
 
-const Cleverbot = require('cleverbot-node');
+const config = require('${___baseDir}/config.json');
+const CleverBot = require('cleverbot.io');
+//init code for CleverbotIO, get a configuration key from our fam at http://cleverbot.io
+const ayano = new CleverBot(config.cleverAPIUser, config.cleverAPIKey);
 const Promise = require('bluebird');
 
-var talkbot = new Cleverbot();
-
-Cleverbot.prepare(() => { });
+// setting Nick just in case we need it
+ayano.setNick(`k_user${config.ownerID}`);
 
 exports.talk = {
-    desc: 'Talk to the bot as if it were a human (sorta).',
-    fullDesc: 'Uses the Cleverbot API to simulate a conversation with another human.',
-    usage: '<message>',
-    main: (bot, ctx) => {
-        return new Promise((resolve, reject) => {
-            if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage('Hm?').then(() => reject([new Error('No message given.')])).catch(reject);
-            } else {
-                talkbot.write(ctx.suffix, (response) => {
-                    ctx.msg.channel.createMessage(response.message).then(() => resolve()).catch(reject);
-                });
-            }
+    desc : 'talk to the bot as if it were human (sort of)',
+    longDesc:'Converse with the bot (uses Cleverbot)',
+    usage:'<Message>',
+    main: (bot,ctx) => {
+        ayano.create((session , err) => {
+            return new Promise((resolve,reject) => {
+                if(ctx.suffix.length === 0) {
+                    ctx.msg.channel.createMessage('Oyasumi!').then(() => reject([new Error('no message provided')])).catch(err => ([err]));
+                } else {
+                    bot.ask(ctx.suffix, (err, response) => {
+                    ctx.msg.channel.createMessage(response).then(()=> resolve()).catch(err => ([err]));
+                    });
+                }
+            });
         });
     }
 };
