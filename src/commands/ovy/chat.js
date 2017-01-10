@@ -13,7 +13,7 @@ exports.commands = [
 const config = require(`${__baseDir}/config.json`);
 const CleverBot = require('cleverbot.io');
 //init code for CleverbotIO, get a configuration key from our fam at http://cleverbot.io
-const ayano = new CleverBot(`'` + config.cleverAPIUser + `'`, `'`+ config.cleverAPIKey + `'`);
+const ayano = new CleverBot(config.cleverAPIUser , config.cleverAPIKey);
 const Promise = require('bluebird');
 
 //works like bot.on, only more cleaner and non-shitty
