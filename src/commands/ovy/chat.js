@@ -16,24 +16,25 @@ const CleverBot = require('cleverbot.io');
 const ayano = new CleverBot(config.cleverAPIUser, config.cleverAPIKey);
 const Promise = require('bluebird');
 
-// setting Nick just in case we need it
-ayano.setNick(`k_user${config.ownerID}`);
+//works like bot.on, only more cleaner and non-shitty
+ayano.create((session, err ) => {
+    //Set Nick to preserve session
+    ayano.setNick(`kotori_user_${config.ownerID}`)
+});
 
 exports.talk = {
     desc : 'talk to the bot as if it were human (sort of)',
     longDesc:'Converse with the bot (uses Cleverbot)',
     usage:'<Message>',
     main: (bot,ctx) => {
-        ayano.create((session , err) => {
-            return new Promise((resolve,reject) => {
-                if(ctx.suffix.length === 0) {
-                    ctx.msg.channel.createMessage('Oyasumi!').then(() => reject([new Error('no message provided')])).catch(err => ([err]));
-                } else {
-                    bot.ask(ctx.suffix, (err, response) => {
+        return new Promise((resolve,reject) => {
+            if(ctx.suffix.length === 0) {
+                ctx.msg.channel.createMessage('Oyasumi!').then(() => reject([new Error('no message provided')])).catch(err => ([err]));
+            } else {
+                bot.ask(ctx.suffix, (err, response) => {
                     ctx.msg.channel.createMessage(response).then(()=> resolve()).catch(err => ([err]));
-                    });
-                }
-            });
+                });
+            }
         });
     }
 };
