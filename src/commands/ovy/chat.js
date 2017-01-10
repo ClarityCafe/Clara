@@ -18,8 +18,8 @@ const Promise = require('bluebird');
 
 //works like bot.on, only more cleaner and non-shitty
 ayano.create((session, err ) => {
-    //Set Nick to preserve session
-    ayano.setNick(`kotori_user_${config.ownerID}`);
+ // * it's empty for now ayy lmao
+ // * who gives a shit about preserving sessions anyways
 });
 
 exports.talk = {
