@@ -16,8 +16,10 @@ const CleverBot = require('cleverbot.io');
 const ayano = new CleverBot(config.cleverAPIUser , config.cleverAPIKey);
 const Promise = require('bluebird');
 
+ayano.setNick(`kotori-io-${config.ownerID}`);
+
 //works like bot.on, only more cleaner and non-shitty
-ayano.create((session, err ) => {
+ayano.create(( err , session  ) => {
  // * it's empty for now ayy lmao
  // * who gives a shit about preserving sessions anyways
 });

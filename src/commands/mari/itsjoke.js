@@ -7,7 +7,6 @@
  */
 
 const Promise = require('bluebird');
-const fs = require('fs');
 
 exports.command = [
     'itsjoke'
