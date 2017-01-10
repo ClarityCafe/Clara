@@ -2,6 +2,7 @@
 	"token": "",
 	"ownerID": "",
 	"mainPrefix": "?",
+    "cleverAPIKey": "PsNtEzGrpx5Dk7Km",
+    "cleverAPIUser": "G9WUcWkLoChlVDjyCPFJSFnlmVTA1Ofw",
 	"osuApiKey": "",
-	"debug": false
 }

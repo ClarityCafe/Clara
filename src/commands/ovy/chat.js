@@ -10,7 +10,7 @@ exports.commands = [
     'talk'
 ];
 
-const config = require('${___baseDir}/config.json');
+const config = require('${__baseDir}/config.json');
 const CleverBot = require('cleverbot.io');
 //init code for CleverbotIO, get a configuration key from our fam at http://cleverbot.io
 const ayano = new CleverBot(config.cleverAPIUser, config.cleverAPIKey);
