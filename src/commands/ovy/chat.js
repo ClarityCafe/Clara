@@ -31,7 +31,7 @@ exports.talk = {
             if(ctx.suffix.length === 0) {
                 ctx.msg.channel.createMessage('Oyasumi!').then(() => reject([new Error('no message provided')])).catch(err => ([err]));
             } else {
-                bot.ask(ctx.suffix, (err, response) => {
+                ayano.ask(ctx.suffix, (err, response) => {
                     ctx.msg.channel.createMessage(response).then(()=> resolve()).catch(err => ([err]));
                 });
             }
