@@ -9,7 +9,7 @@ const cheerio = require('cheerio');
 const request = require('request');
 
 const dirRegex = /.+\//;
-const imgRegex = /.+\.(?:png|jpg)/
+const imgRegex = /.+\.(?:png|jpg)/;
 const baseUrl = 'http://i.yorium.moe/albums/';
 const ignore = [
     'nsfw/',
@@ -21,8 +21,8 @@ exports.commands = [
 ];
 
 exports.yori = {
-    desc: 'idk about you but you have problems',
-    longDesc: 'dad teach me how to parse JSON pl0x',
+    desc: 'returns a random image from yorium.moe',
+    longDesc: 'Returns a randomized image from yorium.moe',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             ctx.msg.channel.sendTyping();
@@ -57,4 +57,4 @@ exports.yori = {
             });
         });
     }
-}
+};
