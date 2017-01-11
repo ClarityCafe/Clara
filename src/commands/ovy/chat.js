@@ -10,33 +10,25 @@ exports.commands = [
     'talk'
 ];
 
-const config = require(`${__baseDir}/config.json`);
-const CleverBot = require('cleverbot.io');
-//init code for CleverbotIO, get a configuration key from our fam at http://cleverbot.io
-const ayano = new CleverBot(config.cleverAPIUser , config.cleverAPIKey);
+const Cleverbot = require('cleverbot-node');
 const Promise = require('bluebird');
 
-ayano.setNick(`kotori-io-${config.ownerID}`);
-
-//works like bot.on, only more cleaner and non-shitty
-ayano.create(( err , session  ) => {
- // * it's empty for now ayy lmao
- // * who gives a shit about preserving sessions anyways
-});
+var talkbot = new Cleverbot();
+Cleverbot.prepare(() => {});
 
 exports.talk = {
     desc : 'talk to the bot as if it were human (sort of)',
-    longDesc:'Converse with the bot (uses Cleverbot)',
-    usage:'<Message>',
-    main: (bot,ctx) => {
+    longDesc: 'Converse with the bot (uses Cleverbot)',
+    usage: '<message>',
+    main: (bot, ctx) => {
         return new Promise((resolve,reject) => {
-            if(ctx.suffix.length === 0) {
+            if (ctx.suffix.length === 0) {
                 ctx.msg.channel.createMessage('Oyasumi!').then(() => reject([new Error('no message provided')])).catch(err => ([err]));
             } else {
-                ayano.ask(ctx.suffix, (err, response) => {
-                    ctx.msg.channel.createMessage(response).then(()=> resolve()).catch(err => ([err]));
+                talkbot.write(ctx.suffix, res => {
+                    ctx.msg.channel.createMessage(res.message).then(()=> resolve()).catch(err => ([err]));
                 });
             }
         });
     }
-};
+}

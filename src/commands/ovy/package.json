@@ -1,6 +1,6 @@
 {
     "main": "chat.js",
     "dependencies" : {
-        "cleverbot.io" : "1.0.4"
+        "cleverbot-node" : "^0.2.2"
     }
 }
