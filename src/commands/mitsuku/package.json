@@ -1,0 +1,6 @@
+{
+    "main": "mitsuku.js",
+    "dependencies": {
+        "mitsuku-api" :"0.2.0"
+    }
+}
