@@ -5,7 +5,7 @@
  */
 
 const Promise = require('bluebird');
-const Discord = require('discord.js');
+const Eris = require('eris');
 const util = require('util');
 
 exports.commands = [
