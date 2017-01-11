@@ -5,13 +5,13 @@
 //*
 //* Contributed by Capuccino
 
-exports.command = [
-    'talk.next'
+exports.commands = [
+    'awau'
 ];
 
-const ayano = require('mitsuku-api');
+const ayano = require('mitsuku-api')();
 
-exports.talk.next = {
+exports.awau = {
     desc: 'a upcoming Chatbot module',
     longDesc: 'chat with the bot using the Mitsuku API!',
     usage: '<message>',
