@@ -8,9 +8,6 @@ exports.commands = [
     'next'
 ];
 
-// *
-// * docs for this lib is at https://doclets.io/dustinblackman/node-cleverbot/master
-// *
 const fs = require('fs');
 const Cleverbot = require('cleverbot.io');
 const config = require(`${__baseDir}/config.json`);
