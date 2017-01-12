@@ -13,7 +13,8 @@ const imgRegex = /.+\.(?:png|jpg)/;
 const baseUrl = 'http://i.yorium.moe/albums/';
 const ignore = [
     'nsfw/',
-    'yuri/'
+    'yuri/',
+    'wallpaper/'
 ];
 
 exports.commands = [
