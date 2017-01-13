@@ -7,9 +7,10 @@ exports.commands = [
     'ascii'
 ];
 
-const owo = require('owo.js')('API-HERE');
+const OWO = require('owo.js');
 const ascii = require('ascii-art');
 const fs = require('fs');
+const owo = new OWO(require(`${__baseDir}/config.json`).owoKey);
 
 exports.ascii = {
     desc: 'turn a boring JPEG into a ASCII art',
