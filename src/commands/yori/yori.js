@@ -13,7 +13,8 @@ const imgRegex = /.+\.(?:png|jpg)/;
 const baseUrl = 'http://i.yorium.moe/albums/';
 const ignore = [
     'nsfw/',
-    'yuri/'
+    'yuri/',
+    'wallpaper/'
 ];
 
 exports.commands = [
@@ -21,8 +22,8 @@ exports.commands = [
 ];
 
 exports.yori = {
-    desc: 'returns a random image from yorium.moe',
-    longDesc: 'Returns a randomized image from yorium.moe',
+    desc: 'Get a random anime picture.',
+    longDesc: 'Scrapes i.yorium.moe for a random anime picture.',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             ctx.msg.channel.sendTyping();
