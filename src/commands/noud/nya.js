@@ -4,7 +4,7 @@
 // * contributed by Capuccino
 
 exports.commands = [
-    'nya'
+    'cat'
 ];
 
 var cats = [
