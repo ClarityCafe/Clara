@@ -8,7 +8,7 @@
 
 const Promise = require('bluebird');
 
-exports.command = [
+exports.commands = [
     'itsjoke'
 ];
 
