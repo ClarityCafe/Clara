@@ -12,25 +12,28 @@ exports.commands = [
 ];
 
 function animeBlock(animu) {
-    var animuTxt = `MyAnimeList results for **${animu.title}**\n`;
-    animuTxt += '```prolog\n';
-    animuTxt += `ID: ${animu.id}\n`;
-    animuTxt += `Japanese: '${animu.alternativeTitles.japanese[0].replace('Japanese:', '').trim()}'\n`;
-    animuTxt += `English: '${animu.alternativeTitles.english[0].replace('English:', '').trim()}'\n`;
-    animuTxt += `Synonyms: '${animu.alternativeTitles.synoynms.join(', ').replace('Synonyms:', '').trim()}'\n`;
-    animuTxt += `Genres: '${animu.genres.join(', ')}'\n`;
-    animuTxt += `Type: '${animu.type}'\n`;
-    animuTxt += `Episodes: ${animu.episodes}\n`;
-    animuTxt += `Status: '${animu.status}'\n`;
-    animuTxt += `Aired: '${animu.aired}'\n`;
-    animuTxt += `Classification: '${animu.classification}'\n`;
-    animuTxt += `${animu.studios.length === 1 ? 'Studio' : 'Studios'}: '${animu.studios.join(', ')}'\n`;
-    animuTxt += `Score: ${animu.statistics.score.value}\n`;
-    animuTxt += `Popularity: ${animu.statistics.popularity}\n`;
-    animuTxt += `Ranking: ${animu.statistics.ranking}\n`;
-    animuTxt += '```';
-    animuTxt += `<${animu.detailsLink}>`;
-    return animuTxt;
+    return {embed: {
+        title: animu.title,
+        url: animu.detailsLink,
+        thumbnail: {url: animu.image},
+        color: 0x9164B0,
+        fields: [
+            {name: 'ID', value: animu.id, inline: true},
+            {name: 'Japanese', value: animu.alternativeTitles.japanese.join(', ').substring(9).trim(), inline: true},
+            {name: 'English', value: animu.alternativeTitles.english ? animu.alternativeTitles.english.join(', ').substring(8).trim() : 'None', inline: true},
+            {name: 'Synonyms', value: animu.alternativeTitles.synoynms.join(',').substring(9).trim(), inline: true},
+            {name: 'Genres', value: animu.genres.join(', '), inline: true},
+            {name: 'Type', value: animu.type, inline: true},
+            {name: 'Episodes', value: animu.episodes, inline: true},
+            {name: 'Status', value: animu.status, inline: true},
+            {name: 'Aired', value: animu.aired, inline: true},
+            {name: 'Classification', value: animu.classification, inline: true},
+            {name: animu.studios.length === 1 ? 'Studio' : 'Studios', value: animu.studios.join(', '), inline: true},
+            {name: 'Score', value: animu.statistics.score.value, inline: true},
+            {name: 'Popularity',  value: animu.statistics.popularity, inline: true},
+            {name: 'Ranking', value: animu.statistics.ranking, inline: true}
+        ]
+    }}
 }
 
 exports.anime = {
