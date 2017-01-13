@@ -7,8 +7,7 @@ exports.commands = [
     'nya'
 ];
 
-const nya = require('cat-ascii-faces');
-nya.cats = [
+var cats = [
     '｡＾･ｪ･＾｡',
     '( ͒ ु- •̫̮ – ू ͒)',
     '( ^..^)ﾉ',
@@ -145,14 +144,17 @@ nya.cats = [
     'ଲ(⁃̗̀̂❍⃓ˑ̫❍⃓⁃̠́̂)ଲ'
 ];
 
+function meow () {
+    return cats[Math.floor(Math.random() * cats.length)];
+}
+
 exports.cat = {
     desc: 'prints out a random cat',
     longDesc: 'prints out a fucked up ASCII cat for your nya-ing pleasure',
     main: (bot, ctx) => {
-        return new Promise((resolv, reject) => {
-            let meow = '';
-            nya.catStream().pipe(meow);
-            ctx.msg.channel.sendMessage(meow);
+        return new Promise((resolve, reject) => {
+
+            ctx.msg.channel.sendMessage(meow).then(() => resolve()).catch(err => ([err]));
         });
     }
 };
