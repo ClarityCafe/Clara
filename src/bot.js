@@ -63,7 +63,12 @@ function loggerPrefix(msg) {
 }
 
 function handleCmdErr(msg, cmd, err) {
-    logger.warn(loggerPrefix(msg) + `Error when running command '${cmd}':\n${err instanceof Array ? config.debug : err[0].stack ? err[0] : config.debug ? err.stack : err}`);
+    if (err instanceof Array) {
+        logger.warn(loggerPrefix(msg) + `Error when running command '${cmd}':\n${config.debug ? err[0].stack : err[0]}`);
+    } else {
+        logger.warn(loggerPrefix(msg) + `Error when running command '${cmd}':\n${config.debug ? err.stack : err}`);
+    }
+    
     if (!(err instanceof Array)) {
         var errMsg = `Unexpected error while executing command '${cmd}'\n`;
         errMsg += '```js\n';
