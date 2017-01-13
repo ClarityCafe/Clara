@@ -21,14 +21,17 @@ exports.ascii = {
             if (ctx.suffix === 0) {
                 ctx.msg.channel.createMessage('Onee-san, in able to use this, you must provide a URL Link!').then(() => reject([new Error('no URL specified')])).catch(err => ([err]));
             } else {
-             ascii.image({
-                 height : '768',
-                 width: '1024',
-                 filePath: `${ctx.suffix}`
-             }).font ('','doom','', (ascii) => {
-                 fs.mkdir('.ascii');
-                 fs.writeFile(fs.resolve('.ascii') + 'ascii.txt', ascii);
-             });
+                ascii.image({
+                    height: '768',
+                    width: '1024',
+                    filePath: `${ctx.suffix}`
+                }).font('', 'doom', '', (ascii) => {
+                    fs.mkdir('.ascii');
+                    fs.writeFile(fs.resolve('.ascii') + 'ascii.txt', ascii);
+                    owo.upload(fs.resolve('.ascii/ascii.txt')).then(data => {
+                        ctx.msg.channel.createMessage(data).then(() => resolve()).catch(err => ([err]));
+                    }).catch(err => ([err]));
+                });
             }
         });
     }
