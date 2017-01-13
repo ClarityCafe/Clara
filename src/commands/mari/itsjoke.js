@@ -7,21 +7,22 @@
  */
 
 const Promise = require('bluebird');
+const fs = require('fs');
 
 exports.commands = [
     'itsjoke'
 ];
 
-const fs = require('fs');
-var files = fs.readdirSync('res/mari');
-var file = fs.readFileSync('directory' + files[Math.floor(Math.random() * files.length)]);
+var files = fs.readdirSync(`${__baseDir}/res/mari`);
+
 exports.itsjoke = {
     desc: "it's Joke!",
     longDesc: "it's Joke!",
     usage: "<It's Joke!>",
     main: (bot, ctx) => {
         return new Promise((reject, resolve) => {
-            ctx.msg.channel.createMessage('',{file: file , name:file.name }).then(() => resolve()).catch(err => reject([err]));
+            var file = fs.readFileSync(`${__baseDir}/res/mari/${files[Math.floor(Math.random() * files.length)]}`);
+            ctx.msg.channel.createMessage('', {file: file, name:file.name}).then(() => resolve()).catch(err => reject([err]));
         });
     }
 };
