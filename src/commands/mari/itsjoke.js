@@ -8,12 +8,13 @@
 
 const Promise = require('bluebird');
 const fs = require('fs');
+const path = require('path');
 
 exports.commands = [
     'itsjoke'
 ];
 
-var files = fs.readdirSync(`${__baseDir}/res/mari`);
+var files = fs.readdirSync(path.resolve(__baseDir) + '/res');
 
 exports.itsjoke = {
     desc: "it's Joke!",
@@ -21,8 +22,8 @@ exports.itsjoke = {
     usage: "<It's Joke!>",
     main: (bot, ctx) => {
         return new Promise((reject, resolve) => {
-            var file = fs.readFileSync(`${__baseDir}/res/mari/${files[Math.floor(Math.random() * files.length)]}`);
-            ctx.msg.channel.createMessage('', {file: file, name:file.name}).then(() => resolve()).catch(err => reject([err]));
+            var file = fs.readFileSync(files + `${files[Math.floor(Math.random() * files.length)]}`);
+            ctx.msg.channel.createMessage('', {file: file, name:''}).then(() => resolve()).catch(err => reject([err]));
         });
     }
 };
