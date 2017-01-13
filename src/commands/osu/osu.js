@@ -10,6 +10,33 @@ const iso3166 = require('iso-3166-1-alpha-2');
 
 var commaRegex = /\B(?=(\d{3})+(?!\d))/g; // Thank you Brayzure uwu
 
+function osuBlock(user) {
+    return {embed: {
+        title: `osu! stats for **${user.username}**`,
+        url: `https://osu.ppy.sh/u/${user.user_id}`,
+        thumbnail: {url: `http://a.ppy.sh/${user.user_id}`},
+        color: 0xFD7BB5,
+        fields: [
+            {name: 'ID', value: user.user_id, inline: true},
+            {name: 'Country', value: `${iso3166.getCountry(user.country)} :flag_${user.country.toLowerCase()}:`, inline: true},
+            {name: 'Country Rank', value: user.pp_country_rank.replace(commaRegex, ','), inline: true},
+            {name: 'Beatmaps Played', value: user.playcount ? user.playcount.replace(commaRegex, ',') : 'none', inline: true},
+            {name: '300s Scored', value: user.count300 ? user.count300.replace(commaRegex, ',') : 'none', inline: true},
+            {name: '100s Scored', value: user.count100 ? user.count100.replace(commaRegex, ',') : 'none', inline: true},
+            {name: '50s Scored', value: user.count50 ? user.count50.replace(commaRegex, ',') : 'none', inline: true},
+            {name: 'Ranked Score', value: user.ranked_score ? user.ranked_score.replace(commaRegex, ',') : 'none', inline: true},
+            {name: 'Total Score', value: user.total_score ? user.total_score.replace(commaRegex, ',') : 'none', inline: true},
+            {name: 'PP', value: user.pp_raw ? user.pp_raw.replace(commaRegex, ',') : 'none', inline: true},
+            {name: 'Level', value: user.level ? Number(user.level).toFixed(1).toString().replace(commaRegex, ',') : 'none', inline: true},
+            {name: 'Rank', value: user.pp_rank ? user.pp_rank.replace(commaRegex, ',') : 'none', inline: true},
+            {name: 'Accuracy', value: user.accuracy ? Number(user.accuracy).toFixed(2).toString('utf8') : 'none', inline: true},
+            {name: 'SS Count', value: user.count_rank_ss ? user.count_rank_ss.replace(commaRegex, ',') : 'none', inline: true},
+            {name: 'S Count', value: user.count_rank_s ? user.count_rank_s.replace(commaRegex, ',') : 'none', inline: true},
+            {name: 'A Count', value: user.count_rank_a ? user.count_rank_a.replace(commaRegex, ',') : 'none', inline: true}
+        ]
+    }}
+}
+
 exports.commands = [
     'osu',
     'mania',
@@ -28,34 +55,15 @@ exports.osu = {
                     reject([new Error('No arguments were given.')]);
                 }).catch(err => reject([err]));
             } else {
-                osu.get_user({ u: ctx.suffix }, res => {
+                ctx.msg.channel.sendTyping();
+                osu.get_user({u: ctx.suffix}, res => {
                     var user = res[0];
                     if (user == undefined || user.user_id == undefined) {
                         ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(() => {
                             reject([new Error('User was not found.')]);
                         }).catch(err => reject([err]));
                     } else {
-                        var osuser = `**Showing osu! results for ${user.username}**\n`;
-                        osuser += '```prolog\n';
-                        osuser += `             ID: ${user.user_id}\n`;
-                        osuser += `        Country: '${iso3166.getCountry(user.country)}'\n`;
-                        osuser += `   Country Rank: ${user.pp_country_rank.replace(commaRegex, ',')}\n`;
-                        osuser += `Beatmaps Played: ${user.playcount ? user.playcount.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `    300s Scored: ${user.count300 ? user.count300.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `    100s Scored: ${user.count100 ? user.count100.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `     50s Scored: ${user.count50 ? user.count50.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `   Ranked Score: ${user.ranked_score ? user.ranked_score.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `    Total Score: ${user.total_score ? user.total_score.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `             PP: ${user.pp_raw ? user.pp_raw.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `          Level: ${user.level ? Number(user.level).toFixed(1).toString().replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `           Rank: ${user.pp_rank ? user.pp_rank.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `       Accuracy: ${user.accuracy ? Number(user.accuracy).toFixed(2) : 'none'}\n`;
-                        osuser += `       SS Count: ${user.count_rank_ss ? user.count_rank_ss.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `        S Count: ${user.count_rank_s ? user.count_rank_s.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `        A Count: ${user.count_rank_a ? user.count_rank_a.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += '```';
-                        osuser += `http://a.ppy.sh/${user.user_id}`;
-                        ctx.msg.channel.createMessage(osuser).then(() => {
+                        ctx.msg.channel.createMessage(osuBlock(user)).then(() => {
                             resolve();
                         }).catch(err => reject([err]));
                     }
@@ -76,33 +84,15 @@ exports.ctb = {
                     reject([new Error('No arguments were given.')]);
                 }).catch(err => reject([err]));
             } else {
-                osu.get_user({ u: ctx.suffix, m: 2 }, res => {
+                ctx.msg.channel.sendTyping();
+                osu.get_user({u: ctx.suffix, m: 2}, res => {
                     var user = res[0];
                     if (user == undefined || user.user_id == undefined) {
                         ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(() => {
                             reject([new Error('User was not found.')]);
                         }).catch(err => reject([err]));
                     } else {
-                        var osuser = `**Showing osu! CtB results for ${user.username}**\n`;
-                        osuser += '```prolog\n';
-                        osuser += `             ID: ${user.user_id}\n`;
-                        osuser += `        Country: '${iso3166.getCountry(user.country)}'\n`;
-                        osuser += `   Country Rank: ${user.pp_country_rank.replace(commaRegex, ',')}\n`;
-                        osuser += `Beatmaps Played: ${user.playcount ? user.playcount.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `    300s Scored: ${user.count300 ? user.count300.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `    100s Scored: ${user.count100 ? user.count100.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `     50s Scored: ${user.count50 ? user.count50.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `   Ranked Score: ${user.ranked_score ? user.ranked_score.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `    Total Score: ${user.total_score ? user.total_score.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `             PP: ${user.pp_raw ? user.pp_raw.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `          Level: ${user.level ? Number(user.level).toFixed(1).toString().replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `           Rank: ${user.pp_rank ? user.pp_rank.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `       Accuracy: ${user.accuracy ? Number(user.accuracy).toFixed(2) : 'none'}\n`;
-                        osuser += `       SS Count: ${user.count_rank_ss ? user.count_rank_ss.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `        S Count: ${user.count_rank_s ? user.count_rank_s.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `        A Count: ${user.count_rank_a ? user.count_rank_a.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += '```';
-                        ctx.msg.channel.createMessage(osuser).then(() => {
+                        ctx.msg.channel.createMessage(osuBlock(user)).then(() => {
                             resolve();
                         }).catch(err => reject([err]));
                     }
@@ -123,33 +113,15 @@ exports.mania = {
                     reject([new Error('No arguments were given.')]);
                 }).catch(err => reject([err]));
             } else {
-                osu.get_user({ u: ctx.suffix, m: 2 }, res => {
+                ctx.msg.channel.sendTyping();
+                osu.get_user({u: ctx.suffix, m: 3}, res => {
                     var user = res[0];
                     if (user == undefined || user.user_id == undefined) {
                         ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(() => {
                             reject([new Error('User was not found.')]);
                         }).catch(err => reject([err]));
                     } else {
-                        var osuser = `**Showing osu!mainia results for ${user.username}**\n`;
-                        osuser += '```prolog\n';
-                        osuser += `             ID: ${user.user_id}\n`;
-                        osuser += `        Country: '${iso3166.getCountry(user.country)}'\n`;
-                        osuser += `   Country Rank: ${user.pp_country_rank.replace(commaRegex, ',')}\n`;
-                        osuser += `Beatmaps Played: ${user.playcount ? user.playcount.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `    300s Scored: ${user.count300 ? user.count300.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `    100s Scored: ${user.count100 ? user.count100.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `     50s Scored: ${user.count50 ? user.count50.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `   Ranked Score: ${user.ranked_score ? user.ranked_score.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `    Total Score: ${user.total_score ? user.total_score.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `             PP: ${user.pp_raw ? user.pp_raw.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `          Level: ${user.level ? Number(user.level).toFixed(1).toString().replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `           Rank: ${user.pp_rank ? user.pp_rank.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `       Accuracy: ${user.accuracy ? Number(user.accuracy).toFixed(2) : 'none'}\n`;
-                        osuser += `       SS Count: ${user.count_rank_ss ? user.count_rank_ss.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `        S Count: ${user.count_rank_s ? user.count_rank_s.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `        A Count: ${user.count_rank_a ? user.count_rank_a.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += '```';
-                        ctx.msg.channel.createMessage(osuser).then(() => {
+                        ctx.msg.channel.createMessage(osuBlock(user)).then(() => {
                             resolve();
                         }).catch(err => reject([err]));
                     }
@@ -170,33 +142,15 @@ exports.taiko = {
                     reject([new Error('No arguments were given.')]);
                 }).catch(err => reject([err]));
             } else {
-                osu.get_user({ u: ctx.suffix, m: 1 }, res => {
+                ctx.msg.channel.sendTyping();
+                osu.get_user({u: ctx.suffix, m: 1}, res => {
                     var user = res[0];
                     if (user == undefined || user.user_id == undefined) {
                         ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(() => {
                             reject([new Error('User was not found.')]);
                         }).catch(err => reject([err]));
                     } else {
-                        var osuser = `**Showing osu! Taiko results for ${user.username}**\n`;
-                        osuser += '```prolog\n';
-                        osuser += `             ID: ${user.user_id}\n`;
-                        osuser += `        Country: '${iso3166.getCountry(user.country)}'\n`;
-                        osuser += `   Country Rank: ${user.pp_country_rank.replace(commaRegex, ',')}\n`;
-                        osuser += `Beatmaps Played: ${user.playcount ? user.playcount.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `    300s Scored: ${user.count300 ? user.count300.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `    100s Scored: ${user.count100 ? user.count100.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `     50s Scored: ${user.count50 ? user.count50.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `   Ranked Score: ${user.ranked_score ? user.ranked_score.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `    Total Score: ${user.total_score ? user.total_score.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `             PP: ${user.pp_raw ? user.pp_raw.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `          Level: ${user.level ? Number(user.level).toFixed(1).toString().replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `           Rank: ${user.pp_rank ? user.pp_rank.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `       Accuracy: ${user.accuracy ? Number(user.accuracy).toFixed(2) : 'none'}\n`;
-                        osuser += `       SS Count: ${user.count_rank_ss ? user.count_rank_ss.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `        S Count: ${user.count_rank_s ? user.count_rank_s.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += `        A Count: ${user.count_rank_a ? user.count_rank_a.replace(commaRegex, ',') : 'none'}\n`;
-                        osuser += '```';
-                        ctx.msg.channel.createMessage(osuser).then(() => {
+                        ctx.msg.channel.createMessage(osuBlock(user)).then(() => {
                             resolve();
                         }).catch(err => reject([err]));
                     }
