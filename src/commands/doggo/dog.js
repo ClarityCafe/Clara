@@ -15,14 +15,13 @@ exports.woof = {
     longDesc: 'prints out a random dog image from random.dog',
     main : (bot,ctx) => {
         return new Promise ((resolve,reject) => {
-            request('http://random.dog', (err,res,body) => {
+            request('http://random.dog/woof', (err,res,body) => {
                 if (err) {
                     reject([err]);
                 } else if (res.statusCode !== 200) {
                     reject ([new Error(`Unexpected Response Code from random.dog (Code ${res.statusCode})`)]);
                 } else {
-                    var pupper = JSON.parse(body).file;
-                    ctx.msg.channel.createMessage(pupper).then(() => resolve()).catch(err => ([err]));
+                    ctx.msg.channel.createMessage(`http://random.dog/${body}`).then(() => resolve()).catch(err => ([err]));
                 }
             });
         });
