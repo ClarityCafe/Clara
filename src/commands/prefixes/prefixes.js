@@ -19,7 +19,7 @@ exports.prefixes = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.args.length === 0 || !/^(add|remove)$/.test(ctx.args[0])) {
-                let prefixes = JSON.parse(fs.readFileSync(`${_baseDir}/data/prefixes.json`));
+                let prefixes = JSON.parse(fs.readFileSync(`${__baseDir}/data/prefixes.json`));
                 prefixes.unshift('@mention');
                 prefixes.unshift(bot.config.mainPrefix);
                 var prfxTxt = `**${prefixes.length}** prefixes available\n`;
@@ -34,7 +34,7 @@ exports.prefixes = {
                     }).catch(err => reject([err]));
                 } else {
                     if (ctx.args[0] === 'add') {
-                        let prefixes = JSON.parse(fs.readFileSync(`${_baseDir}/data/prefixes.json`));
+                        let prefixes = JSON.parse(fs.readFileSync(`${__baseDir}/data/prefixes.json`));
                         ctx.args.shift();
                         if ((ctx.args.join(' ') === bot.config.mainPrefix || ctx.args.join(' ') === '@mention') || prefixes.indexOf(ctx.args.join(' ')) !== -1) {
                             ctx.msg.channel.createMessage('That prefix already exists').then(() => {
@@ -42,7 +42,7 @@ exports.prefixes = {
                             }).catch(err => reject([err]));
                         } else {
                             prefixes.push(ctx.args.join(' '));
-                            fs.writeFile(`${_baseDir}/data/prefixes.json`, JSON.stringify(prefixes), err => {
+                            fs.writeFile(`${__baseDir}/data/prefixes.json`, JSON.stringify(prefixes), err => {
                                 if (err) {
                                     reject(err);
                                 } else {
@@ -51,7 +51,7 @@ exports.prefixes = {
                             });
                         }
                     } else if (ctx.args[0] === 'remove') {
-                        let prefixes = JSON.parse(fs.readFileSync(`${_baseDir}/data/prefixes.json`));
+                        let prefixes = JSON.parse(fs.readFileSync(`${__baseDir}/data/prefixes.json`));
                         ctx.args.shift();
                         if (ctx.args.join(' ') === bot.config.mainPrefix || ctx.args.join(' ') === '@mention') {
                             ctx.msg.channel.createMessage('You cannot remove an internal prefix.').then(() => {
@@ -63,7 +63,7 @@ exports.prefixes = {
                             }).catch(err => reject([err]));
                         } else {
                             prefixes.splice(prefixes.indexOf(ctx.args.join(' ')), 1);
-                            fs.writeFile(`${_baseDir}/data/prefixes.json`, JSON.stringify(prefixes), err => {
+                            fs.writeFile(`${__baseDir}/data/prefixes.json`, JSON.stringify(prefixes), err => {
                                 if (err) {
                                     reject(err);
                                 } else {
