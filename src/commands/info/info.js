@@ -26,7 +26,7 @@ exports.info = {
                 return ctx.guildBot.guild.roles.get(b).position - ctx.guildBot.guild.roles.get(a).position;
             })[0]).color;
             ctx.msg.channel.createMessage({embed: {
-                title: 'Test Boat Info',
+                title: `${bot.user.username} Info`,
                 description: '[Source Code](https://github.com/owo-dev-team/owo-whats-this)',
                 thumbnail: {url: bot.user.avatarURL.replace('https://cdn.discordapp.com', 'https://images.discordapp.net') + '?size=1024', height: 128, width: 128},
                 color: roleColour,
