@@ -20,22 +20,27 @@ exports.info = {
     desc: 'Information about the bot.',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            var infoTxt = `**${bot.user.username} Information**\n`;
-            infoTxt += '```prolog\n';
-            infoTxt += '% Discord Stats %\n';
-            infoTxt += `Guilds: ${bot.guilds.size}\n`;
-            infoTxt += `Channels: ${bot.channels.size}\n`;
-            infoTxt += `Users Seen: ${bot.users.size}\n\n`;
-            infoTxt += '% Other %\n';
-            infoTxt += `Uptime: ${utils.msToTime(bot.uptime)}\n`;
-            infoTxt += `System Time : ${new Date()}\n`;
-            infoTxt += `OS Release : ${os.release()}\n`;
-            infoTxt += `OS Platform : ${os.platform()}\n`;
-            infoTxt += `Memory Usage: ${prettyBytes(process.memoryUsage().rss)}\n`;
-            infoTxt += `Version: ${version}\n`;
-            infoTxt += 'Source: https://github.com/owo-dev-team/owo-whats-this';
-            infoTxt += '```';
-            ctx.msg.channel.createMessage(infoTxt).then(() => resolve()).catch(err => reject([err]));
+            var date = new Date();
+            var sysTime = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${date.getDate()}\n${('0' + (date.getHours() + 1)).slice(-2)}:${('0' + (date.getMinutes() + 1)).slice(-2)}:${('0' + (date.getSeconds() + 1)).slice(-2)}`;
+            var roleColour = ctx.msg.guild.roles.get(ctx.guildBot.roles.sort((a, b) => {
+                return ctx.guildBot.guild.roles.get(b).position - ctx.guildBot.guild.roles.get(a).position;
+            })[0]).color;
+            ctx.msg.channel.createMessage({embed: {
+                title: 'Test Boat Info',
+                description: '[Source Code](https://github.com/owo-dev-team/owo-whats-this)',
+                thumbnail: {url: bot.user.avatarURL.replace('https://cdn.discordapp.com', 'https://images.discordapp.net') + '?size=1024', height: 128, width: 128},
+                color: roleColour,
+                fields: [
+                    {name: 'Guilds', value: bot.guilds.size, inline: true},
+                    {name: 'Users Seen', value: bot.users.size, inline: true},
+                    {name: 'Uptime', value: utils.msToTime(bot.uptime), inline: true},
+                    {name: 'System Time', value: sysTime, inline: true},
+                    {name: 'OS Release', value: os.release(), inline: true},
+                    {name: 'OS Platform', value: os.platform(), inline: true},
+                    {name: 'Memory Usage', value: prettyBytes(process.memoryUsage().rss), inline: true},
+                    {name: 'Version', value: version, inline: true}
+                ]
+            }}).then(() => resolve()).catch(err => reject([err]));
         });
     }
-}``;
+}
