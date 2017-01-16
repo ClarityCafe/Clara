@@ -25,6 +25,7 @@ exports.eval = {
                 }).catch(err => reject([err]));
             } else {
                 var evalArgs = ctx.suffix;
+                var {msg, args, cmd, suffix, cleanSuffix, guildBot} = ctx;
 
                 try {
                     var returned = eval(evalArgs);
