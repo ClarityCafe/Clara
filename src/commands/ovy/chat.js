@@ -21,7 +21,7 @@ ayano.create((err, session) => {
     // *
 });
 
-exports.next = {
+exports.talk = {
     desc: 'chat with the bot',
     longDesc: 'Converse with the bot using Cleverbot',
     usage: '<message>',
