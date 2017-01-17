@@ -6,22 +6,25 @@
 
 const Promise = require('bluebird');
 const mal = require('malapi').Anime;
+const color = require('dominant-color');
+const request = require('request');
+const fs = require('fs');
 
 exports.commands = [
     'anime'
 ];
 
-function animeBlock(animu) {
+function animeBlock(animu, color) {
     return {embed: {
         title: animu.title,
         url: animu.detailsLink,
         thumbnail: {url: animu.image},
-        color: 0x9164B0,
+        color: parseInt(color, 16),
         fields: [
             {name: 'ID', value: animu.id, inline: true},
             {name: 'Japanese', value: animu.alternativeTitles.japanese.join(', ').substring(9).trim(), inline: true},
             {name: 'English', value: animu.alternativeTitles.english ? animu.alternativeTitles.english.join(', ').substring(8).trim() : 'None', inline: true},
-            {name: 'Synonyms', value: animu.alternativeTitles.synoynms.join(',').substring(9).trim(), inline: true},
+            {name: 'Synonyms', value: animu.alternativeTitles.synoynms ? animu.alternativeTitles.synoynms.join(',').substring(9).trim() : 'None', inline: true},
             {name: 'Genres', value: animu.genres.join(', '), inline: true},
             {name: 'Type', value: animu.type, inline: true},
             {name: 'Episodes', value: animu.episodes, inline: true},
@@ -47,17 +50,51 @@ exports.anime = {
                     reject([new Error('No arguments given.')]);
                 }).catch(err => reject([err]));
             } else {
+                ctx.msg.channel.sendTyping();
                 if (/^\d+$/.test(ctx.suffix)) {
                     mal.fromId(Number(ctx.suffix)).then(animu => {
-                        ctx.msg.channel.createMessage(animeBlock(animu)).then(() => resolve()).catch(err => reject([err]));
+                        var savePath = animu.image.split('/')[animu.image.split('/').length - 1];
+                        request(animu.image).pipe(fs.createWriteStream(savePath)).on('close', () => {
+                            color(savePath, (err, color) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    fs.unlink(savePath, () => {
+                                        ctx.msg.channel.createMessage(animeBlock(animu, color)).then(() => resolve()).catch(err => reject([err]));
+                                    });
+                                }
+                            });
+                        });
                     }).catch(reject);
                 } else if (/^https?:\/\/myanimelist\.net\/anime\/\d+\/.+$/.test(ctx.suffix)) {
                     mal.fromUrl(ctx.suffix).then(animu => {
-                        ctx.msg.channel.createMessage(animeBlock(animu)).then(() => resolve()).catch(err => reject([err]));
+                        var savePath = animu.image.split('/')[animu.image.split('/').length - 1];
+                        request(animu.image).pipe(fs.createWriteStream(savePath)).on('close', () => {
+                            color(savePath, (err, color) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    fs.unlink(savePath, () => {
+                                        ctx.msg.channel.createMessage(animeBlock(animu, color)).then(() => resolve()).catch(err => reject([err]));
+                                    });
+                                }
+                            });
+                        });
                     }).catch(reject);
                 } else {
                     mal.fromName(ctx.suffix).then(animu => {
-                        ctx.msg.channel.createMessage(animeBlock(animu)).then(() => resolve()).catch(err => reject([err]));
+                        var savePath = animu.image.split('/')[animu.image.split('/').length - 1];
+                        request(animu.image).pipe(fs.createWriteStream(savePath)).on('close', () => {
+                            color(savePath, (err, color) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    fs.unlink(savePath, () => {
+                                        ctx.msg.channel.createMessage(animeBlock(animu, color)).then(() => resolve()).catch(err => reject([err]));
+                                    });
+                                }
+                            });
+                        });
                     }).catch(reject);
                 }
             }
