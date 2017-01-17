@@ -1,0 +1,8 @@
+{
+    "main": "ibsearch.js",
+    "dependencies": {
+        "request": "^2.79.0",
+        "dominant-color": "^0.0.1",
+        "pretty-bytes": "^4.0.2"
+    }
+}
