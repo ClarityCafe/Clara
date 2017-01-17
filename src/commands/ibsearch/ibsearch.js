@@ -50,7 +50,8 @@ exports.ibsearch = {
                                 } else {
                                     fs.unlink(saveName, () => {
                                         ctx.msg.channel.createMessage({embed: {
-                                            description: `**[Image Source](https://ibsear.ch/images/${item.id})**`,
+                                            title: 'Image Source',
+                                            url: `https://ibsear.ch/images/${item.id}`,
                                             image: {url: imgURL},
                                             color: parseInt(color, 16),
                                             fields: [
@@ -93,7 +94,8 @@ exports.ibsearch = {
                                 } else {
                                     fs.unlink(saveName, () => {
                                         ctx.msg.channel.createMessage({embed: {
-                                            description: `**[Image Source](https://ibsear.ch/images/${item.id})**`,
+                                            title: 'Image Source',
+                                            url: `https://ibsear.ch/images/${item.id}`,
                                             image: {url: imgURL},
                                             color: parseInt(color, 16),
                                             fields: [
