@@ -5,30 +5,35 @@
  * Contributed by Capuccino, Ovyerus.
  */
 
-
 exports.commands = [
     'talk'
 ];
 
-const Cleverbot = require('cleverbot-node');
-const Promise = require('bluebird');
+const fs = require('fs');
+const Cleverbot = require('cleverbot.io');
+const config = require(`${__baseDir}/config.json`);
+const ayano = new Cleverbot('t77jVhrskGDT6Dm1', 'XKmJ3XW1dQwVJVXpWfODAUQ5qKucD6tc');
 
-var talkbot = new Cleverbot();
-Cleverbot.prepare(() => {});
+ayano.setNick(`kotori-io-${config.ownerID}`);
 
-exports.talk = {
-    desc : 'talk to the bot as if it were human (sort of)',
-    longDesc: 'Converse with the bot (uses Cleverbot)',
+ayano.create((err, session) => {
+    // * left empty for now
+    // *
+});
+
+exports.next = {
+    desc: 'chat with the bot',
+    longDesc: 'Converse with the bot using Cleverbot',
     usage: '<message>',
     main: (bot, ctx) => {
-        return new Promise((resolve,reject) => {
-            if (ctx.suffix.length === 0) {
+        return new Promise((resolve, reject) => {
+            if (ctx.suffix === 0) {
                 ctx.msg.channel.createMessage('Oyasumi!').then(() => reject([new Error('no message provided')])).catch(err => ([err]));
             } else {
-                talkbot.write(ctx.suffix, res => {
-                    ctx.msg.channel.createMessage(res.message).then(()=> resolve()).catch(err => ([err]));
+                ayano.ask(ctx.suffix, (err, response) => {
+                    ctx.msg.channel.createMessage(response).then(() => resolve()).catch(err => ([err]));
                 });
             }
         });
     }
-}
+};
