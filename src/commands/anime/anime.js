@@ -53,7 +53,7 @@ exports.anime = {
                 ctx.msg.channel.sendTyping();
                 if (/^\d+$/.test(ctx.suffix)) {
                     mal.fromId(Number(ctx.suffix)).then(animu => {
-                        var savePath = animu.image.split('/')[animu.image.split('/').length - 1];
+                        var savePath = `${__baseDir}/cache/${animu.image.split('/')[animu.image.split('/').length - 1]}`;
                         request(animu.image).pipe(fs.createWriteStream(savePath)).on('close', () => {
                             color(savePath, (err, color) => {
                                 if (err) {
@@ -68,7 +68,7 @@ exports.anime = {
                     }).catch(reject);
                 } else if (/^https?:\/\/myanimelist\.net\/anime\/\d+\/.+$/.test(ctx.suffix)) {
                     mal.fromUrl(ctx.suffix).then(animu => {
-                        var savePath = animu.image.split('/')[animu.image.split('/').length - 1];
+                        var savePath = `${__baseDir}/cache/${animu.image.split('/')[animu.image.split('/').length - 1]}`;
                         request(animu.image).pipe(fs.createWriteStream(savePath)).on('close', () => {
                             color(savePath, (err, color) => {
                                 if (err) {
@@ -83,7 +83,7 @@ exports.anime = {
                     }).catch(reject);
                 } else {
                     mal.fromName(ctx.suffix).then(animu => {
-                        var savePath = animu.image.split('/')[animu.image.split('/').length - 1];
+                        var savePath = `${__baseDir}/cache/${animu.image.split('/')[animu.image.split('/').length - 1]}`;
                         request(animu.image).pipe(fs.createWriteStream(savePath)).on('close', () => {
                             color(savePath, (err, color) => {
                                 if (err) {

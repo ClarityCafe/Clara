@@ -42,7 +42,7 @@ exports.ibsearch = {
                         var results = JSON.parse(body);
                         var item = results[Math.floor(Math.random() * results.length)];
                         var imgURL = `https://${item.server}.ibsear.ch/resize/${item.path}?width=${Number(item.width) > 1000 ? Number(item.width) / 2 : item.width}&height=${Number(item.width) > 1000 ? Number(item.height) / 2 : item.height}`;
-                        var saveName = item.path.split('/')[item.path.split('/').length - 1];
+                        var saveName = `${__baseDir}/cache/${item.path.split('/')[item.path.split('/').length - 1]}`;
                         request(imgURL).pipe(fs.createWriteStream(saveName)).on('close', () => {
                             color(saveName, (err, color) => {
                                 if (err) {
@@ -86,7 +86,7 @@ exports.ibsearch = {
                         var results = JSON.parse(body);
                         var item = results[Math.floor(Math.random() * results.length)];
                         var imgURL = `https://${item.server}.ibsear.ch/resize/${item.path}?width=${Number(item.width) > 1000 ? Number(item.width) / 2 : item.width}&height=${Number(item.width) > 1000 ? Number(item.height) / 2 : item.height}`;
-                        var saveName = item.path.split('/')[item.path.split('/').length - 1];
+                        var saveName = `${__baseDir}/cache/${item.path.split('/')[item.path.split('/').length - 1]}`;
                         request(imgURL).pipe(fs.createWriteStream(saveName)).on('close', () => {
                             color(saveName, (err, color) => {
                                 if (err) {
