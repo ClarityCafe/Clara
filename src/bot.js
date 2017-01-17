@@ -22,6 +22,8 @@ const utils = require(`${__dirname}/lib/utils.js`);
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
 const bot = new Eris(config.token);
+var loadCommands = true;
+var allowCommandUse = false;
 
 // Create data files
 try {
@@ -80,20 +82,24 @@ function handleCmdErr(msg, cmd, err) {
 
 // Init
 bot.on('ready', () => {
-    require(`${__dirname}/lib/commandLoader.js`).init().then(() => {
-        var altPrefixes = JSON.parse(fs.readFileSync(`${__dirname}/data/prefixes.json`));
-        logger.info(`Loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? 'command' : 'commands'}.`);
-        logger.info(`${bot.user.username} is connected to Discord and ready to use.`);
-        logger.info(`Main prefix is '${config.mainPrefix}', can also use @mention.`);
-        logger.info(`${altPrefixes.length > 0 ? `Alternative prefixes: '${altPrefixes.join("', ")}'` : 'No alternative prefixes.'}`);
-    }).catch(err => {
-        console.error(`Experienced error while loading commands:\n${config.debug ? err.stack : err}`);
-    });
+    if (loadCommands) {
+        require(`${__dirname}/lib/commandLoader.js`).init().then(() => {
+            var altPrefixes = JSON.parse(fs.readFileSync(`${__dirname}/data/prefixes.json`));
+            logger.info(`Loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? 'command' : 'commands'}.`);
+            logger.info(`${bot.user.username} is connected to Discord and ready to use.`);
+            logger.info(`Main prefix is '${config.mainPrefix}', can also use @mention.`);
+            logger.info(`${altPrefixes.length > 0 ? `Alternative prefixes: '${altPrefixes.join("', ")}'` : 'No alternative prefixes.'}`);
+            loadCommands = false;
+            allowCommandUse = true;
+        }).catch(err => {
+            console.error(`Experienced error while loading commands:\n${config.debug ? err.stack : err}`);
+        });
+    }
 });
 
 // Command handler
 bot.on('messageCreate', msg => {
-    if (msg.author.id === bot.user.id || msg.author.bot || utils.isBlacklisted(msg.author.id)) return;
+    if (!allowCommandUse || msg.author.id === bot.user.id || msg.author.bot || utils.isBlacklisted(msg.author.id)) return;
     if (!msg.guild) {
         logger.custom('cyan', 'dm', loggerPrefix(msg) + msg.cleanContent);
         return;
@@ -138,11 +144,10 @@ bot.on('messageCreate', msg => {
 
 // Handle disconnect
 bot.on('disconnect', () => {
-    console.log('disconnected from Discord, retrying...');
-    bot.connect().catch(err => {
-        console.log(`Error when attempting to reconnect to Discord, terminating...\n${err}`);
-        process.exit(1);
-    });
+    logger.warn('Disconnected from Discord. Retrying in 5 seconds.');
+    setTimeout(() => {
+        bot.connect();
+    }, 5000);
 });
 
 bot.connect();
