@@ -41,7 +41,7 @@ exports.ibsearch = {
                     } else {
                         var results = JSON.parse(body);
                         var item = results[Math.floor(Math.random() * results.length)];
-                        var imgURL = `https://${item.server}.ibsear.ch/resize/${item.path}?width=${Number(item.width) > 1000 ? Number(item.width) / 2 : item.width}&height=${Number(item.width) > 1000 ? Number(item.height) / 2 : item.height}`;
+                        var imgURL = `https://${item.server}.ibsear.ch/resize/${item.path}?width=${Number(item.width) > 1000 ? Math.floor(Number(item.width) / 2) : item.width}&height=${Number(item.width) > 1000 ? Math.floor(Number(item.height) / 2) : item.height}`;
                         var saveName = `${__baseDir}/cache/${item.path.split('/')[item.path.split('/').length - 1]}`;
                         request(imgURL).pipe(fs.createWriteStream(saveName)).on('close', () => {
                             color(saveName, (err, color) => {
@@ -85,7 +85,7 @@ exports.ibsearch = {
                     } else {
                         var results = JSON.parse(body);
                         var item = results[Math.floor(Math.random() * results.length)];
-                        var imgURL = `https://${item.server}.ibsear.ch/resize/${item.path}?width=${Number(item.width) > 1000 ? Number(item.width) / 2 : item.width}&height=${Number(item.width) > 1000 ? Number(item.height) / 2 : item.height}`;
+                        var imgURL = `https://${item.server}.ibsear.ch/resize/${item.path}?width=${Number(item.width) > 1000 ? Math.floor(Number(item.width) / 2) : item.width}&height=${Number(item.width) > 1000 ? Math.floor(Number(item.height) / 2) : item.height}`;
                         var saveName = `${__baseDir}/cache/${item.path.split('/')[item.path.split('/').length - 1]}`;
                         request(imgURL).pipe(fs.createWriteStream(saveName)).on('close', () => {
                             color(saveName, (err, color) => {
