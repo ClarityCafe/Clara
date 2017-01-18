@@ -20,4 +20,4 @@ exports.ping = {
             }).catch(err => reject([err]));
         });
     }
-}
+};
