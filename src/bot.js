@@ -121,11 +121,10 @@ bot.on('messageCreate', msg => {
         var args = content.split(' ');
         var cmd = args.shift();
         var suffix = args.join(' ');
-        var cleanSuffix = msg.cleanContent.split(' ');
+        var cleanSuffix = cleanContent.split(' ');
         cleanSuffix.splice(0, 1);
         cleanSuffix = cleanSuffix.join(' ');
-        msg.guild = msg.channel.guild;
-        var guildBot = msg.guild.members.get(bot.user.id);
+        var guildBot = msg.channel.guild.members.get(bot.user.id);
         
         var ctx = {msg: msg, args: args, cmd: cmd, suffix: suffix, cleanSuffix: cleanSuffix, guildBot: guildBot };
 
