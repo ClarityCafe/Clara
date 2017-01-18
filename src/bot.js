@@ -18,6 +18,7 @@ global.__baseDir = __dirname;
 const commandsMod = require(`${__dirname}/lib/commands.js`);
 const logger = require(`${__dirname}/lib/logger.js`);
 const utils = require(`${__dirname}/lib/utils.js`);
+const prefixParser = require(`${__dirname}/lib/prefixParser.js`);
 
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
@@ -115,13 +116,13 @@ bot.on('messageCreate', msg => {
         return;
     }
 
-    require(`${__dirname}/lib/prefixParser.js`)(msg.content).then(content => {
+    prefixParser(msg.content).then(content => {
         if (content === undefined) return;
 
         var args = content.split(' ');
         var cmd = args.shift();
         var suffix = args.join(' ');
-        var cleanSuffix = cleanContent.split(' ');
+        var cleanSuffix = msg.cleanContent.split(' ');
         cleanSuffix.splice(0, 1);
         cleanSuffix = cleanSuffix.join(' ');
         var guildBot = msg.channel.guild.members.get(bot.user.id);
