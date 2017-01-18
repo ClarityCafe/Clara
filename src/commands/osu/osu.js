@@ -71,7 +71,7 @@ exports.osu = {
             }
         });
     }
-}
+};
 
 exports.ctb = {
     desc: "Retrive stats for osu!'s Catch The Beat mode for a user.",
@@ -100,7 +100,7 @@ exports.ctb = {
             }
         });
     }
-}
+};
 
 exports.mania = {
     desc: "Retrive stats for osu!'s osu!mania mode for a user.",
