@@ -21,7 +21,14 @@ const utils = require(`${__dirname}/lib/utils.js`);
 
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
-const bot = new Eris(config.token);
+const bot = new Eris(config.token, {
+    autoreconnect: false,
+    disableEvents: {
+        TYPING_START: true,
+        PRESENCE_UPDATE: true,
+        VOICE_STATE_UPDATE: true
+    }
+});
 var loadCommands = true;
 var allowCommandUse = false;
 
@@ -65,6 +72,7 @@ function loggerPrefix(msg) {
 }
 
 function handleCmdErr(msg, cmd, err) {
+    if (err == undefined || (err instanceof Array && err[0] == undefined)) return;
     if (err instanceof Array) {
         logger.warn(loggerPrefix(msg) + `Error when running command '${cmd}':\n${config.debug ? err[0].stack : err[0]}`);
     } else {
@@ -94,6 +102,8 @@ bot.on('ready', () => {
         }).catch(err => {
             console.error(`Experienced error while loading commands:\n${config.debug ? err.stack : err}`);
         });
+    } else {
+        logger.info('blep');
     }
 });
 
