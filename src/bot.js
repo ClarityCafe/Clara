@@ -18,7 +18,6 @@ global.__baseDir = __dirname;
 const commandsMod = require(`${__dirname}/lib/commands.js`);
 const logger = require(`${__dirname}/lib/logger.js`);
 const utils = require(`${__dirname}/lib/utils.js`);
-const prefixParser = require(`${__dirname}/lib/prefixParser.js`);
 
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
@@ -107,6 +106,8 @@ bot.on('ready', () => {
         logger.info('blep');
     }
 });
+
+const prefixParser = require(`${__dirname}/lib/prefixParser.js`);
 
 // Command handler
 bot.on('messageCreate', msg => {
