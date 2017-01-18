@@ -110,7 +110,7 @@ bot.on('ready', () => {
 // Command handler
 bot.on('messageCreate', msg => {
     if (!allowCommandUse || msg.author.id === bot.user.id || msg.author.bot || utils.isBlacklisted(msg.author.id)) return;
-    if (!msg.guild) {
+    if (!msg.channel.guild) {
         logger.custom('cyan', 'dm', loggerPrefix(msg) + msg.cleanContent);
         return;
     }
@@ -127,7 +127,7 @@ bot.on('messageCreate', msg => {
         msg.guild = msg.channel.guild;
         var guildBot = msg.guild.members.get(bot.user.id);
         
-        var ctx = { msg: msg, args: args, cmd: cmd, suffix: suffix, cleanSuffix: cleanSuffix, guildBot: guildBot };
+        var ctx = {msg: msg, args: args, cmd: cmd, suffix: suffix, cleanSuffix: cleanSuffix, guildBot: guildBot };
 
         if (bot.commands[cmd]) {
             logger.cmd(loggerPrefix(msg) + msg.cleanContent);
