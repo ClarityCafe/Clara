@@ -34,7 +34,7 @@ function osuBlock(user) {
             {name: 'S Count', value: user.count_rank_s ? user.count_rank_s.replace(commaRegex, ',') : 'none', inline: true},
             {name: 'A Count', value: user.count_rank_a ? user.count_rank_a.replace(commaRegex, ',') : 'none', inline: true}
         ]
-    }}
+    }};
 }
 
 exports.commands = [
@@ -129,7 +129,7 @@ exports.mania = {
             }
         });
     }
-}
+};
 
 exports.taiko = {
     desc: "Retrive stats for osu!'s Taiko mode for a user.",
@@ -158,4 +158,4 @@ exports.taiko = {
             }
         });
     }
-}
+};
