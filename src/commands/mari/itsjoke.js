@@ -14,7 +14,7 @@ exports.commands = [
     'itsjoke'
 ];
 
-var files = fs.readdirSync(path.resolve(__baseDir) + '/res');
+var files = fs.readdirSync(path.resolve(`${__baseDir}/res`));
 
 exports.itsjoke = {
     desc: "it's Joke!",
@@ -22,7 +22,8 @@ exports.itsjoke = {
     usage: "<It's Joke!>",
     main: (bot, ctx) => {
         return new Promise((reject, resolve) => {
-            var file = fs.readFileSync(files + `${files[Math.floor(Math.random() * files.length)]}`);
+            var joke = file[Math.floor(Math.random() * files.length)];
+            var file = fs.readFileSync(`${files} + ${joke}`);
             ctx.msg.channel.createMessage('', {file: file, name:''}).then(() => resolve()).catch(err => reject([err]));
         });
     }
