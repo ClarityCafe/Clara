@@ -68,7 +68,7 @@ bot.config = config;
 
 // Functions
 function loggerPrefix(msg) {
-    return msg.guild ? `${msg.guild.name} | ${msg.channel.name} > ${utils.formatUsername(msg.author)} (${msg.author.id}): ` : `Direct Message > ${utils.formatUsername(msg.author)} (${msg.author.id}): `;
+    return msg.channel.guild ? `${msg.channel.guild.name} | ${msg.channel.name} > ${utils.formatUsername(msg.author)} (${msg.author.id}): ` : `Direct Message > ${utils.formatUsername(msg.author)} (${msg.author.id}): `;
 }
 
 function handleCmdErr(msg, cmd, err) {
