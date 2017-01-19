@@ -5,6 +5,7 @@
  */
 
 const Promise = require('bluebird');
+const utils = require(`${__baseDir}/lib/utils.js`);
 
 exports.commands = [
     'kick',
@@ -17,49 +18,44 @@ exports.kick = {
     usage: '<user mention(s)>',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            if (!ctx.msg.guild) {
-                ctx.msg.channel.createMessage('This command can only be run in a server.').then(() => reject([new Error('User tried to run command in a DM.')])).catch(err => reject([err]));
+            if (!ctx.msg.member.permission.has('kickMembers')) {
+                ctx.msg.channel.createMessage('You require the **Kick Members** permission to execute this command.').then(() => {
+                    reject([new Error('User does not have sufficient permission.')]);
+                }).catch(err => reject([err]));
             } else {
-                if (!ctx.msg.member.hasPermission('KICK_MEMBERS')) {
-                    ctx.msg.channel.createMessage('You require the **Kick Members** permission to execute this command.').then(() => {
-                        reject([new Error('User does not have sufficient permission.')]);
+                if (!ctx.guildBot.permission.has('kickMembers')) {
+                    ctx.msg.channel.createMessage('I do not have the **Kick Members** permission.').then(() => {
+                        reject([new Error('Bot does not have sufficient permission.')]);  
                     }).catch(err => reject([err]));
                 } else {
-                    if (!ctx.guildBot.hasPermission('KICK_MEMBERS')) {
-                        ctx.msg.channel.createMessage('I do not have the **Kick Members** permission.').then(() => {
-                            reject([new Error('Bot does not have sufficient permission.')]);
+                    if (ctx.msg.mentions.length === 0) {
+                        ctx.msg.channel.createMessage('Please mention at least one user to kick.').then(() => {
+                            reject([new Error('No users mentioned to kick.')]);
                         }).catch(err => reject([err]));
                     } else {
-                        if (ctx.msg.mentions.users.size === 0) {
-                            ctx.msg.channel.createMessage('Please mention at least one user to kick.').then(() => {
-                                reject([new Error('No users mentioned to kick.')]);
-                            }).catch(err => reject([err]));
-                        } else {
-                            var kicked = 0;
-                            ctx.msg.mentions.users.forEach(m => {
-                                if (m.id !== bot.user.id) {
-                                    if (m.kickable) {
-                                        m.kick().then(() => kicked++).catch(err => {
-                                            var errMsg = `Unable to kick **${m.username}#${m.discriminator}**\n`;
-                                            errMsg += '```js\n';
-                                            errMsg += err + '\n';
-                                            errMsg += '```';
-                                            ctx.msg.channel.createMessage(errMsg);
-                                        });
-                                    } else {
-                                        ctx.msg.channel.createMessage(`I do not have sufficient permission to kick **${m.nickname ? m.nickname : m.username}#${m.discriminator}**`);
-                                    }
+                        var promises = [];
+                        for (u of ctx.msg.mentions) {
+                            if (u.id !== bot.user.id) {
+                                if (u.id !== ctx.msg.author.id) {
+                                    promises.push(bot.kickGuildMember(ctx.msg.channel.guild.id, u.id).catch(err => {
+                                        if (err.resp.statusCode === 403) {
+                                            ctx.msg.channel.createMessage(`Unable to kick **${utils.formatUsername(u)}** due to insufficient permission.`);
+                                        } else {
+                                            var oops = `Unable to kick **${utils.formatUsername(u)}**\n`;
+                                            oops += '```js\n';
+                                            oops += err + '\n';
+                                            oops += '```';
+                                            ctx.msg.channel.createMessage(oops);
+                                        }
+                                    }));
                                 } else {
-                                    console.log('owo whats this? trying to kick myself? ayy lmao.');
-                                    ctx.msg.channel.createMessage("lol no im not gonna kick myself.");
+                                    ctx.msg.channel.createMessage('Skipping over author mention.');
                                 }
-                            });
-                            if (kicked > 0) {
-                                ctx.msg.channel.createMessage(`Kicked **${kicked}** members.`).then(() => resolve()).catch(err => reject([err]));
                             } else {
-                                resolve();
+                                ctx.msg.channel.createMessage('Skipping over self mention.');
                             }
                         }
+                        Promise.all(promises).then(kicked => ctx.msg.channel.createMessage(`Kicked ${kicked.length === 0 ? 'no one.' : kicked.length + ` ${kicked.length === 1 ? 'user' : 'users'}.`}`).then(() => resolve()).catch(err => reject([err])));
                     }
                 }
             }
@@ -73,49 +69,44 @@ exports.ban = {
     usage: '<user mention(s)>',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            if (!ctx.msg.guild) {
-                ctx.msg.channel.createMessage('This command can only be run in a server.').then(() => reject([new Error('User tried to run command in a DM.')])).catch(err => reject([err]));
+            if (!ctx.msg.member.permission.has('banMembers')) {
+                ctx.msg.channel.createMessage('You require the **Ban Members** permission to execute this command.').then(() => {
+                    reject([new Error('User does not have sufficient permission.')]);
+                }).catch(err => reject([err]));
             } else {
-                if (!ctx.msg.member.hasPermission('BAN_MEMBERS')) {
-                    ctx.msg.channel.createMessage('You require the **Ban Members** permission to execute this command.').then(() => {
-                        reject([new Error('User does not have sufficient permission.')]);
+                if (!ctx.guildBot.permission.has('banMembers')) {
+                    ctx.msg.channel.createMessage('I do not have the **Ban Members** permission.').then(() => {
+                        reject([new Error('Bot does not have sufficient permission.')]);  
                     }).catch(err => reject([err]));
                 } else {
-                    if (!ctx.guildBot.hasPermission('BAN_MEMBERS')) {
-                        ctx.msg.channel.createMessage('I do not have the **Ban Members** permission.').then(() => {
-                            reject([new Error('Bot does not have sufficient permission.')]);
+                    if (ctx.msg.mentions.length === 0) {
+                        ctx.msg.channel.createMessage('Please mention at least one user to ban.').then(() => {
+                            reject([new Error('No users mentioned to ban.')]);
                         }).catch(err => reject([err]));
                     } else {
-                        if (ctx.msg.mentions.users.size === 0) {
-                            ctx.msg.channel.createMessage('Please mention at least one user to ban.').then(() => {
-                                reject([new Error('No users mentioned to ban.')]);
-                            }).catch(err => reject([err]));
-                        } else {
-                            var banned = 0;
-                            ctx.msg.mentions.users.forEach(m => {
-                                if (m.id !== bot.user.id) {
-                                    if (m.bannable) {
-                                        m.ban().then(() => banned++).catch(err => {
-                                            var errMsg = `Unable to ban **${m.username}#${m.discriminator}**\n`;
-                                            errMsg += '```js\n';
-                                            errMsg += err + '\n';
-                                            errMsg += '```';
-                                            ctx.msg.channel.createMessage(errMsg);
-                                        });
-                                    } else {
-                                        ctx.msg.channel.createMessage(`I do not have sufficient permission to ban **${m.nickname ? m.nickname : m.username}#${m.discriminator}**`);
-                                    }
+                        var promises = [];
+                        ctx.msg.mentions.forEach(u => {
+                            if (u.id !== bot.user.id) {
+                                if (u.id !== ctx.msg.author.id) {
+                                    promises.push(bot.banGuildMember(ctx.msg.channel.guild.id, u.id, 7).catch(err => {
+                                        if (err.resp.statusCode === 403) {
+                                            ctx.msg.channel.createMessage(`Unable to kick **${utils.formatUsername(u)}** due to insufficient permission.`);
+                                        } else {
+                                            var oops = `Unable to kick **${utils.formatUsername(u)}**\n`;
+                                            oops += '```js\n';
+                                            oops += err + '\n';
+                                            oops += '```';
+                                            ctx.msg.channel.createMessage(oops);
+                                        }
+                                    }));
                                 } else {
-                                    console.log('owo whats this? trying to ban myself? ayy lmao.');
-                                    ctx.msg.channel.createMessage("lol no im not gonna ban myself.");
+                                    ctx.msg.channel.createMessage('Skipping over author mention.');
                                 }
-                            });
-                            if (banned > 0) {
-                                ctx.msg.channel.createMessage(`Banned **${banned}** members.`).then(() => resolve()).catch(err => reject([err]));
                             } else {
-                                resolve();
+                                ctx.msg.channel.createMessage('Skipping over self mention.');
                             }
-                        }
+                        });
+                        Promise.all(promises).then(banned => ctx.msg.channel.createMessage(`Banned ${banned.length === 0 ? 'no one.' : banned.length + ` ${banned.length === 1 ? 'user' : 'users'}.`}`).then(() => resolve()).catch(err => reject([err])));
                     }
                 }
             }
