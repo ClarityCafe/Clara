@@ -22,7 +22,7 @@ exports.userinfo = {
                 })[0]).color;
                 ctx.msg.channel.createMessage({embed : {
                     title : `User Info`,
-                    description : `for ${ctx.msg.author.username}#${ctx.msg.author.discriminator}`,
+                    description : `${ctx.msg.author.username}#${ctx.msg.author.discriminator}`,
                     thumbnail : {url: ctx.msg.author.avatarURL},
                     color: roleColour,
                     fields : [
@@ -31,12 +31,16 @@ exports.userinfo = {
                         {name: 'User ID', value: ctx.msg.member.user.id, inline: true}
                     ]
                 }}).then(()=> resolve()).catch(err => ([err]));
-            } else {
+            } else if (ctx.msg.mentions[0]) {
                 ctx.msg.channel.createMessage({embed: {
-                    title: `User Info`,
-                    description: `for ${ctx.msg.mentions}`
-                }}).then(() => resolve()).catch(err => ([err]));
+                    title: 'User Info',
+                    description: `${ctx.msg.mentions[0].username}#${ctx.msg.mentions[0].discriminator}`,
+                    thumbnail:{url:ctx.msg.mentions[0].avatarURL},
+                    fields: {}
+
+                }}).then(()=> resolve()).catch(err => ([err]));
             }
         });
     }
 };
+
