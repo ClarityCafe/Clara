@@ -15,11 +15,27 @@ exports.userinfo = {
     usage : `<user mention>`,
     main : (bot,ctx) => {
         return new Promise((resolve,reject) => {
-            if (ctx.user.mention === 0 ) {
+            if (ctx.msg.mentions === 0 ) {
                 //if no Mention provided, get the author's Info
-
+                var roleColour = ctx.msg.channel.guild.roles.get(ctx.guildBot.roles.sort((a, b) => {
+                    return ctx.guildBot.guild.roles.get(b).position - ctx.guildBot.guild.roles.get(a).position;
+                })[0]).color;
+                ctx.msg.channel.createMessage({embed : {
+                    title : `User Info`,
+                    description : `for ${ctx.msg.author.username}#${ctx.msg.author.discriminator}`,
+                    thumbnail : {url: ctx.msg.author.avatarURL},
+                    color: roleColour,
+                    fields : [
+                        {name: 'Nickname' , value:ctx.msg.member.nick, inline: true},
+                        {name: 'Status' , value:ctx.msg.member.status,inline:true},
+                        {name: 'User ID', value: ctx.msg.member.user.id, inline: true}
+                    ]
+                }}).then(()=> resolve()).catch(err => ([err]));
             } else {
-
+                ctx.msg.channel.createMessage({embed: {
+                    title: `User Info`,
+                    description: `for ${ctx.msg.mentions}`
+                }}).then(() => resolve()).catch(err => ([err]));
             }
         });
     }
