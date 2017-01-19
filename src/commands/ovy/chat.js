@@ -9,7 +9,6 @@ exports.commands = [
     'talk'
 ];
 
-const fs = require('fs');
 const Cleverbot = require('cleverbot.io');
 const config = require(`${__baseDir}/config.json`);
 const ayano = new Cleverbot('t77jVhrskGDT6Dm1', 'XKmJ3XW1dQwVJVXpWfODAUQ5qKucD6tc');
