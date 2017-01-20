@@ -78,7 +78,7 @@ function handleCmdErr(msg, cmd, err) {
     } else {
         logger.warn(loggerPrefix(msg) + `Error when running command '${cmd}':\n${config.debug ? err.stack : err}`);
     }
-    
+
     if (!(err instanceof Array)) {
         var errMsg = `Unexpected error while executing command '${cmd}'\n`;
         errMsg += '```js\n';
@@ -90,13 +90,13 @@ function handleCmdErr(msg, cmd, err) {
 
 // Init
 bot.on('ready', () => {
-    if (loadCommands) {
-        require(`${__dirname}/lib/commandLoader.js`).init().then(() => {
-            var altPrefixes = JSON.parse(fs.readFileSync(`${__dirname}/data/prefixes.json`));
-            logger.info(`Loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? 'command' : 'commands'}.`);
-            logger.info(`${bot.user.username} is connected to Discord and ready to use.`);
-            logger.info(`Main prefix is '${config.mainPrefix}', can also use @mention.`);
-            logger.info(`${altPrefixes.length > 0 ? `Alternative prefixes: '${altPrefixes.join("', ")}'` : 'No alternative prefixes.'}`);
+            if (loadCommands) {
+                require(`${__dirname}/lib/commandLoader.js`).init().then(() => {
+                            var altPrefixes = JSON.parse(fs.readFileSync(`${__dirname}/data/prefixes.json`));
+                            logger.info(`Loaded ${Object.keys(bot.commands).length} ${Object.keys(bot.commands).length === 1 ? 'command' : 'commands'}.`);
+                            logger.info(`${bot.user.username} is connected to Discord and ready to use.`);
+                            logger.info(`Main prefix is '${config.mainPrefix}', can also use @mention.`);
+                            logger.info(`${altPrefixes.length > 0 ? `Alternative prefixes: '${altPrefixes.join("', ")}'` : 'No alternative prefixes.'}`);
             loadCommands = false;
             allowCommandUse = true;
         }).catch(err => {
@@ -157,6 +157,7 @@ bot.on('messageCreate', msg => {
 // Handle disconnect
 bot.on('disconnect', () => {
     logger.error('Disconnected from Discord.');
+    process.exit(1);
 });
 
 bot.connect();
