@@ -157,7 +157,6 @@ bot.on('messageCreate', msg => {
 // Handle disconnect
 bot.on('disconnect', () => {
     logger.error('Disconnected from Discord.');
-    process.exit(1);
 });
 
 bot.connect();
