@@ -48,6 +48,7 @@ function preloadCommands() {
             } else {
                 var jsooon = fs.readFileSync(`${__baseDir}/${commandsDirectory}/${awoo}/package.json`);
                 var pkg = JSON.parse(jsooon);
+                if (pkg.dependencies == undefined) continue;
                 if (Object.keys(pkg.dependencies).length > 0) {
                     for (let awau in pkg.dependencies) {
                         try {
