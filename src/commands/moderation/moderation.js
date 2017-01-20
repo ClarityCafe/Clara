@@ -90,9 +90,9 @@ exports.ban = {
                                 if (u.id !== ctx.msg.author.id) {
                                     promises.push(bot.banGuildMember(ctx.msg.channel.guild.id, u.id, 7).catch(err => {
                                         if (err.resp.statusCode === 403) {
-                                            ctx.msg.channel.createMessage(`Unable to kick **${utils.formatUsername(u)}** due to insufficient permission.`);
+                                            ctx.msg.channel.createMessage(`Unable to ban **${utils.formatUsername(u)}** due to insufficient permission.`);
                                         } else {
-                                            var oops = `Unable to kick **${utils.formatUsername(u)}**\n`;
+                                            var oops = `Unable to ban **${utils.formatUsername(u)}**\n`;
                                             oops += '```js\n';
                                             oops += err + '\n';
                                             oops += '```';
