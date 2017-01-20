@@ -22,7 +22,7 @@ const utils = require(`${__dirname}/lib/utils.js`);
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
 const bot = new Eris(config.token, {
-    autoreconnect: false,
+    autoreconnect: true,
     disableEvents: {
         TYPING_START: true,
         PRESENCE_UPDATE: true,
@@ -156,10 +156,7 @@ bot.on('messageCreate', msg => {
 
 // Handle disconnect
 bot.on('disconnect', () => {
-    logger.warn('Disconnected from Discord. Retrying in 5 seconds.');
-    setTimeout(() => {
-        bot.connect();
-    }, 5000);
+    logger.error('Disconnected from Discord.');
 });
 
 bot.connect();
