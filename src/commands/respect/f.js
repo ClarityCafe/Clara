@@ -19,9 +19,9 @@ exports.f = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.cleanSuffix) {
-                ctx.msg.channel.createMessage(`**${utils.formatUsername(ctx.msg.member)}** has paid their respects for **${ctx.cleanSuffix}**`).then(() => resolve()).catch(err => reject([err]));
+                ctx.msg.channel.createMessage(`**${utils.formatUsername(ctx.msg.member, true)}** has paid their respects for **${ctx.cleanSuffix}**`).then(() => resolve()).catch(err => reject([err]));
             } else {
-                ctx.msg.channel.createMessage(`**${utils.formatUsername(ctx.msg.member)}** has paid their respects.`).then(() => resolve()).catch(err => reject([err]));
+                ctx.msg.channel.createMessage(`**${utils.formatUsername(ctx.msg.member, true)}** has paid their respects.`).then(() => resolve()).catch(err => reject([err]));
             }
         });
     }

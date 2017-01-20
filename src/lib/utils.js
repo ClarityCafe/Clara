@@ -24,8 +24,8 @@ function msToTime(ms) {
     return `${days} days, ${hours}:${minutes}:${seconds}`;
 }
 
-function formatUsername(user) {
-    return user instanceof Eris.Member ? `${user.nick ? user.nick : user.user.username}` : `${user.username}#${user.discriminator}`;
+function formatUsername(user, noDiscrim) {
+    return user instanceof Eris.Member ? `${user.nick ? user.nick : user.user.username}${noDiscrim ? '' : `#${user.user.discriminator}`}` : `${user.username}${noDiscrim ? '' : `#${user.discriminator}`}`;
 }
 
 function isAdmin(userID) {
