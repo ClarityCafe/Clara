@@ -7,6 +7,11 @@
 const Promise = require('bluebird');
 const Eris = require('eris');
 const util = require('util');
+const utils = require('utils');
+const fs = require('fs');
+const cp = require('child_process');
+const path = require('path');
+const os = require('os');
 
 exports.commands = [
     'eval'
