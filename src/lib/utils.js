@@ -25,7 +25,7 @@ function msToTime(ms) {
 }
 
 function formatUsername(user) {
-    return user instanceof Eris.Member ? `${user.nick ? user.nick : user.user.username}#${user.user.discriminator}` : `${user.username}#${user.discriminator}`;
+    return user instanceof Eris.Member ? `${user.nick ? user.nick : user.user.username}` : `${user.username}#${user.discriminator}`;
 }
 
 function isAdmin(userID) {
