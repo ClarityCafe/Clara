@@ -28,7 +28,7 @@ exports.help = {
                     let cmd = bot.commands[command];
                     helpTxt += `"${command}"${cmd.usage ? ` ${cmd.usage}` : ''} - "${cmd.desc}"\n`;
                 }
-                helpTxt += '```';
+                helpTxt += '```\nIf you need support or have suggestions for features of Nodetori, join the Discord server. https://discord.gg/rmMTZue';
                 ctx.msg.channel.createMessage('Sending the help message to your DMs').then(() => {
                     ctx.msg.author.getDMChannel().then(dm => {
                         dm.createMessage(helpTxt).then(() => resolve()).catch(reject);

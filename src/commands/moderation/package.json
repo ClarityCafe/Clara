@@ -1,6 +1,4 @@
 {
     "main": "moderation.js",
-    "dependencies": {
-
-    }
+    "dependencies": {}
 }
