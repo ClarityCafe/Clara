@@ -66,3 +66,4 @@ data.json
 src/config.json
 /data
 prefixes.json
+/.idea/workspace.xml
