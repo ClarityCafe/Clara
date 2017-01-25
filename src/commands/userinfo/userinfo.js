@@ -41,6 +41,8 @@ exports.userinfo = {
             if (ctx.msg.mentions.length === 0) {
                 let roleColour = ctx.msg.channel.guild.roles.get(ctx.msg.member.roles.sort((a, b) => {
                     return ctx.msg.member.guild.roles.get(b).position - ctx.msg.member.guild.roles.get(a).position;
+                }).filter(r => {
+                    return r.color;
                 })[0]).color;
                 let roles = [];
                 ctx.msg.member.roles.forEach(r => {roles.push(ctx.msg.channel.guild.roles.get(r).name)})
@@ -49,7 +51,9 @@ exports.userinfo = {
                 let member = ctx.msg.channel.guild.members.get(ctx.msg.mentions[0].id);
                 let roleColour = ctx.msg.channel.guild.roles.get(member.roles.sort((a, b) => {
                     return member.guild.roles.get(b).position - member.guild.roles.get(a).position;
-                })[0]).color;
+                }).filter(r => {
+                    return r.color;
+                })[0]).color || 000000;
                 let roles = [];
                 member.roles.forEach(r => {roles.push(ctx.msg.channel.guild.roles.get(r).name)})
                 ctx.msg.channel.createMessage(infoBlock(member, roles, roleColour)).then(()=> resolve()).catch(err => ([err]));
