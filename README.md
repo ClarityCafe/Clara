@@ -2,7 +2,7 @@
 
 [Support us on Patreon!](https://www.patreon.com/capuccino) | [Discord Server](https://discord.gg/9utV8gn)
 
-A really experimental (and borked) Discord.JS bot written in ECMAScript 6
+A really experimental (and borked) Discord bot written in ECMAScript 6
 
 # Running
 
