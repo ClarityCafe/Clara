@@ -14,7 +14,8 @@ const baseUrl = 'http://i.yorium.moe/albums/';
 const ignore = [
     'nsfw/',
     'yuri/',
-    'wallpaper/'
+    'wallpaper/',
+    'Space/'
 ];
 
 exports.commands = [
