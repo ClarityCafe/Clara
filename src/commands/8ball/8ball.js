@@ -1,11 +1,11 @@
 // * A kinky 8 ball command
 // *
 // * Contributed by Capuccino
+const Promise = require('bluebird');
+
 exports.commands = [
     'ball'
 ];
-
-const Promise = require('bluebird');
 
 //a variable of all memes
 var responses = [
