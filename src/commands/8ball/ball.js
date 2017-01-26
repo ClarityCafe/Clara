@@ -19,11 +19,9 @@ var responses = [
     `I can't answer that right now....`
 ];
 
-const response = responses[Math.floor(Math.random() * responses.length)];
-
 exports.ball = {
     desc: 'Make the bot decide for you or do some things',
-    longDesc: `'tis an 8ball command. Nothing new`,
+    longDesc: "'tis an 8ball command. Nothing new",
     usage: '<Question?>',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
@@ -32,6 +30,7 @@ exports.ball = {
                     reject([new Error('No Question Given!')]);
                 }).catch(err => ([err]));
             } else if (ctx.suffix) {
+                var response = responses[Math.floor(Math.random() * responses.length)];
                 ctx.msg.channel.createMessage(response).then(() => resolve ()).catch(err => ([err]));
             }
         });
