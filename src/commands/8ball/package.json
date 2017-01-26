@@ -1,4 +1,4 @@
 {
-  "name": "ball.js",
-  "dependencies": {}
+    "main": "ball.js",
+    "dependencies": {}
 }
