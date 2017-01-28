@@ -16,7 +16,8 @@ var responses = [
     'Yes',
     'No',
     `I didn't quite get that, ask again.`,
-    `I can't answer that right now....`
+    `I can't answer that right now....`,
+    `I don't know how to respond to that...`
 ];
 
 exports.ball = {
