@@ -5,7 +5,7 @@
  * | Capuccino
  * | Ovyerus
  *
- * Licensed under MIT. Copyright (c) 2016 Capuccino, Ovyerus and the repository contributors.
+ * Licensed under MIT. Copyright (c) 2017 Capuccino, Ovyerus and the repository contributors.
  */
 
 // Framework imports

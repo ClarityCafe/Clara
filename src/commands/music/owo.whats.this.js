@@ -4,3 +4,9 @@
 * Contributed by Capuccino
 *
 */
+exports. commands = [
+    'play',
+    'skip',
+    'volume'
+];
+
