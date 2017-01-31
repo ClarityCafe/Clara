@@ -26,7 +26,8 @@
     "eris": "github:abalabahaha/eris",
     "eslint": "^3.9.1",
     "jasmine": "^2.5.2",
-    "npm": "^4.0.5"
+    "npm": "^4.0.5",
+    "weather-js": "^1.0.2"
   },
   "devDependencies": {
     "tslint": "^4.3.1",
