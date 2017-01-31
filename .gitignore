@@ -68,3 +68,4 @@ src/config.json
 prefixes.json
 /.idea/workspace.xml
 src/data/
+data.json
