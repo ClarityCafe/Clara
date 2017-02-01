@@ -1,7 +1,8 @@
-//* Userinfo - checks the user info
-//* based from Spoopy's userinfo commands
-//*
-//* Contributed by Capuccino and Ovyerus
+/*
+ * userinfo.js - Get information of a user.
+ *
+ * Contributed by Capuccino and Ovyerus
+ */
 
 const Promise = require('bluebird');
 const utils = require(`${__baseDir}/lib/utils.js`);
@@ -36,26 +37,24 @@ exports.userinfo = {
     desc: "Check a user's info, or your own.",
     longDesc: `check someone's or your own userinfo`,
     usage: '[mention]',
-    main : (bot,ctx) => {
+    main : (bot, ctx) => {
         return new Promise((resolve,reject) => {
             if (ctx.msg.mentions.length === 0) {
-                let roleColour = ctx.msg.channel.guild.roles.get(ctx.msg.member.roles.sort((a, b) => {
+                let roleColour = ctx.msg.member.roles.sort((a, b) => {
                     return ctx.msg.member.guild.roles.get(b).position - ctx.msg.member.guild.roles.get(a).position;
-                }).filter(r => {
-                    return r.color;
-                })[0]).color;
+                })[0];
+                roleColour = roleColour ? ctx.msg.channel.guild.roles.get(roleColour).color : 0;
                 let roles = [];
-                ctx.msg.member.roles.forEach(r => {roles.push(ctx.msg.channel.guild.roles.get(r).name)})
+                ctx.msg.member.roles.forEach(r => {roles.push(ctx.msg.channel.guild.roles.get(r).name)});
                 ctx.msg.channel.createMessage(infoBlock(ctx.msg.member, roles, roleColour)).then(()=> resolve()).catch(err => ([err]));
             } else {
                 let member = ctx.msg.channel.guild.members.get(ctx.msg.mentions[0].id);
-                let roleColour = ctx.msg.channel.guild.roles.get(member.roles.sort((a, b) => {
+                let roleColour = member.roles.sort((a, b) => {
                     return member.guild.roles.get(b).position - member.guild.roles.get(a).position;
-                }).filter(r => {
-                    return r.color;
-                })[0]).color || 000000;
+                })[0];
+                roleColour = roleColour ? member.guild.roles.get(roleColour).color : 0;
                 let roles = [];
-                member.roles.forEach(r => {roles.push(ctx.msg.channel.guild.roles.get(r).name)})
+                member.roles.forEach(r => {roles.push(member.guild.roles.get(r).name)});
                 ctx.msg.channel.createMessage(infoBlock(member, roles, roleColour)).then(()=> resolve()).catch(err => ([err]));
             }
         });
