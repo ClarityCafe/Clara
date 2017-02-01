@@ -21,7 +21,7 @@ exports.choose = {
                 ctx.msg.channel.createMessage('Please give me at least `two` (2) choices.').then(() => reject([new Error('Not enough choices given.')])).catch(err => reject([err]));
             } else {
                 var choice = choices[Math.floor(Math.random() * choices.length)];
-                ctx.msg.channel.createMessage(`**${ctx.msg.author.username}**, I choose \`${choice}\`!`).then(() => {
+                ctx.msg.channel.createMessage(`**${ctx.msg.author.username}**, I choose **${choice}**!`).then(() => {
                     resolve();
                 }).catch(err => reject([err]));
             }
