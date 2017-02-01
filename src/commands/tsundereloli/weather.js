@@ -18,7 +18,7 @@ exports.weather = {
                 ctx.msg.channel.createMessage('No City Specified!').then(() => reject([new Error('no City Specified')])).catch(err => ([err]));
             } else {
                 weather.find({search : ctx.suffix, degreeType: 'C'}, (err, result) => {
-                    let loli = JSON.parse(result);
+                    const loli = JSON.parse(result);
                     ctx.msg.channel.createMessage({embed : {
                         title: `Weather information for ${loli.location.name}`,
                         description : loli.current.skytext,
