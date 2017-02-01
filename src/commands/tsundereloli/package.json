@@ -1,0 +1,6 @@
+{
+    "main" : "weather.js",
+    "dependencies": {
+        "weather-js": "1.0.2"
+    }
+}
