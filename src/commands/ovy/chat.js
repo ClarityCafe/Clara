@@ -27,7 +27,7 @@ exports.talk = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix === 0) {
-                ctx.msg.channel.createMessage('Oyasumi!').then(() => reject([new Error('no message provided')])).catch(err => ([err]));
+                ctx.msg.channel.createMessage('I-Its not like I wat to talk with you or anything.... b-baka! >//>').then(() => reject([new Error('no message provided')])).catch(err => ([err]));
             } else {
                 ayano.ask(ctx.suffix, (err, response) => {
                     ctx.msg.channel.createMessage(response).then(() => resolve()).catch(err => ([err]));
