@@ -19,7 +19,7 @@ exports.help = {
             if (ctx.args.length === 0) {
                 var helpTxt = '```armasm\n';
                 var alphabeticalSort = [];
-                helpTxt += `; ${bot.user.username} Help\n`;
+                helpTxt += `; ${bot.user.username}'s Help\n`;
                 for (let command in bot.commands) {
                     alphabeticalSort.push(command);
                 }
