@@ -8,7 +8,7 @@ exports.commands = [
     'nyaa'
 ];
 
-const Promise = require('bluebird');
+
 const request = require('request');
 
 exports.nyaa = {

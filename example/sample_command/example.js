@@ -4,7 +4,7 @@
  * Contributed by Capuccino, Ovyerus.
  */
 
-const Promise = require('bluebird');
+
 
 exports.commands = [
     // Define the names of your commands here.

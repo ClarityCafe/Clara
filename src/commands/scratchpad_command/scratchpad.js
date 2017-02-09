@@ -10,7 +10,7 @@ exports.commands = [
 
 const chatbot = require('datchatbot');
 const ayana = new chatbot.Client('', 'kotori');
-const Promise = require('bluebird');
+
 
 exports.scratch = {
     desc: 'Experimental Module. Bot Creators only',

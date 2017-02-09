@@ -8,7 +8,7 @@ exports.commands = [
 ];
 
 const request = require('request');
-const Promise = require('bluebird');
+
 
 exports.woof = {
     desc: `It's like nyaa, only it's dogs`,

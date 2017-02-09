@@ -4,7 +4,7 @@
  * Contributed by Ovyerus.
  */
 
-const Promise = require('bluebird');
+
 const Eris = require('eris');
 const util = require('util');
 const utils = require(`${__baseDir}/lib/utils.js`);

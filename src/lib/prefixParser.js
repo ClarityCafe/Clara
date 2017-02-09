@@ -8,7 +8,7 @@
  */
 
 const fs = require('fs');
-const Promise = require('bluebird');
+
 const bot = require(`${__baseDir}/bot.js`).bot;
 
 function parse(content) {

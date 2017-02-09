@@ -3,7 +3,7 @@
  * Contributed by Ovyerus
  */
 
-const Promise = require('bluebird');
+
 
 exports.commands = [
     'invite'

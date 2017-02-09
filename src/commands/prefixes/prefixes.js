@@ -4,7 +4,7 @@
  * Contributed by Ovyerus
  */
 
-const Promise = require('bluebird');
+
 const fs = require('fs');
 const utils = require(`${__baseDir}/lib/utils.js`);
 

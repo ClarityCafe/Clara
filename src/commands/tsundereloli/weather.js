@@ -6,7 +6,7 @@
 exports.commands = [
     'weather',
 ];
-const Promise = require('bluebird');
+
 const weather = require('weather-js'); // npm package is https://www.npmjs.com/package/weather-js
 
 exports.weather = {

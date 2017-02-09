@@ -3,7 +3,7 @@
 // *
 // * contributed by Capuccino
 
-const Promise = require('bluebird');
+
 const cats  = require('cat-ascii-faces');
 
 exports.commands = [

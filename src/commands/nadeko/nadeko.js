@@ -7,7 +7,7 @@ exports.commands = [
     'nadeko'
 ];
 
-const Promise = require('bluebird');
+
 
 var emote = [
     ':joy:',
