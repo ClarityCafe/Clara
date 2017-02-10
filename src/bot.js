@@ -14,6 +14,7 @@ const fs = require('fs');
 
 global.__baseDir = __dirname;
 global.Promise = require('bluebird');
+global.logger = require(`${__dirname}/lib/logger`);
 
 // Custom modules
 const commandsMod = require(`${__dirname}/lib/commands.js`);
@@ -113,7 +114,7 @@ bot.on ('shardReady', shard => {
 });
 
 bot.on('shardResume', shard => {
-    logger.custom(); 
+    logger.custom('blue', 'shard/shardInfo', `shard ${shard} has resumed.`);
 });
 
 const prefixParser = require(`${__dirname}/lib/prefixParser.js`);
