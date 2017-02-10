@@ -18,7 +18,6 @@ global.logger = require(`${__dirname}/lib/logger`);
 
 // Custom modules
 const commandsMod = require(`${__dirname}/lib/commands.js`);
-const logger = require(`${__dirname}/lib/logger.js`);
 const utils = require(`${__dirname}/lib/utils.js`);
 
 // Setup stuff
