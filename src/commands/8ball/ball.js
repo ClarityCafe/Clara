@@ -1,7 +1,7 @@
 // * A kinky 8 ball command
 // *
 // * Contributed by Capuccino
-const Promise = require('bluebird');
+
 
 exports.commands = [
     'ball'

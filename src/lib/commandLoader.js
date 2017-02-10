@@ -12,7 +12,7 @@
 // Dependancies
 const fs = require('fs');
 const path = require('path');
-const Promise = require('bluebird');
+
 const cp = require('child_process');
 const logger = require(`${__dirname}/logger.js`);
 

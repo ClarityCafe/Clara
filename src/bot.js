@@ -13,6 +13,7 @@ const Eris = require('eris');
 const fs = require('fs');
 
 global.__baseDir = __dirname;
+global.Promise = require('bluebird');
 
 // Custom modules
 const commandsMod = require(`${__dirname}/lib/commands.js`);

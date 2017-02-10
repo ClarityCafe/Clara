@@ -4,7 +4,7 @@
  * Contributed by Ovyerus
  */
 
-const Promise = require('bluebird');
+
 const request = require('request');
 const color = require('dominant-color');
 const prettyBytes = require('pretty-bytes');

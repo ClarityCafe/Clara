@@ -4,7 +4,7 @@
  * Contributed by Capuccino and Ovyerus.
  */
 
-const Promise = require('bluebird');
+
 
 exports.commands = [
     'help'

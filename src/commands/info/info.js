@@ -4,7 +4,7 @@
  * Contributed by Ovyerus
  */
 
-const Promise = require('bluebird');
+
 const os = require('os');
 const prettyBytes = require('pretty-bytes');
 const path = require('path');
