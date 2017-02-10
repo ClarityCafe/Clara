@@ -14,5 +14,6 @@ ratings:
   paths:
   - "**.js"
 exclude_paths:
-- docs/*
-- examples/*
+- data/*
+- example/*
+- res/*
