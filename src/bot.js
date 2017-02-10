@@ -107,6 +107,14 @@ bot.on('ready', () => {
     }
 });
 
+bot.on ('shardReady', shard => {
+    logger.custom('blue', 'shard/shardInfo', `shard ${shard} is ready!`); 
+});
+
+bot.on('shardResume', shard => {
+    logger.custom(); 
+});
+
 const prefixParser = require(`${__dirname}/lib/prefixParser.js`);
 
 // Command handler
@@ -157,6 +165,9 @@ bot.on('messageCreate', msg => {
 // Handle disconnect
 bot.on('disconnect', () => {
     logger.warn('Disconnected from Discord.');
+});
+bot.on('shardDisconnect', (err,shard) => {
+    if (err) logger.customError('shard/shardStatus', `shard${shard} disconnected. Reason ${err}`);
 });
 
 bot.connect();
