@@ -28,6 +28,7 @@ exports.restart = {
 
 exports.shutdown = {
     desc: 'OWNER ONLY! Kills the bot process',
+    adminOnly: true,
     main : (bot,ctx) => {
         return new Promise((resolve,reject) => {
             ctx.msg.channel.createMessage('O-Okay... Shutting down...').then(() => {
