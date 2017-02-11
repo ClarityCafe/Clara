@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0cb2fe7a-eab6-40ba-85a9-d959c1777b51}</ProjectGuid>
+    <ProjectHome />
+    <ProjectView>ShowAllFiles</ProjectView>
+    <StartupFile>src\bot.js</StartupFile>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <ItemGroup>
+    <Content Include="data.json" />
+    <Content Include="package.json" />
+    <Content Include="CONTRIBUTING.md" />
+    <Content Include="README.md" />
+    <Content Include="NodejsApp1.njsproj" />
+    <Content Include="owo-dev.njsproj" />
+    <Content Include="src\config.json" />
+    <Content Include="src\pm2.json" />
+    <Compile Include="src\bot.js" />
+    <Content Include="example\sample_command\package.json" />
+    <Compile Include="example\sample_command\example.js" />
+    <Content Include="src\data\data.json" />
+    <Content Include="src\data\prefixes.json" />
+    <Compile Include="src\lib\commandLoader.js" />
+    <Compile Include="src\lib\commands.js" />
+    <Compile Include="src\lib\logger.js" />
+    <Compile Include="src\lib\prefixParser.js" />
+    <Compile Include="src\lib\utils.js" />
+    <Content Include="src\res\481.png" />
+    <Content Include="src\res\tumblr_oaj6d6QFu21v8ljjro1_500.png" />
+    <Content Include="src\res\102.jpg" />
+    <Content Include="src\res\1029.jpg" />
+    <Content Include="src\res\13636074_332065533792219_360383949_n.jpg" />
+    <Content Include="src\res\528.jpg" />
+    <Content Include="src\res\d71.jpg" />
+    <Content Include="src\commands\8ball\package.json" />
+    <Compile Include="src\commands\8ball\ball.js" />
+    <Content Include="src\commands\anime\package.json" />
+    <Compile Include="src\commands\anime\anime.js" />
+    <Content Include="src\commands\ascii\package.json" />
+    <Compile Include="src\commands\ascii\ascii.js" />
+    <Content Include="src\commands\choose\package.json" />
+    <Compile Include="src\commands\choose\choosemedesu.js" />
+    <Content Include="src\commands\doggo\package.json" />
+    <Compile Include="src\commands\doggo\dog.js" />
+    <Content Include="src\commands\eval\package.json" />
+    <Compile Include="src\commands\eval\eval.js" />
+    <Content Include="src\commands\help\package.json" />
+    <Compile Include="src\commands\help\help.js" />
+    <Content Include="src\commands\ibsearch\package.json" />
+    <Compile Include="src\commands\ibsearch\ibsearch.js" />
+    <Content Include="src\commands\info\package.json" />
+    <Compile Include="src\commands\info\info.js" />
+    <Content Include="src\commands\invite\package.json" />
+    <Compile Include="src\commands\invite\invite.js" />
+    <Content Include="src\commands\mari\package.json" />
+    <Compile Include="src\commands\mari\itsjoke.js" />
+    <Content Include="src\commands\moderation\package.json" />
+    <Compile Include="src\commands\moderation\moderation.js" />
+    <Content Include="src\commands\music\package.json" />
+    <Compile Include="src\commands\music\owo.whats.this.js" />
+    <Content Include="src\commands\nadeko\package.json" />
+    <Compile Include="src\commands\nadeko\nadeko.js" />
+    <Content Include="src\commands\noud\package.json" />
+    <Compile Include="src\commands\noud\nya.js" />
+    <Content Include="src\commands\nyaa\package.json" />
+    <Compile Include="src\commands\nyaa\azusa.js" />
+    <Content Include="src\commands\osu\package.json" />
+    <Compile Include="src\commands\osu\osu.js" />
+    <Content Include="src\commands\ovy\package.json" />
+    <Compile Include="src\commands\ovy\chat.js" />
+    <Content Include="src\commands\ping\package.json" />
+    <Compile Include="src\commands\ping\ping.js" />
+    <Content Include="src\commands\prefixes\package.json" />
+    <Compile Include="src\commands\prefixes\prefixes.js" />
+    <Content Include="src\commands\respect\package.json" />
+    <Compile Include="src\commands\respect\f.js" />
+    <Content Include="src\commands\scratchpad_command\package.json" />
+    <Compile Include="src\commands\scratchpad_command\scratchpad.js" />
+    <Content Include="src\commands\tsundereloli\package.json" />
+    <Compile Include="src\commands\tsundereloli\weather.js" />
+    <Content Include="src\commands\userinfo\package.json" />
+    <Compile Include="src\commands\userinfo\userinfo.js" />
+    <Content Include="src\commands\yori\ignores.json" />
+    <Content Include="src\commands\yori\package.json" />
+    <Compile Include="src\commands\yori\yori.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="example" />
+    <Folder Include="example\sample_command" />
+    <Folder Include="src" />
+    <Folder Include="src\commands" />
+    <Folder Include="src\commands\8ball" />
+    <Folder Include="src\commands\anime" />
+    <Folder Include="src\commands\ascii" />
+    <Folder Include="src\commands\choose" />
+    <Folder Include="src\commands\doggo" />
+    <Folder Include="src\commands\eval" />
+    <Folder Include="src\commands\help" />
+    <Folder Include="src\commands\ibsearch" />
+    <Folder Include="src\commands\info" />
+    <Folder Include="src\commands\invite" />
+    <Folder Include="src\commands\mari" />
+    <Folder Include="src\commands\moderation" />
+    <Folder Include="src\commands\music" />
+    <Folder Include="src\commands\nadeko" />
+    <Folder Include="src\commands\noud" />
+    <Folder Include="src\commands\nyaa" />
+    <Folder Include="src\commands\osu" />
+    <Folder Include="src\commands\ovy" />
+    <Folder Include="src\commands\ping" />
+    <Folder Include="src\commands\prefixes" />
+    <Folder Include="src\commands\respect" />
+    <Folder Include="src\commands\scratchpad_command" />
+    <Folder Include="src\commands\tsundereloli" />
+    <Folder Include="src\commands\userinfo" />
+    <Folder Include="src\commands\yori" />
+    <Folder Include="src\data" />
+    <Folder Include="src\lib" />
+    <Folder Include="src\res" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <!--Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them.-->
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

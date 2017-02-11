@@ -20,7 +20,7 @@ exports.nadeko = {
     main : (bot , ctx) => {
         return new Promise ((resolve , reject) => {
         // why did I do this *facepalm*
-            ctx.msg.channel.createMessage(`${ctx.msg.author.mention} did it ${emote[Math.floor(Math.Random() * emote.length)]} :gun:`).then(() => resolve()).catch(err => ([err]));
+            ctx.msg.channel.createMessage(`${ctx.msg.author.mention} did it ${emote[Math.floor(Math.random() * emote.length)]} :gun:`).then(() => resolve()).catch(err => ([err]));
         });
     }
 };
