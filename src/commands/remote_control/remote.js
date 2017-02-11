@@ -18,8 +18,8 @@ exports.restart = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             ctx.msg.channel.createMessage('Okay, Restarting!').then(() => {
-                cp.exec('pm2 restart owo-whats-this', (stdout) => {
-                    logger.info(stdout);
+                cp.exec('pm2 restart owo-whats-this', (data) => {
+                    logger.info(data);
                 });
             }).catch(err => reject([err]));
         });
@@ -32,8 +32,8 @@ exports.shutdown = {
     main : (bot,ctx) => {
         return new Promise((resolve,reject) => {
             ctx.msg.channel.createMessage('O-Okay... Shutting down...').then(() => {
-                cp.exec('pm2 stop owo-whats-this', (stdout) => {
-                    logger.info(stdout);
+                cp.exec('pm2 stop owo-whats-this', (data) => {
+                    logger.info(data);
                 });
             }).catch(err => reject([err]));
         });
