@@ -37,6 +37,7 @@ exports.info = {
                     {name: 'System Time', value: sysTime, inline: true},
                     {name: 'OS Release', value: os.release(), inline: true},
                     {name: 'OS Platform', value: os.platform(), inline: true},
+                    {name: 'Shards Active', value: bot.shards.size, inline: true},
                     {name: 'Memory Usage', value: prettyBytes(process.memoryUsage().rss), inline: true},
                     {name: 'Version', value: version, inline: true}
                 ]
