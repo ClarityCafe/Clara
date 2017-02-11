@@ -1,8 +1,9 @@
 {
-	"token": "",
-	"ownerID": "",
-	"mainPrefix": "?",
-	"osuApiKey": "",
-	"owoKey": "",
-	"ibKey": ""
+  "debug": true, //Boolean. True if Debug Stack is needed for Errors. False if simplified is only needed
+  "ibKey": "", //ibsearch key, used by ibsearch
+  "mainPrefix": "?", //Main Prefix
+  "osuApiKey": "", //API key for osu!Related Requests
+  "ownerID": "", //your own ID. Needed if you need exclusive access
+  "owoKey": "", // owo-whats-th.is key
+  "token": "" //your Bot token
 }
