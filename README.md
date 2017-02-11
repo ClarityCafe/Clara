@@ -1,4 +1,4 @@
-# owo-whats-this <iframe src="https://discordapp.com/widget?id=251664386459041792&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0"></iframe> [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/awau/owo-whats-this/master/LICENSE) [![Code Climate](https://codeclimate.com/github/awau/owo-whats-this/badges/gpa.svg)](https://codeclimate.com/github/awau/owo-whats-this)
+# owo-whats-this <a href="https://discord.gg/ZgQkCkm"><img src="https://discordapp.com/api/guilds/251664386459041792/embed.png" alt="Discord server" /></a> [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/awau/owo-whats-this/master/LICENSE) [![Code Climate](https://codeclimate.com/github/awau/owo-whats-this/badges/gpa.svg)](https://codeclimate.com/github/awau/owo-whats-this)
 
 [Support us on Patreon!](https://www.patreon.com/capuccino) | [Discord Server](https://discord.gg/9utV8gn)
 
