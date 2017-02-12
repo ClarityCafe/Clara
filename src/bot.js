@@ -94,7 +94,7 @@ function handleCmdErr(msg, cmd, err) {
     }
 }
 
-bot.awaitMessage = (channelID, userID, filter=function(){return true}, timeout=15000) => {
+bot.awaitMessage = (channelID, userID, filter=function(){return true;}, timeout=15000) => {
     return new Promise((resolve, reject) => {
         if (!channelID || typeof channelID !== 'string') {
             reject(new Error(`Unwanted type of channelID: got "${typeof channelID}" expected "string"`));
