@@ -68,10 +68,10 @@ bot.logger = logger;
 bot.commands = commandsMod.commands;
 bot.config = config;
 bot.music = {
-    skips : new Collection(Object),
-    queues: new Collection(Object),
-    current: new Collection(Object)
-}
+    skips : new Eris.Collection(Object),
+    queues: new Eris.Collection(Object),
+    current: new Eris.Collection(Object)
+};
 
 // Functions
 function loggerPrefix(msg) {
@@ -109,7 +109,7 @@ bot.awaitMessage = (channelID, userID, filter=function(){return true;}, timeout=
                     responded = true;
                     return msg;
                 }
-            }
+            };
 
             var onCrtWrap = (msg) => {
                 var res = onCrt(msg);
@@ -118,7 +118,7 @@ bot.awaitMessage = (channelID, userID, filter=function(){return true;}, timeout=
                     clearInterval(rmvTimeout);
                     resolve(res);
                 } 
-            }
+            };
 
             knife.on('messageCreate', onCrtWrap);
 
