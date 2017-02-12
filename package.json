@@ -1,6 +1,6 @@
 {
   "name": "clara-owo",
-  "version": "0.1.1",
+  "version": "0.1.1-refactordaily-021217",
   "description": "A Extensible Discord.JS bot.",
   "main": "src/bot.js",
   "scripts": {
