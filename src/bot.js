@@ -66,6 +66,11 @@ exports.bot = bot;
 bot.logger = logger;
 bot.commands = commandsMod.commands;
 bot.config = config;
+bot.music = {
+    skips = new Collection(Object),
+    queues: new Collection(Object),
+    current: new Collection(Object)
+}
 
 // Functions
 function loggerPrefix(msg) {
@@ -87,6 +92,43 @@ function handleCmdErr(msg, cmd, err) {
         errMsg += '```';
         msg.channel.createMessage(errMsg);
     }
+}
+
+bot.awaitMessage = (channelID, userID, filter=function(){return true}, timeout=15000) => {
+    return new Promise((resolve, reject) => {
+        if (!channelID || typeof channelID !== 'string') {
+            reject(new Error(`Unwanted type of channelID: got "${typeof channelID}" expected "string"`));
+        } else if (!userID || typeof userID !== 'string') {
+            reject(new Error(`Unwanted type of userID: got "${typeof userID}" expected "string"`));
+        } else {
+            var responded, rmvTimeout;
+
+            var onCrt = (msg) => {
+                if (msg.channel.id === channelID && msg.author.id === userID && filter(msg)) {
+                    responded = true;
+                    return msg;
+                }
+            }
+
+            var onCrtWrap = (msg) => {
+                var res = onCrt(msg);
+                if (responded) {
+                    knife.removeListener('messageCreate', onCrtWrap);
+                    clearInterval(rmvTimeout);
+                    resolve(res);
+                } 
+            }
+
+            knife.on('messageCreate', onCrtWrap);
+
+            rmvTimeout = setTimeout(() => {
+                if (!responded) {
+                    knife.removeListener('messageCreate', onCrtWrap);
+                    reject(new Error('Message await expired.'))
+                }
+            }, timeout);
+        }
+    });
 }
 
 // Init
