@@ -30,7 +30,7 @@ exports.weather = {
                             {name: 'Wind Speed', value: loli.current.winddisplay, inline:true}
                         ],
                         footer : {text: `Observed from ${loli.current.observationpoint}. Updated as of ${loli.forecast.day}, ${loli.forecast.date}.`}
-                    }}).then(() => resolve()).catch(err => ([err]));
+                    }}).then(resolve).catch(reject);
                 });
             }
         });

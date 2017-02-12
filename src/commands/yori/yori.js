@@ -47,7 +47,7 @@ exports.yori = {
                                 return imgRegex.test(i);
                             });
                             var img = imgs[Math.floor(Math.random() * albums.length)];
-                            ctx.msg.channel.createMessage(baseUrl + album + img).then(() => resolve()).catch(reject);
+                            ctx.msg.channel.createMessage(baseUrl + album + img).then(resolve).catch(reject);
                         }
                     });
                 }

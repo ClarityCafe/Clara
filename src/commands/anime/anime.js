@@ -46,9 +46,7 @@ exports.anime = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix) {
-                ctx.msg.channel.createMessage('Please give me something to search with.').then(() => {
-                    reject([new Error('No arguments given.')]);
-                }).catch(err => reject([err]));
+                ctx.msg.channel.createMessage('Please give me something to search with.').then(resolve).catch(reject);
             } else {
                 ctx.msg.channel.sendTyping();
                 if (/^\d+$/.test(ctx.suffix)) {
@@ -60,7 +58,7 @@ exports.anime = {
                                     reject(err);
                                 } else {
                                     fs.unlink(savePath, () => {
-                                        ctx.msg.channel.createMessage(animeBlock(animu, color)).then(() => resolve()).catch(err => reject([err]));
+                                        ctx.msg.channel.createMessage(animeBlock(animu, color)).then(resolve).catch(reject);
                                     });
                                 }
                             });
@@ -75,7 +73,7 @@ exports.anime = {
                                     reject(err);
                                 } else {
                                     fs.unlink(savePath, () => {
-                                        ctx.msg.channel.createMessage(animeBlock(animu, color)).then(() => resolve()).catch(err => reject([err]));
+                                        ctx.msg.channel.createMessage(animeBlock(animu, color)).then(resolve).catch(reject);
                                     });
                                 }
                             });
@@ -90,7 +88,7 @@ exports.anime = {
                                     reject(err);
                                 } else {
                                     fs.unlink(savePath, () => {
-                                        ctx.msg.channel.createMessage(animeBlock(animu, color)).then(() => resolve()).catch(err => reject([err]));
+                                        ctx.msg.channel.createMessage(animeBlock(animu, color)).then(resolve).catch(reject);
                                     });
                                 }
                             });

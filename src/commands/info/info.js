@@ -41,7 +41,7 @@ exports.info = {
                     {name: 'Memory Usage', value: prettyBytes(process.memoryUsage().rss), inline: true},
                     {name: 'Version', value: version, inline: true}
                 ]
-            }}).then(() => resolve()).catch(err => reject([err]));
+            }}).then(resolve).catch(reject);
         });
     }
 }
