@@ -67,7 +67,7 @@ bot.logger = logger;
 bot.commands = commandsMod.commands;
 bot.config = config;
 bot.music = {
-    skips = new Collection(Object),
+    skips : new Collection(Object),
     queues: new Collection(Object),
     current: new Collection(Object)
 }
