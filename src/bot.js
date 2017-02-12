@@ -17,8 +17,9 @@ global.Promise = require('bluebird');
 global.logger = require(`${__dirname}/lib/logger`);
 
 // Custom modules
-const commandsMod = require(`${__dirname}/lib/commands.js`);
-const utils = require(`${__dirname}/lib/utils.js`);
+const logger = require(`${__dirname}/lib/logger`);
+const commandsMod = require(`${__dirname}/lib/commands`);
+const utils = require(`${__dirname}/lib/utils`);
 
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
