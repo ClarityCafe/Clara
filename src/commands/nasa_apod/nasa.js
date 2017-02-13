@@ -21,7 +21,7 @@ exports.spacenews = {
                         reject( new Error(`Invalid Response! Expected JSON Response, got code ${res.statusCode} instead.`));
                     }).catch(err => (err));
                 } else {
-                    ctx.msg.channel.sendMessage({embed : {
+                    ctx.msg.channel.createMessage({embed : {
                         title: JSON.parse(body.title),
                         thumbnail:{url: 'https://api.nasa.gov/images/logo.png', width: 150, height : 150},
                         color: 0xFD7BB5 ,//placeholder,
