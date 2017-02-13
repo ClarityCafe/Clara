@@ -13,7 +13,6 @@ const cp = require('child_process');
 
 // * This command is made exclusively for the public bot.
 
-
 exports.restart = {
     desc: 'OWNER ONLY! Restarts the bot. This only works if bot is inside a PM2 controller',
     adminOnly: true,
