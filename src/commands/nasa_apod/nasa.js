@@ -21,7 +21,7 @@ exports.apod = {
                         reject( new Error(`Invalid Response! Expected JSON Response, got code ${res.statusCode} instead.`));
                     }).catch(err => (err));
                 } else {
-                    let pioneer = JSON.parse(body);
+                    let pioneer = JSON.stringify(body);
                     ctx.msg.channel.createMessage({embed : {
                         title: pioneer.title,
                         thumbnail:{url: 'https://api.nasa.gov/images/logo.png', width: 150, height : 150},
