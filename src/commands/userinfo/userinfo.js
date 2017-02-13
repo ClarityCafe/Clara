@@ -13,12 +13,12 @@ exports.commands = [
 ];
 
 function infoBlock(member, roles, color) {
-    var avatar = member.avatarURL.replace('cdn.discordapp.com', 'images.discordapp.net') + '?size=256';
-    avatar.indexOf('a_') !== -1 ? avatar = avatar.replace('.jpg', '.gif') : null;
+    var avatar = member.avatarURL + '?size=1024';
+    avatar.indexOf('a_') !== -1 ? avatar = avatar.replace('.png', '.gif', '.webp') : null;
     return {embed: {
         author: {name: utils.formatUsername(member.user), icon_url: member.bot ? 'https://cdn.discordapp.com/emojis/230105988211015680.png' : ''},
         description: `**[Full Avatar](${avatar.replace('size=256', 'size=1024')})**`,
-        thumbnail: {url: avatar, width: 128, height: 128},
+        thumbnail: {url: avatar},
         color: color,
         fields: [
             {name: 'Nickname', value: member.nick || 'None', inline: true}, 
@@ -46,7 +46,7 @@ exports.userinfo = {
                 roleColour = roleColour ? ctx.msg.channel.guild.roles.get(roleColour).color : 0;
                 let roles = [];
                 ctx.msg.member.roles.forEach(r => {roles.push(ctx.msg.channel.guild.roles.get(r).name)});
-                ctx.msg.channel.createMessage(infoBlock(ctx.msg.member, roles, roleColour)).then(()=> resolve()).catch(err => ([err]));
+                ctx.msg.channel.createMessage(infoBlock(ctx.msg.member, roles, roleColour)).then(resolve).catch(reject);
             } else {
                 let member = ctx.msg.channel.guild.members.get(ctx.msg.mentions[0].id);
                 let roleColour = member.roles.sort((a, b) => {
@@ -55,7 +55,7 @@ exports.userinfo = {
                 roleColour = roleColour ? member.guild.roles.get(roleColour).color : 0;
                 let roles = [];
                 member.roles.forEach(r => {roles.push(member.guild.roles.get(r).name)});
-                ctx.msg.channel.createMessage(infoBlock(member, roles, roleColour)).then(()=> resolve()).catch(err => ([err]));
+                ctx.msg.channel.createMessage(infoBlock(member, roles, roleColour)).then(resolve).catch(reject);
             }
         });
     }

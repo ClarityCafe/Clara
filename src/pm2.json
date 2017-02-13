@@ -5,6 +5,8 @@
     "out_file": "./logs/out.log",
     "log_date_format": "YYYY-MM-DD HH:mm Z",
     "watch": true,
+    "exec_mode" : "cluster",
+    "max_memory_restart" : "200M",
     "ignore_watch": ["data", "logs", "commands", "cache"],
     "args": ["--color"]
 }

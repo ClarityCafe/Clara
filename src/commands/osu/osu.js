@@ -51,21 +51,15 @@ exports.osu = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage('Please give me a name to search with.').then(() => {
-                    reject([new Error('No arguments were given.')]);
-                }).catch(err => reject([err]));
+                ctx.msg.channel.createMessage('Please give me a name to search with.').then(resolve).catch(reject);
             } else {
                 ctx.msg.channel.sendTyping();
                 osu.get_user({u: ctx.suffix}, res => {
                     var user = res[0];
-                    if (user == undefined || user.user_id == undefined) {
-                        ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(() => {
-                            reject([new Error('User was not found.')]);
-                        }).catch(err => reject([err]));
+                    if (!user || !user.user.id) {
+                        ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(resolve).catch(reject);
                     } else {
-                        ctx.msg.channel.createMessage(osuBlock(user)).then(() => {
-                            resolve();
-                        }).catch(err => reject([err]));
+                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
                     }
                 });
             }
@@ -80,21 +74,15 @@ exports.ctb = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage('Please give me a name to search with.').then(() => {
-                    reject([new Error('No arguments were given.')]);
-                }).catch(err => reject([err]));
+                ctx.msg.channel.createMessage('Please give me a name to search with.').then(resolve).catch(reject);
             } else {
                 ctx.msg.channel.sendTyping();
                 osu.get_user({u: ctx.suffix, m: 2}, res => {
                     var user = res[0];
-                    if (user == undefined || user.user_id == undefined) {
-                        ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(() => {
-                            reject([new Error('User was not found.')]);
-                        }).catch(err => reject([err]));
+                    if (!user || !user.user_id) {
+                        ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(resolve).catch(reject);
                     } else {
-                        ctx.msg.channel.createMessage(osuBlock(user)).then(() => {
-                            resolve();
-                        }).catch(err => reject([err]));
+                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
                     }
                 });
             }
@@ -109,21 +97,15 @@ exports.mania = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage('Please give me a name to search with.').then(() => {
-                    reject([new Error('No arguments were given.')]);
-                }).catch(err => reject([err]));
+                ctx.msg.channel.createMessage('Please give me a name to search with.').then(resolve).catch(reject);
             } else {
                 ctx.msg.channel.sendTyping();
                 osu.get_user({u: ctx.suffix, m: 3}, res => {
                     var user = res[0];
-                    if (user == undefined || user.user_id == undefined) {
-                        ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(() => {
-                            reject([new Error('User was not found.')]);
-                        }).catch(err => reject([err]));
+                    if (!user || !user.user_id) {
+                        ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(resolve).catch(reject);
                     } else {
-                        ctx.msg.channel.createMessage(osuBlock(user)).then(() => {
-                            resolve();
-                        }).catch(err => reject([err]));
+                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
                     }
                 });
             }
@@ -138,21 +120,15 @@ exports.taiko = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage('Please give me a name to search with.').then(() => {
-                    reject([new Error('No arguments were given.')]);
-                }).catch(err => reject([err]));
+                ctx.msg.channel.createMessage('Please give me a name to search with.').then(resolve).catch(reject);
             } else {
                 ctx.msg.channel.sendTyping();
                 osu.get_user({u: ctx.suffix, m: 1}, res => {
                     var user = res[0];
-                    if (user == undefined || user.user_id == undefined) {
-                        ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(() => {
-                            reject([new Error('User was not found.')]);
-                        }).catch(err => reject([err]));
+                    if (!user || !user.user_id) {
+                        ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(resolve).catch(reject);
                     } else {
-                        ctx.msg.channel.createMessage(osuBlock(user)).then(() => {
-                            resolve();
-                        }).catch(err => reject([err]));
+                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
                     }
                 });
             }

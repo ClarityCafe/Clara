@@ -19,19 +19,13 @@ exports.kick = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (!ctx.msg.member.permission.has('kickMembers')) {
-                ctx.msg.channel.createMessage('You require the **Kick Members** permission to execute this command.').then(() => {
-                    reject([new Error('User does not have sufficient permission.')]);
-                }).catch(err => reject([err]));
+                ctx.msg.channel.createMessage('You require the **Kick Members** permission to execute this command.').then(resolve).catch(reject);
             } else {
                 if (!ctx.guildBot.permission.has('kickMembers')) {
-                    ctx.msg.channel.createMessage('I do not have the **Kick Members** permission.').then(() => {
-                        reject([new Error('Bot does not have sufficient permission.')]);  
-                    }).catch(err => reject([err]));
+                    ctx.msg.channel.createMessage('I do not have the **Kick Members** permission.').then(resolve).catch(reject);
                 } else {
                     if (ctx.msg.mentions.length === 0) {
-                        ctx.msg.channel.createMessage('Please mention at least one user to kick.').then(() => {
-                            reject([new Error('No users mentioned to kick.')]);
-                        }).catch(err => reject([err]));
+                        ctx.msg.channel.createMessage('Please mention at least one user to kick.').then(resolve).catch(reject);
                     } else {
                         var promises = [];
                         for (u of ctx.msg.mentions) {
@@ -55,7 +49,7 @@ exports.kick = {
                                 ctx.msg.channel.createMessage('Skipping over self mention.');
                             }
                         }
-                        Promise.all(promises).then(kicked => ctx.msg.channel.createMessage(`Kicked ${kicked.length === 0 ? 'no one.' : kicked.length + ` ${kicked.length === 1 ? 'user' : 'users'}.`}`).then(() => resolve()).catch(err => reject([err])));
+                        Promise.all(promises).then(kicked => ctx.msg.channel.createMessage(`Kicked ${kicked.length === 0 ? 'no one.' : kicked.length + ` ${kicked.length === 1 ? 'user' : 'users'}.`}`).then(resolve).catch(reject));
                     }
                 }
             }
@@ -70,19 +64,15 @@ exports.ban = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (!ctx.msg.member.permission.has('banMembers')) {
-                ctx.msg.channel.createMessage('You require the **Ban Members** permission to execute this command.').then(() => {
-                    reject([new Error('User does not have sufficient permission.')]);
-                }).catch(err => reject([err]));
+                ctx.msg.channel.createMessage('You require the **Ban Members** permission to execute this command.').then(resolve).catch(reject);
             } else {
                 if (!ctx.guildBot.permission.has('banMembers')) {
                     ctx.msg.channel.createMessage('I do not have the **Ban Members** permission.').then(() => {
                         reject([new Error('Bot does not have sufficient permission.')]);  
-                    }).catch(err => reject([err]));
+                    }).catch(reject);
                 } else {
                     if (ctx.msg.mentions.length === 0) {
-                        ctx.msg.channel.createMessage('Please mention at least one user to ban.').then(() => {
-                            reject([new Error('No users mentioned to ban.')]);
-                        }).catch(err => reject([err]));
+                        ctx.msg.channel.createMessage('Please mention at least one user to ban.').then(resolve).catch(reject);
                     } else {
                         var promises = [];
                         ctx.msg.mentions.forEach(u => {
@@ -106,7 +96,7 @@ exports.ban = {
                                 ctx.msg.channel.createMessage('Skipping over self mention.');
                             }
                         });
-                        Promise.all(promises).then(banned => ctx.msg.channel.createMessage(`Banned ${banned.length === 0 ? 'no one.' : banned.length + ` ${banned.length === 1 ? 'user' : 'users'}.`}`).then(() => resolve()).catch(err => reject([err])));
+                        Promise.all(promises).then(banned => ctx.msg.channel.createMessage(`Banned ${banned.length === 0 ? 'no one.' : banned.length + ` ${banned.length === 1 ? 'user' : 'users'}.`}`).then(resolve).catch(reject));
                     }
                 }
             }

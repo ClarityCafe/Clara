@@ -30,21 +30,19 @@ exports.help = {
                 }
                 helpTxt += '```\nIf you need support or have suggestions for features of Nodetori, join the Discord server. https://discord.gg/rmMTZue';
                 ctx.msg.channel.createMessage('Sending the help message to your DMs').then(() => {
-                    ctx.msg.author.getDMChannel().then(dm => {
-                        dm.createMessage(helpTxt).then(() => resolve()).catch(reject);
-                    }).catch(reject);
-                });
+                    return ctx.msg.author.getDMChannel();
+                }).then(dm => {
+                    return dm.createMessage(helpTxt);
+                }).then(resolve).catch(reject);
             } else {
                 if (!bot.commands[ctx.args[0]]) {
-                    ctx.msg.channel.createMessage('That command does not exist. Make sure to check your spelling.').then(() => {
-                        reject([new Error('Command does not exist.')]);
-                    }).catch(err => reject[err]);
+                    ctx.msg.channel.createMessage('That command does not exist. Make sure to check your spelling.').then(resolve).catch(reject);
                 } else {
                     let cmd = bot.commands[ctx.args[0]];
                     var cmdHelp = '```armasm\n';
                     cmdHelp += `"${ctx.args[0]}"${cmd.usage ? ` ${cmd.usage}` : ''} - "${cmd.fullDesc ? cmd.fullDesc : cmd.desc}"\n`;
                     cmdHelp += '```';
-                    ctx.msg.channel.createMessage(cmdHelp).then(() => resolve()).catch(err => resolve([err]));
+                    ctx.msg.channel.createMessage(cmdHelp).then(resolve).catch(reject);
                 }
             }
         });

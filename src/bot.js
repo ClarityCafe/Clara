@@ -68,7 +68,7 @@ bot.logger = logger;
 bot.commands = commandsMod.commands;
 bot.config = config;
 bot.music = {
-    skips : new Eris.Collection(Object),
+    skips: new Eris.Collection(Object),
     queues: new Eris.Collection(Object),
     current: new Eris.Collection(Object)
 };
@@ -79,19 +79,27 @@ function loggerPrefix(msg) {
 }
 
 function handleCmdErr(msg, cmd, err) {
-    if (err == undefined || (err instanceof Array && err[0] == undefined)) return;
-    if (err instanceof Array) {
-        logger.warn(loggerPrefix(msg) + `Error when running command '${cmd}':\n${config.debug ? err[0].stack : err[0]}`);
+    if (err.response) var resp = JSON.parse(err.response);
+    if (resp && resp.code === 50013) {
+        logger.warn(`Can't send message in '#${msg.channel.name}' (${msg.channel.id}), cmd from user '${utils.formatUsername(msg.author)}' (${msg.author.id})`);
+        msg.author.getDMChannel().then(dm => {
+            console.log(dm.id);
+            return dm.createMessage(`It appears I was unable to send a message in \`#${msg.channel.name}\` on the server \`${msg.channel.guild.name}\`. Please give me the Send Messages permission or notify a mod or admin if you cannot do this.`);
+        }).catch(() => logger.warn(`Couldn't get DM channel for/send DM to ${utils.formatUsername(msg.author)} (${msg.author.id})`));
+    } else if (resp && resp.code !== 50013) {
+        logger.warn(loggerPrefix(msg) + `Discord error running command "${cmd}":\n:${config.debug ? err.stack : err}`);
+        let m = `Discord error while trying to execute \`${cmd}\`\n`;
+        m += '```js\n';
+        m += `Code: ${resp.code}. Message: ${resp.message}\n`;
+        m += '```';
+        msg.channel.createMessage(m);
     } else {
-        logger.warn(loggerPrefix(msg) + `Error when running command '${cmd}':\n${config.debug ? err.stack : err}`);
-    }
-
-    if (!(err instanceof Array)) {
-        var errMsg = `Unexpected error while executing command '${cmd}'\n`;
-        errMsg += '```js\n';
-        errMsg += err + '\n';
-        errMsg += '```';
-        msg.channel.createMessage(errMsg);
+        logger.error(loggerPrefix(msg) + `Error running command "${cmd}":\n${config.debug ? err.stack : err}`);
+        let m = `Experienced error while executing \`${cmd}\`\n`;
+        m += '```js\n';
+        m += err + '\n';
+        m += '```';
+        msg.channel.createMessage(m);
     }
 }
 
@@ -114,23 +122,23 @@ bot.awaitMessage = (channelID, userID, filter=function(){return true;}, timeout=
             var onCrtWrap = (msg) => {
                 var res = onCrt(msg);
                 if (responded) {
-                    knife.removeListener('messageCreate', onCrtWrap);
+                    bot.removeListener('messageCreate', onCrtWrap);
                     clearInterval(rmvTimeout);
                     resolve(res);
                 } 
             };
 
-            knife.on('messageCreate', onCrtWrap);
+            bot.on('messageCreate', onCrtWrap);
 
             rmvTimeout = setTimeout(() => {
                 if (!responded) {
-                    knife.removeListener('messageCreate', onCrtWrap);
-                    reject(new Error('Message await expired.'))
+                    bot.removeListener('messageCreate', onCrtWrap);
+                    reject(new Error('Message await expired.'));
                 }
             }, timeout);
         }
     });
-}
+};
 
 // Init
 bot.on('ready', () => {

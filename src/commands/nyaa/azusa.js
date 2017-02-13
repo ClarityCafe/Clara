@@ -23,7 +23,7 @@ exports.nyaa = {
                     reject(new Error(`Unexpected status code for random.cat: ${res.statusCode}`));
                 } else {
                     var kitty = JSON.parse(body).file;
-                    ctx.msg.channel.createMessage(kitty).then(() => resolve()).catch(reject);
+                    ctx.msg.channel.createMessage(kitty).then(resolve).catch(reject);
                 }
             });
         });

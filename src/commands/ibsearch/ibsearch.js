@@ -42,7 +42,7 @@ exports.ibsearch = {
                     } else {
                         var results = JSON.parse(body);
                         if (results.length === 0) {
-                            ctx.msg.channel.createMessage('No results found.').then(() => resolve()).catch(err => reject([err]));
+                            ctx.msg.channel.createMessage('No results found.').then(resolve).catch(reject);
                         } else {
                             var item = results[Math.floor(Math.random() * results.length)];
                             var imgURL = `https://${item.server}.ibsear.ch/resize/${item.path}?width=${Number(item.width) > 1000 ? Math.floor(Number(item.width) / 2) : item.width}&height=${Number(item.width) > 1000 ? Math.floor(Number(item.height) / 2) : item.height}`;
@@ -63,7 +63,7 @@ exports.ibsearch = {
                                                     {name: 'Tags', value: item.tags.replace(/_/g, '\_')}
                                                 ],
                                                 footer: {text: `Time First Indexed by IbSearch: ${moment.unix(item.found).format('dddd Do MMMM Y')} at ${moment.unix(item.found).format('HH:mm:ss A')}`}
-                                            }}).then(() => resolve()).catch(err => reject([err]));
+                                            }}).then(resolve).catch(reject);
                                         });
                                     }
                                 });
@@ -89,7 +89,7 @@ exports.ibsearch = {
                     } else {
                         var results = JSON.parse(body);
                         if (results.length === 0) {
-                            ctx.msg.channel.createMessage('No results found.').then(() => resolve()).catch(err => reject([err]));
+                            ctx.msg.channel.createMessage('No results found.').then(resolve).catch(reject);
                         } else {
                             var item = results[Math.floor(Math.random() * results.length)];
                             var imgURL = `https://${item.server}.ibsear.ch/resize/${item.path}?width=${Number(item.width) > 1000 ? Math.floor(Number(item.width) / 2) : item.width}&height=${Number(item.width) > 1000 ? Math.floor(Number(item.height) / 2) : item.height}`;
@@ -110,7 +110,7 @@ exports.ibsearch = {
                                                     {name: 'Tags', value: item.tags.replace(/_/g, '\_')}
                                                 ],
                                                 footer: {text: `Time First Indexed by IbSearch: ${moment.unix(item.found).format('dddd Do MMMM Y')} at ${moment.unix(item.found).format('HH:mm:ss A')}`}
-                                            }}).then(() => resolve()).catch(err => reject([err]));
+                                            }}).then(resolve).catch(reject);
                                         });
                                     }
                                 });

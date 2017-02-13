@@ -1,2 +1,0 @@
-C:\Users\Krystal\Documents\owo-whats-this\obj\Debug\owo-dev.njsprojResolveAssemblyReference.cache
-C:\Users\Krystal\Documents\owo-whats-this\bin\Microsoft.NodejsTools.WebRole.dll

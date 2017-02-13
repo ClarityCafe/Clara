@@ -26,27 +26,23 @@ exports.prefixes = {
                 prfxTxt += '```js\n';
                 prfxTxt += `'${prefixes.join("',\n'")}'\n`;
                 prfxTxt += '```';
-                ctx.msg.channel.createMessage(prfxTxt).then(() => resolve()).catch(err => reject([err]));
+                ctx.msg.channel.createMessage(prfxTxt).then(resolve).catch(reject);
             } else {
                 if (!utils.isOwner(ctx.msg.author.id) || !utils.isAdmin(ctx.msg.author.id)) {
-                    ctx.msg.channel.createMessage('You do not have permission to do that.').then(() => {
-                        reject([new Error('User is not owner or bot admin.')]);
-                    }).catch(err => reject([err]));
+                    ctx.msg.channel.createMessage('You do not have permission to do that.').then(resolve).catch(reject);
                 } else {
                     if (ctx.args[0] === 'add') {
                         let prefixes = JSON.parse(fs.readFileSync(`${__baseDir}/data/prefixes.json`));
                         ctx.args.shift();
                         if ((ctx.args.join(' ') === bot.config.mainPrefix || ctx.args.join(' ') === '@mention') || prefixes.indexOf(ctx.args.join(' ')) !== -1) {
-                            ctx.msg.channel.createMessage('That prefix already exists').then(() => {
-                                reject([new Error('Prefix already exists.')]);
-                            }).catch(err => reject([err]));
+                            ctx.msg.channel.createMessage('That prefix already exists').then(resolve).catch(reject);
                         } else {
                             prefixes.push(ctx.args.join(' '));
                             fs.writeFile(`${__baseDir}/data/prefixes.json`, JSON.stringify(prefixes), err => {
                                 if (err) {
                                     reject(err);
                                 } else {
-                                    ctx.msg.channel.createMessage(`Prefix \`${ctx.args.join(' ')}\` successfully added.`).then(() => resolve()).catch(err => reject([err]));
+                                    ctx.msg.channel.createMessage(`Prefix \`${ctx.args.join(' ')}\` successfully added.`).then(resolve).catch(reject);
                                 }
                             });
                         }
@@ -54,20 +50,16 @@ exports.prefixes = {
                         let prefixes = JSON.parse(fs.readFileSync(`${__baseDir}/data/prefixes.json`));
                         ctx.args.shift();
                         if (ctx.args.join(' ') === bot.config.mainPrefix || ctx.args.join(' ') === '@mention') {
-                            ctx.msg.channel.createMessage('You cannot remove an internal prefix.').then(() => {
-                                reject([new Error('User tried to remove internal prefix.')]);
-                            }).catch(err => reject([err]));
+                            ctx.msg.channel.createMessage('You cannot remove an internal prefix.').then(resolve).catch(reject);
                         } else if (prefixes.indexOf(ctx.args.join(' ')) === -1) {
-                            ctx.msg.channel.createMessage('That prefix does not exist').then(() => {
-                                reject([new Error('Prefix does not exist')]);
-                            }).catch(err => reject([err]));
+                            ctx.msg.channel.createMessage('That prefix does not exist').then(resolve).catch(reject);
                         } else {
                             prefixes.splice(prefixes.indexOf(ctx.args.join(' ')), 1);
                             fs.writeFile(`${__baseDir}/data/prefixes.json`, JSON.stringify(prefixes), err => {
                                 if (err) {
                                     reject(err);
                                 } else {
-                                    ctx.msg.channel.createMessage(`Prefix \`${ctx.args.join(' ')}\` successfully removed.`).then(() => resolve()).catch(err => reject([err]));
+                                    ctx.msg.channel.createMessage(`Prefix \`${ctx.args.join(' ')}\` successfully removed.`).then(resolve).catch(reject);
                                 }
                             });
                         }

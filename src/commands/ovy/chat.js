@@ -15,10 +15,7 @@ const ayano = new Cleverbot('t77jVhrskGDT6Dm1', 'XKmJ3XW1dQwVJVXpWfODAUQ5qKucD6t
 
 ayano.setNick(`kotori-io-${config.ownerID}`);
 
-ayano.create((err, session) => {
-    // * left empty for now
-    // *
-});
+ayano.create((err, session) => {});
 
 exports.talk = {
     desc: 'chat with the bot',
@@ -26,11 +23,11 @@ exports.talk = {
     usage: '<message>',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            if (ctx.suffix === 0) {
-                ctx.msg.channel.createMessage('I-Its not like I want to talk with you or anything.... b-baka! >//>').then(() => reject([new Error('no message provided')])).catch(err => ([err]));
+            if (!ctx.suffix) {
+                ctx.msg.channel.createMessage('I-Its not like I want to talk with you or anything.... b-baka! >//>').then(resolve).catch(reject);
             } else {
                 ayano.ask(ctx.suffix, (err, response) => {
-                    ctx.msg.channel.createMessage(response).then(() => resolve()).catch(err => ([err]));
+                    ctx.msg.channel.createMessage(response).then(resolve).catch(reject);
                 });
             }
         });

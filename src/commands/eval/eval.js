@@ -47,14 +47,14 @@ exports.eval = {
                     sentMessage += `Output: ${str}\n`;
                     sentMessage += '```';
 
-                    ctx.msg.channel.createMessage(sentMessage).then(() => resolve()).catch(err => reject([err]));
+                    ctx.msg.channel.createMessage(sentMessage).then(resolve).catch(reject);
                 } catch(err) {
                     var errMessage = '```js\n';
                     errMessage += `Input: ${evalArgs}\n\n`;
                     errMessage += `${err}\n`;
                     errMessage += '```';
 
-                    ctx.msg.channel.createMessage(errMessage).then(() => reject([err])).catch(e => reject([e]));
+                    ctx.msg.channel.createMessage(errMessage).then(resolve).catch(reject);
                 }
             }
         });

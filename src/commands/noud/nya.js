@@ -3,7 +3,6 @@
 // *
 // * contributed by Capuccino
 
-
 const cats  = require('cat-ascii-faces');
 
 exports.commands = [
@@ -16,7 +15,7 @@ exports.cat = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             var cat = cats();
-            ctx.msg.channel.createMessage(cat).then(() => resolve()).catch(err => ([err]));
+            ctx.msg.channel.createMessage(cat).then(resolve).catch(reject);
         });
     }
 };

@@ -27,12 +27,10 @@ exports.ball = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage('Ask somethng first.').then(() => {
-                    reject([new Error('No Question Given!')]);
-                }).catch(err => ([err]));
+                ctx.msg.channel.createMessage('Ask somethng first.').then(resolve).catch(reject);
             } else if (ctx.suffix) {
                 var response = responses[Math.floor(Math.random() * responses.length)];
-                ctx.msg.channel.createMessage(response).then(() => resolve ()).catch(err => ([err]));
+                ctx.msg.channel.createMessage(response).then(resolve).catch(reject);
             }
         });
     }
