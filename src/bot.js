@@ -133,12 +133,12 @@ bot.awaitMessage = (channelID, userID, filter=function(){return true;}, timeout=
             rmvTimeout = setTimeout(() => {
                 if (!responded) {
                     bot.removeListener('messageCreate', onCrtWrap);
-                    reject(new Error('Message await expired.'))
+                    reject(new Error('Message await expired.'));
                 }
             }, timeout);
         }
     });
-}
+};
 
 // Init
 bot.on('ready', () => {
