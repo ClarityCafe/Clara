@@ -21,13 +21,14 @@ exports.spacenews = {
                         reject( new Error(`Invalid Response! Expected JSON Response, got code ${res.statusCode} instead.`));
                     }).catch(err => (err));
                 } else {
+                    let pioneer = JSON.parse(body);
                     ctx.msg.channel.createMessage({embed : {
-                        title: JSON.parse(body.title),
+                        title: pioneer.title,
                         thumbnail:{url: 'https://api.nasa.gov/images/logo.png', width: 150, height : 150},
                         color: 0xFD7BB5 ,//placeholder,
                         fields : [
-                            {name: 'image', value: JSON.parse(body.hdurl)},
-                            {name: '', value: JSON.parse((body.explanation))}
+                            {name: 'image', value: pioneer.hdurl},
+                            {name: '', value: pioneer.explanation}
                         ],
                         footer : {text: `Retrieved using NASA Open API. Retrieved ${JSON.parse(body.date)}.`}
                     }}).then(() => resolve).catch(err => err);
