@@ -19,7 +19,7 @@ function infoBlock(member, roles, color) {
         author: {name: utils.formatUsername(member.user), icon_url: member.bot ? 'https://cdn.discordapp.com/emojis/230105988211015680.png' : ''},
         description: `**[Full Avatar](${avatar.replace('size=256', 'size=1024')})**`,
         thumbnail: {url: avatar, width: 128, height: 128},
-        color: color,
+        color: 0xFD7BB5,
         fields: [
             {name: 'Nickname', value: member.nick || 'None', inline: true}, 
             {name: 'ID', value: member.id, inline: true},
