@@ -4,12 +4,12 @@
 // * Contributed by Capuccino
 
 exports.commands = [
-    'spacenews'
+    'apod'
 ];
 
 const voyager = require('request');
 
-exports.spacenews = {
+exports.apod = {
     desc: 'returns the latest news from NASA',
     main: (bot,ctx) => {
         return new Promise((resolve,reject) => {
