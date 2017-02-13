@@ -62,6 +62,10 @@ out
 .project
 data.json 
 
+# Visual Studio Files
+obj
+bin
+
 # Nodetori files    
 src/config.json
 /data
