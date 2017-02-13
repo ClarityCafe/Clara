@@ -8,6 +8,7 @@ exports.commands = [
     'shutdown'
 ];
 
+const pm2 = require('pm2');
 const cp = require('child_process');
 
 // * This command is made exclusively for the public bot.
