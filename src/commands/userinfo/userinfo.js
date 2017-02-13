@@ -13,12 +13,12 @@ exports.commands = [
 ];
 
 function infoBlock(member, roles, color) {
-    var avatar = member.avatarURL.replace('images.discordapp.net' , 'cdn.discordapp.com') + '?size=1024';
+    var avatar = member.avatarURL + '?size=1024';
     avatar.indexOf('a_') !== -1 ? avatar = avatar.replace('.png', '.gif', '.webp') : null;
     return {embed: {
         author: {name: utils.formatUsername(member.user), icon_url: member.bot ? 'https://cdn.discordapp.com/emojis/230105988211015680.png' : ''},
         description: `**[Full Avatar](${avatar.replace('size=256', 'size=1024')})**`,
-        thumbnail: {url: avatar, width: 1024, height: 1024},
+        thumbnail: {url: avatar},
         color: color,
         fields: [
             {name: 'Nickname', value: member.nick || 'None', inline: true}, 
