@@ -14,7 +14,7 @@ exports.commands = [
 
 function infoBlock(member, roles, color) {
     var avatar = member.avatarURL.replace('cdn.discordapp.com', 'images.discordapp.net') + '?size=256';
-    avatar.indexOf('a_') !== -1 ? avatar = avatar.replace('.jpg', '.gif') : null;
+    avatar.indexOf('a_') !== -1 ? avatar = avatar.replace('.png', '.gif') : null;
     return {embed: {
         author: {name: utils.formatUsername(member.user), icon_url: member.bot ? 'https://cdn.discordapp.com/emojis/230105988211015680.png' : ''},
         description: `**[Full Avatar](${avatar.replace('size=256', 'size=1024')})**`,
