@@ -56,7 +56,7 @@ exports.play = {
             }
         });
     }
-}
+};
 
 function ytRegex(str) {return /https?:\/\/(www\.)?youtube\.com\/watch\?v=.+(&.+)?/.test(str) || /https?:\/\/youtu\.be\/.+/.test(str)}
 
