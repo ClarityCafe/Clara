@@ -15,5 +15,6 @@ ratings:
   - "**.js"
 exclude_paths:
 - data/*
-- example/*
+- example/*.json
+- example/*.json.example
 - res/*
