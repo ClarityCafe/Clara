@@ -27,7 +27,8 @@
     "eslint": "^3.15.0",
     "jasmine": "^2.5.3",
     "npm": "^4.2.0",
-    "weather-js": "^1.0.2"
+    "weather-js": "^1.0.2",
+    "yamljs": "^0.2.8"
   },
   "devDependencies": {
     "tslint": "^4.4.2",

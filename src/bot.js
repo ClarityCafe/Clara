@@ -11,6 +11,9 @@
 // Framework imports
 const Eris = require('eris');
 const fs = require('fs');
+const YAML = require('yamljs');
+
+// global YAML parser 
 
 global.__baseDir = __dirname;
 global.Promise = require('bluebird');
@@ -22,6 +25,9 @@ const commandsMod = require(`${__dirname}/lib/commands`);
 const utils = require(`${__dirname}/lib/utils`);
 
 // Setup stuff
+const config2 = `${__dirname}/sample.yaml`;
+const testString = YAML.load(config2);
+console.log(YAML.stringify(testString));
 const config = require(`${__dirname}/config.json`);
 const bot = new Eris(config.token, {
     autoreconnect: true,
