@@ -48,8 +48,8 @@ exports.play = {
                         } else if (ytRegex(ctx.suffix)) {
                             play(ctx.msg, ctx.suffix).then(resolve).catch(reject);
                         }
-                    } else if (bot.music.queues.get(msg.channel.guild.id)) {
-                        let q = bot.music.queues.get(msg.channel.guild.id).q;
+                    } else if (bot.music.queues.get(ctx.msg.channel.guild.id)) {
+                        let q = bot.music.queues.get(ctx.msg.channel.guild.id).q;
                         play(q[0].msg, q[0].url).then(resolve).catch(reject);
                     }
                 }
