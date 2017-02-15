@@ -12,7 +12,7 @@ function cmd(message) {
     console.log(`${chalk.bgMagenta('cmd')} ${chalk.magenta(message)}`);
 }
 // * used for non-fatal errors
-// * @prop {String} message 
+// * @prop {String} message your message
 function warn(message) {
     console.log(`${chalk.bgYellow('warn')} ${chalk.yellow(message)}`);
 }

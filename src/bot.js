@@ -32,6 +32,7 @@ function getAuthToken () {
         return JsonToken.token;
     } catch(err) {
         //if JSON is undefined, we'll parse YAML then
+        logger.warn('JSON not found!, checking for YAML...');
         let YAMLConfig = `${__dirname}/config.yml`;
         YAML.load(YAMLConfig);
         return YAML.parse(YAMLConfig.token);
@@ -262,3 +263,4 @@ bot.on('voiceChannelSwitch', (mem, chan, old) => {
 });
 
 bot.connect();
+
