@@ -223,3 +223,4 @@ bot.on('shardDisconnect', (err,shard) => {
 });
 
 bot.connect();
+bot.shard.connect();
