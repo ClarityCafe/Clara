@@ -93,7 +93,7 @@ function search(msg, terms) {
                     msg.channel.createMessage('No results found.').then(resolve).catch(reject);
                 }
             }
-        })
+        });
     });
 }
 
