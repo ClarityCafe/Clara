@@ -154,7 +154,6 @@ bot.on('ready', () => {
         }).catch(err => {
             console.error(`Experienced error while loading commands:\n${config.debug ? err.stack : err}`);
         });
-        Eris.Shard.connect();
     } else {
         logger.info('Reconnected to Discord from disconnect.');
     }
@@ -223,4 +222,6 @@ bot.on('shardDisconnect', (err,shard) => {
     if (err) logger.customError('shard/shardStatus', `shard${shard} disconnected. Reason ${err}`);
 });
 
+
 bot.connect();
+
