@@ -73,3 +73,7 @@ prefixes.json
 /.idea/workspace.xml
 src/data/
 data.json
+
+#experimental files
+
+src/config.yaml

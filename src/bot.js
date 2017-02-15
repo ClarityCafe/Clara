@@ -25,9 +25,9 @@ const commandsMod = require(`${__dirname}/lib/commands`);
 const utils = require(`${__dirname}/lib/utils`);
 
 // Setup stuff
-const config2 = `${__dirname}/sample.yaml`;
-const testString = YAML.load(config2);
-console.log(YAML.stringify(testString));
+const newConfig = YAML.load(`${__dirname}/config.yaml`);
+const newToken = YAML.parse(newConfig.token);
+logger.info(YAML.parse(newConfig.token));
 const config = require(`${__dirname}/config.json`);
 const bot = new Eris(config.token, {
     autoreconnect: true,
