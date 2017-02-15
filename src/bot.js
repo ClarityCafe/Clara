@@ -24,12 +24,23 @@ const logger = require(`${__dirname}/lib/logger`);
 const commandsMod = require(`${__dirname}/lib/commands`);
 const utils = require(`${__dirname}/lib/utils`);
 
+//Auth Function 
+function getAuthToken () {
+    try {
+        // let's parse our JSON first
+        let JsonToken = require(`${__dirname}/config.json`);
+        return JsonToken.token;
+    } catch(err) {
+        //if JSON is undefined, we'll parse YAML then
+        let YAMLConfig = `${__dirname}/config.yml`;
+        YAML.load(YAMLConfig);
+        return YAML.parse(YAMLConfig.token);
+    }
+}
+
 // Setup stuff
-const newConfig = YAML.load(`${__dirname}/config.yaml`);
-const newToken = YAML.parse(newConfig.token);
-logger.info(YAML.parse(newConfig.token));
 const config = require(`${__dirname}/config.json`);
-const bot = new Eris(config.token, {
+const bot = new Eris(getAuthToken, {
     autoreconnect: true,
     disableEvents: {
         TYPING_START: true
