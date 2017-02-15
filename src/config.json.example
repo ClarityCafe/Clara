@@ -14,8 +14,8 @@
   "_comment_ownerID": "your own ID. Needed if you need exclusive access",
   "ownerID": "",
 
-  "_comment_owoKey": "owo-whats-th.is key",
-  "owoKey": "",
+  "_comment_ytSearchKey": "Key to use youtube search in music.",
+  "ytSearchKey": "",
 
   "_comment_token": "your Bot token",
   "token": ""

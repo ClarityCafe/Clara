@@ -26,9 +26,7 @@ const config = require(`${__dirname}/config.json`);
 const bot = new Eris(config.token, {
     autoreconnect: true,
     disableEvents: {
-        TYPING_START: true,
-        PRESENCE_UPDATE: true,
-        VOICE_STATE_UPDATE: true
+        TYPING_START: true
     }
 });
 var loadCommands = true;
@@ -70,7 +68,9 @@ bot.config = config;
 bot.music = {
     skips: new Eris.Collection(Object),
     queues: new Eris.Collection(Object),
-    current: new Eris.Collection(Object)
+    channels: new Eris.Collection(Eris.Channel),
+    guilds: new Eris.Collection(Eris.Guild),
+    connections: new Eris.Collection(Eris.VoiceConnection)
 };
 
 // Functions
@@ -220,6 +220,28 @@ bot.on('disconnect', () => {
 });
 bot.on('shardDisconnect', (err,shard) => {
     if (err) logger.customError('shard/shardStatus', `shard${shard} disconnected. Reason ${err}`);
+});
+
+// Music shit
+bot.on('voiceChannelJoin', (mem, chan) => {
+    if (mem.id !== bot.user.id) return;
+    if (!bot.music.channels.get(chan.id)) bot.music.channels.add(chan);
+    if (!bot.music.guilds.get(chan.guild.id)) bot.music.guilds.add(chan.guild);
+});
+
+bot.on('voiceChannelLeave', (mem, chan) => {
+    if (mem.id !== bot.user.id) return;
+    if (bot.music.channels.get(chan.id)) bot.music.channels.remove(chan);
+    if (bot.music.guilds.get(chan.guild.id)) bot.music.guilds.remove(chan.guild);
+    if (bot.music.connections.get(chan.guild.id)) bot.music.connections.remove(chan.guild.id);
+});
+
+bot.on('voiceChannelSwitch', (mem, chan, old) => {
+    if (mem.id !== bot.user.id) return;
+    if (bot.music.channels.get(old.id)) {
+        bot.music.channels.remove(old);
+        bot.music.channels.add(chan);
+    }
 });
 
 bot.connect();
