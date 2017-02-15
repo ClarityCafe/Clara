@@ -24,6 +24,7 @@ const utils = require(`${__dirname}/lib/utils`);
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
 const bot = new Eris(config.token, {
+    maxShards: 2, // hardlimit to 2 since default is 1
     autoreconnect: true,
     disableEvents: {
         TYPING_START: true,
