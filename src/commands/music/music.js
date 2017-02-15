@@ -1,7 +1,7 @@
 /* 
  * music.js - Music commands.
  *
- * Contributed by Capuccino
+ * Contributed by Capuccino and Ovyerus
  */
 
 const ytdl = require('ytdl-core');
