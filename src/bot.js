@@ -222,6 +222,4 @@ bot.on('shardDisconnect', (err,shard) => {
     if (err) logger.customError('shard/shardStatus', `shard${shard} disconnected. Reason ${err}`);
 });
 
-
 bot.connect();
-
