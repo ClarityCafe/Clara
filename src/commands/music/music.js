@@ -6,7 +6,7 @@
 
 const ytdl = require('ytdl-core');
 const ytSearch = require('youtube-search');
-const utils = require(`${__baseDir}/lib/utils.js`);
+const utils = require(`${__baseDir}/lib/utils`);
 const Eris = require('eris');
 
 exports.commands = [
