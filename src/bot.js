@@ -41,7 +41,7 @@ function getAuthToken () {
 
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
-const bot = new Eris(getAuthToken, {
+const bot = new Eris(getAuthToken(), {
     autoreconnect: true,
     disableEvents: {
         TYPING_START: true
