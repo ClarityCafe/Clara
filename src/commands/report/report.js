@@ -17,12 +17,12 @@ exports.report = {
             if (ctx.msg.user.mention || !ctx.suffix) {
                 ctx.msg.channel.createMessage('Mention a user you want to report and put your reason in able to report!').then(() => {
                     reject(new Error('No User and Reason Specified'));
-                }).catch(err => reject(err));
+                }).catch(reject);
             } else if (ctx.msg.user.mention || ctx.suffix) {
                 ctx.msg.channel.createMessage('This has been reported to the proper authorities, Thanks for your cooperation!').then(() => {
                     logger.info(`${ctx.msg.author} fell for it!`);
                     resolve();
-                }).catch(err => reject(err));
+                }).catch(reject);
             }
         });
     }

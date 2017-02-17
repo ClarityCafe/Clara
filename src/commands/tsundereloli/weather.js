@@ -14,7 +14,7 @@ exports.weather = {
     usage: '<City, ie. Melbourne, Australia>',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            if (ctx.suffix === 0) {
+            if (!ctx.suffix) {
                 ctx.msg.channel.createMessage('No City Specified!').then(() => reject([new Error('no City Specified')])).catch(err => ([err]));
             } else {
                 weather.find({search : ctx.suffix, degreeType: 'C'}, (err, result) => {
