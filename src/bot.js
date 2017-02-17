@@ -88,7 +88,8 @@ bot.music = {
     queues: new Eris.Collection(Object),
     channels: new Eris.Collection(Eris.Channel),
     guilds: new Eris.Collection(Eris.Guild),
-    connections: new Eris.Collection(Eris.VoiceConnection)
+    connections: new Eris.Collection(Eris.VoiceConnection),
+    streams: new Eris.Collection(Object)
 };
 
 // Functions
@@ -104,7 +105,7 @@ function handleCmdErr(msg, cmd, err) {
             console.log(dm.id);
             return dm.createMessage(`It appears I was unable to send a message in \`#${msg.channel.name}\` on the server \`${msg.channel.guild.name}\`. Please give me the Send Messages permission or notify a mod or admin if you cannot do this.`);
         }).catch(() => logger.warn(`Couldn't get DM channel for/send DM to ${utils.formatUsername(msg.author)} (${msg.author.id})`));
-    } else if (resp && resp.code !== 50013) {
+    } else if (resp && /\{'code':.+, 'message':.+\}/.test(err.response) && resp.code !== 50013) {
         logger.warn(loggerPrefix(msg) + `Discord error running command "${cmd}":\n:${config.debug ? err.stack : err}`);
         let m = `Discord error while trying to execute \`${cmd}\`\n`;
         m += '```js\n';
@@ -237,7 +238,7 @@ bot.on('disconnect', () => {
     logger.warn('Disconnected from Discord.');
 });
 bot.on('shardDisconnect', (err,shard) => {
-    if (err) logger.customError('shard/shardStatus', `shard${shard} disconnected. Reason ${err}`);
+    if (err) logger.customError('shard/shardStatus', `Shard ${shard} disconnected. Reason ${err}`);
 });
 
 // Music shit
@@ -249,15 +250,21 @@ bot.on('voiceChannelJoin', (mem, chan) => {
 
 bot.on('voiceChannelLeave', (mem, chan) => {
     if (mem.id !== bot.user.id) return;
-    if (bot.music.channels.get(chan.id)) bot.music.channels.remove(chan);
-    if (bot.music.guilds.get(chan.guild.id)) bot.music.guilds.remove(chan.guild);
-    if (bot.music.connections.get(chan.guild.id)) bot.music.connections.remove(chan.guild.id);
+    if (bot.music.channels.get(chan.id)) bot.music.channels.delete(chan.id);
+    if (bot.music.guilds.get(chan.guild.id)) bot.music.guilds.delete(chan.guild.id);
+    if (bot.music.connections.get(chan.guild.id)) bot.music.connections.delete(chan.guild.id);
+    if (bot.music.queues.get(chan.guild.id)) bot.music.queues.delete(chan.guild.id);
+    if (bot.music.skips.get(chan.guild.id)) bot.music.skips.delete(chan.guild.id);
+    if (bot.music.streams.get(chan.guild.id)) {
+        bot.music.streams.get(chan.guild.id).stream.destroy();
+        bot.music.streams.delete(chan.guild.id);
+    }
 });
 
 bot.on('voiceChannelSwitch', (mem, chan, old) => {
     if (mem.id !== bot.user.id) return;
     if (bot.music.channels.get(old.id)) {
-        bot.music.channels.remove(old);
+        bot.music.channels.delete(old.id);
         bot.music.channels.add(chan);
     }
 });
