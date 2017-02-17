@@ -84,7 +84,7 @@ exports.queue = {
                         title: 'Music Queue',
                         description,
                         footer: {text: q.length - 10 > 0 ? `${q.length - 10} more items.` : ''}
-                    }
+                    };
 
                     ctx.msg.channel.createMessage({embed}).then(resolve).catch(reject);
                 }
@@ -109,7 +109,7 @@ exports.queue = {
             }
         });
     }
-}
+};
 
 exports.leave = {
     desc: 'Leaves voice channel and destroys all associated data.',
@@ -127,7 +127,7 @@ exports.leave = {
             }
         });
     }
-}
+};
 
 exports.stop = {
     desc: 'Stops playing music and (optionally) clears the queue.',
@@ -162,7 +162,7 @@ exports.stop = {
             }
         });
     }
-}
+};
 
 exports.join = {
     desc: 'Join a voice channel without playing anything.',
@@ -182,7 +182,7 @@ exports.join = {
             }
         });
     }
-}
+};
 
 exports.sources = {
     desc: 'View available music sources.',
@@ -264,7 +264,7 @@ exports.skip = {
             }
         });
     }
-}
+};
 
 function ytRegex(str) {return /https?:\/\/(www\.)?youtube\.com\/watch\?v=.+(&.+)?/.test(str) || /https?:\/\/youtu\.be\/.+/.test(str)}
 
