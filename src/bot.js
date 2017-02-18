@@ -173,6 +173,7 @@ bot.on('ready', () => {
         }).catch(err => {
             console.error(`Experienced error while loading commands:\n${config.debug ? err.stack : err}`);
         });
+        bot.setStatus('online', `Performing Live in ${bot.guilds.size}!`);
     } else {
         logger.info('Reconnected to Discord from disconnect.');
     }
