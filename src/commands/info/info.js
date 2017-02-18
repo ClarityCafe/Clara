@@ -7,10 +7,9 @@
 
 const os = require('os');
 const prettyBytes = require('pretty-bytes');
-const path = require('path');
 const fs = require('fs');
 const utils = require(`${__baseDir}/lib/utils.js`);
-const version = JSON.parse(fs.readFileSync(path.join(__baseDir, '../package.json'))).version;
+const version = JSON.parse(fs.readFileSync(`${__baseDir}/package.json`)).version;
 
 exports.commands = [
     'info'

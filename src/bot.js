@@ -177,6 +177,7 @@ bot.on('ready', () => {
     } else {
         logger.info('Reconnected to Discord from disconnect.');
     }
+    bot.editStatus('online',{name : `Spreading the love in ${bot.guilds.size} servers!`, type: 1, url: 'https://twitch.tv/osulive'});
 });
 
 bot.on ('shardReady', shard => {
@@ -185,6 +186,14 @@ bot.on ('shardReady', shard => {
 
 bot.on('shardResume', shard => {
     logger.custom('blue', 'shard/shardInfo', `shard ${shard} has resumed.`);
+});
+
+bot.on('onGuildJoin', () => {
+    bot.editStatus('online',{name : `Spreading the love in ${bot.guilds.size} servers!`, type: 1, url: 'https://twitch.tv/osulive'});
+});
+
+bot.on('onGuildLeave', () => {
+    bot.editStatus('online',{name : `Spreading the love in ${bot.guilds.size} servers!`, type: 1, url: 'https://twitch.tv/osulive'});
 });
 
 const prefixParser = require(`${__dirname}/lib/prefixParser.js`);
