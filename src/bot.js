@@ -173,10 +173,10 @@ bot.on('ready', () => {
         }).catch(err => {
             console.error(`Experienced error while loading commands:\n${config.debug ? err.stack : err}`);
         });
-        bot.editStatus('online', {name : `Spreading Love in ${bot.guilds.size}`, type : 1, url : 'https://twitch.tv/osulive'});
     } else {
         logger.info('Reconnected to Discord from disconnect.');
     }
+    bot.editStatus('online', {name :`Spreading Love in ${bot.guilds.size}`, type : 1, url : 'https://twitch.tv/osulive'});
 });
 
 bot.on ('shardReady', shard => {
@@ -188,11 +188,11 @@ bot.on('shardResume', shard => {
 });
 
 bot.on('onGuildJoin', () => {
-    bot.editStatus('online', {name : `Spreading Love in ${bot.guilds.size}`, type : 1, url : 'https://twitch.tv/osulive'});
+    bot.editStatus('online', {name :`Spreading Love in ${bot.guilds.size}`, type : 1, url : 'https://twitch.tv/osulive'});
 });
 
 bot.on('onGuildLeave', () => {
-    bot.editStatus('online', {name : `Spreading Love in ${bot.guilds.size}`, type : 1, url : 'https://twitch.tv/osulive'});
+    bot.editStatus('online', {name :`Spreading Love in ${bot.guilds.size}`, type : 1, url : 'https://twitch.tv/osulive'});
 });
 
 const prefixParser = require(`${__dirname}/lib/prefixParser.js`);
