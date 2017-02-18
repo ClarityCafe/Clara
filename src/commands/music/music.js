@@ -365,7 +365,7 @@ function play(msg, url) {
                         bot.music.streams.get(msg.channel.guild.id).stream.destroy();
                         bot.music.streams.delete(msg.channel.guild.id);
                     }
-                    if (q.length > 0) play(q[0].url, q[0].msg);
+                    if (q.length > 0) play(q[0].msg, q[0].url);
                     this.removeListener('end', onMusicEnd);
                 });
             }).then(resolve).catch(reject);
@@ -393,7 +393,7 @@ function play(msg, url) {
                     bot.music.streams.get(msg.channel.guild.id).stream.destroy();
                     bot.music.streams.delete(msg.channel.guild.id);
                 }
-                if (q.length > 0) play(q[0].url, q[0].msg);
+                if (q.length > 0) play(q[0].msg, q[0].url);
                 this.removeListener('end', onMusicEnd);
             });
 
