@@ -89,7 +89,8 @@ bot.music = {
     channels: new Eris.Collection(Eris.Channel),
     guilds: new Eris.Collection(Eris.Guild),
     connections: new Eris.Collection(Eris.VoiceConnection),
-    streams: new Eris.Collection(Object)
+    streams: new Eris.Collection(Object),
+    stopped: []
 };
 
 // Functions
