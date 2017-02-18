@@ -21,7 +21,7 @@ exports.restart = {
                 cp.exec('pm2 restart owo-whats-this', (stdout) => {
                     logger.info(stdout);
                 });
-            }).catch(err => reject([err]));
+            }).catch(reject);
         });
     }
 };
@@ -35,7 +35,7 @@ exports.shutdown = {
                 cp.exec('pm2 stop owo-whats-this', (stdout) => {
                     logger.info(stdout);
                 });
-            }).catch(err => reject([err]));
+            }).catch(reject);
         });
     }
 };
