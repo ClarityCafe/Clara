@@ -270,4 +270,3 @@ bot.on('voiceChannelSwitch', (mem, chan, old) => {
 });
 
 bot.connect();
-bot.editStatus('online',{name : `Performing Live in ${bot.guilds.size} servers!`, type: 1, url: 'https://twitch.tv/osulive'});
