@@ -56,7 +56,7 @@ exports.osu = {
                 ctx.msg.channel.sendTyping();
                 osu.get_user({u: ctx.suffix}, res => {
                     var user = res[0];
-                    if (!user || !user.user.id) {
+                    if (!user || !user.user_id) {
                         ctx.msg.channel.createMessage('A user with that name or ID could not be found.').then(resolve).catch(reject);
                     } else {
                         ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
