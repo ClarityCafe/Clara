@@ -278,3 +278,4 @@ bot.on('voiceChannelSwitch', (mem, chan, old) => {
 });
 
 bot.connect();
+ bot.editStatus('online', {game : `Spreading Love in ${bot.guilds.size}`, type : 1, url : 'https://twitch.tv/osulive'});
