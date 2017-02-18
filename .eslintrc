@@ -8,7 +8,8 @@
         "sourceType": "module"
     },
     "globals": {
-        "__baseDir": false
+        "__baseDir": false,
+        "logger" : false
     },
     "rules": {
         "no-console": 0,
