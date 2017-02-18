@@ -122,14 +122,6 @@ function handleCmdErr(msg, cmd, err) {
     }
 }
 
-bot.on('onGuildJoin', () => {
-    bot.editStatus('online', {game : `Spreading Love in ${bot.guilds.size}`, type : 1, url : 'https://twitch.tv/osulive'});
-});
-
-bot.on('onGuildLeave', () => {
-    bot.editStatus('online', {game : `Spreading Love in ${bot.guilds.size}`, type : 1, url : 'https://twitch.tv/osulive'});
-});
-
 bot.awaitMessage = (channelID, userID, filter=function(){return true;}, timeout=15000) => {
     return new Promise((resolve, reject) => {
         if (!channelID || typeof channelID !== 'string') {
@@ -181,6 +173,7 @@ bot.on('ready', () => {
         }).catch(err => {
             console.error(`Experienced error while loading commands:\n${config.debug ? err.stack : err}`);
         });
+        bot.editStatus('online', {game : `Spreading Love in ${bot.guilds.size}`, type : 1, url : 'https://twitch.tv/osulive'});
     } else {
         logger.info('Reconnected to Discord from disconnect.');
     }
@@ -192,6 +185,14 @@ bot.on ('shardReady', shard => {
 
 bot.on('shardResume', shard => {
     logger.custom('blue', 'shard/shardInfo', `shard ${shard} has resumed.`);
+});
+
+bot.on('onGuildJoin', () => {
+    bot.editStatus('online', {game : `Spreading Love in ${bot.guilds.size}`, type : 1, url : 'https://twitch.tv/osulive'});
+});
+
+bot.on('onGuildLeave', () => {
+    bot.editStatus('online', {game : `Spreading Love in ${bot.guilds.size}`, type : 1, url : 'https://twitch.tv/osulive'});
 });
 
 const prefixParser = require(`${__dirname}/lib/prefixParser.js`);
@@ -278,4 +279,4 @@ bot.on('voiceChannelSwitch', (mem, chan, old) => {
 });
 
 bot.connect();
- bot.editStatus('online', {game : `Spreading Love in ${bot.guilds.size}`, type : 1, url : 'https://twitch.tv/osulive'});
+
