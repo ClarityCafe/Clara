@@ -6,7 +6,7 @@
     "log_date_format": "YYYY-MM-DD HH:mm Z",
     "watch": true,
     "exec_mode" : "fork",
-    "max_memory_restart" : 512,
+    "max_memory_restart" : "512M",
     "ignore_watch": ["data", "logs", "commands", "cache"],
     "args": ["--color"]
 }
