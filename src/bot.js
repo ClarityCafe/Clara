@@ -122,6 +122,14 @@ function handleCmdErr(msg, cmd, err) {
     }
 }
 
+bot.on('onGuildJoin', () => {
+    bot.editStatus('online', {game : `Spreading Love in ${bot.guilds.size}`, type : 1, url : 'https://twitch.tv/osulive'});
+});
+
+bot.on('onGuildLeave', () => {
+    bot.editStatus('online', {game : `Spreading Love in ${bot.guilds.size}`, type : 1, url : 'https://twitch.tv/osulive'});
+});
+
 bot.awaitMessage = (channelID, userID, filter=function(){return true;}, timeout=15000) => {
     return new Promise((resolve, reject) => {
         if (!channelID || typeof channelID !== 'string') {
