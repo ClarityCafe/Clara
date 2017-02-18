@@ -9,12 +9,11 @@ exports.commands = [
 ];
 
 exports.report = {
-    desc: 'seeing harmful behaviour,report it!',
-    longDesc: 'report someone',
+    desc: 'Report a user with the reason stated',
     usage : '<Mention> <Message>',
     main : (bot,ctx) => {
         return new Promise((resolve,reject) => {
-            if (ctx.msg.user.mention || !ctx.suffix) {
+            if (!ctx.msg.user.mention || !ctx.suffix) {
                 ctx.msg.channel.createMessage('Mention a user you want to report and put your reason in able to report!').then(() => {
                     reject(new Error('No User and Reason Specified'));
                 }).catch(reject);
