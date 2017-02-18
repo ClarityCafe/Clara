@@ -60,7 +60,7 @@ exports.play = {
 
 exports.queue = {
     desc: 'Queue music and view current queue.',
-    longDesc: "If no arguments provided, shows contents of queue. If arguments are provided queues the song.",
+    longDesc: 'If no arguments provided, shows contents of queue. If arguments are provided queues the song.',
     usage: '[URL|search term]',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
@@ -75,7 +75,7 @@ exports.queue = {
                     let q = bot.music.queues.get(ctx.msg.channel.guild.id).q;
                     let description = `**${q.length} ${q.length === 1 ? 'item' : 'items'} in queue.${q.length > 10 ? 'Showing first 10 items.' : ''}**\n\n`;
 
-                    for (i in q) {
+                    for (let i in q) {
                         if (!q[i]) break;
                         description += `**${(Number(i) + 1)}:** \`${q[i].info.title}\` (${q[i].info.uploader})\n\n`;
                     }
@@ -140,7 +140,7 @@ exports.stop = {
                     ctx.msg.channel.createMessage('You are not in my voice channel.').then(resolve).catch(reject);
                 } else {
                     bot.music.connections.get(ctx.msg.channel.guild.id).stopPlaying();
-                    ctx.msg.channel.createMessage('Stopped playing audio. Would you like to clear the queue [y/N]?').then(m => {
+                    ctx.msg.channel.createMessage('Stopped playing audio. Would you like to clear the queue [y/N]?').then(() => {
                         return bot.awaitMessage(ctx.msg.channel.id, ctx.msg.author.id);
                     }).then(m => {
                         if (/y(es)?/i.test(m.content)) {
@@ -194,7 +194,7 @@ exports.sources = {
             }}).then(resolve).catch(reject);
         });
     }
-}
+};
 
 exports.skip = {
     desc: 'Vote skip current song. Admins can override.',
@@ -266,7 +266,7 @@ exports.skip = {
     }
 };
 
-function ytRegex(str) {return /https?:\/\/(www\.)?youtube\.com\/watch\?v=.+(&.+)?/.test(str) || /https?:\/\/youtu\.be\/.+/.test(str)}
+function ytRegex(str) {return /https?:\/\/(www\.)?youtube\.com\/watch\?v=.+(&.+)?/.test(str) || /https?:\/\/youtu\.be\/.+/.test(str);}
 
 function search(msg, terms) {
     return new Promise((resolve, reject) => {
@@ -281,7 +281,7 @@ function search(msg, terms) {
                         title: 'Search Results',
                         description: 'Please choose one of the following choices below by just typing its corresponding number.',
                         fields: []
-                    }
+                    };
 
                     for (let i = 0; i <= 4; i++) {
                         if (!res[i]) break;
@@ -293,7 +293,7 @@ function search(msg, terms) {
                         if (/^[1-5]$/.test(m.content.split(' ')[0])) {
                             let choice = Number(m.content.split(' ')[0]) - 1;
                             choice = res[choice];
-                            return {msg: m, url: choice.link}
+                            return {msg: m, url: choice.link};
                         } else {
                             return m.channel.createMessage('Invalid response.');
                         }
@@ -413,7 +413,7 @@ function queue(msg, url) {
         let q = bot.music.queues.get(msg.channel.guild.id).q;
         getSongInfo(url).then(info => {
             if (ytRegex(url)) {
-                let i = {title: info.title, uploader: info.author.name, type: 'YouTubeVideo'}
+                let i = {title: info.title, uploader: info.author.name, type: 'YouTubeVideo'};
                 q.push({url: url, requestee: msg.author.id, msg: msg, info: i, timestamp: Date.now()});
                 return msg.channel.createMessage(`Queued **${info.title}** to position **${q.length}**.`);
             }
