@@ -17,32 +17,37 @@ exports.help = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.args.length === 0) {
-                var helpTxt = '```armasm\n';
-                var alphabeticalSort = [];
-                helpTxt += `; ${bot.user.username}'s Help\n`;
-                for (let command in bot.commands) {
-                    alphabeticalSort.push(command);
+                let embedTemplate = {title: `${bot.user.username} Help`, description: `**Main Prefix:** ${bot.config.mainPrefix}`, color: 2201331};
+                let cmdFields = [];
+
+                for (let cmd in bot.commands) {
+                    let cmnd = bot.commands[cmd];
+                    cmdFields.push({name: cmd, value: `${cmnd.usage ? `${cmnd.usage} - ` : ''}${cmnd.desc}`});
                 }
-                alphabeticalSort.sort();
-                for (let command of alphabeticalSort) {
-                    let cmd = bot.commands[command];
-                    helpTxt += `"${command}"${cmd.usage ? ` ${cmd.usage}` : ''} - "${cmd.desc}"\n`;
-                }
-                helpTxt += '```\nIf you need support or have suggestions for features of Nodetori, join the Discord server. https://discord.gg/rmMTZue';
+
                 ctx.msg.channel.createMessage('Sending the help message to your DMs').then(() => {
                     return ctx.msg.author.getDMChannel();
                 }).then(dm => {
-                    return dm.createMessage(helpTxt);
+                    let fieldCollect = [];
+                    let msgs = [];
+                    for (let i in cmdFields) {
+                        fieldCollect.push(cmdFields[i]);
+                        if ((Number(i) % 24 === 0 && Number(i) !== 0) || Number(i) === cmdFields.length - 1) {
+                            let embed = embedTemplate;
+                            embed.fields = fieldCollect;
+                            fieldCollect = [];
+                            msgs.push(dm.createMessage({embed}));
+                        }
+                    }
+                    return Promise.all(msgs);
                 }).then(resolve).catch(reject);
             } else {
                 if (!bot.commands[ctx.args[0]]) {
                     ctx.msg.channel.createMessage('That command does not exist. Make sure to check your spelling.').then(resolve).catch(reject);
                 } else {
                     let cmd = bot.commands[ctx.args[0]];
-                    var cmdHelp = '```armasm\n';
-                    cmdHelp += `"${ctx.args[0]}"${cmd.usage ? ` ${cmd.usage}` : ''} - "${cmd.fullDesc ? cmd.fullDesc : cmd.desc}"\n`;
-                    cmdHelp += '```';
-                    ctx.msg.channel.createMessage(cmdHelp).then(resolve).catch(reject);
+                    let embed = {title: ctx.args[0], description: `${cmd.usage ? `\`${cmd.usage}\` - `: ''}**${cmd.longDesc ? cmd.longDesc : cmd.desc}**`, color: 2201331};
+                    ctx.msg.channel.createMessage({embed}).then(resolve).catch(reject);
                 }
             }
         });
