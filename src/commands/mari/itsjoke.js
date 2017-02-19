@@ -22,7 +22,7 @@ exports.mari = {
             ctx.msg.channel.sendTyping();
             var fileName = files[Math.floor(Math.random() * files.length)];
             var file = fs.readFileSync(`${__baseDir}/res/${fileName}`);
-            ctx.msg.channel.createMessage('', {file: file, name: fileName}).then(resolve).catch(reject);
+            ctx.msg.channel.createMessage('', {file: file, name: fileName}).then(resolve).catch(err => reject(err));
         });
     }
 };
