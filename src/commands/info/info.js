@@ -8,8 +8,16 @@
 const os = require('os');
 const prettyBytes = require('pretty-bytes');
 const fs = require('fs');
+const path = require('path');
 const utils = require(`${__baseDir}/lib/utils.js`);
-const version = JSON.parse(fs.readFileSync(`${__baseDir}/package.json`)).version;
+var version;
+
+try {
+    version = JSON.parse(fs.readFileSync(path.normalize(`${__baseDir}/../package.json`))).version;
+} catch(_) {
+    version = JSON.parse(fs.readFileSync(`${__baseDir}/package.json`)).version;
+}
+
 
 exports.commands = [
     'info'
@@ -43,4 +51,4 @@ exports.info = {
             }}).then(resolve).catch(reject);
         });
     }
-}
+};
