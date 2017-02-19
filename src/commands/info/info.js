@@ -27,9 +27,9 @@ exports.info = {
     desc: 'Information about the bot.',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            var date = new Date();
-            var sysTime = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${date.getDate()}\n${('0' + (date.getHours() + 1)).slice(-2)}:${('0' + (date.getMinutes() + 1)).slice(-2)}:${('0' + (date.getSeconds() + 1)).slice(-2)}`;
-            var roleColour = ctx.msg.channel.guild.roles.get(ctx.guildBot.roles.sort((a, b) => {
+            let date = new Date();
+            let sysTime = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${date.getDate()}\n${('0' + (date.getHours() + 1)).slice(-2)}:${('0' + (date.getMinutes() + 1)).slice(-2)}:${('0' + (date.getSeconds() + 1)).slice(-2)}`;
+            let roleColour = ctx.msg.channel.guild.roles.get(ctx.guildBot.roles.sort((a, b) => {
                 return ctx.guildBot.guild.roles.get(b).position - ctx.guildBot.guild.roles.get(a).position;
             })[0]).color;
             ctx.msg.channel.createMessage({embed: {
