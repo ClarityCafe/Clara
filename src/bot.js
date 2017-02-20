@@ -43,6 +43,7 @@ function getAuthToken () {
 const config = require(`${__dirname}/config.json`);
 const bot = new Eris(getAuthToken(), {
     autoreconnect: true,
+    maxShards : config.maxShards,
     disableEvents: {
         TYPING_START: true
     }

@@ -13,6 +13,8 @@
   
   "_comment_ownerID": "your own ID. Needed if you need exclusive access",
   "ownerID": "",
+  "_comment_maxShards" : "sets the bots maximum shards(default 1)",
+  "maxShards": "",
 
   "_comment_ytSearchKey": "Key to use youtube search in music.",
   "ytSearchKey": "",
