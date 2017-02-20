@@ -11,9 +11,8 @@
 // Framework imports
 const Eris = require('eris');
 const fs = require('fs');
-const YAML = require('yamljs');
 
-// global YAML parser 
+//globals w
 
 global.__baseDir = __dirname;
 global.Promise = require('bluebird');
@@ -24,24 +23,10 @@ const logger = require(`${__dirname}/lib/logger`);
 const commandsMod = require(`${__dirname}/lib/commands`);
 const utils = require(`${__dirname}/lib/utils`);
 
-//Auth Function 
-function getAuthToken () {
-    try {
-        // let's parse our JSON first
-        let JsonToken = require(`${__dirname}/config.json`);
-        return JsonToken.token;
-    } catch(err) {
-        //if JSON is undefined, we'll parse YAML then
-        logger.warn('JSON not found!, checking for YAML...');
-        let YAMLConfig = `${__dirname}/config.yml`;
-        YAML.load(YAMLConfig);
-        return YAML.parse(YAMLConfig.token);
-    }
-}
 
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
-const bot = new Eris(getAuthToken(), {
+const bot = new Eris(config.token, {
     autoreconnect: true,
     seedVoiceConnections: true,
     maxShards: config.maxShards || 1,
