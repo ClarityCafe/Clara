@@ -38,7 +38,7 @@ function getDirectories(dir) {
 getDirectories(`${__baseDir}/${commandsDirectory}`).then(dirs => commandFolders = dirs);
 
 function preloadCommands() {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
         var deps = [];
         for (let awoo of commandFolders) {
             var cmdFiles = fs.readdirSync(`${__baseDir}/${commandsDirectory}/${awoo}`);
@@ -46,8 +46,14 @@ function preloadCommands() {
                 logger.customError('commandLoader/preloadCommands', `Skipping over '${awoo}' due to missing package.json`);
                 noLoad.push(awoo);
             } else {
-                var jsooon = fs.readFileSync(`${__baseDir}/${commandsDirectory}/${awoo}/package.json`);
-                var pkg = JSON.parse(jsooon);
+                var json = fs.readFileSync(`${__baseDir}/${commandsDirectory}/${awoo}/package.json`);
+                var pkg;
+                try {
+                    pkg = JSON.parse(json);
+                } catch(err) {
+                    logger.customError('commandLoader/preloadCommands', `Skipping over '${awoo}' due to error parsing package.json\n${err}`);
+                }
+                
                 if (pkg.dependencies == undefined) continue;
                 if (Object.keys(pkg.dependencies).length > 0) {
                     for (let awau in pkg.dependencies) {
@@ -75,7 +81,7 @@ function preloadCommands() {
 }
 
 function loadCommands() {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
         var bot = require(`${__baseDir}/bot.js`);
         for (let cmdFolder of commandFolders) {
             if (noLoad.indexOf(cmdFolder) !== -1) continue;

@@ -1,2 +1,4 @@
-"main" : "poi.js",
-"dependencies" : {}
+{
+    "main": "poi.js",
+    "dependencies": {}
+}
