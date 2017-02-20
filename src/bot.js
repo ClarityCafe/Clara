@@ -43,7 +43,8 @@ function getAuthToken () {
 const config = require(`${__dirname}/config.json`);
 const bot = new Eris(getAuthToken(), {
     autoreconnect: true,
-    maxShards : config.maxShards,
+    seedVoiceConnections: true,
+    maxShards: config.maxShards || 1,
     disableEvents: {
         TYPING_START: true
     }
@@ -281,4 +282,3 @@ bot.on('voiceChannelSwitch', (mem, chan, old) => {
 });
 
 bot.connect();
-
