@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/owo-whats-this.iml" filepath="$PROJECT_DIR$/.idea/owo-whats-this.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Clara.iml" filepath="$PROJECT_DIR$/.idea/Clara.iml" />
     </modules>
   </component>
 </project>

@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sr229/owo-whats-this.git"
+    "url": "git+https://github.com/sr229/Clara.git"
   },
   "keywords": [
     "discord",
@@ -17,9 +17,9 @@
   "author": "sr229",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sr229/owo-whats-this/issues"
+    "url": "https://github.com/sr229/Clara/issues"
   },
-  "homepage": "https://github.com/sr229/owo-whats-this#readme",
+  "homepage": "https://github.com/sr229/Clara#readme",
   "dependencies": {
     "bluebird": "^3.4.7",
     "chalk": "^1.1.3",
