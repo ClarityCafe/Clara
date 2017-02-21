@@ -1,0 +1,20 @@
+engines:
+  eslint:
+    enabled: true
+    channel: "eslint-3"
+    config: .eslintrc
+  duplication:
+    enabled: false
+    config:
+      languages:
+      - javascript
+  fixme:
+      enabled: true
+ratings:
+  paths:
+  - "**.js"
+exclude_paths:
+- data/*
+- example/*.json
+- example/*.json.example
+- res/*

@@ -1,0 +1,6 @@
+{
+    "main": "info.js",
+    "dependencies": {
+        "pretty-bytes": "^4.0.2"
+    }
+}
