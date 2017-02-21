@@ -1,0 +1,20 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "npm-intellisense.importES6": false,
+    "npm-intellisense.importQuotes": "'",
+    "npm-intellisense.importLinebreak": ";\r\n",
+    "npm-intellisense.importDeclarationType": "const",
+    "npm-intellisense.scanDevDependencies": true,
+    "npm-intellisense.showBuildInLibs": true,
+    "node-module-intellisense.fileModuleExtensions": [
+    ".js",
+    ".jsx",
+    ".ts",
+    ".d.ts",
+    ".tsx",
+    ".vue",
+    ".json"
+  ]
+,
+"eslint.enable": true
+}

@@ -1,25 +1,27 @@
-# owo-whats-this [![Build Status](https://travis-ci.org/sr229/owo-whats-this.svg?branch=master)](https://travis-ci.org/sr229/owo-whats-this)
-A really experimental (and borked) Discord.js bot written in ECMAScript 6
+# owo-whats-this <a href="https://discord.gg/ZgQkCkm"><img src="https://discordapp.com/api/guilds/251664386459041792/embed.png" alt="Discord server" /></a> [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/awau/owo-whats-this/master/LICENSE) [![Code Climate](https://codeclimate.com/github/awau/owo-whats-this/badges/gpa.svg)](https://codeclimate.com/github/awau/owo-whats-this)
 
-# Building and Running
-This Script has been proven to work on Node v6 and above
-We cannot assure complete functionality on Node v4 and below.
+[Support us on Patreon!](https://www.patreon.com/capuccino) | [Discord Server](https://discord.gg/9utV8gn)
 
-NOTE: you need a installation of Node.js from the *NVM Repository*, this is possible by installing [nvm](http://nvm.sh) and make the following Node Environments your default (you can only set one).
-Linux users require this since the official packages in some distros like Ubuntu only has 4.x.x. 
+A really experimental (and borked) Discord bot written in ECMAScript 6
+
+# Running
+
+In order to run this bot, you will need one of the most recent versions of Node.JS. Anything that is 6.x.x or above should work, but it's best to make sure that your Node version is the latest stable version.
+
+NOTE: Any version of Node.JS that is below 6.x.x **WILL NOT WORK** due to this bot relying on things that are present in ES6.
+
+If you are running this on Linux, you may need to install [Node Version Manager](http://nvm.sh) in order to get the latest version, as the official packages in some distros like Ubuntu and Debian only have a version of 4.x.x.
 
 # Contributing
 
 Check out CONTRIBUTING.md for guidelines.
 
-#Licensing
+# Licensing
 
-The underlying source code is licensed under MIT.
+The underlying source code is licensed under the [MIT License](https://en.wikipedia.org/wiki/MIT_License).
 
+Copyright &copy; 2016 Capuccino, Ovyerus and the repository contributors.
 
-Copyright (c) 2016 Capuccino , Ovyerus and the repository contributors.
-
-
-see LICENSE.
+See [LICENSE](LICENSE) for full license.
 
 
