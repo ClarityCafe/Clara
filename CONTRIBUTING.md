@@ -26,5 +26,4 @@ PRs are only accepted in the ``development``branch. if you PR to ``master``, it 
 
 # Code Verification
 
-We use Travis for Code Verification. If your code fails at runtime, it will not be merged until it's fixed.
-There's an exception if the linter is a bitch.
+We use CodeClimate for code coverage. If your code falls below A, it may not be merged.
