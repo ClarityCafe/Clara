@@ -34,7 +34,7 @@ exports.info = {
             })[0]).color;
             ctx.msg.channel.createMessage({embed: {
                 title: `${bot.user.username} Info`,
-                description: '[Source Code](https://github.com/owo-dev-team/owo-whats-this)',
+                description: '[Source Code](https://github.com/awau/Clara)',
                 thumbnail: {url: bot.user.avatarURL.replace('https://cdn.discordapp.com', 'https://images.discordapp.net') + '?size=1024', height: 128, width: 128},
                 color: roleColour,
                 fields: [
