@@ -11,7 +11,7 @@ Any modules that are used by several commands/the main bot/whatever, go into the
 
 ## Creating Commands
 
-Information on properly creating commands for the bot can be found [here](example/sample_command/README.md).
+Information on properly creating commands for the bot can be found [here](https://github.com/awau/Clara/wiki).
 
 # Code Styling
 
@@ -22,9 +22,8 @@ Also, please make sure to follow the way that the code in the repository is set 
 
 # Pull Requests
 
-Please fork this repository, make your changes, and then submit a pull request to the `master` branch. If you have write access to the repo, please create your own branch in the repo and then pull into `master`.
+PRs are only accepted in the ``development``branch. if you PR to ``master``, it will be closed.
 
 # Code Verification
 
-We use Travis for Code Verification. If your code fails at runtime, it will not be merged until it's fixed.
-There's an exception if the linter is a bitch.
+We use CodeClimate for code coverage. If your code falls below A, it may not be merged.
