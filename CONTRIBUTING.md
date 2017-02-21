@@ -11,7 +11,7 @@ Any modules that are used by several commands/the main bot/whatever, go into the
 
 ## Creating Commands
 
-Information on properly creating commands for the bot can be found [here](example/sample_command/README.md).
+Information on properly creating commands for the bot can be found [here](https://github.com/awau/Clara/wiki).
 
 # Code Styling
 
