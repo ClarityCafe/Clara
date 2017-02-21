@@ -22,7 +22,7 @@ Also, please make sure to follow the way that the code in the repository is set 
 
 # Pull Requests
 
-Please fork this repository, make your changes, and then submit a pull request to the `master` branch. If you have write access to the repo, please create your own branch in the repo and then pull into `master`.
+PRs are only accepted in the ``development``branch. if you PR to ``master``, it will be closed.
 
 # Code Verification
 
