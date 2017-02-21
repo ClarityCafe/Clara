@@ -32,7 +32,7 @@ exports.ibsearch = {
                     method: 'GET',
                     headers: {
                         'X-IbSearch-Key': ibKey,
-                        'User-Agent': 'owo-whats-this/0.1.1'
+                        'User-Agent': 'Clara/0.1.1'
                     }
                 }, (err, res, body) => {
                     if (err) {
@@ -79,7 +79,7 @@ exports.ibsearch = {
                     method: 'GET',
                     headers: {
                         'X-IbSearch-Key': ibKey,
-                        'User-Agent': 'owo-whats-this/0.1.1'
+                        'User-Agent': 'Clara/0.1.1'
                     }
                 }, (err, res, body) => {
                     if (err) {
