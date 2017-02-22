@@ -110,7 +110,7 @@ function handleCmdErr(msg, cmd, err) {
     }
 }
 
-bot.awaitMessage = (channelID, userID, filter=function(){return true;}, timeout=15000) => {
+bot.awaitMessage = (channelID, userID, filter = function () { return true; }, timeout = 15000) => {
     return new Promise((resolve, reject) => {
         if (!channelID || typeof channelID !== 'string') {
             reject(new Error(`Unwanted type of channelID: got "${typeof channelID}" expected "string"`));
@@ -132,7 +132,7 @@ bot.awaitMessage = (channelID, userID, filter=function(){return true;}, timeout=
                     bot.removeListener('messageCreate', onCrtWrap);
                     clearInterval(rmvTimeout);
                     resolve(res);
-                } 
+                }
             };
 
             bot.on('messageCreate', onCrtWrap);
@@ -164,23 +164,24 @@ bot.on('ready', () => {
     } else {
         logger.info('Reconnected to Discord from disconnect.');
     }
-    bot.editStatus('online',{name : `${config.gameName || null}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}`});
+    bot.editStatus('online', { name: `${config.gameName || null}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
 });
 
-bot.on ('shardReady', shard => {
-    logger.custom('blue', 'shard/shardInfo', `shard ${shard} is ready!`); 
+bot.on('shardReady', shard => {
+    logger.custom('blue', 'shard/shardInfo', `shard ${shard} is ready!`);
 });
 
 bot.on('shardResume', shard => {
     logger.custom('blue', 'shard/shardInfo', `shard ${shard} has resumed.`);
 });
 
-bot.on('onGuildJoin', () => {
-    bot.editStatus('online',{name : `${config.gameName || null}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}`});
+bot.on('guildCreate', () => {
+    bot.editStatus('online', { name: `${config.gameName || null}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
 });
 
-bot.on('onGuildLeave', () => {
-    bot.editStatus('online',{name : `${config.gameName || null}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}`});
+bot.on('guildDelete', () => {
+    bot.editStatus('online', { name: `${config.gameName || null}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
+
 });
 
 const prefixParser = require(`${__dirname}/lib/prefixParser.js`);
@@ -203,8 +204,8 @@ bot.on('messageCreate', msg => {
         cleanSuffix.splice(0, 1);
         cleanSuffix = cleanSuffix.join(' ');
         var guildBot = msg.channel.guild.members.get(bot.user.id);
-        
-        var ctx = {msg: msg, args: args, cmd: cmd, suffix: suffix, cleanSuffix: cleanSuffix, guildBot: guildBot };
+
+        var ctx = { msg: msg, args: args, cmd: cmd, suffix: suffix, cleanSuffix: cleanSuffix, guildBot: guildBot };
 
         if (bot.commands[cmd]) {
             logger.cmd(loggerPrefix(msg) + msg.cleanContent);
@@ -234,7 +235,7 @@ bot.on('messageCreate', msg => {
 bot.on('disconnect', () => {
     logger.warn('Disconnected from Discord.');
 });
-bot.on('shardDisconnect', (err,shard) => {
+bot.on('shardDisconnect', (err, shard) => {
     if (err) logger.customError('shard/shardStatus', `Shard ${shard} disconnected. Reason ${err}`);
 });
 
