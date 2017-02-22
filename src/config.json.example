@@ -10,7 +10,16 @@
 
   "_comment_osuApiKey": "API key for osu!Related Requests",
   "osuApiKey": "",
+
+  "_comment_gameName" : "your selected game name for the bot",
+  "gameName" : "",
   
+  "_comment_gameURL" : "the game's URL, must be a twitch URL"
+  "gameURL" :"",
+
+  "_comment_gameType" : "Now playing mode for your bot (default 0). 0 - Normal, 1 - Streaming",
+  "gameType" : 0,
+
   "_comment_ownerID": "your own ID. Needed if you need exclusive access",
   "ownerID": "",
   "_comment_maxShards" : "sets the bots maximum shards(default 1)",
