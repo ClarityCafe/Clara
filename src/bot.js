@@ -179,7 +179,7 @@ bot.on('onGuildJoin', () => {
     bot.editStatus('online',{name : `Spreading the love in ${bot.guilds.size} servers!`, type: 1, url: 'https://twitch.tv/osulive'});
 });
 
-bot.on('onGuildLeave', () => {
+bot.on('guildDelete', () => {
     bot.editStatus('online',{name : `Spreading the love in ${bot.guilds.size} servers!`, type: 1, url: 'https://twitch.tv/osulive'});
 });
 
