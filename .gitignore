@@ -73,7 +73,7 @@ prefixes.json
 /.idea/workspace.xml
 src/data/
 data.json
-
+lines.txt
 
 #experimental files
 
