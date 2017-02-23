@@ -164,7 +164,7 @@ bot.on('ready', () => {
     } else {
         logger.info('Reconnected to Discord from disconnect.');
     }
-    bot.editStatus('online', { name: `${config.gameName || null}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
+    bot.editStatus('online', { name: `${config.gameName || }`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
 });
 
 bot.on('shardReady', shard => {
