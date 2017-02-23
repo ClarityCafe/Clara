@@ -176,11 +176,11 @@ bot.on('shardResume', shard => {
 });
 
 bot.on('guildCreate', () => {
-    bot.editStatus('online', { name: `${config.gameName || null}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
+    bot.editStatus('online', { name: `${config.gameName || ''}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
 });
 
 bot.on('guildDelete', () => {
-    bot.editStatus('online', { name: `${config.gameName || null}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
+    bot.editStatus('online', { name: `${config.gameName || ''}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
 
 });
 
