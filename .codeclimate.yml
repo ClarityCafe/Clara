@@ -18,3 +18,5 @@ exclude_paths:
 - example/*.json
 - example/*.json.example
 - res/*
+- *.png
+- *.jpg
