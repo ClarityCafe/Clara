@@ -161,7 +161,7 @@ bot.on('ready', () => {
     } else {
         logger.info('Reconnected to Discord from disconnect.');
     }
-    bot.editStatus('online', { name: `${config.gameName || 'with ${bot.guilds.size}'} `, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
+    bot.editStatus('online', { name: `${config.gameName || `with ${bot.guilds.size} server(s)!`} `, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
 });
 
 bot.on('shardReady', shard => {
@@ -177,12 +177,12 @@ bot.on('guildCreate', g => {
         logger.info(`Detected bot collection guild. Autoleaving.... (${g.name} [${g.id}])`);
         g.leave();
     } else {
-        bot.editStatus('online', { name: `${config.gameName || `with ${bot.guilds.size}`}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
+        bot.editStatus('online', { name: `${config.gameName || `with ${bot.guilds.size} server(s)!`}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
     }
 });
 
 bot.on('guildDelete', () => {
-    bot.editStatus('online', { name: `${config.gameName || `with ${bot.guilds.size}`}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
+    bot.editStatus('online', { name: `${config.gameName || `with ${bot.guilds.size} server(s)!`}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
 
 });
 
