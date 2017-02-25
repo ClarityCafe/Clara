@@ -11,8 +11,18 @@ exports.commands = [
 exports.poi = {
     desc: 'Poi? POI!? POOOOOOOOOOIIIIIIII!!!!',
     main: (bot,ctx) => {
+        let responses = [
+            'P-Poi?',
+            'Poi...',
+            'POI!!!!!?',
+            'P-Poi..',
+            'Poi uwu',
+            '(╯°□°）╯︵ ┻━┻'
+            ];
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.createMessage('Poi!').then(resolve).catch(reject);
+            ctx.msg.channel.createMessage(responses[Math.floor(Math.random()* responses.length)]);
+                .then(resolve)
+                .catch(reject);
         });
     }
-}
+};
