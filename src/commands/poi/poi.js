@@ -20,7 +20,7 @@ exports.poi = {
             '(╯°□°）╯︵ ┻━┻'
             ];
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.createMessage(responses[Math.floor(Math.random()* responses.length)]);
+            ctx.msg.channel.createMessage(responses[Math.floor(Math.random()* responses.length)])
                 .then(resolve)
                 .catch(reject);
         });
