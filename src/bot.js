@@ -175,7 +175,11 @@ bot.on('shardResume', shard => {
     logger.custom('blue', 'shard/shardInfo', `shard ${shard} has resumed.`);
 });
 
-bot.on('guildCreate', () => {
+bot.on('guildCreate', g => {
+    if(g.members.filter(m => m.bot).length >= Math.ceil(g.memberCount / 2)) {
+        logger.info('Detected Bot Collection Guild. Autoleaving....');
+        g.leave();
+    }
     bot.editStatus('online', { name: `${config.gameName || `with ${bot.guilds.size} servers.`}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
 });
 
