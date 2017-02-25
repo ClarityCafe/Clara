@@ -38,6 +38,7 @@ exports.play = {
                         if (!ytRegex(ctx.suffix) && !/^https?:\/\//.test(ctx.suffix) && bot.config.ytSearchKey) {
                             search(ctx.msg, ctx.suffix).then(res => {
                                 if (!(res instanceof Eris.Message)) {
+                                    if (bot.music.stopped.indexOf(ctx.msg.channel.guild.id) > -1) bot.music.stopped.splice(bot.music.stopped.indexOf(ctx.msg.channel.guild.id), 1);
                                     play(res.msg, res.url).then(resolve).catch(reject);
                                 } else {
                                     resolve();
@@ -46,9 +47,11 @@ exports.play = {
                         } else if (!ytRegex(ctx.suffix) && !/^https?:\/\//.test(ctx.suffix) && !bot.config.ytSearchKey) {
                             ctx.msg.channel.createMessage('API key to search appears to be missing. Please queue songs via a link.').then(resolve).catch(reject);
                         } else if (ytRegex(ctx.suffix)) {
+                            if (bot.music.stopped.indexOf(ctx.msg.channel.guild.id) > -1) bot.music.stopped.splice(bot.music.stopped.indexOf(ctx.msg.channel.guild.id), 1);
                             play(ctx.msg, ctx.suffix).then(resolve).catch(reject);
                         }
                     } else if (bot.music.queues.get(ctx.msg.channel.guild.id)) {
+                        if (bot.music.stopped.indexOf(ctx.msg.channel.guild.id) > -1) bot.music.stopped.splice(bot.music.stopped.indexOf(ctx.msg.channel.guild.id), 1);
                         let q = bot.music.queues.get(ctx.msg.channel.guild.id).q;
                         play(q[0].msg, q[0].url).then(resolve).catch(reject);
                     }
@@ -147,12 +150,15 @@ exports.stop = {
                             bot.music.queues.get(m.channel.guild.id).q = [];
                             return m.channel.createMessage('Music queue cleared.');
                         } else if (/no?/i.test(m.content)) {
+                            if (bot.music.stopped.indexOf(ctx.msg.channel.guild.id) === -1) bot.music.stopped.push(ctx.msg.channel.guild.id);
                             return m.channel.createMessage('Keeping music queue.');
                         } else {
+                            if (bot.music.stopped.indexOf(ctx.msg.channel.guild.id) === -1) bot.music.stopped.push(ctx.msg.channel.guild.id);
                             return m.channel.createMessage('Invalid response. Keeping music queue.');
                         }
                     }).then(resolve).catch(err => {
                         if (!err.resp) {
+                            if (bot.music.stopped.indexOf(ctx.msg.channel.guild.id) === -1) bot.music.stopped.push(ctx.msg.channel.guild.id);
                             ctx.msg.channel.createMessage('Queue will not be cleared.').then(resolve).catch(reject);
                         } else {
                             reject(err);
@@ -225,9 +231,9 @@ exports.skip = {
                                     let qt = q[0];
                                     if (q[0].url === qt.url) {
                                         q.splice(0, 1);
+                                        bot.music.connections.get(ctx.msg.channel.guild.id).stopPlaying();
                                         bot.music.streams.get(ctx.msg.channel.guild.id).stream.destroy();
                                         bot.music.streams.delete(ctx.msg.channel.guild.id);
-                                        bot.music.connections.get(ctx.msg.channel.guild.id).stopPlaying();
                                     }
                                     if (q.length > 0) play(q[0].msg, q[0].url);
                                     ctx.msg.channel.createMessage(`Skipped **${qt.info.title}**.`).then(resolve).catch(reject);
@@ -251,9 +257,9 @@ exports.skip = {
                                 skips.users = [];
                                 if (q[0].url === qt.url) {
                                     q.splice(0, 1);
+                                    bot.music.connections.get(ctx.msg.channel.guild.id).stopPlaying();
                                     bot.music.streams.get(ctx.msg.channel.guild.id).stream.destroy();
                                     bot.music.streams.delete(ctx.msg.channel.guild.id);
-                                    bot.music.connections.get(ctx.msg.channel.guild.id).stopPlaying();
                                 }
                                 if (q.length > 0) play(q[0].msg, q[0].url);
                                 ctx.msg.channel.createMessage(`Skipped **${qt.info.title}**.`).then(resolve).catch(reject);
@@ -313,31 +319,33 @@ function play(msg, url) {
             queue(msg, url).then(() => {
                 return bot.joinVoiceChannel(msg.member.voiceState.channelID);
             }).then(cnc => {
-                bot.music.connections.add(cnc);
-                let stream = ytdl(url);
-                bot.music.streams.add({id: msg.channel.guild.id, stream, type: 'YouTubeVideo'});
-                cnc.play(stream);
+                cnc.once('ready', () => {
+                    bot.music.connections.add(cnc);
+                    let stream = ytdl(url);
+                    bot.music.streams.add({id: msg.channel.guild.id, stream, type: 'YouTubeVideo'});
+                    cnc.play(stream);
 
-                stream.on('info', function onYtInfo(info) {
-                    msg.channel.createMessage({embed: {
-                        title: 'Now Playing',
-                        description: `${info.title}\n[Link](${info.video_url})`,
-                        image: {url: info.iurlhq},
-                        footer: {text: `Requested by ${utils.formatUsername(msg.member)}`}
-                    }});
-                    this.removeListener('info', onYtInfo);
-                });
+                    stream.on('info', function onYtInfo(info) {
+                        msg.channel.createMessage({embed: {
+                            title: 'Now Playing',
+                            description: `${info.title}\n[Link](${info.video_url})`,
+                            image: {url: info.iurlhq},
+                            footer: {text: `Requested by ${utils.formatUsername(msg.member)}`}
+                        }});
+                        this.removeListener('info', onYtInfo);
+                    });
 
-                cnc.on('end', function onMusicEnd() {
-                    if (cnc.playing) return;
-                    let q = bot.music.queues.get(msg.channel.guild.id).q;
-                    if (q[0].url === url) {
-                        q.splice(0, 1);
-                        bot.music.streams.get(msg.channel.guild.id).stream.destroy();
-                        bot.music.streams.delete(msg.channel.guild.id);
-                    }
-                    if (q.length > 0) play(q[0].msg, q[0].url);
-                    this.removeListener('end', onMusicEnd);
+                    cnc.on('end', function onMusicEnd() {
+                        if (cnc.playing || !bot.music.queues.get(msg.channel.guild.id) || bot.music.stopped.indexOf(msg.channel.guild.id) > -1) return;
+                        let q = bot.music.queues.get(msg.channel.guild.id).q;
+                        if (q[0].url === url) {
+                            q.splice(0, 1);
+                            bot.music.streams.get(msg.channel.guild.id).stream.destroy();
+                            bot.music.streams.delete(msg.channel.guild.id);
+                        }
+                        if (q.length > 0) play(q[0].msg, q[0].url);
+                        this.removeListener('end', onMusicEnd);
+                    });
                 });
             }).then(resolve).catch(reject);
         } else if (bot.music.connections.get(msg.channel.guild.id) && (!bot.music.queues.get(msg.channel.guild.id) || bot.music.queues.get(msg.channel.guild.id).q.length === 0)) {
@@ -358,7 +366,7 @@ function play(msg, url) {
                 });
 
                 cnc.on('end', function onMusicEnd() {
-                    if (cnc.playing) return;
+                    if (cnc.playing || !bot.music.queues.get(msg.channel.guild.id) || bot.music.stopped.indexOf(msg.channel.guild.id) > -1) return;
                     let q = bot.music.queues.get(msg.channel.guild.id).q;
                     if (q[0].url === url) {
                         q.splice(0, 1);
@@ -386,7 +394,7 @@ function play(msg, url) {
             });
 
             cnc.on('end', function onMusicEnd() {
-                if (cnc.playing) return;
+                if (cnc.playing || !bot.music.queues.get(msg.channel.guild.id) || bot.music.stopped.indexOf(msg.channel.guild.id) > -1) return;
                 let q = bot.music.queues.get(msg.channel.guild.id).q;                
                 if (q[0].url === url) {
                     q.splice(0, 1);
