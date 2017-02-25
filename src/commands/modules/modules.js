@@ -29,7 +29,7 @@ exports.modules = {
             if (!ctx.args || Object.keys(subCommands).indexOf(ctx.args[0]) === -1) {
                 let cmdFolders = fs.readdirSync(path.join(__dirname, '../'));
                 let unloadedMods = JSON.parse(fs.readFileSync(`${__baseDir}/data/unloadedCommands.json`));
-                let embed = {title: 'Current Modules', description: `Showing **${cmdFolders.length}** command modules.`, fields: [{name: 'Loaded Modules'}, {name: 'Unloaded Modules'}]};
+                let embed = {title: 'Current Modules', description: `Showing **${cmdFolders.length}** command modules.\n\`Loaded Modules\`\n\n`};
                 let loaded = [];
                 let unloaded = [];
 
@@ -41,10 +41,16 @@ exports.modules = {
                     unloaded.push(`**${mod}**`);
                 });
 
-                embed.fields[0].value = loaded.join('\n');
-                embed.fields[1].value = unloaded.join('\n');
+                embed.description += loaded.join('\n');
 
-                ctx.msg.channel.createMessage({embed}).then(resolve).catch(reject);
+                ctx.msg.channel.createMessage({embed}).then(() => {
+                    if (unloaded.length !== 0) {
+                        embed.description = `Showing **${cmdFolders.length}** command modules.\n\`Unloaded Modules\`\n\n${unloaded.join('\n')}`;
+                        return ctx.msg.channel.createMessage({embed});
+                    } else {
+                        return;
+                    }
+                }).then(resolve).catch(reject);
             } else if (Object.keys(subCommands).indexOf(ctx.args[0]) !== -1) {
                 let sub = ctx.args.shift();
                 subCommands[sub](bot, ctx).then(resolve).catch(reject);
