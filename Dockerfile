@@ -10,7 +10,7 @@ echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 RUN sudo apt install build-essential python
 RUN nvm install v6.10.0 && nvm alias default v6.10.0
 USER ayaneru
-RUN mkdir base
+RUN mkdir /home/ayaneru/base
 # It's advisable to create your config.json before launching this because we copy files
 # then stab it on the container like no one cares.
 COPY src /home/ayaneru/base
