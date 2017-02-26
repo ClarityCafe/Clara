@@ -232,14 +232,14 @@ function handleCmdErr(msg, cmd, err) {
         let m = `Discord error while trying to execute \`${cmd}\`\n`;
         m += '```js\n';
         m += `Code: ${resp.code}. Message: ${resp.message}\n`;
-        m += '```';
+        m += "``` If you feel this shouldn't be happening, join my support server. Invite can be found in the `invite` commaned.";
         msg.channel.createMessage(m);
     } else {
         logger.error(loggerPrefix(msg) + `Error running command "${cmd}":\n${config.debug ? err.stack : err}`);
         let m = `Experienced error while executing \`${cmd}\`\n`;
         m += '```js\n';
         m += err + '\n';
-        m += '```';
+        m += "``` If you feel this shouldn't be happening, join my support server. Invite can be found in the `invite` commaned.";
         msg.channel.createMessage(m);
     }
 }
