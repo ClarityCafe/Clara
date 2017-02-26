@@ -23,7 +23,7 @@ exports.help = {
 
                 bot.commands.forEach((cmd, cmnd) => {
                     cmdFields.push({name: cmd, value: `${cmnd.usage ? `${cmnd.usage} - ` : ''}${cmnd.desc}`});
-                })
+                });
 
                 ctx.msg.channel.createMessage('Sending the help message to your DMs').then(() => {
                     return ctx.msg.author.getDMChannel();
