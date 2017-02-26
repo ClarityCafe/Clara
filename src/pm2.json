@@ -7,6 +7,6 @@
     "watch": true,
     "exec_mode" : "fork",
     "max_memory_restart" : "512M",
-    "ignore_watch": ["data", "logs", "commands", "cache"],
+    "ignore_watch": ["data", "logs", "commands", "cache", "node_modules"],
     "args": ["--color"]
 }
