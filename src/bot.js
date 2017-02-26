@@ -77,73 +77,6 @@ bot.music = {
     stopped: []
 };
 
-// Functions
-function loggerPrefix(msg) {
-    return msg.channel.guild ? `${msg.channel.guild.name} | ${msg.channel.name} > ${utils.formatUsername(msg.author)} (${msg.author.id}): ` : `Direct Message > ${utils.formatUsername(msg.author)} (${msg.author.id}): `;
-}
-
-function handleCmdErr(msg, cmd, err) {
-    if (err.response) var resp = JSON.parse(err.response);
-    if (resp && resp.code === 50013) {
-        logger.warn(`Can't send message in '#${msg.channel.name}' (${msg.channel.id}), cmd from user '${utils.formatUsername(msg.author)}' (${msg.author.id})`);
-        msg.author.getDMChannel().then(dm => {
-            console.log(dm.id);
-            return dm.createMessage(`It appears I was unable to send a message in \`#${msg.channel.name}\` on the server \`${msg.channel.guild.name}\`. Please give me the Send Messages permission or notify a mod or admin if you cannot do this.`);
-        }).catch(() => logger.warn(`Couldn't get DM channel for/send DM to ${utils.formatUsername(msg.author)} (${msg.author.id})`));
-    } else if (resp && /\{'code':.+, 'message':.+\}/.test(err.response) && resp.code !== 50013) {
-        logger.warn(loggerPrefix(msg) + `Discord error running command "${cmd}":\n:${config.debug ? err.stack : err}`);
-        let m = `Discord error while trying to execute \`${cmd}\`\n`;
-        m += '```js\n';
-        m += `Code: ${resp.code}. Message: ${resp.message}\n`;
-        m += '```';
-        msg.channel.createMessage(m);
-    } else {
-        logger.error(loggerPrefix(msg) + `Error running command "${cmd}":\n${config.debug ? err.stack : err}`);
-        let m = `Experienced error while executing \`${cmd}\`\n`;
-        m += '```js\n';
-        m += err + '\n';
-        m += '```';
-        msg.channel.createMessage(m);
-    }
-}
-
-bot.awaitMessage = (channelID, userID, filter = function () { return true; }, timeout = 15000) => {
-    return new Promise((resolve, reject) => {
-        if (!channelID || typeof channelID !== 'string') {
-            reject(new Error(`Unwanted type of channelID: got "${typeof channelID}" expected "string"`));
-        } else if (!userID || typeof userID !== 'string') {
-            reject(new Error(`Unwanted type of userID: got "${typeof userID}" expected "string"`));
-        } else {
-            var responded, rmvTimeout;
-
-            var onCrt = (msg) => {
-                if (msg.channel.id === channelID && msg.author.id === userID && filter(msg)) {
-                    responded = true;
-                    return msg;
-                }
-            };
-
-            var onCrtWrap = (msg) => {
-                var res = onCrt(msg);
-                if (responded) {
-                    bot.removeListener('messageCreate', onCrtWrap);
-                    clearInterval(rmvTimeout);
-                    resolve(res);
-                }
-            };
-
-            bot.on('messageCreate', onCrtWrap);
-
-            rmvTimeout = setTimeout(() => {
-                if (!responded) {
-                    bot.removeListener('messageCreate', onCrtWrap);
-                    reject(new Error('Message await expired.'));
-                }
-            }, timeout);
-        }
-    });
-};
-
 // Init
 bot.on('ready', () => {
     if (loadCommands) {
@@ -161,7 +94,8 @@ bot.on('ready', () => {
     } else {
         logger.info('Reconnected to Discord from disconnect.');
     }
-    bot.editStatus('online', { name: `${config.gameName || `with ${bot.guilds.size} server(s)!`} `, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
+
+    bot.editStatus('online', {name: `${config.gameName || `with everyone.`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: config.gameURL ? 1 : 0, url: `${config.gameURL || null}`});
 });
 
 bot.on('shardReady', shard => {
@@ -177,13 +111,12 @@ bot.on('guildCreate', g => {
         logger.info(`Detected bot collection guild. Autoleaving.... (${g.name} [${g.id}])`);
         g.leave();
     } else {
-        bot.editStatus('online', { name: `${config.gameName || `with ${bot.guilds.size} server(s)!`}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
+        bot.editStatus('online', {name: `${config.gameName || `with everyone.`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: config.gameURL ? 1 : 0, url: `${config.gameURL || null}`});
     }
 });
 
 bot.on('guildDelete', () => {
-    bot.editStatus('online', { name: `${config.gameName || `with ${bot.guilds.size} server(s)!`}`, type: `${config.gameType || 0}`, url: `${config.gameURL || null}` });
-
+    bot.editStatus('online', {name: `${config.gameName || `with everyone.`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: config.gameURL ? 1 : 0, url: `${config.gameURL || null}`});
 });
 
 const prefixParser = require(`${__dirname}/lib/prefixParser.js`);
@@ -280,3 +213,70 @@ bot.on('voiceChannelSwitch', (mem, chan, old) => {
 });
 
 bot.connect();
+
+// Functions
+function loggerPrefix(msg) {
+    return msg.channel.guild ? `${msg.channel.guild.name} | ${msg.channel.name} > ${utils.formatUsername(msg.author)} (${msg.author.id}): ` : `Direct Message > ${utils.formatUsername(msg.author)} (${msg.author.id}): `;
+}
+
+function handleCmdErr(msg, cmd, err) {
+    if (err.response) var resp = JSON.parse(err.response);
+    if (resp && resp.code === 50013) {
+        logger.warn(`Can't send message in '#${msg.channel.name}' (${msg.channel.id}), cmd from user '${utils.formatUsername(msg.author)}' (${msg.author.id})`);
+        msg.author.getDMChannel().then(dm => {
+            console.log(dm.id);
+            return dm.createMessage(`It appears I was unable to send a message in \`#${msg.channel.name}\` on the server \`${msg.channel.guild.name}\`. Please give me the Send Messages permission or notify a mod or admin if you cannot do this.`);
+        }).catch(() => logger.warn(`Couldn't get DM channel for/send DM to ${utils.formatUsername(msg.author)} (${msg.author.id})`));
+    } else if (resp && /\{'code':.+, 'message':.+\}/.test(err.response) && resp.code !== 50013) {
+        logger.warn(loggerPrefix(msg) + `Discord error running command "${cmd}":\n:${config.debug ? err.stack : err}`);
+        let m = `Discord error while trying to execute \`${cmd}\`\n`;
+        m += '```js\n';
+        m += `Code: ${resp.code}. Message: ${resp.message}\n`;
+        m += '```';
+        msg.channel.createMessage(m);
+    } else {
+        logger.error(loggerPrefix(msg) + `Error running command "${cmd}":\n${config.debug ? err.stack : err}`);
+        let m = `Experienced error while executing \`${cmd}\`\n`;
+        m += '```js\n';
+        m += err + '\n';
+        m += '```';
+        msg.channel.createMessage(m);
+    }
+}
+
+bot.awaitMessage = (channelID, userID, filter = function () { return true; }, timeout = 15000) => {
+    return new Promise((resolve, reject) => {
+        if (!channelID || typeof channelID !== 'string') {
+            reject(new Error(`Unwanted type of channelID: got "${typeof channelID}" expected "string"`));
+        } else if (!userID || typeof userID !== 'string') {
+            reject(new Error(`Unwanted type of userID: got "${typeof userID}" expected "string"`));
+        } else {
+            var responded, rmvTimeout;
+
+            var onCrt = (msg) => {
+                if (msg.channel.id === channelID && msg.author.id === userID && filter(msg)) {
+                    responded = true;
+                    return msg;
+                }
+            };
+
+            var onCrtWrap = (msg) => {
+                var res = onCrt(msg);
+                if (responded) {
+                    bot.removeListener('messageCreate', onCrtWrap);
+                    clearInterval(rmvTimeout);
+                    resolve(res);
+                }
+            };
+
+            bot.on('messageCreate', onCrtWrap);
+
+            rmvTimeout = setTimeout(() => {
+                if (!responded) {
+                    bot.removeListener('messageCreate', onCrtWrap);
+                    reject(new Error('Message await expired.'));
+                }
+            }, timeout);
+        }
+    });
+};
