@@ -2,12 +2,11 @@
 # This is a highly experimental Dockerfile. Use with caution.
 # Licensed Under MIT. Contributed by Capuccino
 
-FROM ubuntu:16.xvrdm/ubuntu-16.04
+FROM ubuntu:1and1internet/ubuntu-16
 
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
 
 RUN sudo \
-
 sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
 echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers 
 
@@ -19,6 +18,13 @@ USER ayaneru
 
 RUN mkdir base
 
+# It's advisable to create your config.json before launching this because we copy files
+# then stab it on the container like no one cares.
+
 COPY src /home/ayaneru/base
 
 RUN cd base && npm i -S 
+
+# now we launch the bot
+
+RUN node bot --harmony
