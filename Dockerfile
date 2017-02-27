@@ -5,6 +5,24 @@
 FROM ubuntu:16.04 
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
 RUN sudo apt install build-essential python
+RUN apt-get update && \
+    apt-get -y install \
+    openssh-server \
+    sudo \
+    procps \
+    wget \
+    unzip \
+    mc \
+    ca-certificates \
+    curl \
+    software-properties-common \
+    python-software-properties \
+    bash-completion && \
+    mkdir /var/run/sshd && \
+    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
+    echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    useradd -u 1000 -G users,sudo -d /home/user --shell /bin/bash -m user && \
+    usermod -p "*" user 
 RUN nvm install v6.10.0 && nvm alias default v6.10.0
 USER ayaneru
 RUN mkdir /home/ayaneru/base
