@@ -1,0 +1,12 @@
+LICENSE
+*.md 
+*.floorignore
+*.eslintrc
+example/*
+.vs/*
+.vscode/*
+.idea/*
+.settings/*
+*.yml
+*.sln
+*.njsproj
