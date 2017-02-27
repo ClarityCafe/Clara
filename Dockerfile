@@ -18,7 +18,6 @@ RUN apt-get update && \
     software-properties-common \
     python-software-properties \
     bash-completion
-RUN nvm install v6.10.0 && nvm alias default v6.10.0
 USER ayaneru
 RUN mkdir /home/ayaneru/base
 # It's advisable to create your config.json before launching this because we copy files
