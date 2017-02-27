@@ -4,13 +4,13 @@
 
 FROM ubuntu:16.04 
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
-RUN sudo apt install build-essential python
 RUN apt-get update && \
     apt-get -y install \
-    openssh-server \
     sudo \
     procps \
     wget \
+    build-essential \ 
+    python \
     unzip \
     mc \
     ca-certificates \
