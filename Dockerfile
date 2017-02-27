@@ -2,7 +2,7 @@
 # This is a highly experimental Dockerfile. Use with caution.
 # Licensed Under MIT. Contributed by Capuccino
 
-FROM ubuntu:1and1internet/ubuntu-16
+FROM ubuntu:16.04 
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
 RUN sudo \
 sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
