@@ -14,6 +14,7 @@ RUN mkdir /home/ayaneru/base
 # It's advisable to create your config.json before launching this because we copy files
 # then stab it on the container like no one cares.
 COPY src/* /home/ayaneru/base
+COPY package.json /home/ayaneru/base
 RUN cd base && npm i -S 
 # now we launch the bot
 RUN node bot --harmony
