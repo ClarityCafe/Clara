@@ -6,7 +6,7 @@ node_js:
   - "7.1"
 install:
 
-- apt install docker docker.io
+- sudo apt install docker docker.io
 - npm i --save
 
 script :
