@@ -1,0 +1,4 @@
+[submodule "Clara-commands"]
+	path = src/commands/Clara-commands
+	url = https://github.com/awau/Clara-commands
+	branch = master
