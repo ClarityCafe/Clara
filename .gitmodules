@@ -2,3 +2,7 @@
 	path = src/commands/Clara-commands
 	url = https://github.com/awau/Clara-commands
 	branch = master
+[submodule "commands"]
+	path = commands/commands
+	url = https://github.com/awau/Clara-commands
+	branch = master
