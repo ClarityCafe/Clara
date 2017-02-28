@@ -308,11 +308,13 @@ function play(msg, url) {
             queue(msg, url).then(() => {
                 return bot.joinVoiceChannel(msg.member.voiceState.channelID);
             }).then(cnc => {
+                if (!bot.music.channels.get(cnc.channelID)) bot.music.channels.add(msg.channel.guild.channels.get(cnc.channelID));
+                if (!bot.music.guilds.get(bot.guilds.get(cnc.id))) bot.music.guilds.add(bot.guilds.get(cnc.id));
                 cnc.once('ready', () => {
                     bot.music.connections.add(cnc);
                     let stream = ytdl(url);
                     bot.music.streams.add({id: msg.channel.guild.id, stream, type: 'YouTubeVideo'});
-                    cnc.play(stream, {encoderArgs: ['volume=0.5']});
+                    cnc.play(stream, {encoderArgs: ['-af "volume=0.5"']});
 
                     stream.on('info', function onYtInfo(info) {
                         msg.channel.createMessage({embed: {
@@ -342,7 +344,7 @@ function play(msg, url) {
                 let cnc = bot.music.connections.get(msg.channel.guild.id);
                 let stream = ytdl(url);
                 bot.music.streams.add({id: msg.channel.guild.id, stream, type: 'YouTubeVideo'});
-                cnc.play(stream, {encoderArgs: ['volume=0.5']});
+                cnc.play(stream, {encoderArgs: ['-af "volume=0.5"']});
 
                 stream.on('info', function onYtInfo(info) {
                     msg.channel.createMessage({embed: {
@@ -370,7 +372,7 @@ function play(msg, url) {
             let cnc = bot.music.connections.get(msg.channel.guild.id);
             let stream = ytdl(url);
             bot.music.streams.add({id: msg.channel.guild.id, stream, type: 'YouTubeVideo'});
-            cnc.play(stream, {encoderArgs: ['volume=0.5']});
+            cnc.play(stream, {encoderArgs: ['-af "volume=0.5"']});
 
             stream.on('info', function onYtInfo(info) {
                 msg.channel.createMessage({embed: {

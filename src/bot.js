@@ -174,13 +174,7 @@ bot.on('shardDisconnect', (err, shard) => {
     if (err) logger.customError('shard/shardStatus', `Shard ${shard} disconnected. Reason ${err}`);
 });
 
-// Music shit
-bot.on('voiceChannelJoin', (mem, chan) => {
-    if (mem.id !== bot.user.id) return;
-    if (!bot.music.channels.get(chan.id)) bot.music.channels.add(chan);
-    if (!bot.music.guilds.get(chan.guild.id)) bot.music.guilds.add(chan.guild);
-});
-
+// Music Shit
 bot.on('voiceChannelLeave', (mem, chan) => {
     if (chan.voiceMembers.filter(m => m.id !== bot.user.id && !m.bot).length === 0 && chan.voiceMembers.get(bot.user.id)) {
         setTimeout(() => {
