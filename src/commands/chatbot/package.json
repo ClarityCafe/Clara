@@ -1,6 +1,0 @@
-{
-    "main": "chatbot.js",
-    "dependencies": {
-        "markov-strings": "^1.3.2"
-    }
-}

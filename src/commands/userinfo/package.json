@@ -1,6 +1,0 @@
-{
-    "main": "userinfo.js",
-    "dependencies": {
-        "moment": "^2.17.1"
-    }
-}
