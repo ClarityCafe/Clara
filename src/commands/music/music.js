@@ -39,7 +39,7 @@ exports.play = {
                             search(ctx.msg, ctx.suffix).then(res => {
                                 if (!(res instanceof Eris.Message)) {
                                     if (bot.music.stopped.indexOf(ctx.msg.channel.guild.id) > -1) bot.music.stopped.splice(bot.music.stopped.indexOf(ctx.msg.channel.guild.id), 1);
-                                    play(res.msg, res.url).then(resolve).catch(reject);
+                                    play(res.msg, res.url, {encoderArgs : [`-af "volume=0.5"`]}).then(resolve).catch(reject);
                                 } else {
                                     resolve();
                                 }
@@ -48,12 +48,12 @@ exports.play = {
                             ctx.msg.channel.createMessage('API key to search appears to be missing. Please queue songs via a link.').then(resolve).catch(reject);
                         } else if (ytRegex(ctx.suffix)) {
                             if (bot.music.stopped.indexOf(ctx.msg.channel.guild.id) > -1) bot.music.stopped.splice(bot.music.stopped.indexOf(ctx.msg.channel.guild.id), 1);
-                            play(ctx.msg, ctx.suffix).then(resolve).catch(reject);
+                            play(ctx.msg, ctx.suffix , {encoderArgs : [`-af "volume=0.5"`]}).then(resolve).catch(reject);
                         }
                     } else if (bot.music.queues.get(ctx.msg.channel.guild.id) && bot.music.queues.get(ctx.msg.channel.guild.id).q.length > 0) {
                         if (bot.music.stopped.indexOf(ctx.msg.channel.guild.id) > -1) bot.music.stopped.splice(bot.music.stopped.indexOf(ctx.msg.channel.guild.id), 1);
                         let q = bot.music.queues.get(ctx.msg.channel.guild.id).q;
-                        play(q[0].msg, q[0].url).then(resolve).catch(reject);
+                        play(q[0].msg, q[0].url,{encoderArgs : [`-af "volume=0.5"`]}).then(resolve).catch(reject);
                     }
                 }
             }
@@ -431,6 +431,7 @@ function getSongInfo(song) {
         } 
     });
 }
+<<<<<<< HEAD
 
 function timeFormat(secs) {
     let seconds = secs % 60;
@@ -446,3 +447,5 @@ function timeFormat(secs) {
 
     return `${hours === 0  ? '' : `${hours}:`}${minutes}:${seconds}`;
 }
+=======
+>>>>>>> c013c682464c95bb3da193d10007deb05e6247c3
