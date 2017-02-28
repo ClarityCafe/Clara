@@ -209,6 +209,8 @@ bot.on('voiceChannelSwitch', (mem, chan, old) => {
     if (bot.music.channels.get(old.id)) {
         bot.music.channels.delete(old.id);
         bot.music.channels.add(chan);
+    } else {
+        bot.music.channels.add(chan);
     }
 });
 
