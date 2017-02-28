@@ -50,7 +50,7 @@ exports.play = {
                             if (bot.music.stopped.indexOf(ctx.msg.channel.guild.id) > -1) bot.music.stopped.splice(bot.music.stopped.indexOf(ctx.msg.channel.guild.id), 1);
                             play(ctx.msg, ctx.suffix).then(resolve).catch(reject);
                         }
-                    } else if (bot.music.queues.get(ctx.msg.channel.guild.id)) {
+                    } else if (bot.music.queues.get(ctx.msg.channel.guild.id) && bot.music.queues.get(ctx.msg.channel.guild.id).q.length > 0) {
                         if (bot.music.stopped.indexOf(ctx.msg.channel.guild.id) > -1) bot.music.stopped.splice(bot.music.stopped.indexOf(ctx.msg.channel.guild.id), 1);
                         let q = bot.music.queues.get(ctx.msg.channel.guild.id).q;
                         play(q[0].msg, q[0].url).then(resolve).catch(reject);
@@ -79,36 +79,20 @@ exports.queue = {
                     let description = `**${q.length} ${q.length === 1 ? 'item' : 'items'} in queue.${q.length > 10 ? 'Showing first 10 items.' : ''}**\n\n`;
 
                     for (let i in q) {
-                        if (!q[i]) break;
-                        description += `**${(Number(i) + 1)}:** \`${q[i].info.title}\` (${q[i].info.uploader})\n\n`;
+                        if (!q[i] || Number(q) === 9) break;
+                        description += `**${(Number(i) + 1)}:** \`${q[i].info.title}\` (${q[i].info.uploader}) **[${timeFormat(q[i].info.length)}]**\n\n`;
                     }
 
                     let embed = {
                         title: 'Music Queue',
                         description,
-                        footer: {text: q.length - 10 > 0 ? `${q.length - 10} more items.` : ''}
+                        footer: {text: q.length - 10 > 0 ? `${q.length - 10} more ${q.length - 10 === 1 ? 'item' : 'items'}.` : ''}
                     };
 
                     ctx.msg.channel.createMessage({embed}).then(resolve).catch(reject);
                 }
             } else {
-                if (!ctx.msg.member.voiceState.channelID) {
-                    ctx.msg.channel.createMessage('You are not in a voice channel.').then(resolve).catch(reject);
-                } else {
-                    if (!ytRegex(ctx.suffix) && !/^https?:\/\//.test(ctx.suffix) && bot.config.ytSearchKey) {
-                        search(ctx.msg, ctx.suffix).then(res => {
-                            if (!(res instanceof Eris.Message)) {
-                                play(res.msg, res.url).then(resolve).catch(reject);
-                            } else {
-                                resolve();
-                            }
-                        }).catch(reject);
-                    } else if (!ytRegex(ctx.suffix) && !/^https?:\/\//.test(ctx.suffix) && !bot.config.ytSearchKey) {
-                        ctx.msg.channel.createMessage('API key to search appears to be missing. Please queue songs via a link.').then(resolve).catch(reject);
-                    } else if (ytRegex(ctx.suffix)) {
-                        play(ctx.msg, ctx.suffix).then(resolve).catch(reject);
-                    }
-                }
+                exports.play.main(bot, ctx).then(resolve).catch(reject);
             }
         });
     }
@@ -223,7 +207,7 @@ exports.skip = {
                             if (!skips.users[ctx.msg.author.id]) {
                                 skips.count++;
                                 skips.users.push(ctx.msg.author.id);
-                                let chan = bot.music.channels.find(c => c.guild.id === ctx.msg.channel.guild.id);
+                                let chan = bot.music.channels.get(bot.music.connections.get(ctx.msg.channel.guild.id).channelID);
                                 if (skips.count >= Math.floor(chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf).length / 2)) {
                                     skips.count = 0;
                                     skips.users = [];
@@ -293,14 +277,19 @@ function search(msg, terms) {
                         if (!res[i]) break;
                         embed.fields.push({name: (i + 1) + ': ' + res[i].channelTitle, value: res[i].title});
                     }
-                    msg.channel.createMessage({embed}).then(() => {
+
+                    let outerMsg;
+                    msg.channel.createMessage({embed}).then(m => {
+                        outerMsg = m;
                         return bot.awaitMessage(msg.channel.id, msg.author.id);
                     }).then(m => {
                         if (/^[1-5]$/.test(m.content.split(' ')[0])) {
                             let choice = Number(m.content.split(' ')[0]) - 1;
                             choice = res[choice];
+                            outerMsg.delete();
                             return {msg: m, url: choice.link};
                         } else {
+                            outerMsg.delete();
                             return m.channel.createMessage('Invalid response.');
                         }
                     }).then(resolve).catch(reject);
@@ -323,12 +312,12 @@ function play(msg, url) {
                     bot.music.connections.add(cnc);
                     let stream = ytdl(url);
                     bot.music.streams.add({id: msg.channel.guild.id, stream, type: 'YouTubeVideo'});
-                    cnc.play(stream);
+                    cnc.play(stream, {encoderArgs: ['volume=0.5']});
 
                     stream.on('info', function onYtInfo(info) {
                         msg.channel.createMessage({embed: {
                             title: 'Now Playing',
-                            description: `${info.title}\n[Link](${info.video_url})`,
+                            description: `${info.title}\n[Link](${info.video_url}) **[${timeFormat(info.length_seconds)}]**`,
                             image: {url: info.iurlhq},
                             footer: {text: `Requested by ${utils.formatUsername(msg.member)}`}
                         }});
@@ -353,12 +342,12 @@ function play(msg, url) {
                 let cnc = bot.music.connections.get(msg.channel.guild.id);
                 let stream = ytdl(url);
                 bot.music.streams.add({id: msg.channel.guild.id, stream, type: 'YouTubeVideo'});
-                cnc.play(stream);
+                cnc.play(stream, {encoderArgs: ['volume=0.5']});
 
                 stream.on('info', function onYtInfo(info) {
                     msg.channel.createMessage({embed: {
                         title: 'Now Playing',
-                        description: `${info.title}\n[Link](${info.video_url})`,
+                        description: `${info.title}\n[Link](${info.video_url}) **[${timeFormat(info.length_seconds)}]**`,
                         image: {url: info.iurlhq},
                         footer: {text: `Requested by ${utils.formatUsername(msg.member)}`}
                     }});
@@ -381,12 +370,12 @@ function play(msg, url) {
             let cnc = bot.music.connections.get(msg.channel.guild.id);
             let stream = ytdl(url);
             bot.music.streams.add({id: msg.channel.guild.id, stream, type: 'YouTubeVideo'});
-            cnc.play(stream);
+            cnc.play(stream, {encoderArgs: ['volume=0.5']});
 
             stream.on('info', function onYtInfo(info) {
                 msg.channel.createMessage({embed: {
                     title: 'Now Playing',
-                    description: `${info.title}\n[Link](${info.video_url})`,
+                    description: `${info.title}\n[Link](${info.video_url}) **[${timeFormat(info.length_seconds)}]**`,
                     image: {url: info.iurlhq},
                     footer: {text: `Requested by ${utils.formatUsername(msg.member)}`}
                 }});
@@ -415,13 +404,12 @@ function play(msg, url) {
 function queue(msg, url) {
     return new Promise((resolve, reject) => {
         let bot = exposed.bot;
-        if (!bot.music.queues.get(msg.channel.guild.id)) {
-            bot.music.queues.add({id: msg.channel.guild.id, q: []});
-        }
+        if (!bot.music.queues.get(msg.channel.guild.id)) bot.music.queues.add({id: msg.channel.guild.id, q: []});
         let q = bot.music.queues.get(msg.channel.guild.id).q;
+
         getSongInfo(url).then(info => {
             if (ytRegex(url)) {
-                let i = {title: info.title, uploader: info.author.name, type: 'YouTubeVideo'};
+                let i = {title: info.title, uploader: info.author.name, length: info.length_seconds, type: 'YouTubeVideo'};
                 q.push({url: url, requestee: msg.author.id, msg: msg, info: i, timestamp: Date.now()});
                 return msg.channel.createMessage(`Queued **${info.title}** to position **${q.length}**.`);
             }
@@ -441,4 +429,19 @@ function getSongInfo(song) {
             });
         } 
     });
+}
+
+function timeFormat(secs) {
+    let seconds = secs % 60;
+    let minutes = (secs / 60) % 60;
+    let hours = (minutes / 60) % 24;
+
+    seconds = Math.floor(seconds);
+    minutes = Math.floor(minutes);
+    hours = Math.floor(hours);
+
+    seconds.toString().length === 1 ? seconds = '0' + seconds.toString() : seconds = seconds.toString();
+    minutes.toString().length === 1 && hours !== 0 ? minutes = '0' + minutes.toString() : minutes = minutes.toString();
+
+    return `${hours === 0  ? '' : `${hours}:`}${minutes}:${seconds}`;
 }
