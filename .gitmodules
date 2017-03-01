@@ -1,0 +1,6 @@
+[submodule "src/Clara-commands"]
+	path = src/Clara-commands
+	url = https://github.com/awau/Clara-commands
+[submodule "src/commands"]
+	path = src/commands
+	url = https://github.com/awau/Clara-commands
