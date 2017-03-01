@@ -19,7 +19,6 @@ exports.ship = {
             if(ctx.msg.mentions.length < 2) {
                 ctx.msg.channel.createMessage('Specify at least two users').then(() => reject(new Error('No User Specified'))).catch(reject);
             } else {
-                //placeholder lets for now
                 let user1 = ctx.msg.mentions[1];
                 let user2 = ctx.msg.mentions[2];
                 let result = user1.username.substring(0, Math.floor(user1.username.length / 2)) + user2.username.substring(Math.floor(user2.username.length / 2));
