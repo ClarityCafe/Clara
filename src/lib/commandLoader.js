@@ -17,7 +17,7 @@ const cp = require('child_process');
 const logger = require(`${__dirname}/logger.js`);
 
 // Variables
-var commandsDirectory = 'Clara-commands';
+var commandsDirectory = 'commands';
 var commandFolders;
 var noLoad = [];
 var unloadedCommands;
