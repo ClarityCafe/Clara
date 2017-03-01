@@ -25,7 +25,7 @@ exports.ship = {
                 let result = waifu1.username.substring(0, Math.floor(waifu1.username.length / 2)) + waifu2.username.substring(Math.floor(waifu2.username.length / 2));
                 ctx.msg.channel.createMessage({embed : {
                     title: 'Happy Shipping!',
-                    thumbnail:{url: 'https://raw.githubusercontent.com/twitter/twemoji/gh-pages/2/72x72/1f49f.png', width: 72, height : 72},
+                    thumbnail:'https://raw.githubusercontent.com/twitter/twemoji/gh-pages/2/72x72/1f49f.png', 
                     color: 0xFD7BB5,
                     fields : [
                         {name: 'Your Ship name is', value: result, inline: true}
