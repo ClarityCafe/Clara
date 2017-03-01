@@ -95,7 +95,7 @@ bot.on('ready', () => {
         logger.info('Reconnected to Discord from disconnect.');
     }
 
-    bot.editStatus('online', {name: `${config.gameName || `with everyone.`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: config.gameURL ? 1 : 0, url: `${config.gameURL || null}`});
+    bot.editStatus('online', {name: `${config.gameName || `${config.prefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: config.gameURL ? 1 : 0, url: `${config.gameURL || null}`});
 });
 
 bot.on('shardReady', shard => {
@@ -111,12 +111,12 @@ bot.on('guildCreate', g => {
         logger.info(`Detected bot collection guild. Autoleaving.... (${g.name} [${g.id}])`);
         g.leave();
     } else {
-        bot.editStatus('online', {name: `${config.gameName || `with everyone.`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: config.gameURL ? 1 : 0, url: `${config.gameURL || null}`});
+        bot.editStatus('online', {name: `${config.gameName || `${config.prefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: config.gameURL ? 1 : 0, url: `${config.gameURL || null}`});
     }
 });
 
 bot.on('guildDelete', () => {
-    bot.editStatus('online', {name: `${config.gameName || `with everyone.`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: config.gameURL ? 1 : 0, url: `${config.gameURL || null}`});
+    bot.editStatus('online', {name: `${config.gameName || `${config.prefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: config.gameURL ? 1 : 0, url: `${config.gameURL || null}`});
 });
 
 const prefixParser = require(`${__dirname}/lib/prefixParser.js`);
