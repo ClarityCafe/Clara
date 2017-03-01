@@ -25,6 +25,7 @@ exports.ship = {
                 let result = waifu1.username.substring(0, Math.floor(waifu1.username.length / 2)) + waifu2.username.substring(Math.floor(waifu2.username.length / 2));
                 ctx.msg.channel.createMessage({embed : {
                     title: 'Happy Shipping!',
+                    thumbnail:{url: 'https://cdn.discordapp.com/attachments/132632676225122304/286491951119990795/emoji.png', width: 50, height : 50},
                     color: 0xFD7BB5,
                     fields : [
                         {name: 'Your Ship name is', value: result, inline: true}
