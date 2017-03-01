@@ -152,7 +152,7 @@ bot.on('messageCreate', msg => {
                     handleCmdErr(msg, cmd, err);
                 });
             } else if (bot.commands.getCommand(cmd).adminOnly) {
-                msg.channel.createMessage(`You do not have permission to do that.`);
+                msg.channel.createMessage(`Hey ${msg.author.mention}, you do not have permission to do that! :<`);
             } else {
                 bot.commands.runCommand(cmd, bot, ctx).then(() => {
                     logger.cmd(loggerPrefix(msg) + `Successfully ran command '${cmd}'`);
