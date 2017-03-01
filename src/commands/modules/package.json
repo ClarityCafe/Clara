@@ -1,0 +1,6 @@
+{
+    "main": "modules.js",
+    "dependencies": {
+        "decache": "^4.1.0"
+    }
+}

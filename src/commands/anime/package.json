@@ -1,0 +1,8 @@
+{
+    "main": "anime.js",
+    "dependencies": {
+        "malapi": "^0.0.3",
+        "dominant-color": "^0.0.1",
+        "request": "^2.79.0"
+    }
+}

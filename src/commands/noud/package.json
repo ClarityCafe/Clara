@@ -1,0 +1,6 @@
+{
+    "main": "nya.js",
+    "dependencies": {
+        "cat-ascii-faces" : "2.0.0"
+    }
+}
