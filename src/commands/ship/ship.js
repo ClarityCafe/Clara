@@ -19,7 +19,6 @@ exports.ship = {
             if(ctx.msg.mentions.length < 2) {
                 ctx.msg.channel.createMessage('Specify at least two users').then(() => reject(new Error('No User Specified'))).catch(reject);
             } else {
-                //placeholder lets for now 
                 let waifu1 = ctx.msg.mentions[0];
                 let waifu2 = ctx.msg.mentions[1];
                 let result = waifu1.username.substring(0, Math.floor(waifu1.username.length / 2)) + waifu2.username.substring(Math.floor(waifu2.username.length / 2));
