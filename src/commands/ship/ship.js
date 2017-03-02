@@ -25,11 +25,11 @@ exports.ship = {
                 let result = waifu1.username.substring(0, Math.floor(waifu1.username.length / 2)) + waifu2.username.substring(Math.floor(waifu2.username.length / 2));
                 ctx.msg.channel.createMessage({embed : {
                     title: 'Happy Shipping!',
+                    thumbnail: '',
                     color: 0xFD7BB5,
                     fields : [
                         {name: 'Your Ship name is', value: result, inline: true}
                     ],
-                    footer: "We are not solely responsible for anyone's broken hearts resulting from this ship."
                 }}).then(() => resolve).catch(reject);
             }
         });
