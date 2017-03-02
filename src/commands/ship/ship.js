@@ -11,18 +11,17 @@ exports.commands = [
 ];
 
 exports.ship = {
-    desc: 'basically a ship command.',
-    longDesc: 'Happy Shipping!',
-    usage: '<user Mention (Maximum 2)>',
+    desc: 'Happy Shipping!',
+    usage: '<2 Names (Mention or Regular Msg)>',
     main: (bot, ctx) => {
-        return new Promise((resolve,reject) => {
-            if(ctx.msg.mentions.length < 2) {
-                ctx.msg.channel.createMessage('Specify at least two users').then(() => reject(new Error('No User Specified'))).catch(reject);
+        return new Promise((resolve, reject) => {
+            if (ctx.msg.mentions.length > 2 || ctx.args.length > 2) {
+                ctx.msg.channel.createMessage('Give me at least two names').then(() => reject(new Error('Now you fucked up.'))).catch(reject);
             } else {
-                let waifu1 = ctx.msg.mentions[0];
-                let waifu2 = ctx.msg.mentions[1];
-                let result = waifu1.username.substring(0, Math.floor(waifu1.username.length / 2)) + waifu2.username.substring(Math.floor(waifu2.username.length / 2));
-                ctx.msg.channel.createMessage(`Happy Shipping!\n Your ship name is **${result}**`);
+                let senpai = ctx.msg.mentions[0] ? ctx.msg.mentions[0].username : ctx.args[0];
+                let kouhai = ctx.msg.mentions[1] ? ctx.msg.mentions[1].username : ctx.args[1];
+                let result = senpai.substring(0, Math.floor(senpai.length / 2)) + kouhai.substring(Math.floor(kouhai.length / 2));
+                ctx.msg.channel.createMessage(`Happy Shipping!\n Your Ship name is : **${result}**!\n _Disclaimer: We are not responsible if you get attacked by a Yandere prior from this._`).then(() => resolve).catch(reject);
             }
         });
     }
