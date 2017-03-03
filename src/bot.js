@@ -176,7 +176,7 @@ bot.on('shardDisconnect', (err, shard) => {
 
 // Music Shit
 bot.on('voiceChannelLeave', (mem, chan) => {
-    if (chan.voiceMembers.filter(m => m.id !== bot.user.id && !m.bot).length === 0 && chan.voiceMembers.get(bot.user.id)) {
+    /*if (chan.voiceMembers.filter(m => m.id !== bot.user.id && !m.bot).length === 0 && chan.voiceMembers.get(bot.user.id)) {
         setTimeout(() => {
             let c = bot.guilds.get(chan.guild.id).channels.get(chan.id);
             if (c.voiceMembers.filter(m => m.id !== bot.user.id && !m.bot).length === 0) {
@@ -184,7 +184,7 @@ bot.on('voiceChannelLeave', (mem, chan) => {
                 bot.music.connections.get(chan.guild.id).leave();
             }
         }, 60000);
-    }
+    }*/
 
     if (mem.id !== bot.user.id) return;
     if (bot.music.channels.get(chan.id)) bot.music.channels.delete(chan.id);
