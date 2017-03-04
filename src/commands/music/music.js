@@ -177,7 +177,10 @@ exports.sources = {
         return new Promise((resolve, reject) => {
             ctx.msg.channel.createMessage({embed: {
                 title: 'Music Sources',
-                description: '**Current supported music sources.**\n\n**YouTube**: `https://youtube.com/watch?v=id` or `https://youtu.be/id`'
+                description: '**Current supported music sources.**\n\n'
+                + '**YouTube**: `https://youtube.com/watch?v=id` or `https://youtu.be/id`\n'
+                + '**SoundCloud**: `https://soundcloud.com/user/song`\n'
+                + '**Clyp**: `https://clyp.it/id`'
             }}).then(resolve).catch(reject);
         });
     }
