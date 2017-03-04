@@ -7,6 +7,7 @@
 const ytdl = require('youtube-dl');
 const ytSearch = require('youtube-search');
 const request = require('request');
+let PassThrough = require('stream').PassThrough;
 const utils = require(`${__baseDir}/lib/utils`);
 
 var ytRegex = exports.ytRegex = str => /(https?:\/\/)?(www\.|m.)?youtube\.com\/watch\?v=.+(&.+)?/.test(str) || /(https?:\/\/)?youtu\.be\/.+/.test(str);
@@ -123,6 +124,11 @@ var play = exports.play = (msg, url) => {
                     this.removeListener('data', infoSend);
                 });
 
+                cnc.on('error', function onError(err) {
+                    logger.customError('voiceConnection', `Error in voice connection in guild '${bot.guilds.get(cnc.id).name}' (${cnc.id}):\n${err}`);
+                    msg.channel.createMessage(err);
+                });
+
                 cnc.on('end', function onMusicEnd() {
                     if (cnc.playing || !bot.music.queues.get(msg.channel.guild.id) || bot.music.stopped.indexOf(msg.channel.guild.id) > -1) return;
                     let q = bot.music.queues.get(msg.channel.guild.id).q;
@@ -131,37 +137,45 @@ var play = exports.play = (msg, url) => {
                         bot.music.streams.delete(msg.channel.guild.id);
                     }
                     if (q.length > 0) play(q[0].msg, q[0].url);
+                    this.removeAllListeners('error');
                     this.removeListener('end', onMusicEnd);
                 });
             }).then(resolve).catch(reject);
         } else if (bot.music.connections.get(msg.channel.guild.id) && bot.music.queues.get(msg.channel.guild.id).q.length > 0 && bot.music.queues.get(msg.channel.guild.id).q[0].url === url) {
-            let cnc = bot.music.connections.get(msg.channel.guild.id);
-            let stream = getStream(url);
-            bot.music.streams.add({id: msg.channel.guild.id, stream, type: 'YouTubeVideo'});
-            cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5']});
+            getStream(url).then(res => {
+                let [stream, type] = res;
+                let cnc = bot.music.connections.get(msg.channel.guild.id);
+                let info = bot.music.queues.get(msg.channel.guild.id).q[0].info;
+                bot.music.streams.add({id: msg.channel.guild.id, stream, type: 'YouTubeVideo'});
+                cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5']});
 
-            stream.on('info', function onYtInfo(info) {
-                msg.channel.createMessage({embed: {
-                    title: 'Now Playing',
-                    description: `${info.title}\n[Link](${info.video_url}) **[${timeFormat(info.length_seconds)}]**`,
-                    image: {url: info.iurlhq},
-                    footer: {text: `Requested by ${utils.formatUsername(msg.member)}`}
-                }});
-                this.removeListener('info', onYtInfo);
-            });
+                stream.on('data', function infoSend() {
+                    msg.channel.createMessage({embed: {
+                        title: 'Now Playing',
+                        description: `${info.title}\n[Link](${url}) **[${timeFormat(info.length)}]**`,
+                        image: {url: info.thumbnail},
+                        footer: {text: `Requested by ${utils.formatUsername(msg.member)} | ${type}`}
+                    }});
+                    this.removeListener('data', infoSend);
+                });
 
-            cnc.on('end', function onMusicEnd() {
-                if (cnc.playing || !bot.music.queues.get(msg.channel.guild.id) || bot.music.stopped.indexOf(msg.channel.guild.id) > -1) return;
-                let q = bot.music.queues.get(msg.channel.guild.id).q;                
-                if (q[0].url === url) {
-                    q.splice(0, 1);
-                    bot.music.streams.delete(msg.channel.guild.id);
-                }
-                if (q.length > 0) play(q[0].msg, q[0].url);
-                this.removeListener('end', onMusicEnd);
-            });
+                cnc.on('error', function onError(err) {
+                    logger.customError('voiceConnection', `Error in voice connection in guild '${bot.guilds.get(cnc.id).name}' (${cnc.id}):\n${err}`);
+                    msg.channel.createMessage(err);
+                });
 
-            resolve();
+                cnc.on('end', function onMusicEnd() {
+                    if (cnc.playing || !bot.music.queues.get(msg.channel.guild.id) || bot.music.stopped.indexOf(msg.channel.guild.id) > -1) return;
+                    let q = bot.music.queues.get(msg.channel.guild.id).q;
+                    if (q[0].url === url) {
+                        q.splice(0, 1);
+                        bot.music.streams.delete(msg.channel.guild.id);
+                    }
+                    if (q.length > 0) play(q[0].msg, q[0].url);
+                    this.removeAllListeners('error');
+                    this.removeListener('end', onMusicEnd);
+                });
+            }).then(resolve).catch(reject);
         } else if (bot.music.connections.get(msg.channel.guild.id) && bot.music.queues.get(msg.channel.guild.id).q.length > 0 && bot.music.queues.get(msg.channel.guild.id).q[0].url !== url && bot.music.connections.get(msg.channel.guild.id).playing) {
             queue(msg, url).then(resolve).catch(reject);
         }
