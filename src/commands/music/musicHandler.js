@@ -75,22 +75,21 @@ var play = exports.play = (msg, url) => {
                 bot.music.streams.add({id: msg.channel.guild.id, stream, type});
                 cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5']});
 
-                stream.on('data', function infoSend() {
+                stream.once('data', () => {
                     msg.channel.createMessage({embed: {
                         title: 'Now Playing',
                         description: `${info.title}\n[Link](${url}) **[${timeFormat(info.length)}]**`,
                         image: {url: info.thumbnail},
                         footer: {text: `Requested by ${utils.formatUsername(msg.member)} | ${type}`}
                     }});
-                    this.removeListener('data', infoSend);
                 });
 
-                cnc.on('error', function onError(err) {
+                cnc.on('error', err => {
                     logger.customError('voiceConnection', `Error in voice connection in guild '${bot.guilds.get(cnc.id).name}' (${cnc.id}):\n${err}`);
                     msg.channel.createMessage(err);
                 });
 
-                cnc.on('end', function onMusicEnd() {
+                cnc.once('end', function() {
                     if (cnc.playing || !bot.music.queues.get(msg.channel.guild.id) || bot.music.stopped.indexOf(msg.channel.guild.id) > -1) return;
                     let q = bot.music.queues.get(msg.channel.guild.id).q;
                     if (q[0].url === url) {
@@ -99,7 +98,6 @@ var play = exports.play = (msg, url) => {
                     }
                     if (q.length > 0) play(q[0].msg, q[0].url);
                     this.removeAllListeners('error');
-                    this.removeListener('end', onMusicEnd);
                 });
             }).then(resolve).catch(reject);
         } else if (bot.music.connections.get(msg.channel.guild.id) && (!bot.music.queues.get(msg.channel.guild.id) || bot.music.queues.get(msg.channel.guild.id).q.length === 0)) {
@@ -112,22 +110,21 @@ var play = exports.play = (msg, url) => {
                 bot.music.streams.add({id: msg.channel.guild.id, stream, type});
                 cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5']});
 
-                stream.on('data', function infoSend() {
+                stream.once('data', () => {
                     msg.channel.createMessage({embed: {
                         title: 'Now Playing',
                         description: `${info.title}\n[Link](${url}) **[${timeFormat(info.length)}]**`,
                         image: {url: info.thumbnail},
                         footer: {text: `Requested by ${utils.formatUsername(msg.member)} | ${type}`}
                     }});
-                    this.removeListener('data', infoSend);
                 });
 
-                cnc.on('error', function onError(err) {
+                cnc.on('error', err => {
                     logger.customError('voiceConnection', `Error in voice connection in guild '${bot.guilds.get(cnc.id).name}' (${cnc.id}):\n${err}`);
                     msg.channel.createMessage(err);
                 });
 
-                cnc.on('end', function onMusicEnd() {
+                cnc.once('end', function() {
                     if (cnc.playing || !bot.music.queues.get(msg.channel.guild.id) || bot.music.stopped.indexOf(msg.channel.guild.id) > -1) return;
                     let q = bot.music.queues.get(msg.channel.guild.id).q;
                     if (q[0].url === url) {
@@ -136,7 +133,6 @@ var play = exports.play = (msg, url) => {
                     }
                     if (q.length > 0) play(q[0].msg, q[0].url);
                     this.removeAllListeners('error');
-                    this.removeListener('end', onMusicEnd);
                 });
             }).then(resolve).catch(reject);
         } else if (bot.music.connections.get(msg.channel.guild.id) && bot.music.queues.get(msg.channel.guild.id).q.length > 0 && bot.music.queues.get(msg.channel.guild.id).q[0].url === url) {
@@ -147,22 +143,21 @@ var play = exports.play = (msg, url) => {
                 bot.music.streams.add({id: msg.channel.guild.id, stream, type: 'YouTubeVideo'});
                 cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5']});
 
-                stream.on('data', function infoSend() {
+                stream.once('data', () => {
                     msg.channel.createMessage({embed: {
                         title: 'Now Playing',
                         description: `${info.title}\n[Link](${url}) **[${timeFormat(info.length)}]**`,
                         image: {url: info.thumbnail},
                         footer: {text: `Requested by ${utils.formatUsername(msg.member)} | ${type}`}
                     }});
-                    this.removeListener('data', infoSend);
                 });
 
-                cnc.on('error', function onError(err) {
+                cnc.on('error', err => {
                     logger.customError('voiceConnection', `Error in voice connection in guild '${bot.guilds.get(cnc.id).name}' (${cnc.id}):\n${err}`);
                     msg.channel.createMessage(err);
                 });
 
-                cnc.on('end', function onMusicEnd() {
+                cnc.once('end', function() {
                     if (cnc.playing || !bot.music.queues.get(msg.channel.guild.id) || bot.music.stopped.indexOf(msg.channel.guild.id) > -1) return;
                     let q = bot.music.queues.get(msg.channel.guild.id).q;
                     if (q[0].url === url) {
@@ -171,7 +166,6 @@ var play = exports.play = (msg, url) => {
                     }
                     if (q.length > 0) play(q[0].msg, q[0].url);
                     this.removeAllListeners('error');
-                    this.removeListener('end', onMusicEnd);
                 });
             }).then(resolve).catch(reject);
         } else if (bot.music.connections.get(msg.channel.guild.id) && bot.music.queues.get(msg.channel.guild.id).q.length > 0 && bot.music.queues.get(msg.channel.guild.id).q[0].url !== url && bot.music.connections.get(msg.channel.guild.id).playing) {
