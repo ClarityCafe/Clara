@@ -185,7 +185,7 @@ bot.on('voiceChannelLeave', (mem, chan) => {
     }*/
 
     if (mem.id !== bot.user.id) return;
-    if (bot.music.channels.get(chan.id)) bot.music.channels.delete(chan.id);
+    if (bot.music.connections.get(chan.guild.id)) bot.music.connections.delete(chan.guild.id);
     if (bot.music.queues.get(chan.guild.id)) bot.music.queues.delete(chan.guild.id);
     if (bot.music.skips.get(chan.guild.id)) bot.music.skips.delete(chan.guild.id);
     if (bot.music.streams.get(chan.guild.id)) {
