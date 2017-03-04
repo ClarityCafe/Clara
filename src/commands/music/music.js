@@ -204,19 +204,13 @@ exports.skip = {
                             if (!skips.users[ctx.msg.author.id]) {
                                 skips.count++;
                                 skips.users.push(ctx.msg.author.id);
-                                let chan = bot.music.channels.get(bot.music.connections.get(ctx.msg.channel.guild.id).channelID);
+                                let chan = ctx.msg.channel.guild.channels.get(bot.music.connections.get(ctx.msg.channel.guild.id).channelID);
                                 if (skips.count >= Math.floor(chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf).length / 2)) {
                                     skips.count = 0;
                                     skips.users = [];
                                     let q = bot.music.queues.get(ctx.msg.channel.guild.id).q;
                                     let qt = q[0];
-                                    if (q[0].url === qt.url) {
-                                        q.splice(0, 1);
-                                        bot.music.connections.get(ctx.msg.channel.guild.id).stopPlaying();
-                                        bot.music.streams.get(ctx.msg.channel.guild.id).stream.destroy();
-                                        bot.music.streams.delete(ctx.msg.channel.guild.id);
-                                    }
-                                    if (q.length > 0) handler.play(q[0].msg, q[0].url);
+                                    if (q[0].url === qt.url) bot.music.connections.get(ctx.msg.channel.guild.id).stopPlaying();
                                     ctx.msg.channel.createMessage(`Skipped **${qt.info.title}**.`).then(resolve).catch(reject);
                                     
                                 } else {
@@ -236,13 +230,7 @@ exports.skip = {
                                 let qt = q[0];
                                 skips.count = 0;
                                 skips.users = [];
-                                if (q[0].url === qt.url) {
-                                    q.splice(0, 1);
-                                    bot.music.connections.get(ctx.msg.channel.guild.id).stopPlaying();
-                                    bot.music.streams.get(ctx.msg.channel.guild.id).stream.destroy();
-                                    bot.music.streams.delete(ctx.msg.channel.guild.id);
-                                }
-                                if (q.length > 0) handler.play(q[0].msg, q[0].url);
+                                if (q[0].url === qt.url) bot.music.connections.get(ctx.msg.channel.guild.id).stopPlaying();
                                 ctx.msg.channel.createMessage(`Skipped **${qt.info.title}**.`).then(resolve).catch(reject);
                             }
                         }
