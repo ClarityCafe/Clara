@@ -70,8 +70,6 @@ bot.config = config;
 bot.music = {
     skips: new Eris.Collection(Object),
     queues: new Eris.Collection(Object),
-    channels: new Eris.Collection(Eris.Channel),
-    guilds: new Eris.Collection(Eris.Guild),
     connections: new Eris.Collection(Eris.VoiceConnection),
     streams: new Eris.Collection(Object),
     stopped: []
@@ -188,23 +186,20 @@ bot.on('voiceChannelLeave', (mem, chan) => {
 
     if (mem.id !== bot.user.id) return;
     if (bot.music.channels.get(chan.id)) bot.music.channels.delete(chan.id);
-    if (bot.music.guilds.get(chan.guild.id)) bot.music.guilds.delete(chan.guild.id);
-    if (bot.music.connections.get(chan.guild.id)) bot.music.connections.delete(chan.guild.id);
     if (bot.music.queues.get(chan.guild.id)) bot.music.queues.delete(chan.guild.id);
     if (bot.music.skips.get(chan.guild.id)) bot.music.skips.delete(chan.guild.id);
     if (bot.music.streams.get(chan.guild.id)) {
-        bot.music.streams.get(chan.guild.id).stream.destroy();
         bot.music.streams.delete(chan.guild.id);
     }
 });
 
 bot.on('voiceChannelSwitch', (mem, chan, old) => {
     if (mem.id !== bot.user.id) return;
-    if (bot.music.channels.get(old.id)) {
-        bot.music.channels.delete(old.id);
-        bot.music.channels.add(chan);
+    if (!bot.music.connections.get(old.id)) {
+        bot.music.connections.add(chan);
     } else {
-        bot.music.channels.add(chan);
+        bot.music.connections.delete(old);
+        bot.music.connects.add(old);
     }
 });
 

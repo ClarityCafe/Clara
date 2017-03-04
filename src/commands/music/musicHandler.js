@@ -66,8 +66,6 @@ var play = exports.play = (msg, url) => {
             queue(msg, url).then(() => {
                 return bot.joinVoiceChannel(msg.member.voiceState.channelID);
             }).then(cnc => {
-                if (!bot.music.channels.get(cnc.channelID)) bot.music.channels.add(msg.channel.guild.channels.get(cnc.channelID));
-                if (!bot.music.guilds.get(bot.guilds.get(cnc.id))) bot.music.guilds.add(bot.guilds.get(cnc.id));
                 bot.music.connections.add(cnc);
                 return getStream(url);
             }).then(res => {
