@@ -202,7 +202,9 @@ var getStream = exports.getStream = song => {
         } else if (scRegex(song)) {
             resolve([ytdl(song), 'SoundCloudTrack']);
         } else if (clypRegex(song)) {
-            request(song, (err, resp, body) => {
+            let id = song.split('/');
+            id = id[id.length - 1];
+            request(`https://api.clyp.it/${id}`, (err, resp, body) => {
                 if (err) {
                     reject(err);
                 } else if (resp.statusCode !== 200) {
