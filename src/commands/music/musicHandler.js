@@ -250,7 +250,7 @@ var getSongInfo = exports.getSongInfo = song => {
                     reject(new Error(`Invalid status code: ${resp.statusCode}`)); 
                 } else {
                     let info = JSON.parse(body);
-                    let res = {title: info.Title, uploader: 'N/A', thumbnail: info.ArtworkPictureURL || '', length: Math.floor(info.Duration), type: 'ClypAudio'};
+                    let res = {title: info.Title, uploader: 'N/A', thumbnail: info.ArtworkPictureUrl || 'https://static.clyp.it/site/images/logos/clyp-og-1200x630.png', length: Math.floor(info.Duration), type: 'ClypAudio'};
                     resolve(res);
                 }
             });
