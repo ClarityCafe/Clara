@@ -7,7 +7,6 @@
 const ytdl = require('youtube-dl');
 const ytSearch = require('youtube-search');
 const request = require('request');
-const PassThrough = require('stream').PassThrough;
 const utils = require(`${__baseDir}/lib/utils`);
 
 var ytRegex = exports.ytRegex = str => /(https?:\/\/)?(www\.|m.)?youtube\.com\/watch\?v=.+(&.+)?/.test(str) || /(https?:\/\/)?youtu\.be\/.+/.test(str);
@@ -97,7 +96,6 @@ var play = exports.play = (msg, url) => {
                     let q = bot.music.queues.get(msg.channel.guild.id).q;
                     if (q[0].url === url) {
                         q.splice(0, 1);
-                        bot.music.streams.get(msg.channel.guild.id).stream.destroy();
                         bot.music.streams.delete(msg.channel.guild.id);
                     }
                     if (q.length > 0) play(q[0].msg, q[0].url);
@@ -130,7 +128,6 @@ var play = exports.play = (msg, url) => {
                     let q = bot.music.queues.get(msg.channel.guild.id).q;
                     if (q[0].url === url) {
                         q.splice(0, 1);
-                        bot.music.streams.get(msg.channel.guild.id).stream.destroy();
                         bot.music.streams.delete(msg.channel.guild.id);
                     }
                     if (q.length > 0) play(q[0].msg, q[0].url);
@@ -158,7 +155,6 @@ var play = exports.play = (msg, url) => {
                 let q = bot.music.queues.get(msg.channel.guild.id).q;                
                 if (q[0].url === url) {
                     q.splice(0, 1);
-                    bot.music.streams.get(msg.channel.guild.id).stream.destroy();
                     bot.music.streams.delete(msg.channel.guild.id);
                 }
                 if (q.length > 0) play(q[0].msg, q[0].url);
@@ -264,9 +260,4 @@ var timeFormat = exports.timeFormat = secs => {
 var formatToSeconds =  exports.formatToSeconds = time => {
     let splitted = time.split(':');
     return Number(splitted[0]) * 60 + Number(splitted[1]);
-};
-
-PassThrough.prototype.destroy = function() {
-    if (this.destroyed) return;
-    this.destroyed = true;
 };
