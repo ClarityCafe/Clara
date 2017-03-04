@@ -25,6 +25,9 @@
   "_comment_ytSearchKey": "Key to use youtube search in music.",
   "ytSearchKey": "",
 
+  "_comment_twitchKey": "Key to use with Twitch streaming.",
+  "twitchKey": "",
+  
   "_comment_token": "your Bot token",
   "token": ""
 }

@@ -4,19 +4,23 @@
  * Contributed by Ovvyerus
  */
 
+const config = require(`${__baseDir}/config.json`);
 const ytdl = require('youtube-dl');
 const ytSearch = require('youtube-search');
+const twitch = require('twitch.tv');
+const twitchStream = require('twitch-get-stream')(config.twitchKey);
 const request = require('request');
-let PassThrough = require('stream').PassThrough;
+const PassThrough = require('stream').PassThrough;
 const utils = require(`${__baseDir}/lib/utils`);
 
 var ytRegex = exports.ytRegex = str => /(https?:\/\/)?(www\.|m.)?youtube\.com\/watch\?v=.+(&.+)?/.test(str) || /(https?:\/\/)?youtu\.be\/.+/.test(str);
 var scRegex = exports.scRegex = str => /(https?:\/\/)?soundcloud\.com\/.+\/.+/.test(str);
 var clypRegex = exports.clypRegex = str => /(https?:\/\/)?clyp\.it\/.+/.test(str);
-var allRegex = exports.allRegex = str => ytRegex(str) || scRegex(str) || clypRegex(str);
+var twitchRegex = exports.twitchRegex = str => /(https?:\/\/)?twitch\.tv\/.+/.test(str);
+var allRegex = exports.allRegex = str => ytRegex(str) || scRegex(str) || clypRegex(str) || twitchRegex(str); // eslint-disable-line no-unused-vars
 exports.exposed = {};
 
-var search = exports.search = (msg, terms) => {
+var search = exports.search = (msg, terms) => { // eslint-disable-line no-unused-vars
     return new Promise((resolve, reject) => {
         let bot = exports.exposed.bot;
         ytSearch(terms, {maxResults: 10, key: bot.config.ytSearchKey}, (err, res) => {
@@ -75,14 +79,23 @@ var play = exports.play = (msg, url) => {
                 bot.music.streams.add({id: msg.channel.guild.id, stream, type});
                 cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5']});
 
-                stream.once('data', () => {
+                if (typeof stream === 'object') {
+                    stream.once('data', () => {
+                        msg.channel.createMessage({embed: {
+                            title: 'Now Playing',
+                            description: `${info.title}\n[Link](${url}) **[${typeof info.length === 'number' ? timeFormat(info.length) : info.length}]**`,
+                            image: {url: info.thumbnail},
+                            footer: {text: `Requested by ${utils.formatUsername(msg.member)} | ${type}`}
+                        }});
+                    });
+                } else {
                     msg.channel.createMessage({embed: {
                         title: 'Now Playing',
-                        description: `${info.title}\n[Link](${url}) **[${timeFormat(info.length)}]**`,
+                        description: `${info.title}\n[Link](${url}) **[${typeof info.length === 'number' ? timeFormat(info.length) : info.length}]**`,
                         image: {url: info.thumbnail},
                         footer: {text: `Requested by ${utils.formatUsername(msg.member)} | ${type}`}
                     }});
-                });
+                }
 
                 cnc.on('error', err => {
                     logger.customError('voiceConnection', `Error in voice connection in guild '${bot.guilds.get(cnc.id).name}' (${cnc.id}):\n${err}`);
@@ -110,14 +123,23 @@ var play = exports.play = (msg, url) => {
                 bot.music.streams.add({id: msg.channel.guild.id, stream, type});
                 cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5']});
 
-                stream.once('data', () => {
+                if (typeof stream === 'object') {
+                    stream.once('data', () => {
+                        msg.channel.createMessage({embed: {
+                            title: 'Now Playing',
+                            description: `${info.title}\n[Link](${url}) **[${typeof info.length === 'number' ? timeFormat(info.length) : info.length}]**`,
+                            image: {url: info.thumbnail},
+                            footer: {text: `Requested by ${utils.formatUsername(msg.member)} | ${type}`}
+                        }});
+                    });
+                } else {
                     msg.channel.createMessage({embed: {
                         title: 'Now Playing',
-                        description: `${info.title}\n[Link](${url}) **[${timeFormat(info.length)}]**`,
+                        description: `${info.title}\n[Link](${url}) **[${typeof info.length === 'number' ? timeFormat(info.length) : info.length}]**`,
                         image: {url: info.thumbnail},
                         footer: {text: `Requested by ${utils.formatUsername(msg.member)} | ${type}`}
                     }});
-                });
+                }
 
                 cnc.on('error', err => {
                     logger.customError('voiceConnection', `Error in voice connection in guild '${bot.guilds.get(cnc.id).name}' (${cnc.id}):\n${err}`);
@@ -143,14 +165,23 @@ var play = exports.play = (msg, url) => {
                 bot.music.streams.add({id: msg.channel.guild.id, stream, type: 'YouTubeVideo'});
                 cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5']});
 
-                stream.once('data', () => {
+                if (typeof stream === 'object') {
+                    stream.once('data', () => {
+                        msg.channel.createMessage({embed: {
+                            title: 'Now Playing',
+                            description: `${info.title}\n[Link](${url}) **[${typeof info.length === 'number' ? timeFormat(info.length) : info.length}]**`,
+                            image: {url: info.thumbnail},
+                            footer: {text: `Requested by ${utils.formatUsername(msg.member)} | ${type}`}
+                        }});
+                    });
+                } else {
                     msg.channel.createMessage({embed: {
                         title: 'Now Playing',
-                        description: `${info.title}\n[Link](${url}) **[${timeFormat(info.length)}]**`,
+                        description: `${info.title}\n[Link](${url}) **[${typeof info.length === 'number' ? timeFormat(info.length) : info.length}]**`,
                         image: {url: info.thumbnail},
                         footer: {text: `Requested by ${utils.formatUsername(msg.member)} | ${type}`}
                     }});
-                });
+                }
 
                 cnc.on('error', err => {
                     logger.customError('voiceConnection', `Error in voice connection in guild '${bot.guilds.get(cnc.id).name}' (${cnc.id}):\n${err}`);
@@ -206,6 +237,17 @@ var getStream = exports.getStream = song => {
                     resolve([request(JSON.parse(body).Mp3Url).pipe(stream), 'ClypAudio']);
                 }
             });
+        } else if (twitchRegex(song)) {
+            let user = song.split('/');
+            user = user[user.length - 1];
+            twitchStream.get(user).then(res => {
+                let want = res.filter(r => r.quality === 'Audio Only')[0];
+                if (!want) {
+                    reject(new Error('Unable to get ideal quality for Twitch stream.'));
+                } else {
+                    resolve([want.url, 'TwitchStream']);
+                }
+            }).catch(reject);
         } else {
             reject(new Error(`Could not get stream for ${song}`));
         }
@@ -243,6 +285,18 @@ var getSongInfo = exports.getSongInfo = song => {
                 } else {
                     let info = JSON.parse(body);
                     let res = {title: info.Title, uploader: 'N/A', thumbnail: info.ArtworkPictureUrl || 'https://static.clyp.it/site/images/logos/clyp-og-1200x630.png', length: Math.floor(info.Duration), type: 'ClypAudio'};
+                    resolve(res);
+                }
+            });
+        } else if (twitchRegex(song)) {
+            let user = song.split('/');
+            user = user[user.length - 1];
+            twitch(`streams/${user}/`, {clientID: config.twitchKey}, (err, info) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    info = info.stream.channel;
+                    let res = {title: info.status, uploader: info.display_name, thumbnail: info.video_banner, length: 'Unknown', type: 'TwitchStream'};
                     resolve(res);
                 }
             });

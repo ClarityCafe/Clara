@@ -226,7 +226,7 @@ function handleCmdErr(msg, cmd, err) {
         m += "``` If you feel this shouldn't be happening, join my support server. Invite can be found in the `invite` command.";
         msg.channel.createMessage(m);
     } else {
-        logger.error(loggerPrefix(msg) + `Error running command "${cmd}":\n${config.debug ? err.stack : err}`);
+        logger.error(loggerPrefix(msg) + `Error running command "${cmd}":\n${config.debug ? err.stack || err : err}`);
         let m = `Experienced error while executing \`${cmd}\`\n`;
         m += '```js\n';
         m += err + '\n';
