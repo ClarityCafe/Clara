@@ -14,7 +14,7 @@ exports.invite = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             var msg = `**Invite me to your server:** https://discordapp.com/oauth2/authorize?client_id=${bot.user.id}&scope=bot\n`;
-            msg += '**Invite to my support server:** https://discord.gg/rmMTZue';
+            msg += '**Invite for the official support server:** https://discord.gg/rmMTZue';
             ctx.msg.channel.createMessage(msg).then(resolve).catch(reject);
         });
     }
