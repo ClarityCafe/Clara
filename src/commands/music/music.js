@@ -73,10 +73,10 @@ exports.queue = {
                     }}).then(resolve).catch(reject);
                 } else {
                     let q = bot.music.queues.get(ctx.msg.channel.guild.id).q;
-                    let description = `**${q.length} ${q.length === 1 ? 'item' : 'items'} in queue.${q.length > 10 ? 'Showing first 10 items.' : ''}**\n\n`;
+                    let description = `**${q.length} ${q.length === 1 ? 'item' : 'items'} in queue. ${q.length > 10 ? 'Showing first 10 items.' : ''}**\n\n`;
 
                     for (let i in q) {
-                        if (!q[i] || Number(q) === 9) break;
+                        if (!q[i] || Number(i) === 9) break;
                         description += `**${(Number(i) + 1)}:** \`${q[i].info.title}\` (${q[i].info.uploader}) **[${handler.timeFormat(q[i].info.length)}]**\n\n`;
                     }
 
