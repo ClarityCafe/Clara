@@ -154,6 +154,7 @@ bot.on('messageCreate', msg => {
             } else {
                 bot.commands.runCommand(cmd, bot, ctx).then(() => {
                     logger.cmd(loggerPrefix(msg) + `Successfully ran command '${cmd}'`);
+                    return;
                 }).catch(err => {
                     handleCmdErr(msg, cmd, err);
                 });
