@@ -8,7 +8,6 @@ exports.commands = [
 ];
 
 const voyager = require('request');
-const apiKey= 'NNKOjkoul8n1CH18TWA9gwngW1s1SmjESPjNoUFo';
 
 exports.apod = {
     desc: 'returns the latest news from NASA',

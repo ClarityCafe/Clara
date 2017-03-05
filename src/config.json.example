@@ -28,6 +28,9 @@
   "_comment_twitchKey": "Key to use with Twitch streaming.",
   "twitchKey": "",
   
+  "_comment_nasaKey": "Key to use with nasa apod command",
+  "nasaKey": "",
+
   "_comment_token": "your Bot token",
   "token": ""
 }
