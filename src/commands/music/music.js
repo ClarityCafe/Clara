@@ -180,7 +180,8 @@ exports.sources = {
                 description: '**Current supported music sources.**\n\n'
                 + '**YouTube**: `https://youtube.com/watch?v=id` or `https://youtu.be/id`\n'
                 + '**SoundCloud**: `https://soundcloud.com/user/song`\n'
-                + '**Clyp**: `https://clyp.it/id`'
+                + '**Clyp**: `https://clyp.it/id`\n'
+                + '**Twitch**: `https://twitch.tv/user`\n'
             }}).then(resolve).catch(reject);
         });
     }
