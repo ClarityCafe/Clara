@@ -33,8 +33,8 @@ exports.info = {
                 return ctx.guildBot.guild.roles.get(b).position - ctx.guildBot.guild.roles.get(a).position;
             })[0]).color;
             ctx.msg.channel.createMessage({embed: {
-                title: `${bot.user.username} Info`,
-                description: '[Source Code](https://github.com/awau/Clara)',
+                title: `${bot.user.username}'s Info`,
+                description: '[Source Code](https://github.com/awau/Clara) | [Clara Support Server](https://discord.gg/ZgQkCkm)',
                 thumbnail: {url: bot.user.avatarURL.replace('https://cdn.discordapp.com', 'https://images.discordapp.net') + '?size=1024', height: 128, width: 128},
                 color: roleColour,
                 fields: [
@@ -42,12 +42,12 @@ exports.info = {
                     {name: 'Users Seen', value: bot.users.size, inline: true},
                     {name: 'Uptime', value: utils.msToTime(bot.uptime), inline: true},
                     {name: 'System Time', value: sysTime, inline: true},
-                    {name: 'OS Release', value: os.release(), inline: true},
                     {name: 'OS Platform', value: os.platform(), inline: true},
                     {name: 'Shards Active', value: bot.shards.size, inline: true},
                     {name: 'Memory Usage', value: prettyBytes(process.memoryUsage().rss), inline: true},
                     {name: 'Version', value: version, inline: true}
-                ]
+                ],
+                footer : { text : `${bot.user.username} is powered by Clara. Click the "Source Code" field to check out the repo!`}
             }}).then(resolve).catch(reject);
         });
     }
