@@ -17,4 +17,4 @@ exports.clean = {
             }).then(resolve).catch(reject);
         });
     }
-}
+};
