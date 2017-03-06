@@ -1,0 +1,20 @@
+{
+  "verbose": true,
+  "execMap": {
+    "js": "node --harmony"
+  },
+    "ignore" : [
+  "/commands/*",
+  "/data/*",
+  "/logs/*",
+  "/cache/*",
+  "/node_modules/*"  
+    ],
+  "watch": [
+     "bot.js"
+  ],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ext": "js"
+}

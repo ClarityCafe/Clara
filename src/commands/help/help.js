@@ -4,8 +4,6 @@
  * Contributed by Capuccino and Ovyerus.
  */
 
-
-
 exports.commands = [
     'help'
 ];
@@ -14,16 +12,16 @@ exports.help = {
     desc: 'The help command.',
     fullDesc: 'Displays information for all the avaliable commands in the bot. If an argument is given, displays additional information on that command.',
     usage: '[command]',
+    fixed: true,
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.args.length === 0) {
                 let embedTemplate = {title: `${bot.user.username} Help`, description: `**Main Prefix:** ${bot.config.mainPrefix}`, color: 2201331};
                 let cmdFields = [];
 
-                for (let cmd in bot.commands) {
-                    let cmnd = bot.commands[cmd];
+                bot.commands.forEach((cmd, cmnd) => {
                     cmdFields.push({name: cmd, value: `${cmnd.usage ? `${cmnd.usage} - ` : ''}${cmnd.desc}`});
-                }
+                });
 
                 ctx.msg.channel.createMessage('Sending the help message to your DMs').then(() => {
                     return ctx.msg.author.getDMChannel();
@@ -42,10 +40,10 @@ exports.help = {
                     return Promise.all(msgs);
                 }).then(resolve).catch(reject);
             } else {
-                if (!bot.commands[ctx.args[0]]) {
+                if (!bot.commands.getCommand(ctx.args[0])) {
                     ctx.msg.channel.createMessage('That command does not exist. Make sure to check your spelling.').then(resolve).catch(reject);
                 } else {
-                    let cmd = bot.commands[ctx.args[0]];
+                    let cmd = bot.commands.getCommand(ctx.args[0]);
                     let embed = {title: ctx.args[0], description: `${cmd.usage ? `\`${cmd.usage}\` - `: ''}**${cmd.longDesc ? cmd.longDesc : cmd.desc}**`, color: 2201331};
                     ctx.msg.channel.createMessage({embed}).then(resolve).catch(reject);
                 }

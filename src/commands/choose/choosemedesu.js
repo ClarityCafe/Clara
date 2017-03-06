@@ -16,7 +16,7 @@ exports.choose = {
     usage: '<choices (minimum of two)>',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            var choices = ctx.suffix.split('/');
+            let choices = ctx.suffix.split('/');
             if (choices.length < 2) {
                 ctx.msg.channel.createMessage('Please give me at least `two` (2) choices.').then(resolve).catch(reject);
             } else {
