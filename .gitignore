@@ -67,7 +67,7 @@ obj
 bin
 
 # Nodetori files    
-src/config.json
+ # src/config.json
 /data
 prefixes.json
 /.idea/workspace.xml
