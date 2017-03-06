@@ -1,12 +1,12 @@
 /*
- * owo-whats this - Command Loader File
+ * Clara - Command Loader File
  * based from chalda/DiscordBot
  * 
  * Contributed by:
  * | Capuccino
  * | Ovyerus
  * 
- * Licensed under MIT. Copyright (c) 2016 Capuccino, Ovyerus and the repository contributors.
+ * Licensed under MIT. Copyright (c) 2017 Capuccino, Ovyerus and the repository contributors.
  */
 
 // Dependancies
@@ -20,7 +20,14 @@ const logger = require(`${__dirname}/logger.js`);
 var commandsDirectory = 'commands';
 var commandFolders;
 var noLoad = [];
-var commandsFrom = {};
+var unloadedCommands;
+
+try {
+    unloadedCommands = JSON.parse(fs.readFileSync(`${__baseDir}/data/unloadedCommands.json`).toString());
+} catch(err) {
+    unloadedCommands = [];
+    fs.writeFile(`${__baseDir}/data/unloadedCommands.json`, '[]');
+}
 
 function getDirectories(dir) {
     return new Promise((resolve, reject) => {
@@ -28,26 +35,24 @@ function getDirectories(dir) {
             if (err) {
                 reject(err);
             } else {
-                var numnum = files.filter(file => fs.statSync(path.join(dir, file)).isDirectory());
+                let numnum = files.filter(file => fs.statSync(path.join(dir, file)).isDirectory());
                 resolve(numnum);
             }
         });
     });
 }
 
-getDirectories(`${__baseDir}/${commandsDirectory}`).then(dirs => commandFolders = dirs);
-
 function preloadCommands() {
     return new Promise(resolve => {
         var deps = [];
         for (let awoo of commandFolders) {
-            var cmdFiles = fs.readdirSync(`${__baseDir}/${commandsDirectory}/${awoo}`);
+            let cmdFiles = fs.readdirSync(`${__baseDir}/${commandsDirectory}/${awoo}`);
             if (cmdFiles.indexOf('package.json') === -1) {
                 logger.customError('commandLoader/preloadCommands', `Skipping over '${awoo}' due to missing package.json`);
                 noLoad.push(awoo);
             } else {
-                var json = fs.readFileSync(`${__baseDir}/${commandsDirectory}/${awoo}/package.json`);
-                var pkg;
+                let json = fs.readFileSync(`${__baseDir}/${commandsDirectory}/${awoo}/package.json`);
+                let pkg;
                 try {
                     pkg = JSON.parse(json);
                 } catch(err) {
@@ -81,32 +86,51 @@ function preloadCommands() {
 }
 
 function loadCommands() {
-    return new Promise(resolve => {
-        var bot = require(`${__baseDir}/bot.js`);
+    return new Promise((resolve, reject) => {
+        let bot = require(`${__baseDir}/bot.js`).bot;
         for (let cmdFolder of commandFolders) {
-            if (noLoad.indexOf(cmdFolder) !== -1) continue;
-            var command, commandPackage;
+            if (noLoad.indexOf(cmdFolder) !== -1 || unloadedCommands.indexOf(cmdFolder) !== -1) continue;
+
+            let command, commandPackage;
+
             try {
                 commandPackage = require(`${__baseDir}/${commandsDirectory}/${cmdFolder}/package.json`);
                 command = require(`${__baseDir}/${commandsDirectory}/${cmdFolder}/${commandPackage.main}`);
             } catch (err) {
                 logger.customError('commandLoader/loadCommands', `Experienced error while loading command '${cmdFolder}', skipping...\n${err}`);
+                unloadedCommands.push(cmdFolder);
             }
+
             if (command) {
                 if (command.commands) {
+                    bot.commands.addModule(cmdFolder);
                     for (let cmd of command.commands) {
                         if (command[cmd]) {
-                            bot.addCommand(cmd, command[cmd]).then(() => {
-                                commandsFrom[cmd] = `${cmdFolder}/${commandPackage.main}`;
+                            try {
+                                bot.commands.addCommand(cmd, command[cmd]);
                                 logger.custom('blue', 'commandLoader/loadCommands', `Successfully loaded command '${cmd}'`);
-                            }).catch(err => logger.customError('commandLoader/loadCommands', `Error when attempting to load command '${cmd}':\n${err}`));
+                            } catch(err) {
+                                logger.customError('commandLoader/loadCommands', `Error when attempting to load command '${cmd}':\n${err}`);
+                            }
                         }
                     }
-                    resolve();
                 } else {
                     logger.customError('commandLoader/loadCommands', `Command '${cmdFolder}' not properly set up, skipping...\nCommand array not found.`);
+                    unloadedCommands.push(cmdFolder);
                 }
             }
+        }
+        
+        if (!unloadedCommands.equals(JSON.parse(fs.readFileSync(`${__baseDir}/data/unloadedCommands.json`).toString()))) {
+            fs.writeFile(`${__baseDir}/data/unloadedCommands.json`, JSON.stringify(unloadedCommands), err => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        } else {
+            resolve();
         }
     });
 }
@@ -116,13 +140,28 @@ exports.init = () => {
         getDirectories(`${__baseDir}/${commandsDirectory}`).then(dirs => {
             commandFolders = dirs;
             logger.custom('blue', 'commandLoader/init', 'Preloading commands.');
-            preloadCommands().then(() => {
-                logger.custom('blue', 'commandLoader/init', 'Loading commands.');
-                loadCommands().then(() => {
-                    resolve();
-                }).catch(reject);
-            }).catch(reject);
-        }).catch(reject);
+            return preloadCommands();
+        }).then(() => {
+            logger.custom('blue', 'commandLoader/init', 'Loading commands.');
+            return loadCommands();
+        }).then(resolve).catch(reject);
     });
 };
 
+Array.prototype.equals = (array) => {
+    if (!array || this.length != array.length) return false;
+
+    for (var i = 0, l=this.length; i < l; i++) {
+        if (this[i] instanceof Array && array[i] instanceof Array) {
+            if (!this[i].equals(array[i])) {
+                return false;
+            }
+        } else if (this[i] != array[i]) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
+Object.defineProperty(Array.prototype, 'equals', {enumerable: false});

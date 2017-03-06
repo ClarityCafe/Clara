@@ -1,44 +1,61 @@
+/*
+ * Clara - logger module
+ * 
+ * Contributed by Ovyerus
+ */
+
 const chalk = require('chalk');
 
-// * logging Optional Info
-// * @prop {String} message your message
-
+/**
+ * Generic infomation logging.
+ * @arg {String} message Message to log to console.
+ */
 function info(message) {
     console.log(`${chalk.bgGreen('info')} ${chalk.green(message)}`);
 }
-// * Internal Logger.
-// * @prop {String} message your message
+
+/**
+ * Internal logging for command running.
+ * @arg {String} message Message to log to console.
+ */
 function cmd(message) {
     console.log(`${chalk.bgMagenta('cmd')} ${chalk.magenta(message)}`);
 }
-// * used for non-fatal errors
-// * @prop {String} message your message
+
+/**
+ * Generic warning. Use if wishing to report a non fatal error, but still probably shouldn't be happening.
+ * @arg {String} message Message to log to console.
+ */
 function warn(message) {
     console.log(`${chalk.bgYellow('warn')} ${chalk.yellow(message)}`);
 }
-// * used for fatal errors
-// * @prop {String} message your message
+
+/**
+ * Generic error logging.
+ * @arg {String} message Message to log to console.
+ */
 function error(message) {
     console.error(`${chalk.bgRed('error')} ${chalk.red(message)}`);
 }
-// * custom logging using chalk colours
-// * @prop {String} colour defines color. Uses Chalk colors
-// * @prop {String} name custom name for logging info
-// * @prop {string} message your message.
+
+/**
+ * Generic logging with custom colours.
+ * @arg {String} colour Chalk colour to use.
+ * @arg {String} name Text to display in a coloured box before the message.
+ * @arg {String} message Message to log to console.
+ */
 function custom(colour, name, message) {
     if (!chalk[colour]) throw new Error('colour is not a valid chalk colour');
     console.log(`${chalk['bg' + colour.toLowerCase().charAt(0).toUpperCase() + colour.toLowerCase().slice(1)](name)} ${chalk[colour](message)}`);
 }
-// * custom error logging with name
-// * @prop {String} name the name for the error to log
-// * @prop {String} message your message
+
+/**
+ * Error logging with custom names.
+ * @arg {String} name Text to display in a coloured box before the error.
+ * @arg {String} message Message to log to console.
+ */
 function customError(name, message) {
     console.error(`${chalk.bgRed(name)} ${chalk.red(message)}`);
 }
 
-exports.info = info;
-exports.cmd = cmd;
-exports.warn = warn;
-exports.error = error;
-exports.custom = custom;
-exports.customError = customError;
+module.exports = {info, cmd, warn, error, custom, customError};
