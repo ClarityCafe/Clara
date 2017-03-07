@@ -21,9 +21,8 @@ exports.ship = {
                 let a = ctx.msg.mentions[0] === undefined ? ctx.args[0] : ctx.msg.mentions[0].username;
                 let b = ctx.msg.mentions[1] === undefined ? ctx.args[1] : ctx.msg.mentions[1].username; 
                 let result = a.substring(0, Math.floor(a.length / 2)) + b.substring(Math.floor(b.length / 2));
-                ctx.msg.channel.createMessage(`Happy Shipping!\n Your Ship name is : **${result}**!\n _Disclaimer: We are not responsible if you get attacked by a Yandere prior from this._`)
-                  .then(() => resolve)
-                  .catch(reject);
+
+                ctx.msg.channel.createMessage(`Happy Shipping!\n Your Ship name is : **${result}**!\n _Disclaimer: We are not responsible if you get attacked by a Yandere because of the resulting ship._`).then(() => resolve).catch(reject);
             }
         });
     }

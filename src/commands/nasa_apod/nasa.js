@@ -7,33 +7,36 @@ exports.commands = [
     'apod'
 ];
 
-const voyager = require('request');
+const request = require('request');
 
 exports.apod = {
-    desc: 'returns the latest news from NASA',
-    main: (bot,ctx) => {
-        return new Promise((resolve,reject) => {
-            voyager('https://api.nasa.gov/planetary/apod?api_key=NNKOjkoul8n1CH18TWA9gwngW1s1SmjESPjNoUFo', (err ,res ,body) => {
-                if(err) {
-                    reject(err);
-                } else if (res.statusCode !== 200) {
-                    ctx.msg.channel(`Oh my!, something unexpected happened! Try Again! (Error Code ${res.statusCode})`).then (() => {
-                        reject( new Error(`Invalid Response! Expected JSON Response, got code ${res.statusCode} instead.`));
-                    }).catch(err => (err));
-                } else {
-                    let pioneer = JSON.stringify(body);
-                    ctx.msg.channel.createMessage({embed : {
-                        title: pioneer.title,
-                        thumbnail:{url: 'https://api.nasa.gov/images/logo.png', width: 150, height : 150},
-                        color: 0xFD7BB5 ,//placeholder,
-                        fields : [
-                            {name: 'image', value: pioneer.hdurl},
-                            {name: '', value: pioneer.explanation}
-                        ],
-                        footer : {text: `Retrieved using NASA Open API. Retrieved ${JSON.parse(body.date)}.`}
-                    }}).then(() => resolve).catch(err => err);
-                }
-            })
-        })
+    desc: "Shows NASA's [Astronomy Picture of the Day](http://apod.nasa.gov/apod/astropix.html) (APOD)",
+    main: (bot, ctx) => {
+        return new Promise((resolve, reject) => {
+            if (!bot.config.nasaKey) {
+                ctx.msg.channel.createMessage('This bot does not appear to be set up for this command. Missing API key.').then(resolve).catch(reject);
+            } else {
+                request(`https://api.nasa.gov/planetary/apod?api_key=${bot.config.nasaKey}`, (err, resp, body) => {
+                    if (err) {
+                        reject(err);
+                    } else if (resp.statusCode !== 200) {
+                        reject(new Error(`Invalid status code: ${resp.statusCode}`));
+                    } else {
+                        let data = JSON.parse(body);
+                        ctx.msg.channel.createMessage({embed: {
+                            title: data.title,
+                            description: data.copyright ? `Copyright ${data.copyright}` : '',
+                            thumbnail:{url: 'https://api.nasa.gov/images/logo.png'},
+                            color: 0xFD7BB5,
+                            image: {url: data.url},
+                            fields: [
+                                {name: 'Explanation', value: data.explanation}
+                            ],
+                            footer: {text: `Date of image: ${data.date}`}
+                        }}).then(resolve).catch(reject);
+                    }
+                });
+            }
+        });
     }
 };

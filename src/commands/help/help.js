@@ -4,8 +4,6 @@
  * Contributed by Capuccino and Ovyerus.
  */
 
-
-
 exports.commands = [
     'help'
 ];
