@@ -2,11 +2,7 @@
  * Clara - Command Loader File
  * based from chalda/DiscordBot
  * 
- * Contributed by:
- * | Capuccino
- * | Ovyerus
- * 
- * Licensed under MIT. Copyright (c) 2017 Capuccino, Ovyerus and the repository contributors.
+ * Contributed by Capuccino and Ovyerus
  */
 
 // Dependancies
