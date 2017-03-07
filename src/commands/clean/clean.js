@@ -10,7 +10,7 @@ exports.commands = [
 
 exports.clean = {
     desc: 'clean messages created by the bot itself',
-    main: (bot,ctx) => {
+    main: (bot, ctx) => {
         return new Promise((resolve,reject) => {
             ctx.msg.channel.getMessages(100).then(msgs => {
                 let delet = [];
