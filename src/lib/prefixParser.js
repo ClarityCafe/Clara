@@ -1,5 +1,5 @@
 /*
- * owo-whats this - Core file
+ * owo-whats this - prefix parser
  * 
  * Contributed by Ovyerus
  */
