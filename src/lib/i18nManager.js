@@ -6,7 +6,7 @@
   */
 
   const i18n = require('i18next');
-  const langDir = require(`${__baeDir}/res/locales`);
+  const langDir = require(`${__baseDir}/res/locales`);
   const {backend , Backend} = require('i18next-sync-fs-backend');
 
   class localeManager {
