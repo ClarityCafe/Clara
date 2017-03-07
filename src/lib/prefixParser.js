@@ -1,10 +1,7 @@
 /*
  * owo-whats this - Core file
  * 
- * Contributed by:
- * | Ovyerus
- *
- * Licensed under MIT. Copyright (c) 2016 Capuccino, Ovyerus and the repository contributors.
+ * Contributed by Ovyerus
  */
 
 const fs = require('fs');
