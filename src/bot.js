@@ -70,8 +70,6 @@ bot.config = config;
 bot.music = {
     skips: new Eris.Collection(Object),
     queues: new Eris.Collection(Object),
-    channels: new Eris.Collection(Eris.Channel),
-    guilds: new Eris.Collection(Eris.Guild),
     connections: new Eris.Collection(Eris.VoiceConnection),
     streams: new Eris.Collection(Object),
     stopped: []
@@ -156,10 +154,11 @@ bot.on('messageCreate', msg => {
                     handleCmdErr(msg, cmd, err);
                 });
             } else if (bot.commands.getCommand(cmd).adminOnly) {
-                msg.channel.createMessage(`Hey ${msg.author.mention}, you do not have permission to do that! :<`);
+                return;
             } else {
                 bot.commands.runCommand(cmd, bot, ctx).then(() => {
                     logger.cmd(loggerPrefix(msg) + `Successfully ran command '${cmd}'`);
+                    return;
                 }).catch(err => {
                     handleCmdErr(msg, cmd, err);
                 });
@@ -180,7 +179,7 @@ bot.on('shardDisconnect', (err, shard) => {
 
 // Music Shit
 bot.on('voiceChannelLeave', (mem, chan) => {
-    if (chan.voiceMembers.filter(m => m.id !== bot.user.id && !m.bot).length === 0 && chan.voiceMembers.get(bot.user.id)) {
+    /*if (chan.voiceMembers.filter(m => m.id !== bot.user.id && !m.bot).length === 0 && chan.voiceMembers.get(bot.user.id)) {
         setTimeout(() => {
             let c = bot.guilds.get(chan.guild.id).channels.get(chan.id);
             if (c.voiceMembers.filter(m => m.id !== bot.user.id && !m.bot).length === 0) {
@@ -188,27 +187,24 @@ bot.on('voiceChannelLeave', (mem, chan) => {
                 bot.music.connections.get(chan.guild.id).leave();
             }
         }, 60000);
-    }
+    }*/
 
     if (mem.id !== bot.user.id) return;
-    if (bot.music.channels.get(chan.id)) bot.music.channels.delete(chan.id);
-    if (bot.music.guilds.get(chan.guild.id)) bot.music.guilds.delete(chan.guild.id);
     if (bot.music.connections.get(chan.guild.id)) bot.music.connections.delete(chan.guild.id);
     if (bot.music.queues.get(chan.guild.id)) bot.music.queues.delete(chan.guild.id);
     if (bot.music.skips.get(chan.guild.id)) bot.music.skips.delete(chan.guild.id);
     if (bot.music.streams.get(chan.guild.id)) {
-        bot.music.streams.get(chan.guild.id).stream.destroy();
         bot.music.streams.delete(chan.guild.id);
     }
 });
 
 bot.on('voiceChannelSwitch', (mem, chan, old) => {
     if (mem.id !== bot.user.id) return;
-    if (bot.music.channels.get(old.id)) {
-        bot.music.channels.delete(old.id);
-        bot.music.channels.add(chan);
+    if (!bot.music.connections.get(old.id)) {
+        bot.music.connections.add(chan);
     } else {
-        bot.music.channels.add(chan);
+        bot.music.connections.delete(old);
+        bot.music.connects.add(old);
     }
 });
 
@@ -235,7 +231,7 @@ function handleCmdErr(msg, cmd, err) {
         m += "``` If you feel this shouldn't be happening, join my support server. Invite can be found in the `invite` command.";
         msg.channel.createMessage(m);
     } else {
-        logger.error(loggerPrefix(msg) + `Error running command "${cmd}":\n${config.debug ? err.stack : err}`);
+        logger.error(loggerPrefix(msg) + `Error running command "${cmd}":\n${config.debug ? err.stack || err : err}`);
         let m = `Experienced error while executing \`${cmd}\`\n`;
         m += '```js\n';
         m += err + '\n';

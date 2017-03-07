@@ -6,7 +6,6 @@
  * 
  */
 
-
 const fs = require('fs');
 
 exports.commands = [
@@ -18,7 +17,7 @@ var files = fs.readdirSync(`${__baseDir}/res`);
 exports.mari = {
     desc: "It's Joke!",
     main: (bot, ctx) => {
-        return new Promise((reject, resolve) => {
+        return new Promise((resolve, reject) => {
             ctx.msg.channel.sendTyping();
             var fileName = files[Math.floor(Math.random() * files.length)];
             var file = fs.readFileSync(`${__baseDir}/res/${fileName}`);
