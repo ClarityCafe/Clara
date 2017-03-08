@@ -1,0 +1,4 @@
+{
+    "pong": "Pong!",
+    "pongEdit": "Pong! `{{time}}ms`"
+}
