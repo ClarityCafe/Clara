@@ -89,6 +89,8 @@ bot.on('ready', () => {
             logger.info(`${bot.user.username} is connected to Discord and ready to use.`);
             logger.info(`Main prefix is '${config.mainPrefix}', can also use @mention.`);
             logger.info(`${altPrefixes.length > 0 ? `Alternative prefixes: '${altPrefixes.join("', ")}'` : 'No alternative prefixes.'}`);
+            return localeManager.loadLocales();
+        }).then(() => {
             loadCommands = false;
             allowCommandUse = true;
         }).catch(err => {
