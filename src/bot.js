@@ -17,6 +17,7 @@ const fs = require('fs');
 global.__baseDir = __dirname;
 global.Promise = require('bluebird');
 global.logger = require(`${__dirname}/lib/logger`);
+global.localeManager = require(`${__dirname}/lib/localeManager`);
 
 // Custom modules
 const logger = require(`${__dirname}/lib/logger`);
