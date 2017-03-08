@@ -34,7 +34,7 @@ function parseArgs(str) {
                 });
                 
                 tmp = tmp.filter(v => tmp.indexOf(v) === -1);
-                tmp2 = tmp2.concat(tmp.filter(v => tmp2.indexOf(v) === -1))
+                tmp2 = tmp2.concat(tmp.filter(v => tmp2.indexOf(v) === -1));
                 tmp2 = [].concat.apply([], tmp2).filter(v => v !== '' && v != undefined);
             }
         }
