@@ -18,7 +18,7 @@ function deleteDelay(msg) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             msg.delete().then(() => resolve()).catch(reject);
-        }, 1000);
+        }, 2000);
     });
 }
 
