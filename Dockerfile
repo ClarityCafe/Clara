@@ -12,7 +12,16 @@ RUN echo "#! /bin/bash\n set -e\n sudo /usr/sbin/sshd -D &\n exec \"\$@\"" > /ho
     usermod -p "*" user 
 RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
 RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
-
+RUN \
+  apt-get update && \
+  apt-get -y install \
+          software-properties-common \
+          nano \
+          pwgen \
+          unzip \
+          curl \
+          build-essential \
+          ffmpeg
 RUN echo $'#!/bin/sh\nexit 101' > /usr/sbin/policy-rc.d
 RUN chmod +x /usr/sbin/policy-rc.d
 
