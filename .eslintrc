@@ -9,7 +9,8 @@
     },
     "globals": {
         "__baseDir": false,
-        "logger" : false
+        "logger" : false,
+        "localeManager": false
     },
     "rules": {
         "no-console": 0,
