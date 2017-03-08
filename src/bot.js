@@ -75,8 +75,8 @@ bot.music = {
     stopped: []
 };
 bot.locales = {
-  guilds: new Eris.Collection(Object),
-  supportedLocales : new Eris.Collection(Array)
+    guilds: new Eris.Collection(Object),
+    supportedLocales : new Eris.Collection(Array)
 };
 
 // Init
