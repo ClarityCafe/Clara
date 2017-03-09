@@ -18,4 +18,4 @@ exports.invite = {
             ctx.msg.channel.createMessage(msg).then(resolve).catch(reject);
         });
     }
-}
+};
