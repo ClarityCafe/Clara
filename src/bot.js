@@ -23,6 +23,7 @@ global.localeManager = require(`${__dirname}/lib/localeManager`);
 const logger = require(`${__dirname}/lib/logger`);
 const CommandHolder = require(`${__dirname}/lib/commands`);
 const utils = require(`${__dirname}/lib/utils`);
+const parseArgs = require(`${__dirname}/lib/argParser`);
 
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
@@ -135,17 +136,18 @@ bot.on('messageCreate', msg => {
     }
 
     prefixParser(msg.content).then(content => {
-        if (content === undefined) return;
+        if (content == undefined) return content;
+        return parseArgs(content);
+    }).then(res => {
+        if (res == undefined) return;
 
-        var args = content.split(' ');
-        var cmd = args.shift();
-        var suffix = args.join(' ');
-        var cleanSuffix = msg.cleanContent.split(' ');
+        let {args, cmd, suffix} = res;
+        let cleanSuffix = msg.cleanContent.split(' ');
         cleanSuffix.splice(0, 1);
         cleanSuffix = cleanSuffix.join(' ');
-        var guildBot = msg.channel.guild.members.get(bot.user.id);
+        let guildBot = msg.channel.guild.members.get(bot.user.id);
 
-        var ctx = {msg, args, cmd, suffix, cleanSuffix, guildBot};
+        let ctx = {msg, args, cmd, suffix, cleanSuffix, guildBot};
 
         if (bot.commands.getCommand(cmd)) {
             logger.cmd(loggerPrefix(msg) + msg.cleanContent);
