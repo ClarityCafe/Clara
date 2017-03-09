@@ -7,7 +7,7 @@ exports.commands = [
     'nadeko'
 ];
 
-var emote = [
+const emote = [
     ':joy:',
     ':unamused:'
 ];
