@@ -16,7 +16,7 @@ exports.ping = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             ctx.msg.channel.createMessage(localeManager.translate('pong', 'en-UK')).then(m => {
-                return m.edit(localeManager.translate('pongEdit', 'en-UK', {time: m.timestamp - ctx.msg.timestamp}));
+                return m.edit(localeManager.translate('pong', 'en-UK') + ` \`${m.timestamp - ctx.msg.timestamp}ms\``);
             }).then(resolve).catch(reject);
         });
     }
