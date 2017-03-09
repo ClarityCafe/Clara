@@ -76,10 +76,6 @@ bot.music = {
     streams: new Eris.Collection(Object),
     stopped: []
 };
-bot.locales = {
-    guilds: new Eris.Collection(Object),
-    supportedLocales : new Eris.Collection(Array)
-};
 
 // Init
 bot.on('ready', () => {
