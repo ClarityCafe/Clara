@@ -4,16 +4,15 @@
  * Contributed by Capuccino and Ovyerus
  */
 
-
-
 exports.commands = [
     'choose'
 ];
 
 exports.choose = {
-    desc: 'Randomly chooses between 2 or more arguments.',
+    desc: "Randomly chooses between 2 or more arguments seperated with a '/'.",
     fullDesc: 'Uses a randomiser to pick a random value out of 2 or more given arguments. Arguments must be seperated by a /',
     usage: '<choices (minimum of two)>',
+    example: 'coke zero/coke',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             let choices = ctx.suffix.split('/');

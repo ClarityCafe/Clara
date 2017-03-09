@@ -22,6 +22,7 @@ exports.play = {
     desc: 'Play music from supported sources.',
     longDesc: 'Plays music from supported sources and joins if needed.',
     usage: '[URL|search term]',
+    example: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ | running in the 90s',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             handler.exposed.bot = bot;
