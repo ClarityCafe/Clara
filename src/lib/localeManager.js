@@ -41,7 +41,26 @@ class localeManager {
                         this.locales[locale.substring(0, locale.indexOf('.js'))] = localeParsed;
                     }
 
-                    resolve();
+                    fs.readdir(`${__baseDir}/commands`, (err, fldrs) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            for (let fldr of fldrs) {
+                                let owo = fs.readdirSync(`${__baseDir}/commands/${fldr}`);
+                                if (owo.indexOf('locales') !== -1) {
+                                    let locales = fs.readdirSync(`${__baseDir}/commands/${fldr}/locales`);
+                                    for (let locale of locales) {
+                                        if (!locale.endsWith('.json')) continue;
+                                        let r = JSON.parse(fs.readFileSync(`${__baseDir}/commands/${fldr}/locales/${locale}`));
+                                        let l = locale.substring(0, locale.indexOf('.json'));
+                                        this.locales[l] = Object.assign({}, this.locales[l], r);
+                                    }
+                                }
+                            }
+
+                            resolve();
+                        }
+                    });
                 }
             });
         });
@@ -55,7 +74,7 @@ class localeManager {
      * @param {Object=} replacers Object of values in string.
      * @returns {String}
      */
-    translate(key, locale = this.fallbackLocale, replacers = {}) {
+    t(key, locale = this.fallbackLocale, replacers = {}) {
         if (typeof key !== 'string') {
             throw new Error('key is not a string');
         } else if (typeof locale !== 'string') {
