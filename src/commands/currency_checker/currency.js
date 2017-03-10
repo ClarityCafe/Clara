@@ -11,7 +11,7 @@ exports.commands = [
     'convert'
 ];
 
-const fx = require('http://openexchangerates.github.io/money.js/money.min.js');
+const fx = require('./money.min');
 
 exports.convert = {
     desc: 'converts money, that it',
