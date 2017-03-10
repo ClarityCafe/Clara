@@ -25,7 +25,7 @@ exports.clean = {
                 msgs = msgs.filter(m => m.author.id === bot.user.id);
                 msgs.forEach(m => delet.push(m.delete()));
                 return Promise.all(delet);
-            }).then(amt => ctx.msg.channel.createMessage(`Cleaned ${amt.length} ${amt.length === 1 ? 'message.' : 'messages.'}`)).then(deleteDelay).then(() => resolve).catch(reject);
+            }).then(amt => ctx.msg.channel.createMessage(localeManager.t('clean', 'en-UK', {amt: amt.length}))).then(deleteDelay).then(() => resolve).catch(reject);
         });
     }
 };

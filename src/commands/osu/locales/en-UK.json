@@ -1,0 +1,20 @@
+{
+    "osu-noName": "Please give me a name to search with.",
+    "osu-noRes": "A user with that name or ID could not be found.",
+    "osu-none": "None",
+    "osu-country": "Country",
+    "osu-countryRank": "Country Rank",
+    "osu-playCount": "Beatmaps Played",
+    "osu-300s": "300s Scored",
+    "osu-100s": "100s Scored",
+    "osu-50s": "50s Scored",
+    "osu-rankedScore": "Ranked Score",
+    "osu-totalScore": "Total Score",
+    "osu-pp": "PP",
+    "osu-level": "Level",
+    "osu-rank": "Rank",
+    "osu-accuracy": "Accuracy",
+    "osu-ss": "SS Count",
+    "osu-s": "S Count",
+    "osu-a": "A Count"
+}

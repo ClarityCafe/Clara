@@ -17,10 +17,10 @@ exports.choose = {
         return new Promise((resolve, reject) => {
             let choices = ctx.suffix.split('/');
             if (choices.length < 2) {
-                ctx.msg.channel.createMessage('Please give me at least `two` (2) choices.').then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('choose-insufficientArgs', 'en-UK')).then(resolve).catch(reject);
             } else {
                 var choice = choices[Math.floor(Math.random() * choices.length)];
-                ctx.msg.channel.createMessage(`**${ctx.msg.author.username}**, I choose **${choice}**!`).then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('choose', 'en-UK', {name: ctx.msg.author.username, choice})).then(resolve).catch(reject);
             }
         });
     }

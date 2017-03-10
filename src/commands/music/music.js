@@ -27,10 +27,10 @@ exports.play = {
         return new Promise((resolve, reject) => {
             handler.exposed.bot = bot;
             if (!ctx.suffix && !bot.music.queues.get(ctx.msg.channel.guild.id)) {
-                ctx.msg.channel.createMessage('Please tell me something to play.').then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('music-noArgs', 'en-UK')).then(resolve).catch(reject);
             } else {
                 if (!ctx.msg.member.voiceState.channelID) {
-                    ctx.msg.channel.createMessage('You are not in a voice channel.').then(resolve).catch(reject);
+                    ctx.msg.channel.createMessage(localeManager.t('music-noChan', 'en-UK')).then(resolve).catch(reject);
                 } else {
                     if (ctx.suffix) {
                         if (!handler.allRegex(ctx.suffix) && !/^https?:\/\//.test(ctx.suffix) && bot.config.ytSearchKey) {
@@ -43,7 +43,7 @@ exports.play = {
                                 }
                             }).catch(reject);
                         } else if (!handler.allRegex(ctx.suffix) && !/^https?:\/\//.test(ctx.suffix) && !bot.config.ytSearchKey) {
-                            ctx.msg.channel.createMessage('API key to search appears to be missing. Please queue songs via a link.').then(resolve).catch(reject);
+                            ctx.msg.channel.createMessage(localeManager.t('music-noSearchKey', 'en-UK')).then(resolve).catch(reject);
                         } else if (handler.allRegex(ctx.suffix)) {
                             if (bot.music.stopped.indexOf(ctx.msg.channel.guild.id) > -1) bot.music.stopped.splice(bot.music.stopped.indexOf(ctx.msg.channel.guild.id), 1);
                             handler.play(ctx.msg, ctx.suffix).then(resolve).catch(reject);
@@ -69,8 +69,8 @@ exports.queue = {
             if (!ctx.suffix) {
                 if (!bot.music.queues.get(ctx.msg.channel.guild.id) || bot.music.queues.get(ctx.msg.channel.guild.id).q.length === 0) {
                     ctx.msg.channel.createMessage({embed: {
-                        title: 'Music Queue',
-                        description: 'Queue is more empty than my will to live. I mean... :eyes:'
+                        title: localeManager.t('music-queue', 'en-UK'),
+                        description: localeManager.t('music-noQueue', 'en-UK')
                     }}).then(resolve).catch(reject);
                 } else {
                     let q = bot.music.queues.get(ctx.msg.channel.guild.id).q;
@@ -82,7 +82,7 @@ exports.queue = {
                     }
 
                     let embed = {
-                        title: 'Music Queue',
+                        title: localeManager.t('music-queue', 'en-UK'),
                         description,
                         footer: {text: q.length - 10 > 0 ? `${q.length - 10} more ${q.length - 10 === 1 ? 'item' : 'items'}.` : ''}
                     };
@@ -101,13 +101,13 @@ exports.leave = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (!bot.music.connections.get(ctx.msg.channel.guild.id)) {
-                ctx.msg.channel.createMessage('I am not in a voice channel.').then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('music-noBotChan', 'en-UK')).then(resolve).catch(reject);
             } else {
                 if (ctx.msg.member.voiceState.channelID !== bot.music.connections.get(ctx.msg.channel.guild.id).channelID) {
-                    ctx.msg.channel.createMessage('You are not in my voice channel.').then(resolve).catch(reject);
+                    ctx.msg.channel.createMessage(localeManager.t('music-notSameChan', 'en-UK')).then(resolve).catch(reject);
                 } else {
                     bot.music.connections.get(ctx.msg.channel.guild.id).disconnect();
-                    ctx.msg.channel.createMessage('Left voice channel and destroyed associated data.').then(resolve).catch(reject);
+                    ctx.msg.channel.createMessage(localeManager.t('music-left', 'en-UK')).then(resolve).catch(reject);
                 }
             }
         });
@@ -119,29 +119,29 @@ exports.stop = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (!bot.music.connections.get(ctx.msg.channel.guild.id)) {
-                ctx.msg.channel.createMessage('I am not in a voice channel.').then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('music-noBotChan', 'en-UK')).then(resolve).catch(reject);
             } else {
                 if (ctx.msg.member.voiceState.channelID !== bot.music.connections.get(ctx.msg.channel.guild.id).channelID) {
-                    ctx.msg.channel.createMessage('You are not in my voice channel.').then(resolve).catch(reject);
+                    ctx.msg.channel.createMessage(localeManager.t('music-notSameChan', 'en-UK')).then(resolve).catch(reject);
                 } else {
                     bot.music.connections.get(ctx.msg.channel.guild.id).stopPlaying();
-                    ctx.msg.channel.createMessage('Stopped playing audio. Would you like to clear the queue [y/N]?').then(() => {
+                    ctx.msg.channel.createMessage(localeManager.t('music-stopQuestion')).then(() => {
                         return bot.awaitMessage(ctx.msg.channel.id, ctx.msg.author.id);
                     }).then(m => {
                         if (/y(es)?/i.test(m.content)) {
                             bot.music.queues.get(m.channel.guild.id).q = [];
-                            return m.channel.createMessage('Music queue cleared.');
+                            return m.channel.createMessage(localeManager.t('music-queueCleared', 'en-UK'));
                         } else if (/no?/i.test(m.content)) {
                             if (bot.music.stopped.indexOf(ctx.msg.channel.guild.id) === -1) bot.music.stopped.push(ctx.msg.channel.guild.id);
-                            return m.channel.createMessage('Keeping music queue.');
+                            return m.channel.createMessage(localeManager.t('music-queueKeep', 'en-UK'));
                         } else {
                             if (bot.music.stopped.indexOf(ctx.msg.channel.guild.id) === -1) bot.music.stopped.push(ctx.msg.channel.guild.id);
-                            return m.channel.createMessage('Invalid response. Keeping music queue.');
+                            return m.channel.createMessage(localeManager.t('music-invalidQueueKeep', 'en-UK'));
                         }
                     }).then(resolve).catch(err => {
                         if (!err.resp) {
                             if (bot.music.stopped.indexOf(ctx.msg.channel.guild.id) === -1) bot.music.stopped.push(ctx.msg.channel.guild.id);
-                            ctx.msg.channel.createMessage('Queue will not be cleared.').then(resolve).catch(reject);
+                            ctx.msg.channel.createMessage(localeManager.t('music-stopTimeout', 'en-UK')).then(resolve).catch(reject);
                         } else {
                             reject(err);
                         }
@@ -157,14 +157,14 @@ exports.join = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (bot.music.connections.get(ctx.msg.channel.guild.id)) {
-                ctx.msg.channel.createMessage('I am already in a voice channel.').then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('music-alreadyInChan', 'en-UK')).then(resolve).catch(reject);
             } else {
                 if (!ctx.msg.member.voiceState.channelID) {
-                    ctx.msg.channel.createMessage('You are not in a voice channel.').then(resolve).catch(reject);
+                    ctx.msg.channel.createMessage(localeManager.t('music-noChan', 'en-UK')).then(resolve).catch(reject);
                 } else {
                     bot.joinVoiceChannel(ctx.msg.member.voiceState.channelID).then(cnc => {
                         bot.music.connections.add(cnc);
-                        return ctx.msg.channel.createMessage(`Joined your voice channel. Run \`${bot.config.mainPrefix}play <song>\` to play something.`);
+                        return ctx.msg.channel.createMessage(localeManager.t('music-joinChan', 'en-UK', {prefix: bot.config.mainPrefix}));
                     }).then(resolve).catch(reject);
                 }
             }
@@ -177,8 +177,8 @@ exports.sources = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             ctx.msg.channel.createMessage({embed: {
-                title: 'Music Sources',
-                description: '**Current supported music sources.**\n\n'
+                title: localeManager.t('music-sourcesTitle', 'en-Uk'),
+                description: '**' + localeManager.t('music-sources', 'en-UK') + '**\n\n'
                 + '**YouTube**: `https://youtube.com/watch?v=id` or `https://youtu.be/id`\n'
                 + '**SoundCloud**: `https://soundcloud.com/user/song`\n'
                 + '**Clyp**: `https://clyp.it/id`\n'
@@ -195,13 +195,13 @@ exports.skip = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (!bot.music.connections.get(ctx.msg.channel.guild.id)) {
-                ctx.msg.channel.createMessage('I am not in a voice channel.').then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('music-noBotChan', 'en-UK')).then(resolve).catch(reject);
             } else {
                 if (ctx.msg.member.voiceState.channelID !== bot.music.connections.get(ctx.msg.channel.guild.id).channelID) {
-                    ctx.msg.channel.createMessage('You are not in my voice channel.').then(resolve).catch(reject);
+                    ctx.msg.channel.createMessage(localeManager.t('music-notSameChan', 'en-UK')).then(resolve).catch(reject);
                 } else {
                     if (!bot.music.connections.get(ctx.msg.channel.guild.id).playing) {
-                        ctx.msg.channel.createMessage('I am not playing anything.').then(resolve).catch(reject);
+                        ctx.msg.channel.createMessage(localeManager.t('music-notPlaying', 'en-UK')).then(resolve).catch(reject);
                     } else {
                         if (!ctx.args[0] || ctx.args[0] !== 'force') {
                             if (!bot.music.skips.get(ctx.msg.channel.guild.id)) bot.music.skips.add({id: ctx.msg.channel.guild.id, count: 0, users: []});
@@ -216,18 +216,18 @@ exports.skip = {
                                     let q = bot.music.queues.get(ctx.msg.channel.guild.id).q;
                                     let qt = q[0];
                                     if (q[0].url === qt.url) bot.music.connections.get(ctx.msg.channel.guild.id).stopPlaying();
-                                    ctx.msg.channel.createMessage(`Skipped **${qt.info.title}**.`).then(resolve).catch(reject);
+                                    ctx.msg.channel.createMessage(localeManager.t('music-skipped', 'en-UK', {title: qt.info.title})).then(resolve).catch(reject);
                                     
                                 } else {
                                     let q = bot.music.queues.get(ctx.msg.channel.guild.id).q;
-                                    ctx.msg.channel.createMessage(`**${utils.formatUsername(ctx.msg.member)}** has voted to skip **${q[0].info.title}**.\n**${skips.count}** skips out of **${Math.floor(chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf).length)}** needed.`).then(resolve).catch(reject);
+                                    ctx.msg.channel.createMessage(localeManager.t('music-voteSkip', 'en-UK', {name: utils.formatUsername(ctx.msg.member), title: q[0].info.title, skipsLeft: skips.count, total: Math.floor(chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf).length)})).then(resolve).catch(reject);
                                 }
                             } else {
-                                ctx.msg.channel.createMessage('You have already voted to skip.').then(resolve).catch(reject);
+                                ctx.msg.channel.createMessage(localeManager.t('music-voteSkipAlready', 'en-UK')).then(resolve).catch(reject);
                             }
                         } else if (ctx.args[0] === 'force') {
-                            if (!ctx.msg.member.permission.has('administrator') || ctx.msg.author.id !== ctx.msg.channel.guild.ownerID || !utils.isOwner(ctx.msg.author.id) || !utils.isAdmin(ctx.msg.author.id)) {
-                                ctx.msg.channel.createMessage('You require the Administrator permission to force skip.').then(resolve).catch(reject);
+                            if (!utils.isOwner(ctx.msg.author.id) || !utils.isAdmin(ctx.msg.author.id) || ctx.msg.author.id !== ctx.msg.channel.guild.ownerID || !ctx.msg.member.permission.has('administrator')) {
+                                ctx.msg.channel.createMessage(localeManager.t('music-forceSkipNoPerms', 'en-UK')).then(resolve).catch(reject);
                             } else {
                                 if (!bot.music.skips.get(ctx.msg.channel.guild.id)) bot.music.skips.add({id: ctx.msg.channel.guild.id, count: 0, users: []});
                                 let skips = bot.music.skips.get(ctx.msg.channel.guild.id);
@@ -236,7 +236,7 @@ exports.skip = {
                                 skips.count = 0;
                                 skips.users = [];
                                 if (q[0].url === qt.url) bot.music.connections.get(ctx.msg.channel.guild.id).stopPlaying();
-                                ctx.msg.channel.createMessage(`Skipped **${qt.info.title}**.`).then(resolve).catch(reject);
+                                ctx.msg.channel.createMessage(localeManager.t('music-skipped', 'en-UK', {title: qt.info.title})).then(resolve).catch(reject);
                             }
                         }
                     }

@@ -14,7 +14,7 @@ exports.apod = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (!bot.config.nasaKey) {
-                ctx.msg.channel.createMessage('This bot does not appear to be set up for this command. Missing API key.').then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('nasa-noKey', 'en-UK')).then(resolve).catch(reject);
             } else {
                 request(`https://api.nasa.gov/planetary/apod?api_key=${bot.config.nasaKey}`, (err, resp, body) => {
                     if (err) {
@@ -25,14 +25,14 @@ exports.apod = {
                         let data = JSON.parse(body);
                         ctx.msg.channel.createMessage({embed: {
                             title: data.title,
-                            description: data.copyright ? `Copyright ${data.copyright}` : '',
+                            description: data.copyright ? localeManager.t('nasa-copyright', 'en-UK', {copyright: data.copyright}) : '',
                             thumbnail:{url: 'https://api.nasa.gov/images/logo.png'},
                             color: 0xFD7BB5,
                             image: {url: data.url},
                             fields: [
-                                {name: 'Explanation', value: data.explanation}
+                                {name: localeManager.t('nasa-explanation', 'en-UK'), value: data.explanation}
                             ],
-                            footer: {text: `Date of image: ${data.date}`}
+                            footer: {text: localeManager.t('nasa-date', 'en-UK', {date: data.date})}
                         }}).then(resolve).catch(reject);
                     }
                 });
