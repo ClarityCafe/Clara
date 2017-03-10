@@ -11,7 +11,7 @@ exports.commands = [
     'convert'
 ];
 
-const fx = require('./money.min');
+const fx = require('./money.min.js');
 var awauRegex = str => /^\d+(?:\.\d+)? (?:[A-Z]{3}\s?){2}$/.test(str);
 
 exports.convert = {
