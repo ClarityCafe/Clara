@@ -27,7 +27,7 @@
     "rethinkdbdash": "^2.3.28"
   },
   "devDependencies": {
-    "eslint": "^3.16.1",
+    "eslint": "^3.17.1",
     "tslint": "^4.4.2",
     "typescript": "^2.2.1"
   }
