@@ -15,7 +15,7 @@ const fs = require('fs');
 //globals w
 
 global.__baseDir = __dirname;
-global.Promise = require('breach');
+global.Promise = require('breach').Breach;
 global.logger = require(`${__dirname}/lib/logger`);
 global.localeManager = require(`${__dirname}/lib/localeManager`);
 
