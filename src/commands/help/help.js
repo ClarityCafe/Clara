@@ -23,7 +23,7 @@ exports.help = {
                     cmdFields.push({name: cmd, value: `${cmnd.usage ? `${cmnd.usage} - ` : ''}${cmnd.desc}${cmnd.example ? `\n**Example:** \`${bot.config.mainPrefix}${cmd} ${cmnd.example}\`` : ''}`});
                 });
 
-                ctx.msg.channel.createMessage(localeManager.t('helps-sending', 'en-UK')).then(() => {
+                ctx.msg.channel.createMessage(localeManager.t('help-sending', 'en-UK')).then(() => {
                     return ctx.msg.author.getDMChannel();
                 }).then(dm => {
                     let fieldCollect = [];
