@@ -28,7 +28,7 @@ exports.prefixes = {
                 prfxTxt += '```';
                 ctx.msg.channel.createMessage(prfxTxt).then(resolve).catch(reject);
             } else {
-                if (!utils.isOwner(ctx.msg.author.id) || !utils.isAdmin(ctx.msg.author.id)) {
+                if (!utils.isAdmin(ctx.msg.author.id) || !utils.isOwner(ctx.msg.author.id)) {
                     ctx.msg.channel.createMessage('You do not have permission to do that.').then(resolve).catch(reject);
                 } else {
                     if (ctx.args[0] === 'add') {
