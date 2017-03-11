@@ -276,6 +276,25 @@ bot.awaitMessage = (channelID, userID, filter = function () { return true; }, ti
                     reject(new Error('Message await expired.'));
                 }
             }, timeout);
+
+            // Disconnection handler
+            // just to make sure if autoReconnect didn't work.
+
+            bot.on('disconnected', () => {
+                return new Promise((resolve, reject) => {
+                    logger.warn('disconnected from Discord. Attempting to reconnect...').then(() => {
+                        bot.connect().then(() => {
+                            logger.info('Reconnected from Discord!');
+                        }).catch(err => {
+                            reject(err);
+                            logger.error(`Gave up reconnecting.`).then(() => {
+                                //exit with code 1. In this case, PM2 would report this an problem on the Keymetrics Dashboard.
+                                process.exit(1); 
+                            });
+                        });
+                    }).catch(reject);
+                });
+            });
         }
     });
 };
