@@ -25,9 +25,7 @@ exports.eval = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage('Please give arguments to evaluate.').then(() => {
-                    reject([new Error('No arguments given.')]);
-                }).catch(err => reject([err]));
+                ctx.msg.channel.createMessage('Please give arguments to evaluate.').then(resolve).catch(reject);
             } else {
                 var evalArgs = ctx.suffix;
                 var {msg, args, cmd, suffix, cleanSuffix, guildBot} = ctx;
