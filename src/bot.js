@@ -15,7 +15,7 @@ const fs = require('fs');
 //globals w
 
 global.__baseDir = __dirname;
-global.Promise = require('breach').Breach;
+global.Promise = require('bluebird');
 global.logger = require(`${__dirname}/lib/logger`);
 global.localeManager = require(`${__dirname}/lib/localeManager`);
 
@@ -68,7 +68,6 @@ try {
 
 exports.bot = bot;
 
-bot.logger = logger;
 bot.commands = new CommandHolder();
 bot.config = config;
 bot.music = {
