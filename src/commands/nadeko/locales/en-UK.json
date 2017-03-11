@@ -1,0 +1,3 @@
+{
+    "nadeko" : "{{ctx.msg.author.mention}} did it {{emote[Math.floor(Math.random() * emote.length)]}} :gun:"
+}
