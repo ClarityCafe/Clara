@@ -74,7 +74,7 @@ exports.queue = {
                     }}).then(resolve).catch(reject);
                 } else {
                     let q = bot.music.queues.get(ctx.msg.channel.guild.id).q;
-                    let description = `**${q.length} ${q.length === 1 ? 'item' : 'items'} in queue. ${q.length > 10 ? 'Showing first 10 items.' : ''}**\n\n`;
+                    let description = `**${localeManager.t('music-queuesAmt', 'en-UK', {amt: q.length, more10: q.length > 10 ? localeManager.t('music-queuesAmtMore10', 'en-UK') : ''})}**\n\n`;
 
                     for (let i in q) {
                         if (!q[i] || Number(i) === 9) break;

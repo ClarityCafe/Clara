@@ -5,6 +5,7 @@
     "music-queue": "Music Queue",
     "music-noQueue": "Queue is more empty than my will to live. I mean... :eyes:",
     "music-queuesAmt": "{{amt}} item(s) in queue. {{more10}}",
+    "music-queuesAmtMore10": "Showing first 10 items.",
     "music-noBotChan": "I am not in a voice channel.",
     "music-notSameChan": "You are not in my voice channel.",
     "music-left": "Left voice channel and destroyed associated data.",
@@ -21,5 +22,13 @@
     "music-skipped": "Skipped **{{title}}**.",
     "music-voteSkip": "**{{name}}** has voted to skip {{title}}.\n**{{skips}}** of out **{{total}}** needed.",
     "music-voteSkipAlready": "You have already voted to skip.",
-    "music-forceSkipNoPerms": "You require the Administrator permission to force skip."
+    "music-forceSkipNoPerms": "You require the Administrator permission to force skip.",
+    "music-invalidOpt": "Invalid response.",
+    "music-searchHeader": "Search Results",
+    "music-searchExplanation": "Please choose one of the following choices below by just typing its corresponding number.",
+    "music-searchNoResults": "No results found.",
+    "music-nowPlayingHeader": "Now Playing",
+    "music-nowPlayingSong": "{{title}}\n[Link]({{url}}) **[{{time}}]**",
+    "music-nowPlayingFooter": "Requested by {{user}} | {{type}}",
+    "music-queuedItem": "Queued **{{title}}** to position **{{position}}**."
 }
