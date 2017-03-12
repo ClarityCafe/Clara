@@ -37,6 +37,7 @@ class localeManager {
                     reject(err);
                 } else {
                     for (let locale of locales) {
+                        if (!locale.endsWith('.json')) continue;
                         let localeParsed = JSON.parse(fs.readFileSync(`${localeDir}/${locale}`));
                         this.locales[locale.substring(0, locale.indexOf('.js'))] = localeParsed;
                     }
