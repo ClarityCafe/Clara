@@ -37,6 +37,7 @@ exports.userinfo = {
     desc: "Check a user's info, or your own.",
     longDesc: `check someone's or your own userinfo`,
     usage: '[mention]',
+    example: '@b1nzy#1337',
     main : (bot, ctx) => {
         return new Promise((resolve,reject) => {
             if (ctx.msg.mentions.length === 0) {

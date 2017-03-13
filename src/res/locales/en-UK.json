@@ -1,0 +1,6 @@
+{
+    "user-noPerm": "You require the **{{perm}}** permission to use this command.",
+    "bot-noPerm": "I do not have the **{{perm}}** permission.",
+    "incorrectUsage": "Incorrect Usage",
+    "id": "ID"
+}

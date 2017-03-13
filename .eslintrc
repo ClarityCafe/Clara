@@ -9,11 +9,16 @@
     },
     "globals": {
         "__baseDir": false,
-        "logger" : false
+        "logger" : false,
+        "localeManager": false
     },
+    "ignore": [
+        "*.min.js"
+    ],
     "rules": {
         "no-console": 0,
         "global-require":"off",
+        "no-undef" :"off",
         
         "quotes": [
             "warn",

@@ -21,20 +21,20 @@ function animeBlock(animu, color) {
         thumbnail: {url: animu.image},
         color: parseInt(color, 16),
         fields: [
-            {name: 'ID', value: animu.id, inline: true},
-            {name: 'Japanese', value: animu.alternativeTitles.japanese.join(', ').substring(9).trim(), inline: true},
-            {name: 'English', value: animu.alternativeTitles.english ? animu.alternativeTitles.english.join(', ').substring(8).trim() : 'None', inline: true},
-            {name: 'Synonyms', value: animu.alternativeTitles.synoynms ? animu.alternativeTitles.synoynms.join(',').substring(9).trim() : 'None', inline: true},
-            {name: 'Genres', value: animu.genres.join(', '), inline: true},
-            {name: 'Type', value: animu.type, inline: true},
-            {name: 'Episodes', value: animu.episodes, inline: true},
-            {name: 'Status', value: animu.status, inline: true},
-            {name: 'Aired', value: animu.aired, inline: true},
-            {name: 'Classification', value: animu.classification, inline: true},
-            {name: animu.studios.length === 1 ? 'Studio' : 'Studios', value: animu.studios.join(', '), inline: true},
-            {name: 'Score', value: animu.statistics.score.value, inline: true},
-            {name: 'Popularity',  value: animu.statistics.popularity, inline: true},
-            {name: 'Ranking', value: animu.statistics.ranking, inline: true}
+            {name: localeManager.t('id', 'en-UK'), value: animu.id, inline: true},
+            {name: localeManager.t('anime-japanese', 'en-UK'), value: animu.alternativeTitles.japanese.join(', ').substring(9).trim(), inline: true},
+            {name: localeManager.t('anime-english', 'en-UK'), value: animu.alternativeTitles.english ? animu.alternativeTitles.english.join(', ').substring(8).trim() : 'None', inline: true},
+            {name: localeManager.t('anime-synonyms', 'en-UK'), value: animu.alternativeTitles.synoynms ? animu.alternativeTitles.synoynms.join(',').substring(9).trim() : 'None', inline: true},
+            {name: localeManager.t('anime-genres', 'en-UK'), value: animu.genres.join(', '), inline: true},
+            {name: localeManager.t('anime-type', 'en-UK'), value: animu.type, inline: true},
+            {name: localeManager.t('anime-episodes', 'en-UK'), value: animu.episodes, inline: true},
+            {name: localeManager.t('anime-status', 'en-UK'), value: animu.status, inline: true},
+            {name: localeManager.t('anime-aired', 'en-UK'), value: animu.aired, inline: true},
+            {name: localeManager.t('anime-classification', 'en-UK'), value: animu.classification, inline: true},
+            {name: animu.studios.length === 1 ? localeManager.t('anime-studio', 'en-UK') : localeManager.t('anime-studios', 'en-UK'), value: animu.studios.join(', '), inline: true},
+            {name: localeManager.t('anime-score', 'en-UK'), value: animu.statistics.score.value, inline: true},
+            {name: localeManager.t('anime-popularity', 'en-UK'),  value: animu.statistics.popularity, inline: true},
+            {name: localeManager.t('anime-ranking', 'en-UK'), value: animu.statistics.ranking, inline: true}
         ]
     }}
 }
@@ -46,7 +46,7 @@ exports.anime = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix) {
-                ctx.msg.channel.createMessage('Please give me something to search with.').then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('anime-noArgs', 'en-UK')).then(resolve).catch(reject);
             } else {
                 ctx.msg.channel.sendTyping();
                 if (/^\d+$/.test(ctx.suffix)) {

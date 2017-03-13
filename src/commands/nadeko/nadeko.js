@@ -7,7 +7,7 @@ exports.commands = [
     'nadeko'
 ];
 
-var emote = [
+const emote = [
     ':joy:',
     ':unamused:'
 ];
@@ -16,8 +16,8 @@ exports.nadeko = {
     desc: 'who did it?',
     longDesc: 'owo whats this?',
     main: (bot , ctx) => {
-        return new Promise ((resolve, reject) => {
-            ctx.msg.channel.createMessage(`${ctx.msg.author.mention} did it ${emote[Math.floor(Math.random() * emote.length)]} :gun:`).then(resolve).catch(reject);
+        return new Promise ((resolve, reject) => {           
+            ctx.msg.channel.createMessage(localeManager.t('nadeko', 'en-UK')).then(resolve).catch(reject);
         });
     }
 };

@@ -12,7 +12,6 @@
  * @prop {Number} length Amount of commands currently loaded.
  * @prop {Number} aliasesLength Amount of aliases currently registered.
  */
-
 class CommandHolder {
 
     /**
