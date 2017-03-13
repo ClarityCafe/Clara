@@ -29,9 +29,6 @@ exports.apod = {
                             thumbnail:{url: 'https://api.nasa.gov/images/logo.png'},
                             color: 0xFD7BB5,
                             image: {url: data.url},
-                            fields: [
-                                {name: localeManager.t('nasa-explanation', 'en-UK'), value: data.explanation}
-                            ],
                             footer: {text: localeManager.t('nasa-date', 'en-UK', {date: data.date})}
                         }}).then(resolve).catch(reject);
                     }
