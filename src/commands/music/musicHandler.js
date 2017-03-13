@@ -22,7 +22,7 @@ exports.exposed = {};
 
 var search = exports.search = (msg, terms) => { // eslint-disable-line no-unused-vars
     return new Promise((resolve, reject) => {
-        let bot = exports.exposed.bot;
+        let {bot, settings} = exports.exposed;
         ytSearch(terms, {maxResults: 10, key: bot.config.ytSearchKey}, (err, res) => {
             if (err) {
                 reject(err);
@@ -30,8 +30,8 @@ var search = exports.search = (msg, terms) => { // eslint-disable-line no-unused
                 res = res.filter(r => r.kind === 'youtube#video');
                 if (res.length > 0) {
                     let embed = {
-                        title: localeManager.t('music-searchHeader', 'en-UK'),
-                        description: localeManager.t('music-searchExplanation', 'en-UK'),
+                        title: localeManager.t('music-searchHeader', settings.locale),
+                        description: localeManager.t('music-searchExplanation', settings.locale),
                         fields: []
                     };
 
@@ -52,11 +52,11 @@ var search = exports.search = (msg, terms) => { // eslint-disable-line no-unused
                             return {msg: m, url: choice.link};
                         } else {
                             outerMsg.delete();
-                            return m.channel.createMessage(localeManager.t('music-invalidOpt', 'en-UK'));
+                            return m.channel.createMessage(localeManager.t('music-invalidOpt', settings.locale));
                         }
                     }).then(resolve).catch(reject);
                 } else {
-                    msg.channel.createMessage(localeManager.t('music-searchNoResults', 'en-UK')).then(resolve).catch(reject);
+                    msg.channel.createMessage(localeManager.t('music-searchNoResults', settings.locale)).then(resolve).catch(reject);
                 }
             }
         });
@@ -65,7 +65,7 @@ var search = exports.search = (msg, terms) => { // eslint-disable-line no-unused
 
 var play = exports.play = (msg, url) => {
     return new Promise((resolve, reject) => {
-        let bot = exports.exposed.bot;
+        let {bot, settings} = exports.exposed;
         if (!bot.music.connections.get(msg.channel.guild.id)) {
             queue(msg, url).then(() => {
                 return bot.joinVoiceChannel(msg.member.voiceState.channelID);
@@ -82,18 +82,18 @@ var play = exports.play = (msg, url) => {
                 if (typeof stream === 'object') {
                     stream.once('data', () => {
                         msg.channel.createMessage({embed: {
-                            title: localeManager.t('music-nowPlayingHeader'),
-                            description: localeManager.t('music-nowPlayingSong', 'en-UK', {title: info.title, url, time: typeof info.length === 'number' ? timeFormat(info.length) : info.length}),
+                            title: localeManager.t('music-nowPlayingHeader', settings.locale),
+                            description: localeManager.t('music-nowPlayingSong', settings.locale, {title: info.title, url, time: typeof info.length === 'number' ? timeFormat(info.length) : info.length}),
                             image: {url: info.thumbnail},
-                            footer: {text: localeManager.t('music-nowPlayingFooter', 'en-UK', {user: utils.formatUsername(msg.member), type})}
+                            footer: {text: localeManager.t('music-nowPlayingFooter', settings.locale, {user: utils.formatUsername(msg.member), type})}
                         }});
                     });
                 } else {
                     msg.channel.createMessage({embed: {
-                        title: localeManager.t('music-nowPlayingHeader'),
-                        description: localeManager.t('music-nowPlayingSong', 'en-UK', {title: info.title, url, time: typeof info.length === 'number' ? timeFormat(info.length) : info.length}),
+                        title: localeManager.t('music-nowPlayingHeader', settings.locale),
+                        description: localeManager.t('music-nowPlayingSong', settings.locale, {title: info.title, url, time: typeof info.length === 'number' ? timeFormat(info.length) : info.length}),
                         image: {url: info.thumbnail},
-                        footer: {text: localeManager.t('music-nowPlayingFooter', 'en-UK', {user: utils.formatUsername(msg.member), type})}
+                        footer: {text: localeManager.t('music-nowPlayingFooter', settings.locale, {user: utils.formatUsername(msg.member), type})}
                     }});
                 }
 
@@ -126,18 +126,18 @@ var play = exports.play = (msg, url) => {
                 if (typeof stream === 'object') {
                     stream.once('data', () => {
                         msg.channel.createMessage({embed: {
-                            title: localeManager.t('music-nowPlayingHeader'),
-                            description: localeManager.t('music-nowPlayingSong', 'en-UK', {title: info.title, url, time: typeof info.length === 'number' ? timeFormat(info.length) : info.length}),
+                            title: localeManager.t('music-nowPlayingHeader', settings.locale),
+                            description: localeManager.t('music-nowPlayingSong', settings.locale, {title: info.title, url, time: typeof info.length === 'number' ? timeFormat(info.length) : info.length}),
                             image: {url: info.thumbnail},
-                            footer: {text: localeManager.t('music-nowPlayingFooter', 'en-UK', {user: utils.formatUsername(msg.member), type})}
+                            footer: {text: localeManager.t('music-nowPlayingFooter', settings.locale, {user: utils.formatUsername(msg.member), type})}
                         }});
                     });
                 } else {
                     msg.channel.createMessage({embed: {
-                        title: localeManager.t('music-nowPlayingHeader'),
-                        description: localeManager.t('music-nowPlayingSong', 'en-UK', {title: info.title, url, time: typeof info.length === 'number' ? timeFormat(info.length) : info.length}),
+                        title: localeManager.t('music-nowPlayingHeader', settings.locale),
+                        description: localeManager.t('music-nowPlayingSong', settings.locale, {title: info.title, url, time: typeof info.length === 'number' ? timeFormat(info.length) : info.length}),
                         image: {url: info.thumbnail},
-                        footer: {text: localeManager.t('music-nowPlayingFooter', 'en-UK', {user: utils.formatUsername(msg.member), type})}
+                        footer: {text: localeManager.t('music-nowPlayingFooter', settings.locale, {user: utils.formatUsername(msg.member), type})}
                     }});
                 }
 
@@ -168,18 +168,18 @@ var play = exports.play = (msg, url) => {
                 if (typeof stream === 'object') {
                     stream.once('data', () => {
                         msg.channel.createMessage({embed: {
-                            title: localeManager.t('music-nowPlayingHeader'),
-                            description: localeManager.t('music-nowPlayingSong', 'en-UK', {title: info.title, url, time: typeof info.length === 'number' ? timeFormat(info.length) : info.length}),
+                            title: localeManager.t('music-nowPlayingHeader', settings.locale),
+                            description: localeManager.t('music-nowPlayingSong', settings.locale, {title: info.title, url, time: typeof info.length === 'number' ? timeFormat(info.length) : info.length}),
                             image: {url: info.thumbnail},
-                            footer: {text: localeManager.t('music-nowPlayingFooter', 'en-UK', {user: utils.formatUsername(msg.member), type})}
+                            footer: {text: localeManager.t('music-nowPlayingFooter', settings.locale, {user: utils.formatUsername(msg.member), type})}
                         }});
                     });
                 } else {
                     msg.channel.createMessage({embed: {
-                        title: localeManager.t('music-nowPlayingHeader'),
-                        description: localeManager.t('music-nowPlayingSong', 'en-UK', {title: info.title, url, time: typeof info.length === 'number' ? timeFormat(info.length) : info.length}),
+                        title: localeManager.t('music-nowPlayingHeader', settings.locale),
+                        description: localeManager.t('music-nowPlayingSong', settings.locale, {title: info.title, url, time: typeof info.length === 'number' ? timeFormat(info.length) : info.length}),
                         image: {url: info.thumbnail},
-                        footer: {text: localeManager.t('music-nowPlayingFooter', 'en-UK', {user: utils.formatUsername(msg.member), type})}
+                        footer: {text: localeManager.t('music-nowPlayingFooter', settings.locale, {user: utils.formatUsername(msg.member), type})}
                     }});
                 }
 
@@ -207,13 +207,13 @@ var play = exports.play = (msg, url) => {
 
 var queue = exports.queue = (msg, url) => {
     return new Promise((resolve, reject) => {
-        let bot = exports.exposed.bot;
+        let {bot, settings} = exports.exposed;
         if (!bot.music.queues.get(msg.channel.guild.id)) bot.music.queues.add({id: msg.channel.guild.id, q: []});
         let q = bot.music.queues.get(msg.channel.guild.id).q;
 
         getSongInfo(url).then(info => {
             q.push({url, requestee: msg.author.id, msg, info, timestamp: Date.now()});
-            return msg.channel.createMessage(localeManager.t('music-queuedItem', 'en-UK', {title: info.title, position: q.length}));
+            return msg.channel.createMessage(localeManager.t('music-queuedItem', settings.locale, {title: info.title, position: q.length}));
         }).then(resolve).catch(reject);
     });
 };
