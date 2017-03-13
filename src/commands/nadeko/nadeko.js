@@ -7,7 +7,7 @@ exports.commands = [
     'nadeko'
 ];
 
-const emote = [
+const emotes = [
     ':joy:',
     ':unamused:'
 ];
@@ -17,7 +17,7 @@ exports.nadeko = {
     longDesc: 'owo whats this?',
     main: (bot , ctx) => {
         return new Promise ((resolve, reject) => {           
-            ctx.msg.channel.createMessage(localeManager.t('nadeko', 'en-UK', {user : ctx.msg.author.mention, emote: emote})).then(resolve).catch(reject);
+            ctx.msg.channel.createMessage(localeManager.t('nadeko', 'en-UK', {user : ctx.msg.author.mention, emote: emotes[Math.floor(Math.random() * emotes.length)]})).then(resolve).catch(reject);
         });
     }
 };
