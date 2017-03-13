@@ -17,11 +17,13 @@ const fs = require('fs');
 global.__baseDir = __dirname;
 global.Promise = require('bluebird');
 global.logger = require(`${__dirname}/lib/logger`);
+global.localeManager = require(`${__dirname}/lib/localeManager`);
 
 // Custom modules
 const logger = require(`${__dirname}/lib/logger`);
 const CommandHolder = require(`${__dirname}/lib/commands`);
 const utils = require(`${__dirname}/lib/utils`);
+const parseArgs = require(`${__dirname}/lib/argParser`);
 
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
@@ -29,6 +31,8 @@ const bot = new Eris(config.token, {
     autoreconnect: true,
     seedVoiceConnections: true,
     maxShards: config.maxShards || 1,
+    defaultImageFormat: 'png',
+    defaultImageSize: 512,
     disableEvents: {
         TYPING_START: true
     }
@@ -64,7 +68,6 @@ try {
 
 exports.bot = bot;
 
-bot.logger = logger;
 bot.commands = new CommandHolder();
 bot.config = config;
 bot.music = {
@@ -73,10 +76,6 @@ bot.music = {
     connections: new Eris.Collection(Eris.VoiceConnection),
     streams: new Eris.Collection(Object),
     stopped: []
-};
-bot.locales = {
-    guilds: new Eris.Collection(Object),
-    supportedLocales : new Eris.Collection(Array)
 };
 
 // Init
@@ -88,6 +87,8 @@ bot.on('ready', () => {
             logger.info(`${bot.user.username} is connected to Discord and ready to use.`);
             logger.info(`Main prefix is '${config.mainPrefix}', can also use @mention.`);
             logger.info(`${altPrefixes.length > 0 ? `Alternative prefixes: '${altPrefixes.join("', ")}'` : 'No alternative prefixes.'}`);
+            return localeManager.loadLocales();
+        }).then(() => {
             loadCommands = false;
             allowCommandUse = true;
         }).catch(err => {
@@ -132,17 +133,18 @@ bot.on('messageCreate', msg => {
     }
 
     prefixParser(msg.content).then(content => {
-        if (content === undefined) return;
+        if (content == undefined) return content;
+        return parseArgs(content);
+    }).then(res => {
+        if (res == undefined) return;
 
-        var args = content.split(' ');
-        var cmd = args.shift();
-        var suffix = args.join(' ');
-        var cleanSuffix = msg.cleanContent.split(' ');
+        let {args, cmd, suffix} = res;
+        let cleanSuffix = msg.cleanContent.split(' ');
         cleanSuffix.splice(0, 1);
         cleanSuffix = cleanSuffix.join(' ');
-        var guildBot = msg.channel.guild.members.get(bot.user.id);
+        let guildBot = msg.channel.guild.members.get(bot.user.id);
 
-        var ctx = {msg, args, cmd, suffix, cleanSuffix, guildBot};
+        let ctx = {msg, args, cmd, suffix, cleanSuffix, guildBot};
 
         if (bot.commands.getCommand(cmd)) {
             logger.cmd(loggerPrefix(msg) + msg.cleanContent);
