@@ -28,29 +28,35 @@ exports.eval = {
                 ctx.msg.channel.createMessage('Please give arguments to evaluate.').then(resolve).catch(reject);
             } else {
                 var evalArgs = ctx.suffix;
-                var {msg, args, cmd, suffix, cleanSuffix, guildBot} = ctx;
+                var {msg, args, cmd, suffix, cleanSuffix, guildBot, settings} = ctx;
 
                 try {
                     var returned = eval(evalArgs);
                     var str = util.inspect(returned, {depth: 1});
                     str = str.replace(new RegExp(bot.token, 'gi'), '(token)');
 
-                    if (str.length > 1900) {
-                        str = str.substr(0, 1897);
-                        str = str + '...';
-                    }
-
                     var sentMessage = '```js\n';
                     sentMessage += `Input: ${evalArgs}\n\n`;
                     sentMessage += `Output: ${str}\n`;
                     sentMessage += '```';
 
+                    if (sentMessage.length > 1897) {
+                        sentMessage = sentMessage.substr(0, 1897);
+                        sentMessage = sentMessage + '...\n````';
+                    }
+
                     ctx.msg.channel.createMessage(sentMessage).then(resolve).catch(reject);
                 } catch(err) {
+
                     var errMessage = '```js\n';
                     errMessage += `Input: ${evalArgs}\n\n`;
                     errMessage += `${err}\n`;
                     errMessage += '```';
+
+                    if (errMessage.length > 1897) {
+                        errMessage = errMessage.substr(0, 1897);
+                        errMessage = errMessage + '...\n```';
+                    }
 
                     ctx.msg.channel.createMessage(errMessage).then(resolve).catch(reject);
                 }
