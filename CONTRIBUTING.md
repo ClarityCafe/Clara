@@ -26,6 +26,15 @@ for ctx messages/Promise chaining make sure to do
 
 ctx.msg.channel.createMessage().then(resolve).catch(err);
 ```
+or 
+
+```js
+
+ctx.msg.channel.createMessage().then(() => {
+    //code awau
+}).catch(reject);
+```
+
 Avoid using this type of indents for messages 
 ```js 
 
