@@ -20,7 +20,7 @@ Remember, arrow functions don't change `this`, so if for some reason you need `t
 
 ### Indents
 
-for ctx messages  make sure to do 
+for ctx messages/Promise chaining make sure to do 
 
 ```js 
 
@@ -47,7 +47,7 @@ function ()
     
 }
 ```
-semi as possible. Using a linter like ESLint helps
+semi as possible. Using a linter like ESLint helps.
 
 
 Also, please make sure to follow the way that the code in the repository is set out for consistency.
