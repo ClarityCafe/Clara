@@ -1,0 +1,9 @@
+{
+    "user-noPerm": "Tu as besoin de la permission  **{{perm}}** pour utiliser cette commande.",
+    "bot-noPerm": "Je n'ai pas la permission  **{{perm}}**.",
+    "incorrectUsage": "Usage Incorrect",
+    "locales": {
+        "en-UK": "Anglais (UK)",
+        "fr-CA": "Français (Canada)"
+    }
+}

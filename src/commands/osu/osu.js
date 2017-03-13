@@ -17,22 +17,22 @@ function osuBlock(user) {
         thumbnail: {url: `http://a.ppy.sh/${user.user_id}`},
         color: 0xFD7BB5,
         fields: [
-            {name: localeManager.t('id', 'en-UK'), value: user.user_id, inline: true},
-            {name: localeManager.t('osu-country', 'en-UK'), value: `${iso3166.getCountry(user.country)} :flag_${user.country.toLowerCase()}:`, inline: true},
-            {name: localeManager.t('osu-countryRank', 'en-UK'), value: user.pp_country_rank.replace(commaRegex, ','), inline: true},
-            {name: localeManager.t('osu-playCount', 'en-UK'), value: user.playcount ? user.playcount.replace(commaRegex, ',') : localeManager.t('osu-none', 'en-UK'), inline: true},
-            {name: localeManager.t('osu-300s', 'en-UK'), value: user.count300 ? user.count300.replace(commaRegex, ',') : localeManager.t('osu-none', 'en-UK'), inline: true},
-            {name: localeManager.t('osu-100s', 'en-UK'), value: user.count100 ? user.count100.replace(commaRegex, ',') : localeManager.t('osu-none', 'en-UK'), inline: true},
-            {name: localeManager.t('osu-50s', 'en-UK'), value: user.count50 ? user.count50.replace(commaRegex, ',') : localeManager.t('osu-none', 'en-UK'), inline: true},
-            {name: localeManager.t('osu-rankedScore', 'en-UK'), value: user.ranked_score ? user.ranked_score.replace(commaRegex, ',') : localeManager.t('osu-none', 'en-UK'), inline: true},
-            {name: localeManager.t('osu-totalScore', 'en-UK'), value: user.total_score ? user.total_score.replace(commaRegex, ',') : localeManager.t('osu-none', 'en-UK'), inline: true},
-            {name: localeManager.t('osu-pp', 'en-UK'), value: user.pp_raw ? user.pp_raw.replace(commaRegex, ',') : localeManager.t('osu-none', 'en-UK'), inline: true},
-            {name: localeManager.t('osu-level', 'en-UK'), value: user.level ? Number(user.level).toFixed(1).toString().replace(commaRegex, ',') : localeManager.t('osu-none', 'en-UK'), inline: true},
-            {name: localeManager.t('osu-rank', 'en-UK'), value: user.pp_rank ? user.pp_rank.replace(commaRegex, ',') : localeManager.t('osu-none', 'en-UK'), inline: true},
-            {name: localeManager.t('osu-accuracy', 'en-UK'), value: user.accuracy ? Number(user.accuracy).toFixed(2).toString('utf8') : localeManager.t('osu-none', 'en-UK'), inline: true},
-            {name: localeManager.t('osu-ss', 'en-UK'), value: user.count_rank_ss ? user.count_rank_ss.replace(commaRegex, ',') : localeManager.t('osu-none', 'en-UK'), inline: true},
-            {name: localeManager.t('osu-s', 'en-UK'), value: user.count_rank_s ? user.count_rank_s.replace(commaRegex, ',') : localeManager.t('osu-none', 'en-UK'), inline: true},
-            {name: localeManager.t('osu-a', 'en-UK'), value: user.count_rank_a ? user.count_rank_a.replace(commaRegex, ',') : localeManager.t('osu-none', 'en-UK'), inline: true}
+            {name: localeManager.t('id', settings.locale), value: user.user_id, inline: true},
+            {name: localeManager.t('osu-country', settings.locale), value: `${iso3166.getCountry(user.country)} :flag_${user.country.toLowerCase()}:`, inline: true},
+            {name: localeManager.t('osu-countryRank', settings.locale), value: user.pp_country_rank.replace(commaRegex, ','), inline: true},
+            {name: localeManager.t('osu-playCount', settings.locale), value: user.playcount ? user.playcount.replace(commaRegex, ',') : localeManager.t('osu-none', settings.locale), inline: true},
+            {name: localeManager.t('osu-300s', settings.locale), value: user.count300 ? user.count300.replace(commaRegex, ',') : localeManager.t('osu-none', settings.locale), inline: true},
+            {name: localeManager.t('osu-100s', settings.locale), value: user.count100 ? user.count100.replace(commaRegex, ',') : localeManager.t('osu-none', settings.locale), inline: true},
+            {name: localeManager.t('osu-50s', settings.locale), value: user.count50 ? user.count50.replace(commaRegex, ',') : localeManager.t('osu-none', settings.locale), inline: true},
+            {name: localeManager.t('osu-rankedScore', settings.locale), value: user.ranked_score ? user.ranked_score.replace(commaRegex, ',') : localeManager.t('osu-none', settings.locale), inline: true},
+            {name: localeManager.t('osu-totalScore', settings.locale), value: user.total_score ? user.total_score.replace(commaRegex, ',') : localeManager.t('osu-none', settings.locale), inline: true},
+            {name: localeManager.t('osu-pp', settings.locale), value: user.pp_raw ? user.pp_raw.replace(commaRegex, ',') : localeManager.t('osu-none', settings.locale), inline: true},
+            {name: localeManager.t('osu-level', settings.locale), value: user.level ? Number(user.level).toFixed(1).toString().replace(commaRegex, ',') : localeManager.t('osu-none', settings.locale), inline: true},
+            {name: localeManager.t('osu-rank', settings.locale), value: user.pp_rank ? user.pp_rank.replace(commaRegex, ',') : localeManager.t('osu-none', settings.locale), inline: true},
+            {name: localeManager.t('osu-accuracy', settings.locale), value: user.accuracy ? Number(user.accuracy).toFixed(2).toString('utf8') : localeManager.t('osu-none', settings.locale), inline: true},
+            {name: localeManager.t('osu-ss', settings.locale), value: user.count_rank_ss ? user.count_rank_ss.replace(commaRegex, ',') : localeManager.t('osu-none', settings.locale), inline: true},
+            {name: localeManager.t('osu-s', settings.locale), value: user.count_rank_s ? user.count_rank_s.replace(commaRegex, ',') : localeManager.t('osu-none', settings.locale), inline: true},
+            {name: localeManager.t('osu-a', settings.locale), value: user.count_rank_a ? user.count_rank_a.replace(commaRegex, ',') : localeManager.t('osu-none', settings.locale), inline: true}
         ]
     }};
 }
@@ -51,13 +51,13 @@ exports.osu = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage(localeManager.t('osu-noName', 'en-UK')).then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('osu-noName', settings.locale)).then(resolve).catch(reject);
             } else {
                 ctx.msg.channel.sendTyping();
                 osu.get_user({u: ctx.suffix}, res => {
                     var user = res[0];
                     if (!user || !user.user_id) {
-                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', 'en-UK')).then(resolve).catch(reject);
+                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
                     } else {
                         ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
                     }
@@ -74,13 +74,13 @@ exports.ctb = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage(localeManager.t('osu-noName', 'en-UK')).then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('osu-noName', settings.locale)).then(resolve).catch(reject);
             } else {
                 ctx.msg.channel.sendTyping();
                 osu.get_user({u: ctx.suffix, m: 2}, res => {
                     var user = res[0];
                     if (!user || !user.user_id) {
-                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', 'en-UK')).then(resolve).catch(reject);
+                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
                     } else {
                         ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
                     }
@@ -97,13 +97,13 @@ exports.mania = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage(localeManager.t('osu-noName', 'en-UK')).then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('osu-noName', settings.locale)).then(resolve).catch(reject);
             } else {
                 ctx.msg.channel.sendTyping();
                 osu.get_user({u: ctx.suffix, m: 3}, res => {
                     var user = res[0];
                     if (!user || !user.user_id) {
-                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', 'en-UK')).then(resolve).catch(reject);
+                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
                     } else {
                         ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
                     }
@@ -120,13 +120,13 @@ exports.taiko = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage(localeManager.t('osu-noName', 'en-UK')).then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('osu-noName', settings.locale)).then(resolve).catch(reject);
             } else {
                 ctx.msg.channel.sendTyping();
                 osu.get_user({u: ctx.suffix, m: 1}, res => {
                     var user = res[0];
                     if (!user || !user.user_id) {
-                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', 'en-UK')).then(resolve).catch(reject);
+                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
                     } else {
                         ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
                     }

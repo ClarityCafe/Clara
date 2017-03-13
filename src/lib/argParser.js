@@ -19,7 +19,7 @@ function parseArgs(str) {
             let cmd = tmp.splice(0, 1)[0];
             let suffix = tmp.join(' ');
             tmp = tmp.join(' ').match(/(["'])(?:(?=(\\?))\2.)*?\1/g);
-            let args = str.split(/(["'])(?:(?=(\\?))\2.)*?\1/g).filter(v => v !== '' && v !== '"');
+            let args = str.split(/(")(?:(?=(\\?))\2.)*?\1/g).filter(v => v !== '' && v !== '"');
             args[0] = args[0].split(' ');
             args[0].splice(0, 1);
             args[0] = args[0].join(' ');

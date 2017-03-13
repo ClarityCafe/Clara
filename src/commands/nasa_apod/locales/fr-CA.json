@@ -1,0 +1,5 @@
+{
+    "nasa-noKey": "Le bot n'a pas l'ai d'être configuré pour cette commande.  La clé pour l'API est manquante ou invalide.",
+    "nasa-copyright": "Tous droits réservés {{copyright}} ",
+    "nasa-date": "Date de l'image: {{date}}"
+}

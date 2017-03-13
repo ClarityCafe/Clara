@@ -49,7 +49,7 @@ exports.chat = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix) {
-                ctx.msg.channel.createMessage(localeManager.t('chatbot-noArgs', 'en-UK')).then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('chatbot-noArgs', ctx.settings.locale)).then(resolve).catch(reject);
             } else if (/how (dumb|smart) are you\??/i.test(ctx.suffix.toLowerCase())) {
                 readLines().then(lines => {
                     return ctx.msg.channel.createMessage(`I currently know **${lines.length}** things.`);
