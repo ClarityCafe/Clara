@@ -1,0 +1,4 @@
+{
+    "choose-insufficientArgs": "Donnes-moi au moins deux `(2)` choix.",
+    "choose": "**{{name}}**, je choisis **{{choice}}**!"
+}
