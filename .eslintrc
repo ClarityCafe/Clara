@@ -3,18 +3,22 @@
         "es6": true,
         "node": true
     },
+    
     "extends": "eslint:recommended",
     "parserOptions": {
         "sourceType": "module"
     },
+
     "globals": {
         "__baseDir": false,
         "logger" : false,
         "localeManager": false
     },
+
     "ignore": [
         "*.min.js"
     ],
+
     "rules": {
         "no-console": 0,
         "global-require":"off",
@@ -25,10 +29,12 @@
             "single",
 			{"avoidEscape": true, "allowTemplateLiterals": true}
         ],
+
 		"semi": [
 		    "warn",
 			"always"
 		],
+
 		"indent": [
 		    "error",
 			4
