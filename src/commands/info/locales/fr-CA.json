@@ -1,0 +1,13 @@
+{
+    "info-guilds": "Guildes",
+    "info-users": "Utilisateurs vu",
+    "info-uptime": "Durée de fonctionnement",
+    "info-sysTime": "Heure Système",
+    "info-os": "SE Plateforme",
+    "info-shards": "Shards Actifs",
+    "info-mem": "Utilisation de la mémoire",
+    "info-version": "Version",
+    "info-footer": "{{name}} est propulsé par Clara.  Cliques sur \"Code Source\" pour voir le repo sur Github!",
+    "info-source": "Code Source",
+    "info-supportServer": "Serveur de support"
+}
