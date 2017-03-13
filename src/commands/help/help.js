@@ -20,10 +20,10 @@ exports.help = {
                 let cmdFields = [];
 
                 bot.commands.forEach((cmd, cmnd) => {
-                    cmdFields.push({name: cmd, value: `${cmnd.usage ? `${cmnd.usage} - ` : ''}${cmnd.desc}`});
+                    cmdFields.push({name: cmd, value: `${cmnd.usage ? `${cmnd.usage} - ` : ''}${cmnd.desc}${cmnd.example ? `\n**Example:** \`${bot.config.mainPrefix}${cmd} ${cmnd.example}\`` : ''}`});
                 });
 
-                ctx.msg.channel.createMessage('Sending the help message to your DMs').then(() => {
+                ctx.msg.channel.createMessage(localeManager.t('help-sending', 'en-UK')).then(() => {
                     return ctx.msg.author.getDMChannel();
                 }).then(dm => {
                     let fieldCollect = [];
@@ -41,10 +41,10 @@ exports.help = {
                 }).then(resolve).catch(reject);
             } else {
                 if (!bot.commands.getCommand(ctx.args[0])) {
-                    ctx.msg.channel.createMessage('That command does not exist. Make sure to check your spelling.').then(resolve).catch(reject);
+                    ctx.msg.channel.createMessage(localeManager.t('help-noCmd', 'en-UK')).then(resolve).catch(reject);
                 } else {
                     let cmd = bot.commands.getCommand(ctx.args[0]);
-                    let embed = {title: ctx.args[0], description: `${cmd.usage ? `\`${cmd.usage}\` - `: ''}**${cmd.longDesc ? cmd.longDesc : cmd.desc}**`, color: 2201331};
+                    let embed = {title: ctx.args[0], description: `${cmd.usage ? `\`${cmd.usage}\` - `: ''}**${cmd.longDesc ? cmd.longDesc : cmd.desc}**${cmd.example ? `\n**Example:** \`${bot.config.mainPrefix}${ctx.args[0]} ${cmd.example}\``: ''}`, color: 2201331};
                     ctx.msg.channel.createMessage({embed}).then(resolve).catch(reject);
                 }
             }

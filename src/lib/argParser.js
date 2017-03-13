@@ -15,28 +15,37 @@ function parseArgs(str) {
         if (typeof str !== 'string') {
             reject(new Error('str is not a string.'));
         } else {
-            let args;
             let tmp = str.split(' ');
             let cmd = tmp.splice(0, 1)[0];
             let suffix = tmp.join(' ');
-            tmp = tmp.join(' ').match(/(["'])(?:(?=(\\?))\2.)*?\1/g).map(v => v.slice(1, -1));
-            let tmp2 = str.split(/(["'])(?:(?=(\\?))\2.)*?\1/g).filter(v => v !== '' && v !== '"');
-            tmp2[0] = tmp2[0].split(' ');
-            tmp2[0].splice(0, 1);
-            tmp2[0] = tmp2[0].join(' ');
+            tmp = tmp.join(' ').match(/(["'])(?:(?=(\\?))\2.)*?\1/g);
+            let args = str.split(/(["'])(?:(?=(\\?))\2.)*?\1/g).filter(v => v !== '' && v !== '"');
+            args[0] = args[0].split(' ');
+            args[0].splice(0, 1);
+            args[0] = args[0].join(' ');
 
             if (tmp) {
-                tmp2.forEach((v, i) => {
-                    if (!(v instanceof Array)) {
-                        tmp2[i] = v.split(' ');
-                        if (suffix.split(' ')[i].startsWith('"')) tmp2.splice(i, 0, tmp[i]);
-                    }
+                tmp = tmp.map(v => v.slice(1, -1));
+
+                args.forEach((v, i) => {
+                    if (!(v instanceof Array)) args[i] = v.split(' ');
                 });
                 
-                tmp = tmp.filter(v => tmp.indexOf(v) === -1);
-                tmp2 = tmp2.concat(tmp.filter(v => tmp2.indexOf(v) === -1))
-                tmp2 = [].concat.apply([], tmp2).filter(v => v !== '' && v != undefined);
+                args.forEach((v, i) => {
+                    if (suffix.split(' ')[i].startsWith('"')) args.splice(i + 1, 0, tmp.shift());
+                });
+
+                args = args.concat(tmp.filter(v => args.indexOf(v) === -1));
+                args = [].concat.apply([], args).filter(v => v !== '' && v != undefined);
+            } else {
+                args.forEach((v, i) => {
+                    if (!(v instanceof Array)) args[i] = v.split(' ');
+                });
+
+                args = [].concat.apply([], args).filter(v => v !== '' && v != undefined);
             }
+
+            resolve({args, suffix, cmd});
         }
     });
 }

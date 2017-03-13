@@ -12,7 +12,7 @@ exports.commands = [
     'mari'
 ];
 
-var files = fs.readdirSync(`${__baseDir}/res`);
+var files = fs.readdirSync(`${__baseDir}/res/itsjoke`);
 
 exports.mari = {
     desc: "It's Joke!",

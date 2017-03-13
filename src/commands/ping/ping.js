@@ -15,8 +15,8 @@ exports.ping = {
     fullDesc: "Ping the bot and check it's latency.",
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.createMessage('Pong!').then(m => {
-                return m.edit(`Pong! \`${m.timestamp - ctx.msg.timestamp}ms\``);
+            ctx.msg.channel.createMessage(localeManager.t('pong', 'en-UK')).then(m => {
+                return m.edit(localeManager.t('pong', 'en-UK') + ` \`${m.timestamp - ctx.msg.timestamp}ms\``);
             }).then(resolve).catch(reject);
         });
     }
