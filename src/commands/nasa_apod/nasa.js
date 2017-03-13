@@ -14,7 +14,7 @@ exports.apod = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (!bot.config.nasaKey) {
-                ctx.msg.channel.createMessage(localeManager.t('nasa-noKey', 'en-UK')).then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('nasa-noKey', settings.locale)).then(resolve).catch(reject);
             } else {
                 request(`https://api.nasa.gov/planetary/apod?api_key=${bot.config.nasaKey}`, (err, resp, body) => {
                     if (err) {
@@ -25,11 +25,11 @@ exports.apod = {
                         let data = JSON.parse(body);
                         ctx.msg.channel.createMessage({embed: {
                             title: data.title,
-                            description: data.copyright ? localeManager.t('nasa-copyright', 'en-UK', {copyright: data.copyright}) : '',
+                            description: data.copyright ? localeManager.t('nasa-copyright', settings.locale, {copyright: data.copyright}) : '',
                             thumbnail:{url: 'https://api.nasa.gov/images/logo.png'},
                             color: 0xFD7BB5,
                             image: {url: data.url},
-                            footer: {text: localeManager.t('nasa-date', 'en-UK', {date: data.date})}
+                            footer: {text: localeManager.t('nasa-date', settings.locale, {date: data.date})}
                         }}).then(resolve).catch(reject);
                     }
                 });

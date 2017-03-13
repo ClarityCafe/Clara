@@ -34,20 +34,20 @@ exports.info = {
             })[0]).color;
             ctx.msg.channel.createMessage({embed: {
                 title: `${bot.user.username}'s Info`,
-                description: `[${localeManager.t('info-source', 'en-UK')}](https://github.com/awau/Clara) | [${localeManager.t('info-supportServer', 'en-UK')}](https://discord.gg/ZgQkCkm)`,
+                description: `[${localeManager.t('info-source', ctx.settings.locale)}](https://github.com/awau/Clara) | [${localeManager.t('info-supportServer', ctx.settings.locale)}](https://discord.gg/ZgQkCkm)`,
                 thumbnail: {url: bot.user.avatarURL},
                 color: roleColour,
                 fields: [
-                    {name: localeManager.t('info-guilds', 'en-UK'), value: bot.guilds.size, inline: true},
-                    {name: localeManager.t('info-users', 'en-UK'), value: bot.users.size, inline: true},
-                    {name: localeManager.t('info-uptime', 'en-UK'), value: utils.msToTime(bot.uptime), inline: true},
-                    {name: localeManager.t('info-sysTime', 'en-UK'), value: sysTime, inline: true},
-                    {name: localeManager.t('info-os', 'en-UK'), value: os.platform(), inline: true},
-                    {name: localeManager.t('info-shards', 'en-UK'), value: bot.shards.size, inline: true},
-                    {name: localeManager.t('info-mem', 'en-UK'), value: prettyBytes(process.memoryUsage().rss), inline: true},
-                    {name: localeManager.t('info-version', 'en-UK'), value: version, inline: true}
+                    {name: localeManager.t('info-guilds', ctx.settings.locale), value: bot.guilds.size, inline: true},
+                    {name: localeManager.t('info-users', ctx.settings.locale), value: bot.users.size, inline: true},
+                    {name: localeManager.t('info-uptime', ctx.settings.locale), value: utils.msToTime(bot.uptime), inline: true},
+                    {name: localeManager.t('info-sysTime', ctx.settings.locale), value: sysTime, inline: true},
+                    {name: localeManager.t('info-os', ctx.settings.locale), value: os.platform(), inline: true},
+                    {name: localeManager.t('info-shards', ctx.settings.locale), value: bot.shards.size, inline: true},
+                    {name: localeManager.t('info-mem', ctx.settings.locale), value: prettyBytes(process.memoryUsage().rss), inline: true},
+                    {name: localeManager.t('info-version', ctx.settings.locale), value: version, inline: true}
                 ],
-                footer: {text: localeManager.t('info-footer', 'en-UK', {name: bot.user.username})}
+                footer: {text: localeManager.t('info-footer', ctx.settings.locale, {name: bot.user.username})}
             }}).then(resolve).catch(reject);
         });
     }

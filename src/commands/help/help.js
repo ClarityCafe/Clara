@@ -23,7 +23,7 @@ exports.help = {
                     cmdFields.push({name: cmd, value: `${cmnd.usage ? `${cmnd.usage} - ` : ''}${cmnd.desc}${cmnd.example ? `\n**Example:** \`${bot.config.mainPrefix}${cmd} ${cmnd.example}\`` : ''}`});
                 });
 
-                ctx.msg.channel.createMessage(localeManager.t('help-sending', 'en-UK')).then(() => {
+                ctx.msg.channel.createMessage(localeManager.t('help-sending', ctx.settings.locale)).then(() => {
                     return ctx.msg.author.getDMChannel();
                 }).then(dm => {
                     let fieldCollect = [];
@@ -41,7 +41,7 @@ exports.help = {
                 }).then(resolve).catch(reject);
             } else {
                 if (!bot.commands.getCommand(ctx.args[0])) {
-                    ctx.msg.channel.createMessage(localeManager.t('help-noCmd', 'en-UK')).then(resolve).catch(reject);
+                    ctx.msg.channel.createMessage(localeManager.t('help-noCmd', ctx.settings.locale)).then(resolve).catch(reject);
                 } else {
                     let cmd = bot.commands.getCommand(ctx.args[0]);
                     let embed = {title: ctx.args[0], description: `${cmd.usage ? `\`${cmd.usage}\` - `: ''}**${cmd.longDesc ? cmd.longDesc : cmd.desc}**${cmd.example ? `\n**Example:** \`${bot.config.mainPrefix}${ctx.args[0]} ${cmd.example}\``: ''}`, color: 2201331};
