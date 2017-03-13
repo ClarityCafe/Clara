@@ -12,3 +12,6 @@ const RinnaBridge = new Twitter({
 	access_token_secret: ''
 });
 
+function RinnaClient (message, response) {
+	//im so sorry MS
+}
