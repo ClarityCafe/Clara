@@ -113,10 +113,6 @@
             "error"
         ],
 
-        "no-array-constructor": [
-            "error"
-        ],
-
         "no-new-object": [
             "error"
         ],

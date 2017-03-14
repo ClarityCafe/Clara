@@ -1,9 +1,9 @@
 /* It's Joke!
  *
  * Contributed by Ohara Mari.
- * 
+ *
  * Don't ask why is this a thing.
- * 
+ *
  */
 
 const fs = require('fs');
