@@ -30,7 +30,7 @@ function infoBlock(member, roles, color) {
             {name: 'Roles', value: roles.join(', '), inline: true}
         ],
         footer: {text: `Account Created on ${moment(member.createdAt).format('dddd Do MMMM Y')} at ${moment(member.createdAt).format('HH:mm:ss A')}`}
-    }}
+    }};
 }
 
 exports.userinfo = {
@@ -38,15 +38,15 @@ exports.userinfo = {
     longDesc: `check someone's or your own userinfo`,
     usage: '[mention]',
     example: '@b1nzy#1337',
-    main : (bot, ctx) => {
-        return new Promise((resolve,reject) => {
+    main: (bot, ctx) => {
+        return new Promise((resolve, reject) => {
             if (ctx.msg.mentions.length === 0) {
                 let roleColour = ctx.msg.member.roles.sort((a, b) => {
                     return ctx.msg.member.guild.roles.get(b).position - ctx.msg.member.guild.roles.get(a).position;
                 })[0];
                 roleColour = roleColour ? ctx.msg.channel.guild.roles.get(roleColour).color : 0;
                 let roles = [];
-                ctx.msg.member.roles.forEach(r => {roles.push(ctx.msg.channel.guild.roles.get(r).name)});
+                ctx.msg.member.roles.forEach(r => {roles.push(ctx.msg.channel.guild.roles.get(r).name);});
                 ctx.msg.channel.createMessage(infoBlock(ctx.msg.member, roles, roleColour)).then(resolve).catch(reject);
             } else {
                 let member = ctx.msg.channel.guild.members.get(ctx.msg.mentions[0].id);
@@ -55,7 +55,7 @@ exports.userinfo = {
                 })[0];
                 roleColour = roleColour ? member.guild.roles.get(roleColour).color : 0;
                 let roles = [];
-                member.roles.forEach(r => {roles.push(member.guild.roles.get(r).name)});
+                member.roles.forEach(r => {roles.push(member.guild.roles.get(r).name);});
                 ctx.msg.channel.createMessage(infoBlock(member, roles, roleColour)).then(resolve).catch(reject);
             }
         });
