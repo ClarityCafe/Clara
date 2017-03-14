@@ -26,7 +26,7 @@ exports.apod = {
                         ctx.msg.channel.createMessage({embed: {
                             title: data.title,
                             description: data.copyright ? localeManager.t('nasa-copyright', settings.locale, {copyright: data.copyright}) : '',
-                            thumbnail:{url: 'https://api.nasa.gov/images/logo.png'},
+                            thumbnail: {url: 'https://api.nasa.gov/images/logo.png'},
                             color: 0xFD7BB5,
                             image: {url: data.url},
                             footer: {text: localeManager.t('nasa-date', settings.locale, {date: data.date})}

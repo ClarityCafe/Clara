@@ -5,13 +5,7 @@
  */
 
 
-const Eris = require('eris');
 const util = require('util');
-const utils = require(`${__baseDir}/lib/utils.js`);
-const fs = require('fs');
-const cp = require('child_process');
-const path = require('path');
-const os = require('os');
 
 exports.commands = [
     'eval'
@@ -27,9 +21,7 @@ exports.eval = {
             if (ctx.suffix.length === 0) {
                 ctx.msg.channel.createMessage('Please give arguments to evaluate.').then(resolve).catch(reject);
             } else {
-                var evalArgs = ctx.suffix;
-                var {msg, args, cmd, suffix, cleanSuffix, guildBot, settings} = ctx;
-
+                var evalArgs = cx.suffix;
                 try {
                     var returned = eval(evalArgs);
                     var str = util.inspect(returned, {depth: 1});
@@ -63,4 +55,4 @@ exports.eval = {
             }
         });
     }
-}
+};

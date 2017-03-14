@@ -171,11 +171,6 @@
             "error"
         ],
 
-        "object-shorthand": [
-            "error",
-            "properties"
-        ],
-
         "prefer-arrow-callback": [
             "error"
         ],
