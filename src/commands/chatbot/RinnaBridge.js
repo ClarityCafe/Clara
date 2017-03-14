@@ -24,7 +24,7 @@ class RinnaClient extends Twitter {
     /**
      * sends a message through DM
      * @prop {string} message message to send
-     * @returns Promise
+     * @returns {Promise}
      */
     createMessage(message) {
         return new Promise((resolve,reject) => {
