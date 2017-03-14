@@ -117,11 +117,6 @@
             "error"
         ],
 
-        "nonblock-statement-body-position": [
-            "error",
-            "beside"
-        ],
-
         "object-curly-spacing": [
             "error",
             "never"
