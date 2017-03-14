@@ -1,6 +1,6 @@
 /*
  * Clara - utility module
- * 
+ *
  * Contributed by Capuccino and Ovyerus
  */
 
@@ -28,9 +28,9 @@ function msToTime(ms) {
     hours = Math.floor(hours);
     days = Math.floor(days);
 
-    seconds.toString().length === 1 ? seconds = '0' + seconds.toString() : seconds = seconds.toString();
-    minutes.toString().length === 1 ? minutes = '0' + minutes.toString() : minutes = minutes.toString();
-    hours.toString().length === 1 ? hours = '0' + hours.toString() : hours = hours.toString();
+    seconds.toString().length === 1 ? seconds = '0' + seconds.toString() : seconds = seconds.toString(); // eslint-disable-line prefer-template
+    minutes.toString().length === 1 ? minutes = '0' + minutes.toString() : minutes = minutes.toString(); // eslint-disable-line prefer-template
+    hours.toString().length === 1 ? hours = '0' + hours.toString() : hours = hours.toString(); // eslint-disable-line prefer-template
 
     return `${days} days, ${hours}:${minutes}:${seconds}`;
 }

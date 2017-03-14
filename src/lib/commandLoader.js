@@ -1,7 +1,7 @@
 /*
  * Clara - Command Loader File
  * based from chalda/DiscordBot
- * 
+ *
  * Contributed by Capuccino and Ovyerus
  */
 
@@ -54,13 +54,13 @@ function preloadCommands() {
                 } catch(err) {
                     logger.customError('commandLoader/preloadCommands', `Skipping over '${awoo}' due to error parsing package.json\n${err}`);
                 }
-                
-                if (pkg.dependencies == undefined) continue;
+
+                if (pkg.dependencies == null) continue;
                 if (Object.keys(pkg.dependencies).length > 0) {
                     for (let awau in pkg.dependencies) {
                         try {
                             require.resolve(awau);
-                        } catch (err) {
+                        } catch(err) {
                             if (deps.indexOf(awau) === -1) deps.push(awau);
                         }
                     }
@@ -92,7 +92,7 @@ function loadCommands() {
             try {
                 commandPackage = require(`${__baseDir}/${commandsDirectory}/${cmdFolder}/package.json`);
                 command = require(`${__baseDir}/${commandsDirectory}/${cmdFolder}/${commandPackage.main}`);
-            } catch (err) {
+            } catch(err) {
                 logger.customError('commandLoader/loadCommands', `Experienced error while loading command '${cmdFolder}', skipping...\n${err}`);
                 unloadedCommands.push(cmdFolder);
             }
@@ -116,7 +116,7 @@ function loadCommands() {
                 }
             }
         }
-        
+
         if (!unloadedCommands.equals(JSON.parse(fs.readFileSync(`${__baseDir}/data/unloadedCommands.json`).toString()))) {
             fs.writeFile(`${__baseDir}/data/unloadedCommands.json`, JSON.stringify(unloadedCommands), err => {
                 if (err) {
@@ -131,8 +131,8 @@ function loadCommands() {
     });
 }
 
-exports.init = () => {
-    return new Promise((resolve, reject) => {
+exports.init = () =>
+    new Promise((resolve, reject) => {
         getDirectories(`${__baseDir}/${commandsDirectory}`).then(dirs => {
             commandFolders = dirs;
             logger.custom('blue', 'commandLoader/init', 'Preloading commands.');
@@ -142,17 +142,16 @@ exports.init = () => {
             return loadCommands();
         }).then(resolve).catch(reject);
     });
-};
 
-Array.prototype.equals = (array) => {
-    if (!array || this.length != array.length) return false;
+Array.prototype.equals = array => {
+    if (!array || this.length !== array.length) return false;
 
     for (var i = 0, l=this.length; i < l; i++) {
         if (this[i] instanceof Array && array[i] instanceof Array) {
             if (!this[i].equals(array[i])) {
                 return false;
             }
-        } else if (this[i] != array[i]) {
+        } else if (this[i] !== array[i]) {
             return false;
         }
     }

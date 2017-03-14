@@ -27,7 +27,7 @@ class localeManager {
 
     /**
      * Load all locales in the locale directory.
-     * 
+     *
      * @returns {Promise}
      */
     loadLocales() {
@@ -69,7 +69,7 @@ class localeManager {
 
     /**
      * Return's the value of 'key' in the locale specified, or fallback to the fallback language.
-     * 
+     *
      * @param {String} key The key whose value to translate
      * @param {String} locale Name of locale to translate too.
      * @param {Object=} replacers Object of values in string.
