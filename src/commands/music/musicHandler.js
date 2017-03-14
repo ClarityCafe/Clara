@@ -1,6 +1,6 @@
 /*
  * Clara - music handler module
- * 
+ *
  * Contributed by Ovvyerus
  */
 
@@ -37,7 +37,7 @@ var search = exports.search = (msg, terms) => { // eslint-disable-line no-unused
 
                     for (let i = 0; i <= 4; i++) {
                         if (!res[i]) break;
-                        embed.fields.push({name: (i + 1) + ': ' + res[i].channelTitle, value: res[i].title});
+                        embed.fields.push({name: `${i + 1}: ${res[i].channelTitle}`, value: res[i].title});
                     }
 
                     let outerMsg;
@@ -281,7 +281,7 @@ var getSongInfo = exports.getSongInfo = song => {
                 if (err) {
                     reject(err);
                 } else if (resp.statusCode !== 200) {
-                    reject(new Error(`Invalid status code: ${resp.statusCode}`)); 
+                    reject(new Error(`Invalid status code: ${resp.statusCode}`));
                 } else {
                     let info = JSON.parse(body);
                     let res = {title: info.Title, uploader: 'N/A', thumbnail: info.ArtworkPictureUrl || 'https://static.clyp.it/site/images/logos/clyp-og-1200x630.png', length: Math.floor(info.Duration), type: 'ClypAudio'};
@@ -313,8 +313,8 @@ var timeFormat = exports.timeFormat = secs => {
     minutes = Math.floor(minutes);
     hours = Math.floor(hours);
 
-    seconds.toString().length === 1 ? seconds = '0' + seconds.toString() : seconds = seconds.toString();
-    minutes.toString().length === 1 && hours !== 0 ? minutes = '0' + minutes.toString() : minutes = minutes.toString();
+    seconds.toString().length === 1 ? seconds = `0${seconds.toString()}` : seconds = seconds.toString();
+    minutes.toString().length === 1 && hours !== 0 ? minutes = `0${minutes.toString()}` : minutes = minutes.toString();
 
     return `${hours === 0  ? '' : `${hours}:`}${minutes}:${seconds}`;
 };
