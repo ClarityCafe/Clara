@@ -1,6 +1,6 @@
 /*
  * owo-whats this - Core file
- * 
+ *
  * Contributed by:
  * | Capuccino
  * | Ovyerus
@@ -45,7 +45,7 @@ try {
     require.resolve(`${__dirname}/data/data.json`);
 } catch (err) {
     fs.mkdirSync(`${__dirname}/data/`);
-    fs.writeFile(`${__dirname}/data/data.json`, JSON.stringify({ admins: [], blacklist: [] }), e => {
+    fs.writeFile(`${__dirname}/data/data.json`, JSON.stringify({admins: [], blacklist: []}), e => {
         if (e) {
             throw e;
         } else {
@@ -91,9 +91,7 @@ bot.on('ready', () => {
         require(`${__dirname}/lib/commandLoader.js`).init().then(() => {
             logger.info(`Loaded ${bot.commands.length} ${bot.commands.length === 1 ? 'command' : 'commands'}.`);
             return localeManager.loadLocales();
-        }).then(() => {
-            return bot.db.tableList().run();
-        }).then(res => {
+        }).then(bot.db.tableList().run).then(res => {
             meme = res;
             if (res.indexOf('guild_settings') === -1) {
                 logger.info('Setting up "guild_settings" table in database.');
@@ -158,10 +156,10 @@ bot.on('messageCreate', msg => {
     }
 
     prefixParser(msg.content).then(content => {
-        if (content == undefined) return content;
+        if (content == null) return content;
         return parseArgs(content);
     }).then(res => {
-        if (res == undefined) return;
+        if (res == null) return;
 
         let {args, cmd, suffix} = res;
 
@@ -184,16 +182,16 @@ bot.on('messageCreate', msg => {
 
                 if (bot.commands.getCommand(cmd).adminOnly && (utils.isOwner(msg.author.id) || utils.isAdmin(msg.author.id))) {
                     bot.commands.runCommand(cmd, bot, ctx).then(() => {
-                        logger.cmd(loggerPrefix(msg) + `Successfully ran owner command '${cmd}'`);
+                        logger.cmd(loggerPrefix(msg) + `Successfully ran owner command '${cmd}'`); // eslint-disable-line prefer-template
                     }).catch(err => {
                         handleCmdErr(msg, cmd, err);
                     });
                 } else if (bot.commands.getCommand(cmd).adminOnly) {
-                    return;
+                    return null;
                 } else {
                     bot.commands.runCommand(cmd, bot, ctx).then(() => {
-                        logger.cmd(loggerPrefix(msg) + `Successfully ran command '${cmd}'`);
-                        return;
+                        logger.cmd(loggerPrefix(msg) + `Successfully ran command '${cmd}'`); // eslint-disable-line prefer-template
+                        return null;
                     }).catch(err => {
                         handleCmdErr(msg, cmd, err);
                     });
@@ -221,7 +219,7 @@ bot.on('voiceChannelLeave', (mem, chan) => {
         setTimeout(() => {
             let c = bot.guilds.get(chan.guild.id).channels.get(chan.id);
             if (c.voiceMembers.filter(m => m.id !== bot.user.id && !m.bot).length === 0) {
-                if (bot.music.connections.get(chan.guild.id).playing) bot.music.connetions.get(chan.guild.id).stopPlaying(); 
+                if (bot.music.connections.get(chan.guild.id).playing) bot.music.connetions.get(chan.guild.id).stopPlaying();
                 bot.music.connections.get(chan.guild.id).leave();
             }
         }, 60000);
@@ -252,7 +250,7 @@ bot.connect();
 
 /**
  * Returns pre-formatted prefix to use in the logger.
- * 
+ *
  * @param {Eris.Message} msg Message to use to get names of channels, user, etc.
  * @returns {String}
  */
@@ -262,7 +260,7 @@ function loggerPrefix(msg) {
 
 /**
  * Handle errors from commands.
- * 
+ *
  * @param {Eris.Message} msg Message to pass for sending messages.
  * @param {String} cmd Command name.
  * @param {Object} err The error object to analyse.
@@ -277,17 +275,17 @@ function handleCmdErr(msg, cmd, err) {
             return dm.createMessage(`It appears I was unable to send a message in \`#${msg.channel.name}\` on the server \`${msg.channel.guild.name}\`. Please give me the Send Messages permission or notify a mod or admin if you cannot do this.`);
         }).catch(() => logger.warn(`Couldn't get DM channel for/send DM to ${utils.formatUsername(msg.author)} (${msg.author.id})`));
     } else if (resp && /\{'code':.+, 'message':.+\}/.test(err.response) && resp.code !== 50013) {
-        logger.warn(loggerPrefix(msg) + `Discord error running command "${cmd}":\n:${config.debug ? err.stack : err}`);
+        logger.warn(loggerPrefix(msg) + `Discord error running command "${cmd}":\n:${config.debug ? err.stack : err}`); // eslint-disable-line prefer-template
         let m = `Discord error while trying to execute \`${cmd}\`\n`;
         m += '```js\n';
         m += `Code: ${resp.code}. Message: ${resp.message}\n`;
         m += "``` If you feel this shouldn't be happening, join my support server. Invite can be found in the `invite` command.";
         msg.channel.createMessage(m);
     } else {
-        logger.error(loggerPrefix(msg) + `Error running command "${cmd}":\n${config.debug ? err.stack || err : err}`);
+        logger.error(loggerPrefix(msg) + `Error running command "${cmd}":\n${config.debug ? err.stack || err : err}`); // eslint-disable-line prefer-template
         let m = `Experienced error while executing \`${cmd}\`\n`;
         m += '```js\n';
-        m += err + '\n';
+        m += err + '\n'; // eslint-disable-line prefer-template
         m += "``` If you feel this shouldn't be happening, join my support server. Invite can be found in the `invite` command.";
         msg.channel.createMessage(m);
     }
@@ -295,14 +293,14 @@ function handleCmdErr(msg, cmd, err) {
 
 /**
  * Wait for a message in the specified channel from the specified user.
- * 
+ *
  * @param {String} channelID ID of channel to wait in.
  * @param {String} userID ID of user to wait for.
  * @param {Function} [filter] Filter to pass to message. Must return true.
  * @param {Number} [timeout=15000] Time in milliseconds to wait for message.
  */
-bot.awaitMessage = (channelID, userID, filter = function() {return true;}, timeout = 15000) => {
-    return new Promise((resolve, reject) => {
+bot.awaitMessage = (channelID, userID, filter = () => true, timeout = 15000) =>
+    new Promise((resolve, reject) => {
         if (!channelID || typeof channelID !== 'string') {
             reject(new TypeError('channelID is not string.'));
         } else if (!userID || typeof userID !== 'string') {
@@ -310,14 +308,14 @@ bot.awaitMessage = (channelID, userID, filter = function() {return true;}, timeo
         } else {
             var responded, rmvTimeout;
 
-            var onCrt = (msg) => {
+            var onCrt = msg => {
                 if (msg.channel.id === channelID && msg.author.id === userID && filter(msg)) {
                     responded = true;
                     return msg;
                 }
             };
 
-            var onCrtWrap = (msg) => {
+            var onCrtWrap = msg => {
                 var res = onCrt(msg);
                 if (responded) {
                     bot.removeListener('messageCreate', onCrtWrap);
@@ -336,16 +334,15 @@ bot.awaitMessage = (channelID, userID, filter = function() {return true;}, timeo
             }, timeout);
         }
     });
-};
 
 /**
  * Get the settings for a guild.
- * 
+ *
  * @param {String} guildID ID of guild to get settings for.
  * @returns {Promise<Object>}
  */
-bot.getGuildSettings = guildID => {
-    return new Promise((resolve, reject) => {
+bot.getGuildSettings = guildID =>
+    new Promise((resolve, reject) => {
         if (typeof guildID !== 'string') {
             reject(new TypeError('guildID is not string.'));
         } else {
@@ -369,16 +366,15 @@ bot.getGuildSettings = guildID => {
             }
         }
     });
-};
 
 /**
  * Initialize settings for a guild.
- * 
+ *
  * @param {String} guildID ID of guild to init settings for.
  * @returns {Promise<Object>}
  */
-bot.initGuildSettings = guildID => {
-    return new Promise((resolve, reject) => {
+bot.initGuildSettings = guildID =>
+    new Promise((resolve, reject) => {
         if (typeof guildID !== 'string') {
             reject(new TypeError('guildID is not string.'));
         } else {
@@ -395,25 +391,25 @@ bot.initGuildSettings = guildID => {
             }).catch(reject);
         }
     });
-};
+
 
 /**
  * Edit a guild's settings.
- * 
+ *
  * @param {String} guildID ID of guild to edit settings for.
  * @param {Object} settings Settings to change.
  * @returns {Promise<Object>}
  */
-bot.setGuildSettings = (guildID, settings = {}) => {
-    return new Promise((resolve, reject) => {
+bot.setGuildSettings = (guildID, settings = {}) =>
+    new Promise((resolve, reject) => {
         if (typeof guildID !== 'string') {
             reject(new TypeError('guildID is not string.'));
         } else if (Object.keys(settings).length === 0) {
             reject(new Error('No settings.'));
         } else {
-            bot.db.table('guild_settings').get(guildID).update(settings).run().then(() => {
-                return bot.db.table('guild_settings').get(guildID);
-            }).then(res => {
+            bot.db.table('guild_settings').get(guildID).update(settings).run().then(() =>
+                bot.db.table('guild_settings').get(guildID)
+            ).then(res => {
                 if (!bot.settings.guilds.get(guildID)) {
                     bot.settings.guilds.add(res);
                 } else {
@@ -425,16 +421,15 @@ bot.setGuildSettings = (guildID, settings = {}) => {
             }).catch(reject);
         }
     });
-};
 
 /**
  * Get the settings for a user.
- * 
+ *
  * @param {String} userID ID of user to get settings for.
  * @returns {Promise<Object>}
  */
-bot.getUserSettings = userID => {
-    return new Promise((resolve, reject) => {
+bot.getUserSettings = userID =>
+    new Promise((resolve, reject) => {
         if (typeof userID !== 'string') {
             reject(new TypeError('userID is not string.'));
         } else {
@@ -458,16 +453,15 @@ bot.getUserSettings = userID => {
             }
         }
     });
-};
 
 /**
  * Initialize settings for a user.
- * 
+ *
  * @param {String} userID ID of user to init settings for.
  * @returns {Promise<Object>}
  */
-bot.initUserSettings = userID => {
-    return new Promise((resolve, reject) => {
+bot.initUserSettings = userID =>
+    new Promise((resolve, reject) => {
         if (typeof userID !== 'string') {
             reject(new TypeError('userID is not string.'));
         } else {
@@ -484,25 +478,24 @@ bot.initUserSettings = userID => {
             }).catch(reject);
         }
     });
-};
 
 /**
  * Edit a user's settings.
- * 
+ *
  * @param {String} userID ID of user to edit settings for.
  * @param {Object} settings Settings to change.
  * @returns {Promise<Object>}
  */
-bot.setUserSettings = (userID, settings = {}) => {
-    return new Promise((resolve, reject) => {
+bot.setUserSettings = (userID, settings = {}) =>
+    new Promise((resolve, reject) => {
         if (typeof userID !== 'string') {
             reject(new TypeError('userID is not string.'));
         } else if (Object.keys(settings).length === 0) {
             reject(new Error('No settings.'));
         } else {
-            bot.db.table('user_settings').get(userID).update(settings).run().then(() => {
-                return bot.db.table('user_settings').get(userID);
-            }).then(res => {
+            bot.db.table('user_settings').get(userID).update(settings).run().then(() =>
+                bot.db.table('user_settings').get(userID)
+            ).then(res => {
                 if (!bot.settings.users.get(userID)) {
                     bot.settings.users.add(res);
                 } else {
@@ -514,4 +507,3 @@ bot.setUserSettings = (userID, settings = {}) => {
             }).catch(reject);
         }
     });
-};

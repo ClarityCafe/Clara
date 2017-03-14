@@ -1,6 +1,6 @@
 /*
  * owo-whats this - prefix parser
- * 
+ *
  * Contributed by Ovyerus
  */
 
@@ -20,7 +20,7 @@ function parse(content) {
             var oldContent = content;
             var prefixes = JSON.parse(fs.readFileSync(`${__baseDir}/data/prefixes.json`));
             prefixes.push(`<@${bot.user.id}> `);
-        
+
             if (!content.startsWith(bot.config.mainPrefix)) {
                 for (let i in prefixes) {
                     if (content.startsWith(prefixes[i])) {
