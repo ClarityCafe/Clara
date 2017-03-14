@@ -13,12 +13,12 @@ const Twitter = require('twitter');
  */
 
 class RinnaClient extends Twitter {
-    super(options)
-    constructor(__consumerKey,__consumerSecret, __accessKey, __accessSecret) {
-        this.__consumerkey = __consumerKey;
-        this.__consumersecret = __consumerSecret;
-        this.__accessKey = __accessKey;
-        this.__accessSecret = __accessSecret;
+    constructor(__consumerKey, __consumerSecret, __accessKey, __accessSecret) {
+        super(options);
+        this.__consumerkey = options.__consumerKey;
+        this.__consumersecret = options.__consumerSecret;
+        this.__accessKey = options.__accessKey;
+        this.__accessSecret = options.__accessSecret;
     }
 
     /**
@@ -27,11 +27,13 @@ class RinnaClient extends Twitter {
      * @returns {Promise}
      */
     createMessage(message) {
-        return new Promise((resolve,reject) => {
-            this.post().then(() => {
+        return new Promise((resolve, reject) => {
+            this.post(message).then(() => {
                 resolve(body.description);
-            })
-        })
+            }).catch(reject);
+        });
     }
 
 }
+
+module.exports = RinnaClient;
