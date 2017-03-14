@@ -43,7 +43,7 @@ var allowCommandUse = false;
 // Create data files
 try {
     require.resolve(`${__dirname}/data/data.json`);
-} catch (err) {
+} catch(err) {
     fs.mkdirSync(`${__dirname}/data/`);
     fs.writeFile(`${__dirname}/data/data.json`, JSON.stringify({admins: [], blacklist: []}), e => {
         if (e) {
@@ -56,7 +56,7 @@ try {
 
 try {
     require.resolve(`${__dirname}/data/prefixes.json`);
-} catch (err) {
+} catch(err) {
     fs.writeFile(`${__dirname}/data/prefixes.json`, JSON.stringify([]), e => {
         if (e) {
             throw e;
