@@ -21,3 +21,5 @@ exclude_paths:
  checks:
       camelcase:
         enabled: false
+      arrow-parens :
+        enabled: false
