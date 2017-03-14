@@ -23,7 +23,7 @@ exports.convert = {
                 ctx.msg.channel.createMessage('Give me a number then two currencies first.').then(resolve).catch(reject);
             } else if (ctx.args > 4) {
                 ctx.msg.channel.createMessage('Insufficient information. I need a number and at least two currencies').then(reject).catch(reject);
-            }else if (!ctx.args.test(awauRegex)){
+            } else if (!ctx.args.test(awauRegex)) {
                 ctx.msg.channel.createMessage('Nope, wrong format!').then(resolve).then(reject);
             } else {
                 fx(ctx.args[1]).from(ctx.args[2]).to(ctx.args[3]);
