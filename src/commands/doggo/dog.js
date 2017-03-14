@@ -13,9 +13,9 @@ const request = require('request');
 exports.woof = {
     desc: `It's like nyaa, only it's dogs`,
     longDesc: 'prints out a random dog image from random.dog',
-    main : (bot,ctx) => {
-        return new Promise ((resolve,reject) => {
-            request('http://random.dog/woof', (err,res,body) => {
+    main: (bot, ctx) => {
+        return new Promise((resolve, reject) => {
+            request('http://random.dog/woof', (err, res, body) => {
                 if (err) {
                     reject(err);
                 } else if (res.statusCode !== 200) {
