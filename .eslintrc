@@ -113,10 +113,6 @@
             "error"
         ],
 
-        "no-new-object": [
-            "error"
-        ],
-
         "no-trailing-spaces": [
             "error"
         ],
