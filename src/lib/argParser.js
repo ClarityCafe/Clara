@@ -1,12 +1,12 @@
 /*
  * Clara - command argument parser
- * 
+ *
  * Contributed by Ovyerus
  */
 
 /**
  * Parse a string and return arguments.
- * 
+ *
  * @param {String} str String to parse args from.
  * @returns {Object} Object with keys: args, cmd and suffix.
  */
@@ -30,19 +30,19 @@ function parseArgs(str) {
                 args.forEach((v, i) => {
                     if (!(v instanceof Array)) args[i] = v.split(' ');
                 });
-                
+
                 args.forEach((v, i) => {
                     if (suffix.split(' ')[i].startsWith('"')) args.splice(i + 1, 0, tmp.shift());
                 });
 
                 args = args.concat(tmp.filter(v => args.indexOf(v) === -1));
-                args = [].concat.apply([], args).filter(v => v !== '' && v != undefined);
+                args = [].concat.apply([], args).filter(v => v !== '' && v != null);
             } else {
                 args.forEach((v, i) => {
                     if (!(v instanceof Array)) args[i] = v.split(' ');
                 });
 
-                args = [].concat.apply([], args).filter(v => v !== '' && v != undefined);
+                args = [].concat.apply([], args).filter(v => v !== '' && v != null);
             }
 
             resolve({args, suffix, cmd});
