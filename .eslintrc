@@ -158,7 +158,7 @@
         ],
 
         "arrow-parens": [
-            "error",
+            "warn",
             "as-needed"
         ],
 
