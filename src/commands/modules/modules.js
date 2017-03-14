@@ -48,7 +48,7 @@ exports.modules = {
                         embed.description = `Showing **${cmdFolders.length}** command modules.\n\`Unloaded Modules\`\n\n${unloaded.join('\n')}`;
                         return ctx.msg.channel.createMessage({embed});
                     } else {
-                        return;
+                        reject;
                     }
                 }).then(resolve).catch(reject);
             } else if (Object.keys(subCommands).indexOf(ctx.args[0]) !== -1) {
