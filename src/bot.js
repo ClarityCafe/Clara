@@ -91,7 +91,7 @@ bot.on('ready', () => {
         require(`${__dirname}/lib/commandLoader.js`).init().then(() => {
             logger.info(`Loaded ${bot.commands.length} ${bot.commands.length === 1 ? 'command' : 'commands'}.`);
             return localeManager.loadLocales();
-        }).then(bot.db.tableList().run).then(res => {
+        }).then(() => bot.db.tableList().run()).then(res => {
             meme = res;
             if (res.indexOf('guild_settings') === -1) {
                 logger.info('Setting up "guild_settings" table in database.');
