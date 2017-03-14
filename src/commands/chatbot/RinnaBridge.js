@@ -7,7 +7,7 @@
 const Twitter = require('twitter');
 
 /**
- * Initializes a new Twitter Client.
+ * Initializes a new Twitter Client for DM Bridge.
  * @prop {string} __consumerkey your consumer key for twitter.
  * @prop {string} __consumersecret your consumer secret for twitter.
  */
@@ -26,7 +26,11 @@ class RinnaClient extends Twitter {
      * @prop {string} message message to send
      */
     createMessage(message) {
-        this.post()
+        return new Promise((resolve,reject) => {
+            this.post().then(() => {
+                resolve(body.description);
+            })
+        })
     }
 
 }
