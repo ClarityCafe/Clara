@@ -18,6 +18,10 @@ exclude_paths:
 - example/*.json
 - example/*.json.example
 - res/*
+engines : 
+  eslint :
+   enabled : true
+  
  checks:
       camelcase:
         enabled: false
