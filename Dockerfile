@@ -27,8 +27,6 @@ RUN mkdir base
 COPY src/ base
 COPY package.json base
 RUN cd base && npm i -S && npm i -g pm2
-# now we launch the bot
-RUN pm2 -n Clara bot.js 
 ENV DEBIAN_FRONTEND noninteractive
 ENV LANG en_GB.UTF-8
 ENV LANG en_US.UTF-8
