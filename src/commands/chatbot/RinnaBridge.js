@@ -35,7 +35,7 @@ class RinnaClient extends Twitter {
                 this.get().then(() => {
                     resolve(body.description);
                 });
-            }).catch(reject(new Error(err)));
+            }).catch(reject);
         });
     }
 
