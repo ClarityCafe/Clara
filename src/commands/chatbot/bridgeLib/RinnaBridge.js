@@ -52,5 +52,4 @@ class RinnaClient extends Line.client {
 }
 
 
-module.exports = RinnaAuthHandler;
-module.exports = RinnaClient;
+module.exports = RinnaClient, RinnaAuthHandler;
