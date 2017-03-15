@@ -1,1 +1,1 @@
-module.exports = ('./RinnaBridge');
+module.exports = require('./RinnaBridge');
