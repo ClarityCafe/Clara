@@ -4,8 +4,14 @@
  * Contributed by Ovyerus.
  */
 
-
+/* eslint-disable no-unused-vars */
+const Eris = require('eris');
 const util = require('util');
+const utils = require(`${__baseDir}/lib/utils.js`);
+const fs = require('fs');
+const cp = require('child_process');
+const path = require('path');
+/* eslint-enable */
 
 exports.commands = [
     'eval'
@@ -21,9 +27,12 @@ exports.eval = {
             if (ctx.suffix.length === 0) {
                 ctx.msg.channel.createMessage('Please give arguments to evaluate.').then(resolve).catch(reject);
             } else {
-                var evalArgs = cx.suffix;
+                let evalArgs = ctx.suffix;
+                let {msg, args, cmd, suffix, cleanSuffix, guildBot, settings} = ctx; // eslint-disable-line
                 try {
-                    var returned = eval(evalArgs);
+                    let returned = eval(evalArgs);
+
+
                     var str = util.inspect(returned, {depth: 1});
                     str = str.replace(new RegExp(bot.token, 'gi'), '(token)');
 
