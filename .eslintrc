@@ -181,10 +181,7 @@
 
         "no-new-object": [
             "warn"
-        ],
-
-        "no-trailing-spaces": [
-            "warn"
         ]
+
     }
 }
