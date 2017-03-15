@@ -1,6 +1,6 @@
 /*
  * eval.js - Evaluate JavaScript code in Discord.
- * 
+ *
  * Contributed by Ovyerus.
  */
 

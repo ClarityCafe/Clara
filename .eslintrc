@@ -69,11 +69,6 @@
             {"allowSingleLine": true}
         ],
 
-        "camelcase": [
-            "warn",
-            {"properties": "always"}
-        ],
-
         "comma-dangle": [
             "error",
             "never"
