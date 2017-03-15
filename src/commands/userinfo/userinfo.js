@@ -21,7 +21,7 @@ function infoBlock(member, roles, color) {
         thumbnail: {url: avatar},
         color: color,
         fields: [
-            {name: 'Nickname', value: member.nick || 'None', inline: true}, 
+            {name: 'Nickname', value: member.nick || 'None', inline: true},
             {name: 'ID', value: member.id, inline: true},
             {name: 'Status', value: member.status.replace(member.status[0], member.status[0].toUpperCase()), inline: true},
             {name: 'Game', value: !member.game ? 'None' : member.game.type === 0 ? member.game.name : `[${member.game.name}](${member.game.url})`, inline: true},

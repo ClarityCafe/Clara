@@ -1,6 +1,6 @@
 /*
  * chatbot.js - Chatbot made using markov chains.
- * 
+ *
  * Contributed by Ovyerus
  */
 
@@ -28,7 +28,7 @@ function readLines() {
 
 function appendLines(msg) {
     return new Promise((resolve, reject) => {
-        fs.appendFile(`${__dirname}/lines.txt`, msg.replace(/\n+/g, ' ').trim() + '\n', (err) => {
+        fs.appendFile(`${__dirname}/lines.txt`, msg.replace(/\n+/g, ' ').trim() + '\n', err => {
             if (err) {
                 reject(err);
             } else {
