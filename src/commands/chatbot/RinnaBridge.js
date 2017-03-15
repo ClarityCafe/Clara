@@ -13,12 +13,12 @@ const Twitter = require('twitter');
  */
 
 class RinnaClient extends Twitter {
-    constructor(__consumerKey, __consumerSecret, __accessKey, __accessSecret) {
+    constructor(options) {
         super(options);
-        this.__consumerkey = options.__consumerKey;
-        this.__consumersecret = options.__consumerSecret;
-        this.__accessKey = options.__accessKey;
-        this.__accessSecret = options.__accessSecret;
+        this.consumerkey = options.consumerKey;
+        this.consumersecret = options.consumerSecret;
+        this.accessKey = options.accessKey;
+        this.accessSecret = options.accessSecret;
     }
 
     /**
