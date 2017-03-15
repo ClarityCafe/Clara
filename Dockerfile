@@ -4,7 +4,7 @@
 
 FROM ubuntu:16.04 
 
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+
 RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
 RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 RUN \
@@ -18,6 +18,7 @@ RUN \
           build-essential \
           ffmpeg
 RUN echo $'#!/bin/sh\nexit 101' > /usr/sbin/policy-rc.d
+RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
 RUN chmod +x /usr/sbin/policy-rc.d
 
 RUN mkdir base
