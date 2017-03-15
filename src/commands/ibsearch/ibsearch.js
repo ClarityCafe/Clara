@@ -10,7 +10,7 @@ const color = require('dominant-color');
 const prettyBytes = require('pretty-bytes');
 const moment = require('moment');
 const fs = require('fs');
-const ibKey = require(`${__baseDir}/config.json`).ibKey
+const ibKey = require(`${__baseDir}/config.json`).ibKey;
 
 const defaultQuery = 'foxgirl';
 const queryLimit = 75; // Default: 75
@@ -121,4 +121,4 @@ exports.ibsearch = {
             }
         });
     }
-}
+};
