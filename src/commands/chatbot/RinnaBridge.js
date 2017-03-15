@@ -31,8 +31,10 @@ class RinnaClient extends Twitter {
     createMessage(message) {
         return new Promise((resolve, reject) => {
             this.post(message).then(() => {
-                resolve(body.description);
-            }).catch(reject);
+                this.get().then(() => {
+                    resolve(body.description);
+                });
+            }).catch(reject(new Error(err)));
         });
     }
 
