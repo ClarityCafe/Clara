@@ -34,7 +34,7 @@ class RinnaClient extends Line.client {
     createMessage(message) {
         return new Promise((resolve, reject) => {
             this.pushMessage({
-                to: 'placeholder',
+                to: 'placeholder', //temp for now
                 messages: [
                     {
                         type: 'text',
