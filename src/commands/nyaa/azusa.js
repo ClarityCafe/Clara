@@ -1,6 +1,6 @@
 /*
  * azusa.js - random.cat command.
- * 
+ *
  * Contributed by Capuccino
  */
 

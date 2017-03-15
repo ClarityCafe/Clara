@@ -1,6 +1,6 @@
 /*
  * help.js - Display information for all avaliable commands.
- * 
+ *
  * Contributed by Capuccino and Ovyerus.
  */
 

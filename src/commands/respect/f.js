@@ -1,6 +1,6 @@
 /*
  * f.js - Pay respects.
- * 
+ *
  * Contributed by Capuccino and Ovyerus.
  */
 
@@ -25,7 +25,7 @@ exports.f = {
             }
         });
     }
-}
+};
 
 exports.rip = {
     desc: 'Rest in pieces.',
@@ -41,4 +41,4 @@ exports.rip = {
             }
         });
     }
-}
+};

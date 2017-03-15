@@ -1,6 +1,6 @@
 /*
  * locales.js - Locale management
- * 
+ *
  * Contributed by Ovyerus
  */
 

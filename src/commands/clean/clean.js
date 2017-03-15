@@ -1,6 +1,6 @@
 /*
  * clean.js - Clean only the bots messages.
- * 
+ *
  * Contributed by Ovyerus
  */
 

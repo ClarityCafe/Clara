@@ -1,6 +1,6 @@
 /*
  * moderation.js - Moderation commands for people who are lazy.
- * 
+ *
  * Contributed by Capuccino and Ovyerus
  */
 

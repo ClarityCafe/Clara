@@ -1,6 +1,6 @@
 /*
  * yori.js - Random anime image command.
- * 
+ *
  * Contributed by Capuccino, Ovyerus.
  */
 

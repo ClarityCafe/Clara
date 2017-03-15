@@ -1,6 +1,6 @@
 /*
  * choose.js - Make the bot choose your stupid life decisions.
- * 
+ *
  * Contributed by Capuccino and Ovyerus
  */
 
