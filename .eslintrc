@@ -178,6 +178,18 @@
         "template-curly-spacing": [
             "error",
             "never"
+        ],
+
+        "no-array-constructor": [
+            "warn"
+        ],
+
+        "no-new-object": [
+            "warn"
+        ]
+
+        "no-trailing-spaces": [
+            "warn"
         ]
     }
 }
