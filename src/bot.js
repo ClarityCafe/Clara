@@ -180,7 +180,7 @@ bot.on('messageCreate', msg => {
 
                 let ctx = {msg, args, cmd, suffix, cleanSuffix, guildBot, settings};
 
-                if (bot.commands.getCommand(cmd).adminOnly && (utils.isOwner(msg.author.id) || utils.isAdmin(msg.author.id))) {
+                if (bot.commands.getCommand(cmd).adminOnly && utils.checkBotPerms(msg.author.id)) {
                     bot.commands.runCommand(cmd, bot, ctx).then(() => {
                         logger.cmd(loggerPrefix(msg) + `Successfully ran owner command '${cmd}'`); // eslint-disable-line prefer-template
                     }).catch(err => {
