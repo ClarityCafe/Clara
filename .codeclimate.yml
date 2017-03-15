@@ -2,12 +2,6 @@ engines:
   eslint:
     enabled: true
     config: .eslintrc
-checks:
-  camelcase:
-    enabled: false
-  arrow-parens :
-    enabled: false
-
   duplication:
     enabled: false
     config:
