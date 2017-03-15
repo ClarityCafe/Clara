@@ -1,44 +1,56 @@
-/* Bridge for Rinna using Twitter
+/* Bridge for Rinna using LINE
 *
 *
 * Contributed by Capuccino
 */
 
-const Twitter = require('twitter');
+const Line = require('line-bot-api');
 
 /**
- * Initializes a new Twitter Client for DM Bridge.
+ * Initializes a new LINE Client for DM Bridge.
  * @prop {Object} options everythonk for auth
- * @prop {string} consumerKey your consumer key for twitter.
- * @prop {string} consumerSecret your consumer secret for twitter.
- * @prop {string} accessKey your access key for twitter.
- * @prop {string} accessSecret your access secret for twitter.
+ * @prop {String} accessToken your access token for LINE.
+ * @prop {String} channelSecret your channel secret for Line
  */
 
-class RinnaClient extends Twitter {
-    constructor(options) {
+class RinnaAuthHandler extends Line.init {
+    constructor() {
         super(options);
-        this.consumerkey = options.consumerKey;
-        this.consumerSecret = options.consumerSecret;
-        this.accessKey = options.accessKey;
-        this.accessSecret = options.accessSecret;
+        this.accessToken = options.accessToken;
+        this.channelSecret = options.channelSecret;
     }
+}
 
+class RinnaClient extends Line.client {
+    constructor() {
+        super();
+    }
     /**
-     * sends a message through DM
-     * @prop {string} message message to send
-     * @returns {Promise}
+     * creates a new message then pushes to the line API
+     * @param {String} message your message
+     * @returns {Promise} 
+     * @see {link} https://github.com/tejitak/node-line-bot-api 
      */
     createMessage(message) {
         return new Promise((resolve, reject) => {
-            this.post(message).then(() => {
-                this.get().then(() => {
-                    resolve(body.description);
+            this.pushMessage({
+                to: 'placeholder',
+                messages: [
+                    {
+                        type: 'text',
+                        text: message
+                    }
+                ]
+            }).then(() => {
+                this.getMessageContent('id').then(content => {
+                    resolve(JSON.parse(content.body.message));
                 });
-            }).catch(reject);
+            }).catch(err => reject(err));
         });
     }
 
 }
 
+
+module.exports = RinnaAuthHandler;
 module.exports = RinnaClient;
