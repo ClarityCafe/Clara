@@ -1,6 +1,6 @@
 /*
  *  anime.js - Search MyAnimeList for manga and anime
- * 
+ *
  *  Contributed by Capuccino and Ovyerus
  */
 
@@ -36,7 +36,7 @@ function animeBlock(animu, color, settings) {
             {name: localeManager.t('anime-popularity', settings.locale),  value: animu.statistics.popularity, inline: true},
             {name: localeManager.t('anime-ranking', settings.locale), value: animu.statistics.ranking, inline: true}
         ]
-    }}
+    }};
 }
 
 exports.anime = {
