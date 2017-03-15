@@ -1,15 +1,13 @@
 engines:
   eslint:
     enabled: true
-    channel: "eslint-3"
     config: .eslintrc
+checks:
+  camelcase:
+    enabled: false
+  arrow-parens :
+    enabled: false
 
-   checks:
-      camelcase:
-        enabled: false
-      arrow-parens :
-        enabled: false
-        
   duplication:
     enabled: false
     config:
