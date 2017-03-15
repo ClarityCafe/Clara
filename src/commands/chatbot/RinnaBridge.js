@@ -8,8 +8,10 @@ const Twitter = require('twitter');
 
 /**
  * Initializes a new Twitter Client for DM Bridge.
- * @prop {string} __consumerkey your consumer key for twitter.
- * @prop {string} __consumersecret your consumer secret for twitter.
+ * @prop {string} consumerKey your consumer key for twitter.
+ * @prop {string} consumerSecret your consumer secret for twitter.
+ * @prop {string} accessKey your access key for twitter.
+ * @prop {string} accessSecret your access secret for twitter.
  */
 
 class RinnaClient extends Twitter {
