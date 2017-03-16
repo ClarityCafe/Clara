@@ -1,55 +1,66 @@
-/* Bridge for Rinna using LINE
-*
-*
-* Contributed by Capuccino
-*/
+/* 
+ * Bridge for Rinna using LINE
+ *
+ * Contributed by Capuccino and Ovyerus
+ */
 
-const Line = require('line-bot-api');
+const LINE = require('node-line-bot-api/lib/clients/v2/Service');
+const LINESigValidator = require('node-line-bot-api/lib/clients/v2/SignitureValidator');
 
 /**
  * Initializes a new LINE Client for DM Bridge.
- * @prop {Object} options everythonk for auth
- * @prop {String} accessToken your access token for LINE.
- * @prop {String} channelSecret your channel secret for Line
+ * 
+ * @prop {LINE.SignitureValidator} validator Signiture validator for the LINE API lib. 
+ * @prop {Object} options Options used when client was constructed.
+ * @prop {String} rinnaID Rinna's ID.
  */
 
-class RinnaAuthHandler extends Line.init {
-    constructor() {
-        super(options);
-        this.accessToken = options.accessToken;
-        this.channelSecret = options.channelSecret;
-    }
-}
+class RinnaClient extends LINE {
 
-class RinnaClient extends Line.client {
-    constructor() {
-        super();
-    }
     /**
-     * creates a new message then pushes to the line API
-     * @param {String} message your message
-     * @returns {Promise} 
-     * @see {link} https://github.com/tejitak/node-line-bot-api 
+     * @param {Object} options The options to create the client with.
+     * @param {String} options.accessToken Token to authenticate with.
+     * @param {String} [options.channelSecret] For webhook signiture validation.
      */
-    createMessage(message) {
+    constructor(options) {
+        if (typeof options.accessToken !== 'string') {
+            throw new Error('accessToken is not a string.');
+        } else if (options.channelSecret && typeof options.channelSecret !== 'string') {
+            throw new Error('channelSecret is not a string.');
+        } else {
+            super(options);
+            this.validator = new LINESigValidator(options);
+            this.options = options;
+            this.rinnaID = ''; 
+        }
+    }
+
+    /**
+     * Create a message and send it to Rinna.
+     * 
+     * @param {String} content Message content.
+     * @returns {Promise} 
+     * @see {Link} https://github.com/tejitak/node-line-bot-api 
+     */
+    createMessage(content) {
         return new Promise((resolve, reject) => {
             this.pushMessage({
-                to: 'placeholder', //temp for now
-                messages: [
-                    {
-                        type: 'text',
-                        text: message
-                    }
-                ]
+                to: this.rinnaID,
+                messages: [{
+                    type: 'text',
+                    text: content
+                }]
             }).then(() => {
-                this.getMessageContent('id').then(content => {
-                    resolve(JSON.parse(content.body.message));
-                });
-            }).catch(err => reject(err));
+                return this.getMessageContent('id');
+            }).then(content => {
+                resolve(content);
+            }).catch(reject);
         });
     }
-
 }
 
+function RinnaBridge(options) {
+    return new RinnaClient(options);
+}
 
-module.exports = RinnaClient, RinnaAuthHandler;
+module.exports = RinnaBridge;
