@@ -66,6 +66,18 @@ try {
     });
 }
 
+try {
+    require.resolve(`${__dirname}/data/blacklistedGuilds.json`);
+} catch (err) {
+    fs.writeFile(`${__dirname}/data/blacklistedGuilds.json`, JSON.stringify([]), e => {
+        if (e) {
+            throw e;
+        } else {
+            logger.info('Created Blacklist.');
+        }
+    })
+}
+
 exports.bot = bot;
 
 bot.db = require('rethinkdbdash')(config.rethinkOptions);
@@ -133,8 +145,25 @@ bot.on('shardResume', shard => {
 });
 
 bot.on('guildCreate', g => {
+    let blacklist = require(`${__dirname}/data/blacklistedGuilds.json`);
+    if (blacklist.includes(g.id)) {
+        g.defaultChannel.createMessage("I'm sorry but your server was blacklisted. If you think this was done in error you can contact us in our server: discord.gg/ZgQkCkm").then(() => {
+            logger.warn(`${g.id} (${g.name}) attempted to re-add the bot but guild ID in blacklist. Autoleaving...`).then(() => {
+                g.leave();
+            });
+        });
+    }
+    
     if (g.members.filter(m => m.bot).length >= Math.ceil(g.memberCount / 2)) {
-        logger.info(`Detected bot collection guild. Autoleaving.... (${g.name} [${g.id}])`);
+        logger.info(`Detected bot collection guild. Autoleaving and adding guild ID to blacklist... (${g.name} [${g.id}])`);
+        blacklist.push(g.id);
+        fs.writeFile(`${__baseDir}/data/blacklistedGuilds.json`, JSON.stringify(blacklist, '', '\t', err => {
+            if (err) {
+                logger.error('failed to add Guild ID to blacklist');
+            } else {
+                logger.info('Successfully added Guild ID to blacklist.')
+            }
+        }));
         g.leave();
     } else {
         bot.editStatus('online', {name: `${config.gameName || `${config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: config.gameURL ? 1 : 0, url: `${config.gameURL || null}`});
