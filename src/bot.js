@@ -153,7 +153,7 @@ bot.on('guildCreate', g => {
             });
         });
     }
-    if (g.members.filter(m => m.bot).size/ g.members.size >= 0.99 ) {
+    if (g.members.filter(m => m.bot).size/ g.members.size >= 0.75) {
         logger.info(`Detected bot collection guild. Autoleaving and adding guild ID to blacklist... (${g.name} [${g.id}])`);
         blacklist.push(g.id);
         fs.writeFile(`${__baseDir}/data/blacklistedGuilds.json`, JSON.stringify(blacklist, '', '\t', err => {
