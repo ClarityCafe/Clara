@@ -1,9 +1,9 @@
 /*
- * owo-whats this - Core file
+ * Clara - Core file
  *
  * Contributed by:
- * | Capuccino
- * | Ovyerus
+ * Capuccino
+ * Ovyerus
  *
  * Licensed under MIT. Copyright (c) 2017 Capuccino, Ovyerus and the repository contributors.
  */
