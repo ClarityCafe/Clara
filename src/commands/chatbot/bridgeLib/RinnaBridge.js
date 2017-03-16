@@ -6,7 +6,6 @@
 
 const LINE = require('node-line-bot-api/lib/clients/v2/Service');
 const LINESigValidator = require('node-line-bot-api/lib/clients/v2/SignitureValidator');
-const Message = require('./Message');
 
 /**
  * Initializes a new LINE Client for DM Bridge.
