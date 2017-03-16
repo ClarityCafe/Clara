@@ -17,5 +17,6 @@
   ]
 ,
 "eslint.enable": true,
-"vsicons.presets.angular": false
+"vsicons.presets.angular": false,
+"tslint.enable": false
 }
