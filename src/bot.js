@@ -32,7 +32,7 @@ const bot = new Eris(config.token, {
     seedVoiceConnections: true,
     maxShards: config.maxShards || 1,
     defaultImageFormat: 'png',
-    defaultImageSize: 512,
+    defaultImageSize: 1024,
     disableEvents: {
         TYPING_START: true
     }
