@@ -1,7 +1,5 @@
 /*
- * Ship Command
- *
- * Blame Kawaiibot
+ * ship.js - Ship people.
  *
  * Contributed by Capuccino
  */
@@ -11,9 +9,10 @@ exports.commands = [
 ];
 
 exports.ship = {
-    desc: 'Happy Shipping!',
-    usage: '<2 Names (Mention or Regular Msg)>',
-    main: (bot, ctx) => {
+    desc: 'Ship people.',
+    longDesc: "Takes half of each name given, and creates a 'ship name'.",
+    usage: '<2 names or mentions>',
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.msg.mentions.length > 2 || ctx.args.length > 2) {
                 ctx.msg.channel.createMessage(localeManager.t('ship-noArgs', settings.locale)).then(resolve).catch(reject);

@@ -22,7 +22,7 @@ exports.eval = {
     fullDesc: 'Used to evaluate JavaScript code in Discord. Mostly for debug purposes.',
     adminOnly: true,
     usage: '<code>',
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
                 ctx.msg.channel.createMessage('Please give arguments to evaluate.').then(resolve).catch(reject);
@@ -33,10 +33,10 @@ exports.eval = {
                     let returned = eval(evalArgs);
 
 
-                    var str = util.inspect(returned, {depth: 1});
+                    let str = util.inspect(returned, {depth: 1});
                     str = str.replace(new RegExp(bot.token, 'gi'), '(token)');
 
-                    var sentMessage = '```js\n';
+                    let sentMessage = '```js\n';
                     sentMessage += `Input: ${evalArgs}\n\n`;
                     sentMessage += `Output: ${str}\n`;
                     sentMessage += '```';
@@ -49,7 +49,7 @@ exports.eval = {
                     ctx.msg.channel.createMessage(sentMessage).then(resolve).catch(reject);
                 } catch(err) {
 
-                    var errMessage = '```js\n';
+                    let errMessage = '```js\n';
                     errMessage += `Input: ${evalArgs}\n\n`;
                     errMessage += `${err}\n`;
                     errMessage += '```';

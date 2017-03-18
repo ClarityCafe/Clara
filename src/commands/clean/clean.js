@@ -8,17 +8,9 @@ exports.commands = [
     'clean'
 ];
 
-function deleteDelay(msg) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            msg.delete().then(() => resolve()).catch(reject);
-        }, 2000);
-    });
-}
-
 exports.clean = {
-    desc: 'clean messages created by the bot itself',
-    main: (bot, ctx) => {
+    desc: 'Clean messages created by the bot.',
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             ctx.msg.channel.getMessages(100).then(msgs => {
                 let delet = [];
@@ -29,3 +21,11 @@ exports.clean = {
         });
     }
 };
+
+function deleteDelay(msg) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            msg.delete().then(() => resolve()).catch(reject);
+        }, 2000);
+    });
+}

@@ -68,14 +68,14 @@ try {
 
 try {
     require.resolve(`${__dirname}/data/blacklistedGuilds.json`);
-} catch (err) {
+} catch(err) {
     fs.writeFile(`${__dirname}/data/blacklistedGuilds.json`, JSON.stringify([]), e => {
         if (e) {
             throw e;
         } else {
             logger.info('Created Blacklist.');
         }
-    })
+    });
 }
 
 exports.bot = bot;
@@ -160,7 +160,7 @@ bot.on('guildCreate', g => {
             if (err) {
                 logger.error('failed to add Guild ID to blacklist');
             } else {
-                logger.info('Successfully added Guild ID to blacklist.')
+                logger.info('Successfully added Guild ID to blacklist.');
             }
         }));
         g.leave();

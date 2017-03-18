@@ -14,30 +14,6 @@ try {
     fs.writeFileSync(`${__dirname}/lines.txt`, fs.readFileSync(`${__dirname}/sample.txt`).toString());
 }
 
-function readLines() {
-    return new Promise((resolve, reject) => {
-        fs.readFile(`${__dirname}/lines.txt`, 'utf8', (err, lines) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(lines.split('\n'));
-            }
-        });
-    });
-}
-
-function appendLines(msg) {
-    return new Promise((resolve, reject) => {
-        fs.appendFile(`${__dirname}/lines.txt`, msg.replace(/\n+/g, ' ').trim() + '\n', err => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
-            }
-        });
-    });
-}
-
 exports.commands = [
     'chat'
 ];
@@ -46,7 +22,7 @@ exports.chat = {
     desc: 'Chat with the bot.',
     longDesc: 'Uses an algorithm to simulate chatting with a human. May be extremely dumb and offtopic at times.',
     usage: '<message>',
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix) {
                 ctx.msg.channel.createMessage(localeManager.t('chatbot-noArgs', ctx.settings.locale)).then(resolve).catch(reject);
@@ -70,3 +46,27 @@ exports.chat = {
         });
     }
 };
+
+function readLines() {
+    return new Promise((resolve, reject) => {
+        fs.readFile(`${__dirname}/lines.txt`, 'utf8', (err, lines) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(lines.split('\n'));
+            }
+        });
+    });
+}
+
+function appendLines(msg) {
+    return new Promise((resolve, reject) => {
+        fs.appendFile(`${__dirname}/lines.txt`, msg.replace(/\n+/g, ' ').trim() + '\n', err => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}

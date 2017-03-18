@@ -4,7 +4,6 @@
  * Contributed by Capuccino, Ovyerus.
  */
 
-
 const cheerio = require('cheerio');
 const request = require('request');
 
@@ -20,7 +19,7 @@ exports.commands = [
 exports.yori = {
     desc: 'Get a random anime picture.',
     longDesc: 'Scrapes i.yorium.moe for a random anime picture.',
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             ctx.msg.channel.sendTyping();
             request(baseUrl, (err, res, body) => {
