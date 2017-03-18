@@ -26,7 +26,7 @@ exports.awwnime = {
                         title: `Search Results for ${ctx.args[2]}`,
                         image: images.full
                     }}).then(resolve).catch(reject);
-                })
+                });
             }
         });
     }
