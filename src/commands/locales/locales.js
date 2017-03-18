@@ -14,7 +14,7 @@ exports.locales = {
     desc: 'Manage locales.',
     longDesc: '',
     usage: '[set [guild] <locale>]',
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.args.length < 2) {
                 ctx.msg.channel.createMessage({embed: localeBlock(ctx.settings)}).then(resolve).catch(reject);

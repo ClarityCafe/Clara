@@ -8,7 +8,106 @@ const config = require(`${__baseDir}/config.json`);
 const osu = require('osu')(config.osuApiKey);
 const iso3166 = require('iso-3166-1-alpha-2');
 
-var commaRegex = /\B(?=(\d{3})+(?!\d))/g; // Thank you Brayzure uwu
+const commaRegex = /\B(?=(\d{3})+(?!\d))/g; // Thank you Brayzure uwu
+
+exports.commands = [
+    'osu',
+    'mania',
+    'taiko',
+    'ctb'
+];
+
+exports.osu = {
+    desc: "Retrive stats for osu!'s standard mode for a user.",
+    fullDesc: "Uses the osu! API to get information for osu!'s standard mode for a user.",
+    usage: '<osu! username/id>',
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            if (ctx.suffix.length === 0) {
+                ctx.msg.channel.createMessage(localeManager.t('osu-noName', settings.locale)).then(resolve).catch(reject);
+            } else {
+                ctx.msg.channel.sendTyping();
+                osu.get_user({u: ctx.suffix}, res => {
+                    var user = res[0];
+                    if (!user || !user.user_id) {
+                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
+                    } else {
+                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
+                    }
+                });
+            }
+        });
+    }
+};
+
+exports.ctb = {
+    desc: "Retrive stats for osu!'s Catch The Beat mode for a user.",
+    fullDesc: "Uses the osu! API to get information for osu!'s Catch The Beat mode for a user.",
+    usage: '<osu! username/id>',
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            if (ctx.suffix.length === 0) {
+                ctx.msg.channel.createMessage(localeManager.t('osu-noName', settings.locale)).then(resolve).catch(reject);
+            } else {
+                ctx.msg.channel.sendTyping();
+                osu.get_user({u: ctx.suffix, m: 2}, res => {
+                    var user = res[0];
+                    if (!user || !user.user_id) {
+                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
+                    } else {
+                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
+                    }
+                });
+            }
+        });
+    }
+};
+
+exports.mania = {
+    desc: "Retrive stats for osu!'s osu!mania mode for a user.",
+    fullDesc: "Uses the osu! API to get information for osu!'s osu!mania mode for a user.",
+    usage: '<osu! username/id>',
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            if (ctx.suffix.length === 0) {
+                ctx.msg.channel.createMessage(localeManager.t('osu-noName', settings.locale)).then(resolve).catch(reject);
+            } else {
+                ctx.msg.channel.sendTyping();
+                osu.get_user({u: ctx.suffix, m: 3}, res => {
+                    var user = res[0];
+                    if (!user || !user.user_id) {
+                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
+                    } else {
+                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
+                    }
+                });
+            }
+        });
+    }
+};
+
+exports.taiko = {
+    desc: "Retrive stats for osu!'s Taiko mode for a user.",
+    fullDesc: "Uses the osu! API to get information for osu!'s Taiko mode for a user.",
+    usage: '<osu! username/id>',
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            if (ctx.suffix.length === 0) {
+                ctx.msg.channel.createMessage(localeManager.t('osu-noName', settings.locale)).then(resolve).catch(reject);
+            } else {
+                ctx.msg.channel.sendTyping();
+                osu.get_user({u: ctx.suffix, m: 1}, res => {
+                    var user = res[0];
+                    if (!user || !user.user_id) {
+                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
+                    } else {
+                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
+                    }
+                });
+            }
+        });
+    }
+};
 
 function osuBlock(user) {
     return {embed: {
@@ -36,102 +135,3 @@ function osuBlock(user) {
         ]
     }};
 }
-
-exports.commands = [
-    'osu',
-    'mania',
-    'taiko',
-    'ctb'
-];
-
-exports.osu = {
-    desc: "Retrive stats for osu!'s standard mode for a user.",
-    fullDesc: "Uses the osu! API to get information for osu!'s standard mode for a user.",
-    usage: '<osu! username/id>',
-    main: (bot, ctx) => {
-        return new Promise((resolve, reject) => {
-            if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage(localeManager.t('osu-noName', settings.locale)).then(resolve).catch(reject);
-            } else {
-                ctx.msg.channel.sendTyping();
-                osu.get_user({u: ctx.suffix}, res => {
-                    var user = res[0];
-                    if (!user || !user.user_id) {
-                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
-                    } else {
-                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
-                    }
-                });
-            }
-        });
-    }
-};
-
-exports.ctb = {
-    desc: "Retrive stats for osu!'s Catch The Beat mode for a user.",
-    fullDesc: "Uses the osu! API to get information for osu!'s Catch The Beat mode for a user.",
-    usage: '<osu! username/id>',
-    main: (bot, ctx) => {
-        return new Promise((resolve, reject) => {
-            if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage(localeManager.t('osu-noName', settings.locale)).then(resolve).catch(reject);
-            } else {
-                ctx.msg.channel.sendTyping();
-                osu.get_user({u: ctx.suffix, m: 2}, res => {
-                    var user = res[0];
-                    if (!user || !user.user_id) {
-                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
-                    } else {
-                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
-                    }
-                });
-            }
-        });
-    }
-};
-
-exports.mania = {
-    desc: "Retrive stats for osu!'s osu!mania mode for a user.",
-    fullDesc: "Uses the osu! API to get information for osu!'s osu!mania mode for a user.",
-    usage: '<osu! username/id>',
-    main: (bot, ctx) => {
-        return new Promise((resolve, reject) => {
-            if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage(localeManager.t('osu-noName', settings.locale)).then(resolve).catch(reject);
-            } else {
-                ctx.msg.channel.sendTyping();
-                osu.get_user({u: ctx.suffix, m: 3}, res => {
-                    var user = res[0];
-                    if (!user || !user.user_id) {
-                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
-                    } else {
-                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
-                    }
-                });
-            }
-        });
-    }
-};
-
-exports.taiko = {
-    desc: "Retrive stats for osu!'s Taiko mode for a user.",
-    fullDesc: "Uses the osu! API to get information for osu!'s Taiko mode for a user.",
-    usage: '<osu! username/id>',
-    main: (bot, ctx) => {
-        return new Promise((resolve, reject) => {
-            if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage(localeManager.t('osu-noName', settings.locale)).then(resolve).catch(reject);
-            } else {
-                ctx.msg.channel.sendTyping();
-                osu.get_user({u: ctx.suffix, m: 1}, res => {
-                    var user = res[0];
-                    if (!user || !user.user_id) {
-                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
-                    } else {
-                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
-                    }
-                });
-            }
-        });
-    }
-};
