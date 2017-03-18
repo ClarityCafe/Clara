@@ -3,6 +3,7 @@
     "bot-noPerm": "I do not have the **{{perm}}** permission.",
     "incorrectUsage": "Incorrect Usage",
     "id": "ID",
+    "none": "None",
     "locales": {
         "en-UK": "English (UK)",
         "fr-CA": "French (Canada)"
