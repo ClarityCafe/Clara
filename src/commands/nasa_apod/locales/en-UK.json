@@ -1,0 +1,6 @@
+{
+    "nasa-noKey": "This bot does not appear to be set up for this command. Missing API key.",
+    "nasa-copyright": "Copyright {{copyright}}",
+    "nasa-date": "Date of image: {{date}}",
+    "nasa-explanation": "Explanation"
+}

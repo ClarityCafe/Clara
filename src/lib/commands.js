@@ -1,10 +1,10 @@
 /*
  * Clara - command object file
- * 
+ *
  * Contributed by Ovyerus
  */
 
-/** 
+/**
  * Object to handle and store commands, modules and aliases.
  * @prop {Object} commands Object mapping command objects to their name.
  * @prop {Object} aliases Object mapping aliases to the name of their command.
@@ -12,7 +12,6 @@
  * @prop {Number} length Amount of commands currently loaded.
  * @prop {Number} aliasesLength Amount of aliases currently registered.
  */
-
 class CommandHolder {
 
     /**
@@ -57,7 +56,7 @@ class CommandHolder {
     addCommand(cmdName, cmdObject) {
         if (typeof cmdName !== 'string') throw new Error('cmdName is not a string');
         if ((cmdObject instanceof Object) !== true) new Error('cmdObject is not an object');
-        if (this.commands[cmdName] == undefined && !(cmdObject.desc && cmdObject.main)) throw new Error(`Not loading '${cmdName}' due to missing one or both required properties, desc and main.`);
+        if (this.commands[cmdName] == null && !(cmdObject.desc && cmdObject.main)) throw new Error(`Not loading '${cmdName}' due to missing one or both required properties, desc and main.`);
         if (this.commands[cmdName]) throw new Error(`'${cmdName}' already exists in the command holder.`);
 
         this.commands[cmdName] = cmdObject;
@@ -73,7 +72,7 @@ class CommandHolder {
         if (typeof cmdName !== 'string') throw new Error('cmdName is not a string.');
         if (!this.commands[cmdName]) throw new Error(`'${cmdName}' does not exist in the command holder.`);
         if (this.commands[cmdName].fixed) throw new Error(`'${cmdName}' cannot be removed.`);
-        
+
         delete this.commands[cmdName];
         return cmdName;
     }
@@ -139,7 +138,7 @@ class CommandHolder {
      */
     forEach(callback) {
         if (!callback || typeof callback !== 'function') throw new Error('callback is not a function');
-        
+
         for (let cmd in this.commands) {
             callback(cmd, this.commands[cmd]);
         }

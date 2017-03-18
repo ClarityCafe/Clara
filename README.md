@@ -22,7 +22,7 @@ Check out CONTRIBUTING.md for guidelines.
 
 The underlying source code is licensed under the [MIT License](https://en.wikipedia.org/wiki/MIT_License).
 
-Copyright &copy; 2016 Capuccino, Ovyerus and the repository contributors.
+Copyright &copy; 2017 Capuccino, Ovyerus and the repository contributors.
 
 See [LICENSE](LICENSE) for full license.
 

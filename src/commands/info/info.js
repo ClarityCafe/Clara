@@ -4,7 +4,6 @@
  * Contributed by Ovyerus
  */
 
-
 const os = require('os');
 const prettyBytes = require('pretty-bytes');
 const fs = require('fs');
@@ -18,14 +17,13 @@ try {
     version = JSON.parse(fs.readFileSync(`${__baseDir}/package.json`)).version;
 }
 
-
 exports.commands = [
     'info'
 ];
 
 exports.info = {
     desc: 'Information about the bot.',
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             let date = new Date();
             let sysTime = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${date.getDate()}\n${('0' + (date.getHours() + 1)).slice(-2)}:${('0' + (date.getMinutes() + 1)).slice(-2)}:${('0' + (date.getSeconds() + 1)).slice(-2)}`;
@@ -34,20 +32,20 @@ exports.info = {
             })[0]).color;
             ctx.msg.channel.createMessage({embed: {
                 title: `${bot.user.username}'s Info`,
-                description: '[Source Code](https://github.com/awau/Clara) | [Clara Support Server](https://discord.gg/ZgQkCkm)',
-                thumbnail: {url: bot.user.avatarURL.replace('https://cdn.discordapp.com', 'https://images.discordapp.net') + '?size=1024', height: 128, width: 128},
+                description: `[${localeManager.t('info-source', ctx.settings.locale)}](https://github.com/awau/Clara) | [${localeManager.t('info-supportServer', ctx.settings.locale)}](https://discord.gg/ZgQkCkm)`,
+                thumbnail: {url: bot.user.avatarURL},
                 color: roleColour,
                 fields: [
-                    {name: 'Guilds', value: bot.guilds.size, inline: true},
-                    {name: 'Users Seen', value: bot.users.size, inline: true},
-                    {name: 'Uptime', value: utils.msToTime(bot.uptime), inline: true},
-                    {name: 'System Time', value: sysTime, inline: true},
-                    {name: 'OS Platform', value: os.platform(), inline: true},
-                    {name: 'Shards Active', value: bot.shards.size, inline: true},
-                    {name: 'Memory Usage', value: prettyBytes(process.memoryUsage().rss), inline: true},
-                    {name: 'Version', value: version, inline: true}
+                    {name: localeManager.t('info-guilds', ctx.settings.locale), value: bot.guilds.size, inline: true},
+                    {name: localeManager.t('info-users', ctx.settings.locale), value: bot.users.size, inline: true},
+                    {name: localeManager.t('info-uptime', ctx.settings.locale), value: utils.msToTime(bot.uptime), inline: true},
+                    {name: localeManager.t('info-sysTime', ctx.settings.locale), value: sysTime, inline: true},
+                    {name: localeManager.t('info-os', ctx.settings.locale), value: os.platform(), inline: true},
+                    {name: localeManager.t('info-shards', ctx.settings.locale), value: bot.shards.size, inline: true},
+                    {name: localeManager.t('info-mem', ctx.settings.locale), value: prettyBytes(process.memoryUsage().rss), inline: true},
+                    {name: localeManager.t('info-version', ctx.settings.locale), value: version, inline: true}
                 ],
-                footer : { text : `${bot.user.username} is powered by Clara. Click the "Source Code" field to check out the repo!`}
+                footer: {text: localeManager.t('info-footer', ctx.settings.locale, {name: bot.user.username})}
             }}).then(resolve).catch(reject);
         });
     }
