@@ -139,7 +139,7 @@ bot.on('shardResume', shard => {
 });
 
 bot.on('guildCreate', g => {
-    let blacklist = require(`${__dirname}/data/blacklistedGuilds.json`);
+    let blacklist = JSON.readFileSync(`${__dirname}/data/blacklistedGuilds.json`);
     if (blacklist.includes(g.id)) {
         g.defaultChannel.createMessage("I'm sorry but your server was blacklisted. If you think this was done in error you can contact us in our server: discord.gg/ZgQkCkm").then(() => {
             logger.warn(`${g.id} (${g.name}) attempted to re-add the bot but guild ID in blacklist. Autoleaving...`).then(() => {
