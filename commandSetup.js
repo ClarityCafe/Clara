@@ -37,7 +37,7 @@ process.stdin.once('data', txt => {
         if (err) throw err;
         console.log('Created command directory.');
 
-        fs.writeFile(`${cmdPath}/package.json`, JSON.stringify({main: `${cmdName}.js`, dependencies: {}}, null, '\s\s\s\s'), err => {
+        fs.writeFile(`${cmdPath}/package.json`, JSON.stringify({main: `${cmdName}.js`, dependencies: {}}, null, '    '), err => {
             if (err) throw err;
             console.log('Created package.json');
 
