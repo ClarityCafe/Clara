@@ -23,7 +23,7 @@ exports.play = {
     longDesc: 'Plays music from supported sources and joins if needed.',
     usage: '[URL|search term]',
     example: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ | running in the 90s',
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             handler.exposed.bot = bot;
             handler.exposed.settings = ctx.settings;
@@ -64,7 +64,7 @@ exports.queue = {
     desc: 'Queue music and view current queue.',
     longDesc: 'If no arguments provided, shows contents of queue. If arguments are provided queues the song.',
     usage: '[URL|search term]',
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             handler.exposed.bot = bot;
             if (!ctx.suffix) {
@@ -99,7 +99,7 @@ exports.queue = {
 
 exports.leave = {
     desc: 'Leaves voice channel and destroys all associated data.',
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!bot.music.connections.get(ctx.msg.channel.guild.id)) {
                 ctx.msg.channel.createMessage(localeManager.t('music-noBotChan', ctx.settings.locale)).then(resolve).catch(reject);
@@ -117,7 +117,7 @@ exports.leave = {
 
 exports.stop = {
     desc: 'Stops playing music and (optionally) clears the queue.',
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!bot.music.connections.get(ctx.msg.channel.guild.id)) {
                 ctx.msg.channel.createMessage(localeManager.t('music-noBotChan', ctx.settings.locale)).then(resolve).catch(reject);
@@ -155,7 +155,7 @@ exports.stop = {
 
 exports.join = {
     desc: 'Join a voice channel without playing anything.',
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (bot.music.connections.get(ctx.msg.channel.guild.id)) {
                 ctx.msg.channel.createMessage(localeManager.t('music-alreadyInChan', ctx.settings.locale)).then(resolve).catch(reject);
@@ -175,7 +175,7 @@ exports.join = {
 
 exports.sources = {
     desc: 'View available music sources.',
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             ctx.msg.channel.createMessage({embed: {
                 title: localeManager.t('music-sourcesTitle', ctx.settings.locale),
@@ -193,7 +193,7 @@ exports.skip = {
     desc: 'Vote skip current song. Admins can override.',
     longDesc: 'Votes to skip the current song playing. Skip limit is half of unmuted people in current channel. Admins can force skip.',
     usage: '[force (admin only)]',
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!bot.music.connections.get(ctx.msg.channel.guild.id)) {
                 ctx.msg.channel.createMessage(localeManager.t('music-noBotChan', ctx.settings.locale)).then(resolve).catch(reject);

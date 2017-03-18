@@ -4,7 +4,6 @@
  * Contributed by Capuccino and Ovyerus
  */
 
-
 const utils = require(`${__baseDir}/lib/utils.js`);
 const safe = require('safe-regex');
 
@@ -14,19 +13,11 @@ exports.commands = [
     'purge'
 ];
 
-function deleteDelay(msg) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            msg.delete().then(() => resolve()).catch(reject);
-        }, 2000);
-    });
-}
-
 exports.kick = {
     desc: 'Kicks the mentioned people from the guild.',
     fullDesc: "Kicks the mentioned people from the guild the command is executed in. Can kick multiple people at once. Requires the 'Kick Members' permission.",
     usage: '<user mention(s)>',
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.msg.member.permission.has('kickMembers')) {
                 ctx.msg.channel.createMessage(localeManager.t('user-noPerm', ctx.settings.locale, {perm: 'Kick Members'})).then(resolve).catch(reject);
@@ -71,7 +62,7 @@ exports.ban = {
     desc: 'Bans the mentioned people from the guild.',
     fullDesc: "Bans the mentioned people from the guild the command is executed in. Can ban multiple people at once. Requires the 'Ban Members' permission.",
     usage: '<user mention(s)>',
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.msg.member.permission.has('banMembers')) {
                 ctx.msg.channel.createMessage(localeManager.t('user-noPerms', ctx.settings.locale, {perm: 'Ban Members'})).then(resolve).catch(reject);
@@ -113,10 +104,10 @@ exports.ban = {
 };
 
 exports.purge = {
-    desc: 'Clean the messages from the bot or from a user or another bot',
-    longDesc: 'Cleans Messages from a channel.',
-    usage: '<type> [amount]',
-    main: (bot, ctx) => {
+    desc: 'Purge messages',
+    longDesc: 'Purges a specified type of message with an optional amount.',
+    usage: '<type> [amount up to 100]',
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.msg.member.permission.has('manageMessages')) {
                 ctx.msg.channel.createMessage(localeManager.t('user-noPerms', ctx.settings.locale, {perm: 'Manage Messages'})).then(resolve).catch(reject);
@@ -364,3 +355,11 @@ exports.purge = {
         });
     }
 };
+
+function deleteDelay(msg) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            msg.delete().then(() => resolve()).catch(reject);
+        }, 2000);
+    });
+}

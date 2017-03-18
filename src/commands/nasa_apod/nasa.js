@@ -1,17 +1,18 @@
-// * NASA APOD Parser
-// * For Spacefags
-// *
-// * Contributed by Capuccino
+/*
+ * nasa.js - Show NASA's Astronomy Picture of the Day
+ * 
+ * Contributed by Capuccino and Ovyerus
+ */
+
+const request = require('request');
 
 exports.commands = [
     'apod'
 ];
 
-const request = require('request');
-
 exports.apod = {
     desc: "Shows NASA's [Astronomy Picture of the Day](http://apod.nasa.gov/apod/astropix.html) (APOD)",
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!bot.config.nasaKey) {
                 ctx.msg.channel.createMessage(localeManager.t('nasa-noKey', settings.locale)).then(resolve).catch(reject);

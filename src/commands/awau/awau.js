@@ -1,19 +1,22 @@
 /*
- * awau - awau  
+ * awau.js - Awau
  * 
- * 
- * Contribute dby Capuccino
+ * Contributed by Capuccino and Ovyerus
  */
+
+const fs = require('fs');
 
 exports.commands = [
     'awau'
 ];
 
 exports.awau = {
-    desc: 'awau',
-    main: (bot, ctx) => {
+    desc: 'Awaus at you.',
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.createMessage({file: `${__baseDir}/res/awau/awau.png`, name: 'awau.png'}).then(resolve).catch(reject);
+            ctx.msg.channel.sendTyping();
+            let file = fs.readFileSync(`${__baseDir}/res/awau/awau.png`);
+            ctx.msg.channel.createMessage('', {file, name: 'awau.png'}).then(resolve).catch(reject);
         });
     } 
 };
