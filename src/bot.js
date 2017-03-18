@@ -214,6 +214,7 @@ bot.on('messageCreate', msg => {
                     }).catch(err => {
                         handleCmdErr(msg, cmd, err);
                     });
+                    return null;
                 } else if (bot.commands.getCommand(cmd).adminOnly) {
                     return null;
                 } else {
@@ -223,6 +224,7 @@ bot.on('messageCreate', msg => {
                     }).catch(err => {
                         handleCmdErr(msg, cmd, err);
                     });
+                    return null;
                 }
             }).catch(err => logger.error(err.stack));
         }
