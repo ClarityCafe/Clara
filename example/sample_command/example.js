@@ -23,7 +23,7 @@ exports.ping = {
             ctx.msg.channel.createMessage('Ping!').then(() => resolve()).catch(err => reject([err]));
         });
     }
-}
+};
 
 // Example pong command (demonstrating a full command, and multiple commands in a file).
 exports.pong = {
@@ -34,4 +34,4 @@ exports.pong = {
             ctx.msg.channel.createMessage('Pong!').then(() => resolve()).catch(err => reject([err]));
         });
     }
-}
+};
