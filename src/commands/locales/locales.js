@@ -49,7 +49,7 @@ function localeBlock(settings) {
     );
 
     embed.fields.push({
-        name: localeManager.t('locales-exampleUsage', settings.locale),
+        name: localeManager.t('exampleUsage', settings.locale),
         value: '`locales set en-UK`\n`locales set guild en-UK`'}
     );
 
