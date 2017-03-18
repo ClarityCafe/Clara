@@ -1,6 +1,6 @@
 /*
  * Clara - utility module
- * 
+ *
  * Contributed by Capuccino and Ovyerus
  */
 
@@ -28,9 +28,9 @@ function msToTime(ms) {
     hours = Math.floor(hours);
     days = Math.floor(days);
 
-    seconds.toString().length === 1 ? seconds = '0' + seconds.toString() : seconds = seconds.toString();
-    minutes.toString().length === 1 ? minutes = '0' + minutes.toString() : minutes = minutes.toString();
-    hours.toString().length === 1 ? hours = '0' + hours.toString() : hours = hours.toString();
+    seconds.toString().length === 1 ? seconds = '0' + seconds.toString() : seconds = seconds.toString(); // eslint-disable-line prefer-template
+    minutes.toString().length === 1 ? minutes = '0' + minutes.toString() : minutes = minutes.toString(); // eslint-disable-line prefer-template
+    hours.toString().length === 1 ? hours = '0' + hours.toString() : hours = hours.toString(); // eslint-disable-line prefer-template
 
     return `${days} days, ${hours}:${minutes}:${seconds}`;
 }
@@ -45,24 +45,14 @@ function formatUsername(user, noDiscrim=false) {
     return user instanceof Eris.Member ? `${user.nick ? user.nick : user.user.username}${noDiscrim ? '' : `#${user.user.discriminator}`}` : `${user.username}${noDiscrim ? '' : `#${user.discriminator}`}`;
 }
 
-// Internal permission checks.
-
 /**
- * Check if the user is a bot admin.
- * @arg {String} userID ID of the user to check.
+ * Check if the user has bot perms.
+ * @param {String} userID ID of the user to check.
  * @returns {Boolean}
  */
-function isAdmin(userID) {
-    return JSON.parse(fs.readFileSync(`${__baseDir}/data/data.json`)).admins.indexOf(userID) !== -1;
-}
 
-/**
- * Check if the user is the bots owner (defined in config).
- * @arg {String} userID ID of the user to check.
- * @returns {Boolean}
- */
-function isOwner(userID) {
-    return userID === config.ownerID;
+function checkBotPerms(userID) {
+    return userID === config.ownerID || JSON.parse(fs.readFileSync(`${__baseDir}/data/data.json`)).admins.indexOf(userID) !== -1;
 }
 
 /**
@@ -74,4 +64,4 @@ function isBlacklisted(userID) {
     return JSON.parse(fs.readFileSync(`${__baseDir}/data/data.json`)).blacklist.indexOf(userID) !== -1;
 }
 
-module.exports = {msToTime, formatUsername, isOwner, isAdmin, isBlacklisted};
+module.exports = {msToTime, formatUsername, isBlacklisted, checkBotPerms};

@@ -18,6 +18,47 @@ Information on properly creating commands for the bot can be found [here](https:
 To fit in with the 'theme' of the bot, please use any ES6 features where possible/needed, e.g. arrow functions, template strings, promises, etc.
 Remember, arrow functions don't change `this`, so if for some reason you need `this` changed, eg. using a library which does so, then you'll need to use the regular `function() {}`.
 
+### Indents
+
+for ctx messages/Promise chaining make sure to do 
+
+```js 
+
+ctx.msg.channel.createMessage().then(resolve).catch(err);
+```
+or 
+
+```js
+
+ctx.msg.channel.createMessage().then(() => {
+    //code awau
+}).catch(reject);
+```
+
+Avoid using this type of indents for messages 
+```js 
+
+ctx.msg.channel.createMessage()
+.then(resolve)
+.catch(reject)
+```
+
+For Curlies, please make it a space after a statement 
+```js
+function () {
+    
+}
+```
+Avoid curlies that is a line after the statement
+```js
+function ()
+{
+    
+}
+```
+semi as possible. Using a linter like ESLint helps.
+
+
 Also, please make sure to follow the way that the code in the repository is set out for consistency.
 
 # Pull Requests

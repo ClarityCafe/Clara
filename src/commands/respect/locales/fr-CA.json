@@ -1,0 +1,6 @@
+{
+    "respects": "{{user}} a payé respect.",
+    "respects-args": "{{user}} a payé respect pour **{{object}}** ",
+    "rip": "Reste en pais.",
+    "rip-args": "<{{url}}> Reste en pais."
+}
