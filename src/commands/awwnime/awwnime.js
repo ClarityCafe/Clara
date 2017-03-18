@@ -18,7 +18,7 @@ exports.awwnime = {
             if(!ctx.args) {
                 randomAnimeWallpapers().then(images => {
                     let animu = images[Math.floor(Math.random()*Object.id.length)];
-                    ctx.msg.channel.createMessage('',{file: animu.full, name: animu.id}).then(resolve).catch(reject);
+                    ctx.msg.channel.createMessage('', {file: animu.full, name: animu.id}).then(resolve).catch(reject);
                 }).catch(reject);
             }
         });
