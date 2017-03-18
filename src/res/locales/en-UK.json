@@ -2,7 +2,10 @@
     "user-noPerm": "You require the **{{perm}}** permission to use this command.",
     "bot-noPerm": "I do not have the **{{perm}}** permission.",
     "incorrectUsage": "Incorrect Usage",
+    "exampleUsage": "Example Usage",
     "id": "ID",
+    "yes": "Yes",
+    "no": "No",
     "none": "None",
     "locales": {
         "en-UK": "English (UK)",

@@ -21,7 +21,7 @@ exports.ship = {
                 let b = ctx.msg.mentions[1] === undefined ? ctx.args[1] : ctx.msg.mentions[1].username;
                 let result = a.substring(0, Math.floor(a.length / 2)) + b.substring(Math.floor(b.length / 2));
 
-                ctx.msg.channel.createMessage(localeManager.t('ship', settings.locale, {result})).then(() => resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('ship', ctx.settings.locale, {result})).then(() => resolve).catch(reject);
             }
         });
     }
