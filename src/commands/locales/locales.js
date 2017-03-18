@@ -38,11 +38,21 @@ exports.locales = {
 
 function localeBlock(settings) {
     let embed = {title: localeManager.t('locales-infoHeader', settings.locale), description: '', fields: []};
+
     Object.keys(localeManager.locales).forEach(v => embed.description += `\n${v} - **${localeManager.locales[v].locales[v]} [${localeManager.locales[settings.locale].locales[v]}]**`);
+    
     embed.description += '\n\u200b';
 
-    embed.fields.push({name: localeManager.t('locales-userLocale', settings.locale, {locale: settings.user.locale}), value: `${localeManager.t('locales-guildLocale', settings.locale, {locale: settings.guild.locale})}\n\u200b`});
-    embed.fields.push({name: localeManager.t('locales-exampleUsage', settings.locale), value: '`locales set en-UK`\n`locales set guild en-UK`'});
+    embed.fields.push({
+        name: localeManager.t('locales-userLocale', settings.locale, {locale: settings.user.locale}),
+        value: `${localeManager.t('locales-guildLocale', settings.locale, {locale: settings.guild.locale})}\n\u200b`}
+    );
+
+    embed.fields.push({
+        name: localeManager.t('locales-exampleUsage', settings.locale),
+        value: '`locales set en-UK`\n`locales set guild en-UK`'}
+    );
+
     return embed;
 }
 
