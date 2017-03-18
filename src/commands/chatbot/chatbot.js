@@ -10,7 +10,7 @@ const fs = require('fs');
 try {
     require.resolve(`${__dirname}/lines.txt`);
 } catch(err) {
-    logger.custom('blue', 'commands/chatbot', 'Markov line file not found. Generating pre-seeded one.');
+    logger.custom('yellow', 'commands/chatbot', 'Markov line file not found. Generating pre-seeded one.');
     fs.writeFileSync(`${__dirname}/lines.txt`, fs.readFileSync(`${__dirname}/sample.txt`).toString());
 }
 
