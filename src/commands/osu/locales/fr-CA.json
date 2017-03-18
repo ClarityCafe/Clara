@@ -1,0 +1,19 @@
+{
+    "osu-noName": "Donne-moi un nom d'utilisateur à rechercher.",
+    "osu-noRes": "Aucun utilisateur avec ce nom ou ID n'a été trouvé.",
+    "osu-country": "Pays",
+    "osu-countryRank": "Rang régional",
+    "osu-playCount": "Beatmaps jouées",
+    "osu-300s": "300s scorés",
+    "osu-100s": "100s scorés",
+    "osu-50s": "50s scorés",
+    "osu-rankedScore": "Score au rangs",
+    "osu-totalScore": "Score total",
+    "osu-pp": "PP",
+    "osu-level": "Niveau",
+    "osu-rank": "Rang",
+    "osu-accuracy": "Précision",
+    "osu-ss": "Nombre de SS",
+    "osu-s": "Nombre de S",
+    "osu-a": "Nombre de A"
+}

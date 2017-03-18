@@ -1,0 +1,8 @@
+{
+    "locales-infoHeader": "Locale Management",
+    "locales-userLocale": "User locale: {{locale}}",
+    "locales-guildLocale": "Guild locale: {{locale}}",
+    "loacales-invalidLocale": "**{{locale}}** is not a supported locale.",
+    "locales-userLocaleUpdated": "Your locale has been updated to **{{locale}}**",
+    "locales-guildLocaleUpdated": "Guild locale has been updated to **{{locale}}**"
+}

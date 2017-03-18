@@ -1,0 +1,8 @@
+{
+    "locales-infoHeader": "Gestion des locales",
+    "locales-userLocale": "Locale utilisateur: {{locale}}",
+    "locales-guildLocale": "Locale de la guilde: {{locale}}",
+    "loacales-invalidLocale": "**{{locale}}** n'est pas une locale supportée.",
+    "locales-userLocaleUpdated": "Votre locale a été changée pour **{{locale}}**",
+    "locales-guildLocaleUpdated": "La locale du serveur a été changée pour **{{locale}}**"
+}

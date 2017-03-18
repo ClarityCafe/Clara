@@ -1,6 +1,6 @@
 /*
  * Clara - logger module
- * 
+ *
  * Contributed by Ovyerus
  */
 
@@ -46,7 +46,7 @@ function error(message) {
  */
 function custom(colour, name, message) {
     if (!chalk[colour]) throw new Error('colour is not a valid chalk colour');
-    console.log(`${chalk['bg' + colour.toLowerCase().charAt(0).toUpperCase() + colour.toLowerCase().slice(1)](name)} ${chalk[colour](message)}`);
+    console.log(`${chalk['bg' + colour.toLowerCase().charAt(0).toUpperCase() + colour.toLowerCase().slice(1)](name)} ${chalk[colour](message)}`); // eslint-disable-line prefer-template
 }
 
 /**

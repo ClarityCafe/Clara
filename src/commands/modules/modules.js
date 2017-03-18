@@ -1,6 +1,6 @@
 /*
  * modules.js - Dynamic command module loading, unloading and reloading.
- * 
+ *
  * Contributed by Ovyerus
  */
 
@@ -8,7 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const decache = require('decache');
 
-var subCommands = {
+const subCommands = {
     load: loadFunc,
     unload: unloadFunc,
     reload: reloadFunc
@@ -24,7 +24,7 @@ exports.modules = {
     usage: '[load|unload|reload]',
     adminOnly: true,
     fixed: true,
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.args || Object.keys(subCommands).indexOf(ctx.args[0]) === -1) {
                 let cmdFolders = fs.readdirSync(path.join(__dirname, '../'));
@@ -48,7 +48,7 @@ exports.modules = {
                         embed.description = `Showing **${cmdFolders.length}** command modules.\n\`Unloaded Modules\`\n\n${unloaded.join('\n')}`;
                         return ctx.msg.channel.createMessage({embed});
                     } else {
-                        return;
+                        reject;
                     }
                 }).then(resolve).catch(reject);
             } else if (Object.keys(subCommands).indexOf(ctx.args[0]) !== -1) {

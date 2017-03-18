@@ -4,15 +4,14 @@
  * Contributed by Ovyerus
  */
 
-
 const request = require('request');
 const color = require('dominant-color');
 const prettyBytes = require('pretty-bytes');
 const moment = require('moment');
 const fs = require('fs');
-const ibKey = require(`${__baseDir}/config.json`).ibKey
+const ibKey = require(`${__baseDir}/config.json`).ibKey;
 
-const defaultQuery = 'foxgirl';
+const defaultQuery = 'foxgirl'; // Default: 'foxgirl'
 const queryLimit = 75; // Default: 75
 
 exports.commands = [
@@ -23,7 +22,7 @@ exports.ibsearch = {
     desc: 'Search ibsear.ch for anime pics.',
     fullDesc: 'Searches ibsear.ch for the specified tags. If no arguments, returns random picture. SFW only.',
     usage: '[tags]',
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix) {
                 ctx.msg.channel.sendTyping();
@@ -32,7 +31,7 @@ exports.ibsearch = {
                     method: 'GET',
                     headers: {
                         'X-IbSearch-Key': ibKey,
-                        'User-Agent': 'Clara/0.1.1'
+                        'User-Agent': 'Clara/0.2.2'
                     }
                 }, (err, res, body) => {
                     if (err) {
@@ -79,7 +78,7 @@ exports.ibsearch = {
                     method: 'GET',
                     headers: {
                         'X-IbSearch-Key': ibKey,
-                        'User-Agent': 'Clara/0.1.1'
+                        'User-Agent': 'Clara/0.2.2'
                     }
                 }, (err, res, body) => {
                     if (err) {
@@ -121,4 +120,4 @@ exports.ibsearch = {
             }
         });
     }
-}
+};
