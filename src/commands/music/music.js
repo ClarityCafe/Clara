@@ -5,7 +5,7 @@
  */
 
 const handler = require(`${__dirname}/musicHandler.js`);
-const utils = require(`${__baseDir}/lib/utils`);
+const utils = require(`${__baseDir}/modules/utils`);
 const Eris = require('eris');
 
 exports.commands = [

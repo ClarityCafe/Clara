@@ -4,7 +4,7 @@
  * Contributed by Capuccino and Ovyerus
  */
 
-const utils = require(`${__baseDir}/lib/utils.js`);
+const utils = require(`${__baseDir}/modules/utils.js`);
 const safe = require('safe-regex');
 
 exports.commands = [
