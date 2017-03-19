@@ -9,5 +9,6 @@
     "info-version": "Version",
     "info-footer": "{{name}} is powered by Clara. Click \"Source Code\" to check out the repository!",
     "info-source": "Source Code",
-    "info-supportServer": "Clara Support Server"
+    "info-supportServer": "Clara Support Server",
+    "info-NodeVersion": "Node.js Version"
 }

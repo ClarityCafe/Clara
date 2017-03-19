@@ -43,6 +43,7 @@ exports.info = {
                     {name: localeManager.t('info-os', ctx.settings.locale), value: os.platform(), inline: true},
                     {name: localeManager.t('info-shards', ctx.settings.locale), value: bot.shards.size, inline: true},
                     {name: localeManager.t('info-mem', ctx.settings.locale), value: prettyBytes(process.memoryUsage().rss), inline: true},
+                    {name: localeManager.t('info-NodeVersion'), value: process.version},
                     {name: localeManager.t('info-version', ctx.settings.locale), value: version, inline: true}
                 ],
                 footer: {text: localeManager.t('info-footer', ctx.settings.locale, {name: bot.user.username})}
