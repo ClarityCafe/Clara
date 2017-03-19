@@ -5,7 +5,7 @@
  */
 
 const fs = require('fs');
-const utils = require(`${__baseDir}/lib/utils.js`);
+const utils = require(`${__baseDir}/modules/utils.js`);
 
 exports.commands = [
     'prefixes'

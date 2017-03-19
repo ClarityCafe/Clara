@@ -8,7 +8,7 @@ const os = require('os');
 const prettyBytes = require('pretty-bytes');
 const fs = require('fs');
 const path = require('path');
-const utils = require(`${__baseDir}/lib/utils.js`);
+const utils = require(`${__baseDir}/modules/utils`);
 var version;
 
 try {

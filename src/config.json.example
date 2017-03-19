@@ -31,8 +31,11 @@
   "_comment_nasaKey": "Key to use with nasa apod command",
   "nasaKey": "",
 
-  "_comment_rethinkOptions: "Object to use when connecting to a Rethink instance",
+  "_comment_rethinkOptions": "Object to use when connecting to a Rethink instance",
   "rethinkOptions: {},
+
+  "_comment_discordBotsKey": "Token for posting guild count to Discord Bots",
+  "discordBotsKey": "",
 
   "_comment_token": "your Bot token",
   "token": ""
