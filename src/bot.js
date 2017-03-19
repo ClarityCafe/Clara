@@ -43,6 +43,8 @@ var allowCommandUse = false;
 // Create data files
 try {
     require.resolve(`${__dirname}/data/data.json`);
+    require.resolve(`${__dirname}/data/prefixes.json`);
+    require.resolve(`${__dirname}/data/blacklistedGuilds.json`);
 } catch(err) {
     fs.mkdirSync(`${__dirname}/data/`);
     fs.writeFile(`${__dirname}/data/data.json`, JSON.stringify({admins: [], blacklist: []}), e => {
@@ -52,28 +54,20 @@ try {
             logger.info('Created data.json.');
         }
     });
-}
 
-try {
-    require.resolve(`${__dirname}/data/prefixes.json`);
-} catch(err) {
-    fs.writeFile(`${__dirname}/data/prefixes.json`, JSON.stringify([]), e => {
+    fs.writeFile(`${__dirname}/data/prefixes.json`, JSON.stringify([], e => {
         if (e) {
             throw e;
         } else {
-            logger.info('Created prefixes.json.');
-        }
-    });
-}
+            logger.info('Created Prefixes data');
+        }    
+    }));
 
-try {
-    require.resolve(`${__dirname}/data/blacklistedGuilds.json`);
-} catch(err) {
     fs.writeFile(`${__dirname}/data/blacklistedGuilds.json`, JSON.stringify([]), e => {
         if (e) {
             throw e;
         } else {
-            logger.info('Created Blacklist.');
+            logger.info('Created Blacklisted Guilds data');
         }
     });
 }
@@ -145,7 +139,7 @@ bot.on('shardResume', shard => {
 });
 
 bot.on('guildCreate', g => {
-    let blacklist = require(`${__dirname}/data/blacklistedGuilds.json`);
+    let blacklist = JSON.readFileSync(`${__dirname}/data/blacklistedGuilds.json`);
     if (blacklist.includes(g.id)) {
         g.defaultChannel.createMessage("I'm sorry but your server was blacklisted. If you think this was done in error you can contact us in our server: discord.gg/ZgQkCkm").then(() => {
             logger.warn(`${g.id} (${g.name}) attempted to re-add the bot but guild ID in blacklist. Autoleaving...`).then(() => {
