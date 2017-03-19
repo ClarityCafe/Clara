@@ -44,9 +44,7 @@ var allowCommandUse = false;
 try {
     require.resolve(`${__dirname}/data/data.json`);
     require.resolve(`${__dirname}/data/prefixes.json`);
-    require.resolve(`${__dirname}/data/blacklistedGuilds.json`);
 } catch(err) {
-    fs.mkdirSync(`${__dirname}/data/`);
     fs.writeFile(`${__dirname}/data/data.json`, JSON.stringify({admins: [], blacklist: []}), e => {
         if (e) {
             throw e;
@@ -61,14 +59,6 @@ try {
         } else {
             logger.info('Created Prefixes data');
         }    
-    }));
-
-    fs.writeFile(`${__dirname}/data/blacklistedGuilds.json`, JSON.stringify([]), e => {
-        if (e) {
-            throw e;
-        } else {
-            logger.info('Created Blacklisted Guilds data');
-        }
     });
 }
 
