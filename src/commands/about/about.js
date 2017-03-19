@@ -9,6 +9,8 @@ exports.commands = [
     'about'
 ];
 
+const fs = require('fs');
+
 exports.about = {
     desc: 'All you need to know where the bot came from',
     main: (bot, ctx) => {
