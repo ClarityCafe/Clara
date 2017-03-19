@@ -54,13 +54,13 @@ try {
         }
     });
 
-    fs.writeFile(`${__dirname}/data/prefixes.json`, JSON.stringify([], e => {
+    fs.writeFile(`${__dirname}/data/prefixes.json`, JSON.stringify([]), e => {
         if (e) {
             throw e;
         } else {
-            logger.info('Created Prefixes data');
-        }    
-    });
+            logger.info('Created prefixes.json');
+        }
+    })
 }
 
 exports.bot = bot;
