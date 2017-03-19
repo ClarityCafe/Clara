@@ -60,7 +60,7 @@ try {
         } else {
             logger.info('Created prefixes.json');
         }
-    })
+    });
 }
 
 exports.bot = bot;
