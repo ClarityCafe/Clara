@@ -141,10 +141,8 @@ bot.on('shardResume', shard => {
 bot.on('guildCreate', g => {
     let blacklist = JSON.readFileSync(`${__dirname}/data/blacklistedGuilds.json`);
     if (blacklist.includes(g.id)) {
-        g.defaultChannel.createMessage("I'm sorry but your server was blacklisted. If you think this was done in error you can contact us in our server: discord.gg/ZgQkCkm").then(() => {
-            logger.warn(`${g.id} (${g.name}) attempted to re-add the bot but guild ID in blacklist. Autoleaving...`).then(() => {
-                g.leave();
-            });
+        logger.warn(`Attempt to add bot to ${g.name} has been detected. Autoleaving`).then(() => {
+            g.leave();
         });
     }
     if (g.members.filter(m => m.bot).size/ g.members.size >= 0.75) {
