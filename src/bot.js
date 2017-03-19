@@ -139,22 +139,8 @@ bot.on('shardResume', shard => {
 });
 
 bot.on('guildCreate', g => {
-    let blacklist = JSON.readFileSync(`${__dirname}/data/blacklistedGuilds.json`);
-    if (blacklist.includes(g.id)) {
-        logger.warn(`Attempt to add bot to ${g.name} has been detected. Autoleaving`).then(() => {
-            g.leave();
-        });
-    }
     if (g.members.filter(m => m.bot).size/ g.members.size >= 0.75) {
-        logger.info(`Detected bot collection guild. Autoleaving and adding guild ID to blacklist... (${g.name} [${g.id}])`);
-        blacklist.push(g.id);
-        fs.writeFile(`${__baseDir}/data/blacklistedGuilds.json`, JSON.stringify(blacklist, '', '\t', err => {
-            if (err) {
-                logger.error('failed to add Guild ID to blacklist');
-            } else {
-                logger.info('Successfully added Guild ID to blacklist.');
-            }
-        }));
+        logger.info(`Leaving bot collection '${g.name}' (${g.id})`);
         g.leave();
     } else {
         bot.editStatus('online', {name: `${config.gameName || `${config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: config.gameURL ? 1 : 0, url: `${config.gameURL || null}`});
