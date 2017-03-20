@@ -3,7 +3,7 @@
 
 <a href="https://discord.gg/ZgQkCkm"><img src="https://discordapp.com/api/guilds/251664386459041792/embed.png" alt="Discord server" /></a> [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/awau/Clara/master/LICENSE) [![Code Climate](https://codeclimate.com/github/awau/Clara/badges/gpa.svg)](https://codeclimate.com/github/awau/Clara) <a href="https://koding.com/"> <img src="https://koding-cdn.s3.amazonaws.com/badges/made-with-koding/v1/koding_badge_ReadmeDark.png" srcset="https://koding-cdn.s3.amazonaws.com/badges/made-with-koding/v1/koding_badge_ReadmeDark.png 1x, https://koding-cdn.s3.amazonaws.com/badges/made-with-koding/v1/koding_badge_ReadmeDark@2x.png 2x" alt="Made with Koding" /> </a>
 
-[Support us on Patreon!](https://www.patreon.com/capuccino) | [Discord Server](https://discord.gg/9utV8gn)
+[Support us on Patreon!](https://www.patreon.com/capuccino) | [Discord Server](https://discord.gg/ZgQkCkm)
 
 
 # Running
