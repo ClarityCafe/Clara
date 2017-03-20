@@ -1,6 +1,7 @@
 const prefixParser = require(`${__baseDir}/modules/prefixParser`);
 const parseArgs = require(`${__baseDir}/modules/argParser`);
 const utils = require(`${__baseDir}/modules/utils`);
+const config = require(`${__baseDir}/config.json`);
 
 module.exports = bot => {
     bot.on('messageCreate', msg => {
@@ -58,7 +59,7 @@ module.exports = bot => {
 
             return null;
         }).catch(err => {
-            logger.customError('prefixParser', `Failed to parse message for prefix: ${err}${bot.config.debug ? `\n${err.stack}` : ''}`);
+            logger.customError('prefixParser', `Failed to parse message for prefix: ${err}${config.debug ? `\n${err.stack}` : ''}`);
         });
     });
 };
@@ -90,14 +91,14 @@ function handleCmdErr(msg, cmd, err) {
             return dm.createMessage(`It appears I was unable to send a message in \`#${msg.channel.name}\` on the server \`${msg.channel.guild.name}\`. Please give me the Send Messages permission or notify a mod or admin if you cannot do this.`);
         }).catch(() => logger.warn(`Couldn't get DM channel for/send DM to ${utils.formatUsername(msg.author)} (${msg.author.id})`));
     } else if (resp && /\{'code':.+, 'message':.+\}/.test(err.response) && resp.code !== 50013) {
-        logger.warn(loggerPrefix(msg) + `Discord error running command "${cmd}":\n:${bot.config.debug ? err.stack : err}`); // eslint-disable-line prefer-template
+        logger.warn(loggerPrefix(msg) + `Discord error running command "${cmd}":\n:${config.debug ? err.stack : err}`); // eslint-disable-line prefer-template
         let m = `Discord error while trying to execute \`${cmd}\`\n`;
         m += '```js\n';
         m += `Code: ${resp.code}. Message: ${resp.message}\n`;
         m += "``` If you feel this shouldn't be happening, join my support server. Invite can be found in the `invite` command.";
         msg.channel.createMessage(m);
     } else {
-        logger.error(loggerPrefix(msg) + `Error running command "${cmd}":\n${bot.config.debug ? err.stack || err : err}`); // eslint-disable-line prefer-template
+        logger.error(loggerPrefix(msg) + `Error running command "${cmd}":\n${config.debug ? err.stack || err : err}`); // eslint-disable-line prefer-template
         let m = `Experienced error while executing \`${cmd}\`\n`;
         m += '```js\n';
         m += err + '\n'; // eslint-disable-line prefer-template
