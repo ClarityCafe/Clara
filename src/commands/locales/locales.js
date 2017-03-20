@@ -27,6 +27,7 @@ exports.locales = {
                 if (!ctx.msg.member.permission.has('manageGuild')) {
                     ctx.msg.channel.createMessage(localeManager.t('user-noPerm', 'en-UK', {perm: 'Manage guild'})).then(resolve).catch(reject);
                 } else {
+                    exposed = bot;
                     changeLocale(ctx, true).then(resolve).catch(reject);
                 }
             } else {
@@ -58,7 +59,6 @@ function localeBlock(settings) {
 
 function changeLocale(ctx, guild) {
     return new Promise((resolve, reject) => {
-        let bot = exposed;
         let real;
         if (!guild) {
             for (let locale in localeManager.locales) {
@@ -70,26 +70,28 @@ function changeLocale(ctx, guild) {
 
             let userChoice = ctx.args[1].split('-')[0].toLowerCase() + '-' + ctx.args[1].split('-')[1].toUpperCase();
             if (!real) {
-                ctx.msg.channel.createMessage(localeManager.t('locales-invalidLocale', ctx.settings.locale, {locale: userChoice})).then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('locales-invalidLocale', userChoice, {locale: userChoice})).then(resolve).catch(reject);
             } else {
+                let bot = exposed;
                 bot.setUserSettings(ctx.msg.author.id, {locale: userChoice}).then(() => {
-                    return ctx.msg.channel.createMessage(localeManager.t('locales-userLocaleUpdated', ctx.settings.locale, {locale: userChoice}));
+                    return ctx.msg.channel.createMessage(localeManager.t('locales-userLocaleUpdated', userChoice, {locale: userChoice}));
                 }).then(resolve).catch(reject);
             }
         } else {
             for (let locale in localeManager.locales) {
-                if (ctx.args[1].toLowerCase() === locale.toLowerCase()) {
+                if (ctx.args[2].toLowerCase() === locale.toLowerCase()) {
                     real = true;
                     break;
                 }
             }
 
-            let userChoice = ctx.args[1].split('-')[0].toLowerCase() + '-' + ctx.args[1].split('-')[1].toUpperCase();
+            let userChoice = ctx.args[2].split('-')[0].toLowerCase() + '-' + ctx.args[2].split('-')[1].toUpperCase();
             if (!real) {
                 ctx.msg.channel.createMessage(localeManager.t('locales-invalidLocale', ctx.settings.locale, {locale: userChoice})).then(resolve).catch(reject);
             } else {
+                let bot = exposed;
                 bot.setGuildSettings(ctx.msg.channel.guild.id, {locale: userChoice}).then(() => {
-                    return ctx.msg.channel.createMessage(localeManager.t('locales-guildLocaleUpdated', ctx.settings.locale, {locale: userChoice}));
+                    return ctx.msg.channel.createMessage(localeManager.t('locales-guildLocaleUpdated', userChoice, {locale: userChoice}));
                 }).then(resolve).catch(reject);
             }
         }
