@@ -3,9 +3,12 @@
     "bot-noPerm": "Je n'ai pas la permission  **{{perm}}**.",
     "incorrectUsage": "Usage Incorrect",
     "exampleUsage": "Exemple d'usage",
+    "yes": "Oui",
+    "no": "Non",
     "none": "Aucun",
     "locales": {
         "en-UK": "Anglais (UK)",
-        "fr-CA": "Français (Canada)"
+        "fr-CA": "Français (Canada)",
+        "es-SPA": "Espanol"
     }
 }
