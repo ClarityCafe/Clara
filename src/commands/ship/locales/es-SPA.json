@@ -1,4 +1,4 @@
 {
     "ship-noArgs": "Dame al menos dos nombres.",
-    "ship": "Feliz shipeo!\nEl nombre de tu ship es: **{{result}}**!"
+    "ship": "Feliz shipeo!\nEl nombre de tu ship es: **{{result}}**! :heart:"
 }
