@@ -25,7 +25,7 @@ exports.locales = {
                 changeLocale(ctx).then(resolve).catch(reject);
             } else if (ctx.args.length === 3 && ctx.args[1] === 'guild' && /[a-z]{2}-[A-Z]{2}/i.test(ctx.args[2])) {
                 if (!ctx.msg.member.permission.has('manageGuild')) {
-                    ctx.msg.channel.createMessage(localeManager.t('user-noPerm', 'en-UK', {perm: 'Manage guild'})).then(resolve).catch(reject);
+                    ctx.msg.channel.createMessage(localeManager.t('user-noPerm', 'en-UK', {perm: 'Manage Guild'})).then(resolve).catch(reject);
                 } else {
                     exposed = bot;
                     changeLocale(ctx, true).then(resolve).catch(reject);
