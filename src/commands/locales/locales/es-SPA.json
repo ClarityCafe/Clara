@@ -3,7 +3,7 @@
     "locales-userLocale": "Idioma del usuario: {{locale}}",
     "locales-guildLocale": "Idioma del gremio: {{locale}}",
     "exampleUsage": "Ejemplo de uso:",
-    "loacales-invalidLocale": "**{{locale}}** no es un idioma soportado.",
+    "locales-invalidLocale": "**{{locale}}** no es un idioma soportado.",
     "locales-userLocaleUpdated": "Su idioma ha sido cambiado a **{{locale}}**",
     "locales-guildLocaleUpdated": "El idioma del gremio ha sido actualizado a **{{locale}}**"
 }
