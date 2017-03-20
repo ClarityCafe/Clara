@@ -32,7 +32,7 @@ exports.osu = {
                     if (!user || !user.user_id) {
                         ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
                     } else {
-                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
+                        ctx.msg.channel.createMessage(osuBlock(user, ctx.settings)).then(resolve).catch(reject);
                     }
                 });
             }
@@ -55,7 +55,7 @@ exports.ctb = {
                     if (!user || !user.user_id) {
                         ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
                     } else {
-                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
+                        ctx.msg.channel.createMessage(osuBlock(user, ctx.settings)).then(resolve).catch(reject);
                     }
                 });
             }
@@ -78,7 +78,7 @@ exports.mania = {
                     if (!user || !user.user_id) {
                         ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
                     } else {
-                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
+                        ctx.msg.channel.createMessage(osuBlock(user, ctx.settings)).then(resolve).catch(reject);
                     }
                 });
             }
@@ -101,7 +101,7 @@ exports.taiko = {
                     if (!user || !user.user_id) {
                         ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
                     } else {
-                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
+                        ctx.msg.channel.createMessage(osuBlock(user, ctx.settings)).then(resolve).catch(reject);
                     }
                 });
             }
@@ -109,7 +109,7 @@ exports.taiko = {
     }
 };
 
-function osuBlock(user) {
+function osuBlock(user, settings) {
     return {embed: {
         title: `osu! stats for **${user.username}**`,
         url: `https://osu.ppy.sh/u/${user.user_id}`,
