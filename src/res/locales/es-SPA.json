@@ -1,0 +1,14 @@
+{
+    "user-noPerm": "Requieres el permiso **{{perm}}** para poder ejecutar este comando.",
+    "bot-noPerm": "No tengo el permiso **{{perm}}**.",
+    "incorrectUsage": "Uso incorrecto.",
+    "exampleUsage": "Ejemplo de uso:",
+    "yes": "Si",
+    "no": "No",
+    "none": "Ninguno",
+    "locales": {
+        "en-UK": "Inglés (UK)",
+        "fr-CA": "Francés (Canadá)",
+        "es-SPA": "Español"
+    }
+}
