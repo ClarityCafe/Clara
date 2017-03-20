@@ -9,6 +9,7 @@
     "none": "None",
     "locales": {
         "en-UK": "English (UK)",
-        "fr-CA": "French (Canada)"
+        "fr-CA": "French (Canada)",
+        "es-SPA": "Spanish"
     }
 }

@@ -17,5 +17,5 @@
     "purge-finishEmbeds": "Eliminado {{amt}} links.",
     "purge-finishAttachments": "Eliminado {{amt}} adjuntos.",
     "purge-finishImages": "Eliminado {{amt}} imágenes.",
-    "purge-badRegex": "Expresión regex inválida o insegura.",
+    "purge-badRegex": "Expresión regex inválida o insegura."
 }
