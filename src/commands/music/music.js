@@ -126,7 +126,7 @@ exports.stop = {
                     ctx.msg.channel.createMessage(localeManager.t('music-notSameChan', ctx.settings.locale)).then(resolve).catch(reject);
                 } else {
                     bot.music.connections.get(ctx.msg.channel.guild.id).stopPlaying();
-                    ctx.msg.channel.createMessage(localeManager.t('music-stopQuestion')).then(() => {
+                    ctx.msg.channel.createMessage(localeManager.t('music-stopQuestion', ctx.settings.locale)).then(() => {
                         return bot.awaitMessage(ctx.msg.channel.id, ctx.msg.author.id);
                     }).then(m => {
                         if (/y(es)?/i.test(m.content)) {
