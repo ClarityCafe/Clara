@@ -18,7 +18,7 @@ exports.about = {
             let version = JSON.parse(fs.readFileSync(`${__baseDir}/package.json`)).version;
             ctx.msg.channel.createMessage({embed: {
                 title: 'About Clara',
-                description: localeManager.t('about-nya', ctx.settings.locale, {url: 'https://github.com/awau/Clara', patreon-url: 'https://patreon.com/capuccino'}),
+                description: localeManager.t('about-nya', ctx.settings.locale, {github: 'https://github.com/awau/Clara', patreon: 'https://patreon.com/capuccino'}),
                 image: {url: 'https://github.com/awau/Clara/raw/master/nodebot_logo.png'},
                 footer: {text: `${bot.user.username} uses Clara ${version}`}
 
