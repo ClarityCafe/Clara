@@ -24,7 +24,8 @@
     "bluebird": "^3.5.0",
     "chalk": "^1.1.3",
     "eris": "github:abalabahaha/eris",
-    "rethinkdbdash": "^2.3.28"
+    "rethinkdbdash": "^2.3.28",
+    "decache": "^4.1.0"
   },
   "devDependencies": {
     "eslint": "^3.18.0",
