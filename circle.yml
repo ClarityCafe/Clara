@@ -1,0 +1,17 @@
+version: 2
+dependencies:
+ post: docker ./install-pacakges
+ 
+jobs:
+  build:
+    docker:
+      - image: node:7.4.0
+    working_directory: src
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - run:
+          name: Docker Build
+          command: docker build -f Dockerfile -t Clara:continous .
