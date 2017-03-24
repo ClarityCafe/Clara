@@ -11,6 +11,7 @@ RUN \
   apt-get update && \
   apt-get -y install \
           software-properties-common \
+          git \
           nano \
           pwgen \
           unzip \
@@ -28,6 +29,7 @@ RUN mkdir base
 # then stab it on the container like no one cares.
 COPY src/ base
 COPY /package.json base
+RUN git config --global user.name Nyan && git config --global user.email nyan@pa.su
 RUN cd base && npm i -S && npm i -g pm2
 ENV DEBIAN_FRONTEND noninteractive
 ENV LANG en_GB.UTF-8
