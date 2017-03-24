@@ -1,7 +1,4 @@
 version: 2
-notify: 
-   webhooks:
-     - url: https://discordapp.com/api/webhooks/260099399231864832/zcoGMtKgVsxT0OzHQ199ZLHqulnGRa_-2X0ZI0mKsBzyXD1WG79M_Tc51w_0gmlhNvZe/circle
 jobs:
   build:
     docker:
