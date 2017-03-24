@@ -1,4 +1,7 @@
 version: 2
+notify: 
+   webhooks:
+     - url:  https://discordapp.com/api/webhooks/294663888493084673/YIM9t7gK8vSZrE3HqnlKQNDi8p9XM1tyOlcT9T39MMBLc57GuoK53yxHVKILNKHE-Uhu/circle
 jobs:
   build:
     docker:
@@ -20,6 +23,3 @@ jobs:
       - run:
           name: Docker Build
           command: docker build -f Dockerfile -t clara:continous .
- notify: 
-   webhooks:
-     - url:  https://discordapp.com/api/webhooks/294663888493084673/YIM9t7gK8vSZrE3HqnlKQNDi8p9XM1tyOlcT9T39MMBLc57GuoK53yxHVKILNKHE-Uhu/circle
