@@ -16,7 +16,9 @@ RUN \
           unzip \
           curl \
           build-essential \
-          ffmpeg
+          ffmpeg \
+          nodejs-legacy \
+          npm
 RUN echo $'#!/bin/sh\nexit 101' > /usr/sbin/policy-rc.d
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
 RUN chmod +x /usr/sbin/policy-rc.d
