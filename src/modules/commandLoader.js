@@ -93,25 +93,15 @@ function loadCommands() {
                 commandPackage = require(`${__baseDir}/${commandsDirectory}/${cmdFolder}/package.json`);
                 command = require(`${__baseDir}/${commandsDirectory}/${cmdFolder}/${commandPackage.main}`);
             } catch(err) {
-                logger.customError('commandLoader/loadCommands', `Experienced error while loading command '${cmdFolder}', skipping...\n${err}`);
+                logger.customError('commandLoader/loadCommands', `Experienced error while loading module '${cmdFolder}', skipping...\n${err}`);
                 unloadedCommands.push(cmdFolder);
             }
 
             if (command) {
-                if (command.commands) {
-                    bot.commands.addModule(cmdFolder);
-                    for (let cmd of command.commands) {
-                        if (command[cmd]) {
-                            try {
-                                bot.commands.addCommand(cmd, command[cmd]);
-                                logger.custom('blue', 'commandLoader/loadCommands', `Successfully loaded command '${cmd}'`);
-                            } catch(err) {
-                                logger.customError('commandLoader/loadCommands', `Error when attempting to load command '${cmd}':\n${err}`);
-                            }
-                        }
-                    }
-                } else {
-                    logger.customError('commandLoader/loadCommands', `Command '${cmdFolder}' not properly set up, skipping...\nCommand array not found.`);
+                try {
+                    bot.commands.addModule(commandPackage.main.slice(0, -3), command);
+                } catch(err) {
+                    logger.customError('commandLoader/loadCommands', `Experienced error while loading module '${cmdFolder}', skipping...\n${err}`);
                     unloadedCommands.push(cmdFolder);
                 }
             }
