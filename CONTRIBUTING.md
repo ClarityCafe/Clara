@@ -67,4 +67,8 @@ PRs are only accepted in the ``development``branch. if you PR to ``master``, it 
 
 # Code Verification
 
-We use CodeClimate for code coverage. If your code falls below A, it may not be merged.
+We use CodeClimate for code coverage. If your code falls below A, it would not be merged.
+
+# Docker CI
+
+We use CircleCI to test if the Dockerfile can build. If you edited the Dockerfile and it fails, your PR would not be merged.
