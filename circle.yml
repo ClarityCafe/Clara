@@ -19,4 +19,4 @@ jobs:
           command: npm i -S
       - run:
           name: Docker Build
-          command: docker build -f Dockerfile -t Clara:continous .
+          command: docker build -f Dockerfile -t clara:continous .
