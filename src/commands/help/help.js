@@ -13,7 +13,7 @@ exports.help = {
     fullDesc: 'Displays information for all the avaliable commands in the bot. If an argument is given, displays additional information on that command.',
     usage: '[command]',
     fixed: true,
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.args.length === 0) {
                 let embedTemplate = {title: `${bot.user.username} Help`, description: `**Main Prefix:** ${bot.config.mainPrefix}`, color: 2201331};

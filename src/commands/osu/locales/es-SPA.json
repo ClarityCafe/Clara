@@ -1,0 +1,20 @@
+{
+    "osu-noName": "Por favor, dame un nombre para buscar.",
+    "osu-noRes": "Un usuario con ese nombre o ID no pudo ser encontrado.",
+    "none": "Ninguno",
+    "osu-country": "País",
+    "osu-countryRank": "Rango en el país",
+    "osu-playCount": "Mapas jugados",
+    "osu-300s": "300s obtenidos",
+    "osu-100s": "100s obtenidos",
+    "osu-50s": "50s obtenidos",
+    "osu-rankedScore": "Puntuación en modo Ranked",
+    "osu-totalScore": "Puntuación total",
+    "osu-pp": "PP",
+    "osu-level": "Nivel",
+    "osu-rank": "Rango",
+    "osu-accuracy": "Precisión",
+    "osu-ss": "Cantidad de SS",
+    "osu-s": "Cantidad de S",
+    "osu-a": "Cantidad de A"
+}

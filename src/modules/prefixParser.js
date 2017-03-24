@@ -5,14 +5,13 @@
  */
 
 const fs = require('fs');
-const bot = require(`${__baseDir}/bot.js`).bot;
 
 /**
  * Parse a message's content to check if it starts with a registered prefix.
  * @arg {String} content Message content to check.
  * @returns {?String} Content without the prefix if the content starts with a prefix.
  */
-function parse(content) {
+function parse(bot, content) {
     return new Promise((resolve, reject) => {
         if (typeof content !== 'string') {
             reject(new Error('content is not a string'));
