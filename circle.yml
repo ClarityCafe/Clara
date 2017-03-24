@@ -5,11 +5,16 @@ notify:
 jobs:
   build:
     docker:
-      - image: node:7.4.0
+      - image: ubuntu:16.04
     working_directory: src
     steps:
       - setup_remote_docker
       - checkout
+      - run:
+         name: Install Node
+         command : |
+            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+            nvm install v6.10.0
       - run:
           name: Install Docker client
           command: |
