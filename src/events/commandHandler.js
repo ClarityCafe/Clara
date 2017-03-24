@@ -19,7 +19,7 @@ module.exports = bot => {
 
             let {args, cmd, suffix} = res;
 
-            if (bot.commands.getCommand(cmd)) {
+            if (bot.commands.checkCommand(cmd)) {
                 logger.cmd(loggerPrefix(msg) + msg.cleanContent);
 
                 let settings = {};
@@ -29,30 +29,52 @@ module.exports = bot => {
                     return bot.getUserSettings(msg.author.id);
                 }).then(res => {
                     settings.user = res;
-                    settings.locale = settings.user.locale !== 'en-UK' ? settings.user.locale : settings.guild.locale;
+                    settings.locale = settings.user.locale !== localeManager.fallbackLocale ? settings.user.locale : settings.guild.locale;
 
                     let cleanSuffix = msg.cleanContent.split(cmd)[1];
                     let guildBot = msg.channel.guild.members.get(bot.user.id);
 
                     let ctx = {msg, args, cmd, suffix, cleanSuffix, guildBot, settings};
 
-                    if (bot.commands.getCommand(cmd).adminOnly && utils.checkBotPerms(msg.author.id)) {
-                        bot.commands.runCommand(cmd, bot, ctx).then(() => {
-                            logger.cmd(loggerPrefix(msg) + `Successfully ran owner command '${cmd}'`); // eslint-disable-line prefer-template
-                        }).catch(err => {
-                            handleCmdErr(msg, cmd, err);
-                        });
-                        return null;
-                    } else if (bot.commands.getCommand(cmd).adminOnly) {
-                        return null;
-                    } else {
-                        bot.commands.runCommand(cmd, bot, ctx).then(() => {
-                            logger.cmd(loggerPrefix(msg) + `Successfully ran command '${cmd}'`); // eslint-disable-line prefer-template
+                    if (args.length > 0 && bot.commands.getCommand(cmd).subcommands && bot.commands.getCommand(cmd).subcommands[args[0]]) {
+                        ctx.args = ctx.args.slice(1);
+                        if ((bot.commands.getCommand(cmd).adminOnly || bot.commands.getCommand(cmd).subcommands[args[0]].adminOnly) && utils.checkBotPerms(msg.author.id)) {
+                            bot.commands.runCommand(cmd, bot, ctx, args[0]).then(() => {
+                                logger.cmd(loggerPrefix(msg) + `Successfully ran owner command '${cmd}'`); // eslint-disable-line prefer-template
+                            }).catch(err => {
+                                handleCmdErr(msg, cmd, err);
+                            });
                             return null;
-                        }).catch(err => {
-                            handleCmdErr(msg, cmd, err);
-                        });
-                        return null;
+                        } else if (bot.commands.getCommand(cmd).adminOnly || bot.commands.getCommand(cmd).subcommands[args[0]]) {
+                            return null;
+                        } else {
+                            bot.commands.runCommand(cmd, bot, ctx, args[0]).then(() => {
+                                logger.cmd(loggerPrefix(msg) + `Successfully ran command '${cmd}'`); // eslint-disable-line prefer-template
+                                return null;
+                            }).catch(err => {
+                                handleCmdErr(msg, cmd, err);
+                            });
+                            return null;
+                        }
+                    } else {
+                        if (bot.commands.getCommand(cmd).adminOnly && utils.checkBotPerms(msg.author.id)) {
+                            bot.commands.runCommand(cmd, bot, ctx).then(() => {
+                                logger.cmd(loggerPrefix(msg) + `Successfully ran owner command '${cmd}'`); // eslint-disable-line prefer-template
+                            }).catch(err => {
+                                handleCmdErr(msg, cmd, err);
+                            });
+                            return null;
+                        } else if (bot.commands.getCommand(cmd).adminOnly) {
+                            return null;
+                        } else {
+                            bot.commands.runCommand(cmd, bot, ctx).then(() => {
+                                logger.cmd(loggerPrefix(msg) + `Successfully ran command '${cmd}'`); // eslint-disable-line prefer-template
+                                return null;
+                            }).catch(err => {
+                                handleCmdErr(msg, cmd, err);
+                            });
+                            return null;
+                        }
                     }
                 }).catch(err => logger.error(err.stack));
             }
