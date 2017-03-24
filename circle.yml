@@ -21,7 +21,6 @@ jobs:
           chmod +x  /usr/bin/docker-compose
           
        - type: setup-docker-engine
-       - type: shell
        
         name: Verify Docker Works
         command: |
