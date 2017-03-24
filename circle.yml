@@ -16,7 +16,7 @@ jobs:
             mv /tmp/docker/* /usr/bin
       - run:
           name: Install Dependencies
-          command: npm install && sudo apt install docker docker.io
+          command: npm i -S
       - run:
           name: Docker Build
           command: docker build -f Dockerfile -t Clara:continous .
