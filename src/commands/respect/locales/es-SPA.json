@@ -1,0 +1,6 @@
+{
+    "respects": "{{user}} ha dado sus respetos.",
+    "respects-args": "{{user}} ha dado sus respetos por **{{object}}**.",
+    "rip": "Descansa para siempre en paz.",
+    "rip-args": "<{{url}}> Descansa para siempre en paz."
+}

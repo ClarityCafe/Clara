@@ -10,9 +10,42 @@ const fs = require('fs');
 try {
     require.resolve(`${__dirname}/lines.txt`);
 } catch(err) {
-    logger.custom('blue', 'commands/chatbot', 'Markov line file not found. Generating pre-seeded one.');
+    logger.custom('yellow', 'commands/chatbot', 'Markov line file not found. Generating pre-seeded one.');
     fs.writeFileSync(`${__dirname}/lines.txt`, fs.readFileSync(`${__dirname}/sample.txt`).toString());
 }
+
+exports.commands = [
+    'chat'
+];
+
+exports.chat = {
+    desc: 'Chat with the bot.',
+    longDesc: 'Uses an algorithm to simulate chatting with a human. May be extremely dumb and offtopic at times.',
+    usage: '<message>',
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            if (!ctx.suffix) {
+                ctx.msg.channel.createMessage(localeManager.t('chatbot-noArgs', ctx.settings.locale)).then(resolve).catch(reject);
+            } else if (/how (dumb|smart) are you\??/i.test(ctx.suffix.toLowerCase())) {
+                readLines().then(lines => {
+                    return ctx.msg.channel.createMessage(`I currently know **${lines.length}** things.`);
+                }).then(resolve).catch(reject);
+            } else {
+                let chat;
+                readLines().then(lines => {
+                    chat = new Markov(lines, {stateSize: 3});
+                    return chat.buildCorpus();
+                }).then(() => {
+                    return appendLines(ctx.suffix);
+                }).then(() => {
+                    return chat.generateSentence({maxLength: 420});
+                }).then(sent => {
+                    return ctx.msg.channel.createMessage(sent.string);
+                }).then(resolve).catch(reject);
+            }
+        });
+    }
+};
 
 function readLines() {
     return new Promise((resolve, reject) => {
@@ -37,36 +70,3 @@ function appendLines(msg) {
         });
     });
 }
-
-exports.commands = [
-    'chat'
-];
-
-exports.chat = {
-    desc: 'Chat with the bot.',
-    longDesc: 'Uses an algorithm to simulate chatting with a human. May be extremely dumb and offtopic at times.',
-    usage: '<message>',
-    main: (bot, ctx) => {
-        return new Promise((resolve, reject) => {
-            if (!ctx.suffix) {
-                ctx.msg.channel.createMessage(localeManager.t('chatbot-noArgs', ctx.settings.locale)).then(resolve).catch(reject);
-            } else if (/how (dumb|smart) are you\??/i.test(ctx.suffix.toLowerCase())) {
-                readLines().then(lines => {
-                    return ctx.msg.channel.createMessage(`I currently know **${lines.length}** things.`);
-                }).then(resolve).catch(reject);
-            } else {
-                let chat;
-                readLines().then(lines => {
-                    chat = new Markov(lines, {stateSize: 3});
-                    return chat.buildCorpus();
-                }).then(() => {
-                    return appendLines(ctx.suffix);
-                }).then(() => {
-                    return chat.generateSentence({maxLength: 420});
-                }).then(sent => {
-                    return ctx.msg.channel.createMessage(sent.string);
-                }).then(resolve).catch(reject);
-            }
-        });
-    }
-};

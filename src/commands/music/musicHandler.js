@@ -11,13 +11,13 @@ const twitch = require('twitch.tv');
 const twitchStream = require('twitch-get-stream')(config.twitchKey);
 const request = require('request');
 const PassThrough = require('stream').PassThrough;
-const utils = require(`${__baseDir}/lib/utils`);
+const utils = require(`${__baseDir}/modules/utils`);
 
-var ytRegex = exports.ytRegex = str => /(https?:\/\/)?(www\.|m.)?youtube\.com\/watch\?v=.+(&.+)?/.test(str) || /(https?:\/\/)?youtu\.be\/.+/.test(str);
-var scRegex = exports.scRegex = str => /(https?:\/\/)?soundcloud\.com\/.+\/.+/.test(str);
-var clypRegex = exports.clypRegex = str => /(https?:\/\/)?clyp\.it\/.+/.test(str);
-var twitchRegex = exports.twitchRegex = str => /(https?:\/\/)?twitch\.tv\/.+/.test(str);
-var allRegex = exports.allRegex = str => ytRegex(str) || scRegex(str) || clypRegex(str) || twitchRegex(str); // eslint-disable-line no-unused-vars
+const ytRegex = exports.ytRegex = str => /(https?:\/\/)?(www\.|m.)?youtube\.com\/watch\?v=.+(&.+)?/.test(str) || /(https?:\/\/)?youtu\.be\/.+/.test(str);
+const scRegex = exports.scRegex = str => /(https?:\/\/)?soundcloud\.com\/.+\/.+/.test(str);
+const clypRegex = exports.clypRegex = str => /(https?:\/\/)?clyp\.it\/.+/.test(str);
+const twitchRegex = exports.twitchRegex = str => /(https?:\/\/)?twitch\.tv\/.+/.test(str);
+const allRegex = exports.allRegex = str => ytRegex(str) || scRegex(str) || clypRegex(str) || twitchRegex(str); // eslint-disable-line no-unused-vars
 exports.exposed = {};
 
 var search = exports.search = (msg, terms) => { // eslint-disable-line no-unused-vars
