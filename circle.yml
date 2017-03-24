@@ -1,7 +1,4 @@
 version: 2
-dependencies:
- post: docker ./install-pacakges
- 
 jobs:
   build:
     docker:
@@ -11,7 +8,7 @@ jobs:
       - checkout
       - run:
           name: Install Dependencies
-          command: npm install
+          command: npm install && sudo apt install docker docker.io
       - run:
           name: Docker Build
           command: docker build -f Dockerfile -t Clara:continous .
