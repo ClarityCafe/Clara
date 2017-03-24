@@ -14,7 +14,7 @@ const localeDir = `${__baseDir}/res/locales`;
  * @prop {String} localeDir The directory where locales are stored.
  */
 
-class localeManager {
+class LocaleManager {
 
     /**
      * Create the locale manager object.
@@ -96,4 +96,4 @@ class localeManager {
     }
 }
 
-module.exports = new localeManager();
+module.exports = LocaleManager;
