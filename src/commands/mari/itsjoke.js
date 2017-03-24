@@ -1,9 +1,7 @@
-/* It's Joke!
+/* 
+ * itsjoke.js - Mari memes.
  *
- * Contributed by Ohara Mari.
- *
- * Don't ask why is this a thing.
- *
+ * Contributed by Capuccino and Ovyerus.
  */
 
 const fs = require('fs');
@@ -15,12 +13,13 @@ exports.commands = [
 var files = fs.readdirSync(`${__baseDir}/res/itsjoke`);
 
 exports.mari = {
-    desc: "It's Joke!",
-    main: (bot, ctx) => {
+    desc: "It's joke!",
+    longDesc: "Send a random picture of the it's joke meme.",
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             ctx.msg.channel.sendTyping();
-            var fileName = files[Math.floor(Math.random() * files.length)];
-            var file = fs.readFileSync(`${__baseDir}/res/${fileName}`);
+            let fileName = files[Math.floor(Math.random() * files.length)];
+            let file = fs.readFileSync(`${__baseDir}/res/itsjoke/${fileName}`);
             ctx.msg.channel.createMessage('', {file, name: fileName}).then(resolve).catch(reject);
         });
     }

@@ -4,12 +4,11 @@
  * Contributed by Ovyerus
  */
 
-
 const os = require('os');
 const prettyBytes = require('pretty-bytes');
 const fs = require('fs');
 const path = require('path');
-const utils = require(`${__baseDir}/lib/utils.js`);
+const utils = require(`${__baseDir}/modules/utils`);
 var version;
 
 try {
@@ -18,14 +17,13 @@ try {
     version = JSON.parse(fs.readFileSync(`${__baseDir}/package.json`)).version;
 }
 
-
 exports.commands = [
     'info'
 ];
 
 exports.info = {
     desc: 'Information about the bot.',
-    main: (bot, ctx) => {
+    main(bot, ctx) {
         return new Promise((resolve, reject) => {
             let date = new Date();
             let sysTime = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${date.getDate()}\n${('0' + (date.getHours() + 1)).slice(-2)}:${('0' + (date.getMinutes() + 1)).slice(-2)}:${('0' + (date.getSeconds() + 1)).slice(-2)}`;
@@ -45,6 +43,7 @@ exports.info = {
                     {name: localeManager.t('info-os', ctx.settings.locale), value: os.platform(), inline: true},
                     {name: localeManager.t('info-shards', ctx.settings.locale), value: bot.shards.size, inline: true},
                     {name: localeManager.t('info-mem', ctx.settings.locale), value: prettyBytes(process.memoryUsage().rss), inline: true},
+                    {name: localeManager.t('info-NodeVersion'), value: process.version},
                     {name: localeManager.t('info-version', ctx.settings.locale), value: version, inline: true}
                 ],
                 footer: {text: localeManager.t('info-footer', ctx.settings.locale, {name: bot.user.username})}
