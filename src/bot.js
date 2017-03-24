@@ -9,13 +9,13 @@
 // Module requies
 const Eris = require('eris');
 const fs = require('fs');
-const CommandHolder = require(`${__dirname}/modules/commands`);
+const CommandHolder = require(`${__dirname}/modules/CommandHolder`);
 
 // Global variables
 global.__baseDir = __dirname;
 global.Promise = require('bluebird');
 global.logger = require(`${__dirname}/modules/logger`);
-global.localeManager = require(`${__dirname}/modules/localeManager`);
+global.localeManager = new (require(`${__dirname}/modules/LocaleManager`))();
 
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
@@ -59,7 +59,7 @@ try {
 
 // Bot object modification
 bot.db = require('rethinkdbdash')(config.rethinkOptions);
-bot.commands = new CommandHolder();
+bot.commands = new CommandHolder(bot);
 bot.config = config;
 bot.loadCommands = true;
 bot.allowCommandUse = false;
