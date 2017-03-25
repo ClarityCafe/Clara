@@ -4,10 +4,13 @@ module.exports = bot => {
     bot.on('ready', () => {
         if (bot.loadCommands) {
             let meme;
-            require(`${__baseDir}/modules/commandLoader`).init().then(() => {
+            localeManager.loadLocales().then(() => {
+                logger.info(`Loaded ${Object.keys(localeManager.locales).length} locales.`);
+                return require(`${__baseDir}/modules/commandLoader`).init();
+            }).then(() => {
                 logger.info(`Loaded ${bot.commands.length} ${bot.commands.length === 1 ? 'command' : 'commands'}.`);
-                return localeManager.loadLocales();
-            }).then(() => bot.db.tableList().run()).then(res => {
+                return bot.db.tableList().run();
+            }).then(res => {
                 meme = res;
                 if (res.indexOf('guild_settings') === -1) {
                     logger.info('Setting up "guild_settings" table in database.');
