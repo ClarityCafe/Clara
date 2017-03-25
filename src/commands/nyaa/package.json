@@ -1,6 +1,4 @@
 {
     "main": "azusa.js",
-    "dependencies": {
-        "got" : "6.7.1"
-    }
+    "dependencies": {}
 }
