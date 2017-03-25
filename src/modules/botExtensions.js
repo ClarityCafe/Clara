@@ -1,5 +1,5 @@
 const bot = require(`${__baseDir}/bot.js`).bot;
-const request = require('request');
+const got = require('got');
 
 /**
  * Wait for a message in the specified channel from the specified user.
@@ -71,6 +71,15 @@ bot.postGuildCount = () => {
                 logger.info('POSTed to DBots.');
             }
         });
+
+        got(`https://bots.discord.pw/api/bots/${bot.user.id}/stats`, {
+            method: 'POST',
+            headers: {Authentication: bot.config.discordBotsKey},
+            json: true,
+            body: {server_count: bot.guilds.size}
+        }).then(() => {
+            logger.info('POSTed to DBots.');
+        }).catch(err => logger.error(`Unable to POST to DBots: ${err}`));
     }
 };
 
