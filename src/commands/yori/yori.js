@@ -5,7 +5,7 @@
  */
 
 const cheerio = require('cheerio');
-const request = require('request');
+const got = require('got');
 
 const dirRegex = /.+\//;
 const imgRegex = /.+\.(?:png|jpg)/;
@@ -22,35 +22,18 @@ exports.yori = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             ctx.msg.channel.sendTyping();
-            request(baseUrl, (err, res, body) => {
-                if (err) {
-                    reject(err);
-                } else if (res.statusCode !== 200) {
-                    reject(new Error(`Invalid status code: ${res.statusCode}`));
-                } else {
-                    var $ = cheerio.load(body);
-                    var albums = $('a').text().trim().substring('Parent Directory'.length).trim().split(' ').filter(alb => {
-                        return dirRegex.test(alb);
-                    }).filter(alb => {
-                        return ignore.indexOf(alb) === -1;
-                    });
-                    var album = albums[Math.floor(Math.random() * albums.length)];
-                    request(baseUrl + album, (e, r, b) => {
-                        if (e) {
-                            reject(e);
-                        } else if (r.statusCode !== 200) {
-                            reject(new Error(`Invalid status code: ${r.statusCode}`));
-                        } else {
-                            $ = cheerio.load(b);
-                            var imgs = $('a').text().trim().substring('Parent Directory'.length).trim().split(' ').filter(i => {
-                                return imgRegex.test(i);
-                            });
-                            var img = imgs[Math.floor(Math.random() * albums.length)];
-                            ctx.msg.channel.createMessage(baseUrl + album + img).then(resolve).catch(reject);
-                        }
-                    });
-                }
-            });
+            let albums, album;
+            got(baseUrl).then(res => {
+                let $ = cheerio.load(res.body);
+                albums = $('a').text().trim().substring(16).trim().split(' ').filter(alb => dirRegex.test(alb)).filter(alb => !~ignore.indexOf(alb));
+                album = albums[Math.floor(Math.random() * albums.length)];
+                return got(baseUrl + album);
+            }).then(res => {
+                let $ = cheerio.load(res.body);
+                let imgs = $('a').text().trim().substring(16).trim().split(' ').filter(i => imgRegex.test(i));
+                let img = imgs[Math.floor(Math.random() * albums.length)];
+                return ctx.msg.channel.createMessage(baseUrl + album + img);
+            }).then(resolve).catch(reject);
         });
     }
 };
