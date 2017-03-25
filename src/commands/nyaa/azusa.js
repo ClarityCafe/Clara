@@ -16,9 +16,9 @@ exports.nyaa = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             got('http://random.cat/meow').then(res => {
-                let nyaa = JSON.parse(res.body).file;
-                ctx.msg.channel.createMessage(nyaa).then(resolve).catch(reject);
-            }).catch(reject(new Error('Unexpected Error happened.')));
+                let kitty = JSON.parse(res.body).file;
+                return ctx.msg.channel.createMessage(kitty);
+            }).then(resolve).catch(reject);
         });
     }
 };
