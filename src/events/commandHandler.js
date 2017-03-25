@@ -104,7 +104,7 @@ function loggerPrefix(msg) {
  * @param {Object} err The error object to analyse.
  */
 function handleCmdErr(msg, cmd, err) {
-    if (err.response) var resp = JSON.parse(err.response);
+    if (err.response && typeof err.response === 'string') var resp = JSON.parse(err.response);
     if (resp && resp.code === 50013) {
         logger.warn(`Can't send message in '#${msg.channel.name}' (${msg.channel.id}), cmd from user '${
         utils.formatUsername(msg.author)}' (${msg.author.id})`);
