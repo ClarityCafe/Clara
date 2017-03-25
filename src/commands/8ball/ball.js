@@ -5,12 +5,15 @@
  */
 
 const responses = ['yes', 'no'];
-let filterKeys = Object.keys(localeManager.locales['en-UK']).filter(k => /^ball-response\d+$/.test(k));
-for (let key of filterKeys) responses.push(key);
 
 exports.commands = [
     'ball'
 ];
+
+exports.init = () => {
+    let filterKeys = Object.keys(localeManager.locales['en-UK']).filter(k => /^ball-response\d+$/.test(k));
+    for (let key of filterKeys) responses.push(key);
+}
 
 exports.ball = {
     desc: 'Make the bot decide for you or do some things.',
