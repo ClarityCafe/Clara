@@ -1,6 +1,6 @@
 {
     "main": "azusa.js",
     "dependencies": {
-        "request": "^2.78.0"
+        "got" : "6.7.1"
     }
 }
