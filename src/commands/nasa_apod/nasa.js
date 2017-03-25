@@ -4,7 +4,7 @@
  * Contributed by Capuccino and Ovyerus
  */
 
-const request = require('request');
+const got = require('got');
 
 exports.commands = [
     'apod'
@@ -17,23 +17,17 @@ exports.apod = {
             if (!bot.config.nasaKey) {
                 ctx.msg.channel.createMessage(localeManager.t('nasa-noKey', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
-                request(`https://api.nasa.gov/planetary/apod?api_key=${bot.config.nasaKey}`, (err, resp, body) => {
-                    if (err) {
-                        reject(err);
-                    } else if (resp.statusCode !== 200) {
-                        reject(new Error(`Invalid status code: ${resp.statusCode}`));
-                    } else {
-                        let data = JSON.parse(body);
-                        ctx.msg.channel.createMessage({embed: {
-                            title: data.title,
-                            description: data.copyright ? localeManager.t('nasa-copyright', ctx.settings.locale, {copyright: data.copyright}) : '',
-                            thumbnail: {url: 'https://api.nasa.gov/images/logo.png'},
-                            color: 0xFD7BB5,
-                            image: {url: data.url},
-                            footer: {text: localeManager.t('nasa-date', ctx.settings.locale, {date: data.date})}
-                        }}).then(resolve).catch(reject);
-                    }
-                });
+                got(`https://api.nasa.gov/planetary/apod?api_key=${bot.config.nasaKey}`).then(res => {
+                    let data = JSON.parse(res.body);
+                    return ctx.msg.channel.createMessage({embed: {
+                        title: data.title,
+                        description: data.copyright ? localeManager.t('nasa-copyright', ctx.settings.locale, {copyright: data.copyright}) : '',
+                        thumbnail: {url: 'https://api.nasa.gov/images/logo.png'},
+                        color: 0xFD7BB5,
+                        image: {url: data.url},
+                        footer: {text: localeManager.t('nasa-date', ctx.settings.locale, {date: data.date})}
+                    }});
+                }).then(resolve).catch(reject);
             }
         });
     }
