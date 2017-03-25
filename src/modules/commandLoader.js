@@ -99,7 +99,7 @@ function loadCommands() {
 
             if (command) {
                 try {
-                    bot.commands.addModule(commandPackage.main.slice(0, -3), command);
+                    bot.commands.addModule(cmdFolder, command);
                 } catch(err) {
                     logger.customError('commandLoader/loadCommands', `Experienced error while loading module '${cmdFolder}', skipping...\n${err}`);
                     unloadedCommands.push(cmdFolder);
