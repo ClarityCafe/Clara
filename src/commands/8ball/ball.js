@@ -4,7 +4,7 @@
  * Contributed by Capuccino and Ovyerus
  */
 
-const responses = ['yes', 'no'];
+const responses = JSON.parse('./responses/en-UK.json');
 
 exports.commands = [
     'ball'
