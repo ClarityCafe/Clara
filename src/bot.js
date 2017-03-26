@@ -17,6 +17,11 @@ global.Promise = require('bluebird');
 global.logger = require(`${__dirname}/modules/logger`);
 global.localeManager = new (require(`${__dirname}/modules/LocaleManager`))();
 
+Promise.config({
+    warnings: {wForgottenReturn: false},
+    longStackTraces: false
+})
+
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
 const bot = new Eris(config.token, {
