@@ -6,6 +6,9 @@
   "_comment_debug": "Boolean. True if Debug Stack is needed for Errors. False if simplified is only needed",
   "debug": true,
 
+  "_comment_promiseWarnings": "Boolean. Decide if you want stupidly long stack traces and warnings for Promises.",
+  "promiseWarnings": false,
+
   "_comment_ibKey": "ibsearch key, used by ibsearch",
   "ibKey": "",
 
