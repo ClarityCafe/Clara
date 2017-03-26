@@ -18,8 +18,8 @@ global.logger = require(`${__dirname}/modules/logger`);
 global.localeManager = new (require(`${__dirname}/modules/LocaleManager`))();
 
 Promise.config({
-    warnings: {wForgottenReturn: false},
-    longStackTraces: false
+    warnings: {wForgottenReturn: config.debug || false},
+    longStackTraces: config.debug || false
 });
 
 // Setup stuff
