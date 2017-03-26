@@ -52,26 +52,6 @@ bot.awaitMessage = (channelID, userID, filter = () => true, timeout = 15000) =>
  */
 bot.postGuildCount = () => {
     if (bot.config.discordBotsKey) {
-        request({
-            url: `htpss`,
-            method: 'POST',
-            headers: {
-                Authentication: bot.config.discordBotsKey
-            },
-            json: true,
-            body: {
-                server_count: bot.guilds.size
-            }
-        }, (err, res) => {
-            if (err) {
-                logger.error(`Unable to POST to DBots: ${err}`);
-            } else if (res.statusCode !== 200) {
-                logger.error(`Unable to POST to DBots: Invalid status code ${res.statusCode}`);
-            } else {
-                logger.info('POSTed to DBots.');
-            }
-        });
-
         got(`https://bots.discord.pw/api/bots/${bot.user.id}/stats`, {
             method: 'POST',
             headers: {Authentication: bot.config.discordBotsKey},
