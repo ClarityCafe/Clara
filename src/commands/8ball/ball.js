@@ -4,7 +4,7 @@
  * Contributed by Capuccino and Ovyerus
  */
 
-const responses = JSON.parse('./responses/en-UK.json');
+const responses = ['yes', 'no'];
 
 exports.commands = [
     'ball'
@@ -21,7 +21,7 @@ exports.ball = {
     usage: '<question>',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            if (!ctx.suffix) {
+            if (!ctx.suffix || !/(?:\?|\uff1f)$/.test(ctx.suffix)) {
                 ctx.msg.channel.createMessage(localeManager.t('ball-noQuestion', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
                 let response = localeManager.t(responses[Math.floor(Math.random() * responses.length)], ctx.settings.locale);
