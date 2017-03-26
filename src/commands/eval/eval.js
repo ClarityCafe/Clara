@@ -12,6 +12,7 @@ const fs = require('fs');
 const cp = require('child_process');
 const path = require('path');
 const got = require('got');
+const PassThrough = require('stream').PassThrough;
 /* eslint-enable */
 
 const FAILCOL = 0xF44336;
@@ -99,7 +100,12 @@ function sendEval(bot, ctx, embed, returned) {
                 resolve();
                 return null;
             } else {
-                let strN = util.inspect(returned._rejectionHandler0, {depth: 1});
+                let strN;
+                if (res instanceof PassThrough && res.requestUrl) {
+                    strN = res.headers['content-type'].split(';')[0] === 'application/json' ? util.inspect(JSON.parse(res.body), {depth: 1}) : res.body;
+                } else {
+                    strN = util.inspect(res, {depth: 1});
+                }
                 strN = strN.replace(new RegExp(bot.token, 'gi'), '(token)');
 
                 if (strN.length >= 1000) {
