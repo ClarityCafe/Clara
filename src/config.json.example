@@ -1,4 +1,8 @@
 {
+  
+  "_comment_token": "your Bot token",
+  "token": "",
+
   "_comment_debug": "Boolean. True if Debug Stack is needed for Errors. False if simplified is only needed",
   "debug": true,
 
@@ -35,8 +39,5 @@
   "rethinkOptions: {},
 
   "_comment_discordBotsKey": "Token for posting guild count to Discord Bots",
-  "discordBotsKey": "",
-
-  "_comment_token": "your Bot token",
-  "token": ""
+  "discordBotsKey": ""
 }
