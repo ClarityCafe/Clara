@@ -9,6 +9,7 @@ const localeDir = `${__baseDir}/res/locales`;
 
 /**
  * Object for managing locales and translating strings
+ * 
  * @prop {String} fallbackLocale The locale to fallback if it can't translate the string for some reason.
  * @prop {Object} locales Object of locales currently loaded.
  * @prop {String} localeDir The directory where locales are stored.
