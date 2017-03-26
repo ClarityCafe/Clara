@@ -18,7 +18,7 @@ function parseArgs(str) {
             let tmp = str.split(' ');
             let cmd = tmp.splice(0, 1)[0];
             let suffix = tmp.join(' ');
-            tmp = tmp.join(' ').match(/(["'])(?:(?=(\\?))\2.)*?\1/g);
+            tmp = tmp.join(' ').match(/(")(?:(?=(\\?))\2.)*?\1/g);
             let args = str.split(/(")(?:(?=(\\?))\2.)*?\1/g).filter(v => v !== '' && v !== '"');
             args[0] = args[0].split(' ').slice(1).join(' ');
 
