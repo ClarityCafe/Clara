@@ -15,7 +15,7 @@ const CommandHolder = require(`${__dirname}/modules/CommandHolder`);
 global.__baseDir = __dirname;
 global.Promise = require('bluebird');
 global.logger = require(`${__dirname}/modules/logger`);
-global.localeManager = new (require(`${__dirname}/modules/LocaleManager`))();
+global.localeManager = new (require(`${__dirname}/modules/localeManager`))();
 
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
