@@ -7,7 +7,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "nodemon",
+            "name": "Launch Bot (NoDemon)",
             "runtimeExecutable": "nodemon",
             "runtimeArgs": [
                 "--debug=5858"
@@ -19,15 +19,15 @@
             "internalConsoleOptions": "neverOpen"
         },
         {
-            "name": "Launch Program",
-            "type": "node2",
+            "type": "node",
+            "name": "Launch Bot (without NodeMon)",
             "request": "launch",
             "program": "${workspaceRoot}/src/bot.js",
             "cwd": "${workspaceRoot}"
         },
         {
+            "type": "node",
             "name": "Attach to Process",
-            "type": "node2",
             "request": "attach",
             "port": 9229
         }
