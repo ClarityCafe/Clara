@@ -5,7 +5,6 @@
  */
 
 const fs = require('fs');
-const utils = require(`${__baseDir}/modules/utils.js`);
 
 exports.loadAsSubcommands = true;
 
@@ -75,7 +74,7 @@ exports.remove = {
                 let prefix = ctx.args.join(' ');
                 let prefixes = JSON.parse(fs.readFileSync(`${__baseDir}/data/prefixes.json`));
                 let newPrefixes = prefixes.filter(p => p !== prefix);
-                console.log(newPrefixes)
+                console.log(newPrefixes);
 
                 if (newPrefixes.equals(prefixes)) {
                     ctx.msg.channel.createMessage("That prefix doesn't exist or can't be removed.");
