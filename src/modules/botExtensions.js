@@ -54,7 +54,7 @@ bot.postGuildCount = () => {
     if (bot.config.discordBotsKey) {
         got(`https://bots.discord.pw/api/bots/${bot.user.id}/stats`, {
             method: 'POST',
-            headers: {Authentication: bot.config.discordBotsKey, 'Content-Type': 'application/json'},
+            headers: {Authorization: bot.config.discordBotsKey, 'Content-Type': 'application/json'},
             body: JSON.stringify({server_count: bot.guilds.size})
         }).then(() => {
             logger.info('POSTed to DBots.');
