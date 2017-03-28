@@ -2,6 +2,7 @@
 	"browser": false,
 	"node": true,
 	"devel": false,
+    "esnext" : true,
 	"esversion": 6,
 	"globals": {
 		"__baseDir": true,
