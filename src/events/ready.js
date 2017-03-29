@@ -40,6 +40,13 @@ module.exports = bot => {
             logger.info('Reconnected to Discord from disconnection.');
         }
 
-        bot.editStatus('online', {name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: bot.config.gameURL ? 1 : 0, url: `${bot.config.gameURL || null}`});
+        bot.editStatus('online', {name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: bot.config.gameURL ? 1 : 0, url: `${bot.config.gameURL || null}`}).then(() => {
+            if (bot.config.discordBotsKey) {
+                bot.postGuildCount();
+                bot.postShardCount();
+            } else {
+                return;
+            }
+        });
     });
 };
