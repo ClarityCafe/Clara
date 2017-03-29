@@ -53,16 +53,14 @@ bot.awaitMessage = (channelID, userID, filter = () => true, timeout = 15000) =>
 bot.postShardCount = () => {
     if (bot.config.discordBotsKey) {
         got(`https://bots.discord.pw/api/bots/${bot.user.id}/stats`, {
-           method: 'POST',
-           headers: {Authorization: bot.config.discordBotsKey, 'Content-Type' : 'application/json'},
+            method: 'POST',
+            headers: {Authorization: bot.config.discordBotsKey, 'Content-Type' : 'application/json'},
             body: JSON.stringify({shard_count: bot.shards.size})
         }).then(() => {
             logger.info('POSTed to Discord Bots');
         }).catch(err => logger.warn(`Unable to POST at Discord Bots, ${err}.`));
-        } else {
-            return;
-        }
-    };
+    }
+};
 /**
  * POSTs guild count to DBots.
  * 
