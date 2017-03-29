@@ -9,7 +9,7 @@
 		"logger": true,
 		"localeManager": true
 	},
-
+	"indent" : 4,
 	"undef": true,
 	"unused": true,
 	"eqeqeq": true,
