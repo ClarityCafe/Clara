@@ -1,10 +1,11 @@
 {
     "compilerOptions": {
         "target": "ES6",
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "charset": "utf-8"
     },
     "files": [
-        "src/*.js"
+        "**.js"
     ],
     "exclude": [
         "node_modules"
