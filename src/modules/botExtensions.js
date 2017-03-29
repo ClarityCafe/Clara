@@ -44,7 +44,25 @@ bot.awaitMessage = (channelID, userID, filter = () => true, timeout = 15000) =>
             }, timeout);
         }
     });
-
+/**
+* POSTs ShardCount to DBots
+*
+*
+* @returns {Promise}
+*/
+bot.postShardCount = () => {
+    if (bot.config.discordBotsKey) {
+        got(`https://bots.discord.pw/api/bots/${bot.user.id}/stats`, {
+           method: 'POST',
+           headers: {Authorization: bot.config.discordBotsKey, 'Content-Type' : 'application/json'},
+            body: JSON.stringify({shard_count: bot.shards.size})
+        }).then(() => {
+            logger.info('POSTed to Discord Bots');
+        }).catch(err => logger.warn(`Unable to POST at Discord Bots, ${err}.`));
+        } else {
+            return;
+        }
+    };
 /**
  * POSTs guild count to DBots.
  * 
@@ -58,7 +76,7 @@ bot.postGuildCount = () => {
             body: JSON.stringify({server_count: bot.guilds.size})
         }).then(() => {
             logger.info('POSTed to DBots.');
-        }).catch(err => logger.error(`Unable to POST to DBots: ${err}`));
+        }).catch(err => logger.warn(`Unable to POST to DBots: ${err}`));
     }
 };
 
