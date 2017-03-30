@@ -11,12 +11,6 @@ const Eris = require('eris');
 const fs = require('fs');
 const CommandHolder = require(`${__dirname}/modules/CommandHolder`);
 
-// Global variables
-global.__baseDir = __dirname;
-global.Promise = require('bluebird');
-global.logger = require(`${__dirname}/modules/logger`);
-global.localeManager = new (require(`${__dirname}/modules/LocaleManager`))();
-
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
 const bot = new Eris(config.token, {
