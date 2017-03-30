@@ -2,7 +2,7 @@ const utils = require(`${__baseDir}/modules/utils`);
 
 module.exports = bot => {
     bot.on('guildCreate', g => {
-        if (g.members.filter(m => m.bot).size / g.members.size >= 0.75 && g.members.filter(m => m.bot).length >= Math.ceil(g.memberCount / 2)) {
+        if (g.members.filter(m => m.bot).size / g.members.size >= 0.75) {
             logger.info(`Leaving bot collection '${g.name}' (${g.id})`);
             g.leave();
         } else {
