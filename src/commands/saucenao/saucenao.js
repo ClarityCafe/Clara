@@ -25,7 +25,7 @@ exports.saucenao = {
                     body: JSON.stringify({url: imgUrl})
                 }).then(res => {
                     //only return the top result
-                    let nya = [];
+                    const nya = [];
                     nya.push = res.url;
                 });
             }
