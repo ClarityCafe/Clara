@@ -6,7 +6,8 @@
 	"globals": {
 		"__baseDir": true,
 		"logger": true,
-		"localeManager": true
+		"localeManager": true,
+		"got": true
 	},
 	"indent" : 4,
 	"undef": true,

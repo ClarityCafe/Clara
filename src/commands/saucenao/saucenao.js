@@ -15,6 +15,20 @@ exports.saucenao = {
     main(bot, ctx) {
         if (!ctx.suffix) {
             //grab the last message with an attachment
+            if (!ctx.msg.channel.attachments) {
+                ctx.msg.channel.createMessage('Aw, no Image here.');
+            } else {
+                let imgUrl = ctx.msg.channel.attachments[0].url;
+                got(`https://saucenao.com`, {
+                    method: 'POST',
+                    'Content-Type': 'application/json',
+                    body: JSON.stringify({url: imgUrl})
+                }).then(res => {
+                    //only return the top result
+                    let nya = [];
+                    nya.push = res.url;
+                });
+            }
         }
     }
 };
