@@ -2,13 +2,14 @@
 	"browser": false,
 	"node": true,
 	"devel": false,
-	"esversion": 6,
+    "esnext" : true,
 	"globals": {
 		"__baseDir": true,
 		"logger": true,
-		"localeManager": true
+		"localeManager": true,
+		"got": true
 	},
-
+	"indent" : 4,
 	"undef": true,
 	"unused": true,
 	"eqeqeq": true,
