@@ -16,7 +16,8 @@
     "globals": {
         "__baseDir": false,
         "logger" : false,
-        "localeManager": false
+        "localeManager": false,
+        "got": false
     },
 
     "ignore": [
