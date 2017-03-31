@@ -24,6 +24,11 @@ const bot = new Eris(config.token, {
     }
 });
 
+global.__baseDir = __dirname;
+global.Promise = require('bluebird');
+global.logger = require(`${__dirname}/modules/logger`);
+global.localeManager = new (require(`${__dirname}/modules/LocaleManager`))();
+
 Promise.config({
     warnings: {wForgottenReturn: config.promiseWarnings || false},
     longStackTraces: config.promiseWarnings || false
