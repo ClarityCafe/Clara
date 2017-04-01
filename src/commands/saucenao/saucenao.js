@@ -18,7 +18,7 @@ exports.saucenao = {
         if (!ctx.suffix) {
             //grab the last message with an attachment
             if (!ctx.msg.channel.attachments) {
-                ctx.msg.channel.createMessage('Aw, no Image here.');
+                ctx.msg.channel.createMessage('Aw, no Image here.').then(reject);
             } else {
                 let imgUrl = ctx.msg.channel.attachments[0].url;
                 got(`https://saucenao.com`, {
