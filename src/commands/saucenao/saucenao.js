@@ -34,8 +34,23 @@ exports.saucenao = {
                         desccription: 'This is the closest I can find.',
                         fields
                     }}).then(resolve).catch(reject);
-                }).catch(reject);
+                }).then(resolve).catch(reject);
             }
+        } else {
+            //query saucenao but this time, we use the suffix value
+            got('https://saucenao.com', {
+                method: 'POST',
+                'Content-Type': 'application/json',
+                body: JSON.stringify({url: ctx.suffix})
+            }).then(res => {
+                const fields = [];
+                fields.push({name: '', value: res.url});
+                ctx.msg.channel.createMessage({embed:{
+                    title: 'saucenao query',
+                    desccription: 'this is the closest I can find',
+                    fields
+                }});
+            }).then(resolve).catch(reject);
         }
     }
 };
