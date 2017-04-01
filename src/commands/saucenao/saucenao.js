@@ -8,7 +8,7 @@ exports.commands = [
     'saucenao'
 ];
 
-const imgRegex = /(?:([^:/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*\.(?:png|jpe?g|gifv?|webp|bmp|tiff|jfif))(?:\?([^#]*))?(?:#(.*))?/gi.test(str);
+const imgRegex =  /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi.test(str);
 
 exports.saucenao = {
     desc: 'Grab an image\'s source using saucenao API.',
