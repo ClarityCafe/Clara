@@ -8,6 +8,8 @@ exports.commands = [
     'saucenao'
 ];
 
+const imgRegex = /(?:([^:/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*\.(?:png|jpe?g|gifv?|webp|bmp|tiff|jfif))(?:\?([^#]*))?(?:#(.*))?/gi.test(str);
+
 exports.saucenao = {
     desc: 'Grab an image\'s source using saucenao API.',
     longDesc: 'Gets the image source from sacuenao.',
@@ -29,28 +31,36 @@ exports.saucenao = {
                     //TODO : should push a embed field.
                     fields.push({name: '', value: res[0].url, inline: true});
                     //finally send the message in embed
-                    ctx.msg.channel.createMessage({embed: {
-                        title: 'saucenao Query',
-                        desccription: 'This is the closest I can find.',
-                        fields
-                    }}).then(resolve).catch(reject);
+                    ctx.msg.channel.createMessage({
+                        embed: {
+                            title: 'saucenao Query',
+                            desccription: 'This is the closest I can find.',
+                            fields
+                        }
+                    }).then(resolve).catch(reject);
                 }).then(resolve).catch(reject);
             }
         } else {
-            //query saucenao but this time, we use the suffix value
-            got('https://saucenao.com', {
-                method: 'POST',
-                'Content-Type': 'application/json',
-                body: JSON.stringify({url: ctx.suffix})
-            }).then(res => {
-                const fields = [];
-                fields.push({name: '', value: res.url});
-                ctx.msg.channel.createMessage({embed:{
-                    title: 'saucenao query',
-                    desccription: 'this is the closest I can find',
-                    fields
-                }});
-            }).then(resolve).catch(reject);
+            if (!imgRegex) { 
+                ctx.msg.channel.createMessage('Your URL is invalid!, Please make sure it\'s a valid image URL.');
+            } else {
+                //query saucenao but this time, we use the suffix value
+                got('https://saucenao.com', {
+                    method: 'POST',
+                    'Content-Type': 'application/json',
+                    body: JSON.stringify({url: ctx.suffix})
+                }).then(res => {
+                    const fields = [];
+                    fields.push({name: '', value: res.url});
+                    ctx.msg.channel.createMessage({
+                        embed: {
+                            title: 'saucenao query',
+                            desccription: 'this is the closest I can find',
+                            fields
+                        }
+                    });
+                }).then(resolve).catch(reject);
+            }
         }
     }
 };
