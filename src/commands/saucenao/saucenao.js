@@ -25,9 +25,16 @@ exports.saucenao = {
                     body: JSON.stringify({url: imgUrl})
                 }).then(res => {
                     //only return the top result
-                    const nya = [];
-                    nya.push = res.url;
-                });
+                    const fields = [];
+                    //TODO : should push a embed field.
+                    fields.push({name: '', value: res[0].url, inline: true});
+                    //finally send the message in embed
+                    ctx.msg.channel.createMessage({embed: {
+                        title: 'saucenao Query',
+                        desccription: 'This is the closest I can find.',
+                        fields
+                    }}).then(resolve).catch(reject);
+                }).catch(reject);
             }
         }
     }
