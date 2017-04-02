@@ -4,6 +4,8 @@
  * Contributed by Capuccino, Ovyerus.
  */
 
+/* eslint-env node*/
+
 exports.commands = [
     'ping'
 ];

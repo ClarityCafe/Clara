@@ -1,3 +1,5 @@
+/* eslint-env node*/
+
 const fs = require('fs');
 
 module.exports = bot => {

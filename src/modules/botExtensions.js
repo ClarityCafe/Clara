@@ -1,3 +1,5 @@
+/* eslint-env node*/
+
 const bot = require(`${__baseDir}/bot.js`).bot;
 const got = require('got');
 

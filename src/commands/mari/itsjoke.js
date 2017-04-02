@@ -1,8 +1,10 @@
 /* 
- * itsjoke.js - Mari memes.
+ * itsjoke.js - It's Joke!.
  *
  * Contributed by Capuccino and Ovyerus.
  */
+
+/* eslint-env node*/
 
 const fs = require('fs');
 

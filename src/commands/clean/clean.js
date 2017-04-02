@@ -4,6 +4,8 @@
  * Contributed by Ovyerus
  */
 
+/* eslint-env node*/
+
 exports.commands = [
     'clean'
 ];

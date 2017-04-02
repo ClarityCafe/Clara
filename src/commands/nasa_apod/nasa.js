@@ -4,6 +4,8 @@
  * Contributed by Capuccino and Ovyerus
  */
 
+/* eslint-env node*/
+
 const got = require('got');
 
 exports.commands = [
