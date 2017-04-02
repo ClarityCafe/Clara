@@ -17,7 +17,7 @@ exports.ship = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.msg.mentions.length > 2 || ctx.args.length > 2) {
-                ctx.msg.channel.createMessage(localeManager.t('ship-noArgs', settings.locale)).then(resolve).catch(reject);
+                ctx.msg.channel.createMessage(localeManager.t('ship-noArgs', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
                 let a = ctx.msg.mentions[0] === undefined ? ctx.args[0] : ctx.msg.mentions[0].username;
                 let b = ctx.msg.mentions[1] === undefined ? ctx.args[1] : ctx.msg.mentions[1].username;

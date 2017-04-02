@@ -12,17 +12,25 @@ exports.commands = [
 
 exports.choose = {
     desc: "Randomly chooses between 2 or more arguments seperated with a '/'.",
-    fullDesc: 'Uses a randomiser to pick a random value out of 2 or more given arguments. Arguments must be seperated by a /',
-    usage: '<choices (minimum of two)>',
-    example: 'coke zero/coke',
+    fullDesc: 'Uses a randomiser to pick a random value out of two given arguments. Arguments must be seperated by "or" ',
+    usage: '<choice1> or <choice2>',
+    example: 'coke zero or coke',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            let choices = ctx.suffix.split('/');
-            if (choices.length < 2) {
-                ctx.msg.channel.createMessage(localeManager.t('choose-insufficientArgs', ctx.settings.locale)).then(resolve).catch(reject);
+            if (ctx.args < 2) {
+                ctx.msg.channel.createMessage(localeManager.t('choose-insufficientArgs', ctx.settings.locale));
+            } else if (ctx.args > 2) {
+                ctx.msg.channel.createMessage(localeManager.t('choose-exceededLimit', ctx.settings.locale));
             } else {
-                var choice = choices[Math.floor(Math.random() * choices.length)];
-                ctx.msg.channel.createMessage(localeManager.t('choose', ctx.settings.locale, {name: ctx.msg.author.username, choice})).then(resolve).catch(reject);
+                /*
+                * We should only pars String ID 0 and 1, kinda like this
+                * [x or y]
+                *  ^    ^
+                * "or" is only there for naturalization
+                */
+                let choices = [ctx.args[0], ctx.args[2]];
+                let choice = choices[Math.floor(Math.random()* choices.length)];
+                ctx.msg.channel.createMessage(localeManager.t('choose', ctx.settings.locale, {name: ctx.msg.author.mention, choice})).then(resolve).catch(reject);
             }
         });
     }
