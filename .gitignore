@@ -46,9 +46,6 @@ jspm_packages
 # Yarn Integrity file
 .yarn-integrity
 
-# VSCode stuff
-jsconfig.json
-
 # Configuration
 src/config.json
 src/data/data.json
@@ -66,7 +63,7 @@ data.json
 obj
 bin
 
-# Nodetori files    
+# Bot files    
 src/config.json
 /data
 prefixes.json
@@ -74,7 +71,3 @@ prefixes.json
 src/data/
 data.json
 lines.txt
-
-#experimental files
-
-src/config.yaml
