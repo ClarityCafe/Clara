@@ -4,7 +4,7 @@
  * Contributed by Ovyerus.
  */
 
-/* eslint-env node*/
+/* eslint-env node */
 
 /* eslint-disable no-unused-vars */
 const Eris = require('eris');

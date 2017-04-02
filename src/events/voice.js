@@ -1,4 +1,4 @@
-/* eslint-env node*/
+/* eslint-env node */
 
 module.exports = bot => {
     bot.on('voiceChannelLeave', (mem, chan) => {

@@ -4,7 +4,7 @@
  * Contributed by Capuccino and Ovyerus
  */
 
-/* eslint-env node*/
+/* eslint-env node */
 
 const handler = require(`${__dirname}/musicHandler.js`);
 const utils = require(`${__baseDir}/modules/utils`);

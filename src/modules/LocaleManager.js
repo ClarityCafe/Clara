@@ -4,7 +4,7 @@
  * Contributed by Capuccino and Ovyerus
  */
 
-/* eslint-env node*/
+/* eslint-env node */
 
 const fs = require('fs');
 const localeDir = `${__baseDir}/res/locales`;

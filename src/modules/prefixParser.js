@@ -4,7 +4,7 @@
  * Contributed by Ovyerus
  */
 
-/* eslint-env node*/
+/* eslint-env node */
 
 const fs = require('fs');
 
