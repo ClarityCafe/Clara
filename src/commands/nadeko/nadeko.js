@@ -4,7 +4,7 @@
  * Contributed by Capuccino.
  */
 
-/* eslint-env node*/
+/* eslint-env node */
 
 const emotes = [
     ':joy:',

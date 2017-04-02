@@ -4,7 +4,7 @@
  *  Contributed by Capuccino and Ovyerus
  */
 
-/* eslint-env node*/
+/* eslint-env node */
 
 const mal = require('malapi').Anime;
 const color = require('dominant-color');
