@@ -5,7 +5,7 @@
  * Contributed by Capuccino and Ovyerus
  */
 
-/* eslint-env node*/
+/* eslint-env node */
 
 // Dependancies
 const fs = require('fs');

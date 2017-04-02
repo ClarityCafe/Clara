@@ -4,7 +4,7 @@
  * Contributed by Ovvyerus
  */
 
-/* eslint-env node*/
+/* eslint-env node */
 
 const config = require(`${__baseDir}/config.json`);
 const ytdl = require('youtube-dl');
