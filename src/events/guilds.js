@@ -1,3 +1,5 @@
+/* eslint-env node*/
+
 const utils = require(`${__baseDir}/modules/utils`);
 
 module.exports = bot => {
@@ -11,7 +13,7 @@ module.exports = bot => {
         }
     });
 
-    bot.on('guildDelete', () => {
+    bot.on('guildDelete', g => {
         if (!(g.members.filter(m => m.bot).size/g.members.size >= 0.75)) {
             bot.editStatus('online', {name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: bot.config.gameURL ? 1 : 0, url: `${bot.config.gameURL || null}`});
             bot.postGuildCount();
@@ -22,10 +24,9 @@ module.exports = bot => {
         bot.getGuildSettings(g.id).then(res => {
             if (!res || !res.greeting || !res.greeting.enabled || !res.greeting.channelID || !res.greeting.message) {
                 return null;
-            } else {
-                let msg = res.greeting.message.replace(/\{\{user\}\}/g, m.mention).replace(/\{\{name\}\}/g, utils.formatUsername(m));
-                return g.channels.get(res.greeting.channelID).createMessage(msg);
             }
+            let msg = res.greeting.message.replace(/\{\{user\}\}/g, m.mention).replace(/\{\{name\}\}/g, utils.formatUsername(m));
+                return g.channels.get(res.greeting.channelID).createMessage(msg);
         });
     });
 
@@ -33,10 +34,9 @@ module.exports = bot => {
         bot.guildSettings(g.id).then(res => {
             if (!res || !res.greeting || !res.greeting.enabled || !res.greeting.channelID || !res.parting.message) {
                 return null;
-            } else {
+            }
                 let msg = res.parting.message.replace(/\{\user\}\}/g, m.mention).replace(/\{name\}\}/g, utils.formatUsername(m));
                 return g.channels.get(res.greeting.channelID).createMessage(msg);
-            }
         });
     });
 };

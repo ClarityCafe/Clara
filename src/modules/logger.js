@@ -4,6 +4,8 @@
  * Contributed by Ovyerus
  */
 
+/* eslint-env node*/
+
 const chalk = require('chalk');
 
 /**

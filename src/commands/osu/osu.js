@@ -4,6 +4,8 @@
  * Contributed by Capuccino and Ovyerus.
  */
 
+/* eslint-env node*/
+
 const config = require(`${__baseDir}/config.json`);
 const osu = require('osu')(config.osuApiKey);
 const iso3166 = require('iso-3166-1-alpha-2');

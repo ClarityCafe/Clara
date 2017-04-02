@@ -4,6 +4,8 @@
  * Contributed by Ovyerus
  */
 
+/* eslint-env node*/
+
 const Eris = require('eris');
 const decache = require('decache');
 const logger = require(`${__dirname}/logger`);

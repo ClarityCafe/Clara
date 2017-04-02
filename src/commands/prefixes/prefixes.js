@@ -4,6 +4,8 @@
  * Contributed by Ovyerus
  */
 
+/* eslint-env node*/
+
 const fs = require('fs');
 
 exports.loadAsSubcommands = true;

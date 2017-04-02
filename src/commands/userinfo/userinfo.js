@@ -4,6 +4,8 @@
  * Contributed by Capuccino and Ovyerus
  */
 
+/* eslint-env node*/
+
 const utils = require(`${__baseDir}/modules/utils.js`);
 const moment = require('moment');
 

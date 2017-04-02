@@ -4,6 +4,8 @@
  * Contributed by Capuccino
  */
 
+/* eslint-env node*/
+
 exports.commands = [
     'ship'
 ];

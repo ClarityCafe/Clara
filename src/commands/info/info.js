@@ -4,6 +4,8 @@
  * Contributed by Ovyerus
  */
 
+/* eslint-env node*/
+
 const os = require('os');
 const prettyBytes = require('pretty-bytes');
 const fs = require('fs');

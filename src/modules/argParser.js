@@ -4,6 +4,8 @@
  * Contributed by Ovyerus
  */
 
+/* eslint-env node*/
+
 /**
  * Parse a string and return arguments.
  *
@@ -34,13 +36,13 @@ function parseArgs(str) {
                 });
 
                 args = args.concat(tmp.filter(v => args.indexOf(v) === -1));
-                args = [].concat.apply([], args).filter(v => v !== '' && v != null);
+                args = [].concat.apply([], args).filter(v => v !== '' && v !== null);
             } else {
                 args.forEach((v, i) => {
                     if (!(v instanceof Array)) args[i] = v.split(' ');
                 });
 
-                args = [].concat.apply([], args).filter(v => v !== '' && v != null);
+                args = [].concat.apply([], args).filter(v => v !== '' && v !== null);
             }
 
             resolve({args, suffix, cmd});

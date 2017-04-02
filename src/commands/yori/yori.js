@@ -4,6 +4,8 @@
  * Contributed by Capuccino, Ovyerus.
  */
 
+/* eslint-env node*/
+
 const cheerio = require('cheerio');
 const got = require('got');
 
