@@ -4,6 +4,8 @@
  * Contributed by Ovvyerus
  */
 
+/* eslint-env node*/
+
 const config = require(`${__baseDir}/config.json`);
 const ytdl = require('youtube-dl');
 const ytSearch = require('youtube-search');

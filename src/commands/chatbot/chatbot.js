@@ -4,6 +4,8 @@
  * Contributed by Ovyerus
  */
 
+/* eslint-env node*/
+
 const Markov = require('markov-strings');
 const fs = require('fs');
 

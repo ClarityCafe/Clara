@@ -4,6 +4,8 @@
  * Contributed by Ovyerus
  */
 
+/* eslint-env node*/
+
 const got = require('got');
 const prettyBytes = require('pretty-bytes');
 const moment = require('moment');

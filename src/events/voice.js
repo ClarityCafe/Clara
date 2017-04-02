@@ -1,3 +1,5 @@
+/* eslint-env node*/
+
 module.exports = bot => {
     bot.on('voiceChannelLeave', (mem, chan) => {
         /*if (chan.voiceMembers.filter(m => m.id !== bot.user.id && !m.bot).length === 0 && chan.voiceMembers.get(bot.user.id)) {

@@ -6,6 +6,8 @@
  * Licensed under MIT. Copyright (c) 2017 Capuccino, Ovyerus and the repository contributors.
  */
 
+/* eslint-env node*/
+
 // Module requies
 const Eris = require('eris');
 const fs = require('fs');

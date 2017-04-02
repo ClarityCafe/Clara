@@ -4,6 +4,8 @@
  * Contributed by Capuccino and Ovyerus
  */
 
+/* eslint-env node*/
+
 const fs = require('fs');
 const Eris = require('eris');
 const config = require(`${__baseDir}/config.json`);

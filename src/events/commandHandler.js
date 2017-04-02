@@ -1,3 +1,5 @@
+/* eslint-env node*/
+
 const prefixParser = require(`${__baseDir}/modules/prefixParser`);
 const parseArgs = require(`${__baseDir}/modules/argParser`);
 const utils = require(`${__baseDir}/modules/utils`);
