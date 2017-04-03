@@ -6,6 +6,7 @@ FROM node:boron
 
 RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
 RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
+RUN apt install build-essential ffmpeg 
 
 RUN adduser --disabled-password --gecos "" clara && adduser clara sudo && su clara
 WORKDIR /home/clara
