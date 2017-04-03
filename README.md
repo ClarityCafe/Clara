@@ -14,6 +14,10 @@ NOTE: Any version of Node.JS that is below 6.10.0 **WILL NOT WORK** due to this 
 
 If you are running this on Linux, you may need to install [Node Version Manager](http://nvm.sh) in order to get the latest version, as the official packages in some distros like Ubuntu and Debian only have a version of 4.x.x.
 
+### Deploying via Docker
+If you don't want to install node on your host, or you are having problems with native build tools, you can deploy this bot with the help of Docker.
+You'll need to mount `/home/clare/src/config.json` to some file on host, or make a virtual volume containing your token and service keys. Service port exposed is `8080`, though, it is not mandatory to forward it.
+
 # Contributing
 
 Check out CONTRIBUTING.md for guidelines.
