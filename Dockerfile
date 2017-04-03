@@ -2,14 +2,24 @@
 # This is a highly experimental Dockerfile. Use with caution.
 # Licensed Under MIT. Contributed by Capuccino
 
-FROM ubuntu:16.04 
+# We would use the Latest Ubuntu LTS for this image.
 
+FROM ubuntu:16.04  
 
+# Environment Variables
+
+ENV NODE_VERSION=6.10.1 \
+NODE_PATH=/usr/local/lib/node_modules \
+USERNAME=clara 
+HOME_PATH=/home/clara
+
+# Install Essentials
 RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
 RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 RUN \
   apt-get update && \
   apt-get -y install \
+          openssh-client \
           software-properties-common \
           git \
           nano \
@@ -18,21 +28,47 @@ RUN \
           curl \
           build-essential \
           ffmpeg \
-          nodejs-legacy \
-          npm
+
+# now we add a normal user with sudo privs
+RUN useradd -p $USERNAME --create-home $USERNAME && usermod -aG sudo $USERNAME 
+
+# Preinstall a Node Version. In This case, we provided a ENV_Variable for it 
+RUN cd /home/$USERNAME && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
+  && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
+  && gpg --verify SHASUMS256.txt.asc \
+  && gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc \
+  && grep " node-v$NODE_VERSION-linux-x64.tar.xz\$" SHASUMS256.txt | sha256sum -c - \
+  && sudo tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C /usr/local --strip-components=1 \
+  && sudo rm "node-v$NODE_VERSION-linux-x64.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt \
+&& sudo ln -s /usr/local/bin/node /usr/local/bin/nodejs
+
+
+# install NVM
 RUN echo $'#!/bin/sh\nexit 101' > /usr/sbin/policy-rc.d
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
 RUN chmod +x /usr/sbin/policy-rc.d
 
-RUN mkdir base
+RUN mkdir $HOME_PATH/base
+
 # It's advisable to create your config.json before launching this because we copy files
 # then stab it on the container like no one cares.
-COPY src/ base
-COPY /package.json base
-RUN git config --global user.name Nyan && git config --global user.email nyan@pa.su
-RUN cd base && npm i -S && npm i -g pm2
+
+COPY src/ $HOME_PATH/base
+COPY /package.json $HOME_PATH/base
+
+#We're gonna add a pseudo-user here
+
+RUN git config --global user.name nyan && git config --global user.email nyan@pa.su
+
+RUN cd $HOME_PATH/base && npm i --save && npm i -g pm2
+
+#Additional ENV_Variables
+
 ENV DEBIAN_FRONTEND noninteractive
 ENV LANG en_GB.UTF-8
 ENV LANG en_US.UTF-8
 CMD tail -f /dev/null
+
+#Expose Local port and SSH Port just because we can
+
 EXPOSE 22 8080
