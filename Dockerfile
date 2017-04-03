@@ -11,7 +11,6 @@ FROM ubuntu:16.04
 ENV NODE_VERSION=6.10.1 \
 NODE_PATH=/usr/local/lib/node_modules \
 USERNAME=clara 
-HOME_PATH=/home/clara
 
 # Install Essentials
 RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
@@ -53,8 +52,8 @@ RUN mkdir $HOME_PATH/base
 # It's advisable to create your config.json before launching this because we copy files
 # then stab it on the container like no one cares.
 
-COPY src/ $HOME_PATH/base
-COPY /package.json $HOME_PATH/base
+COPY src/ /home/$USERNAME/base
+COPY /package.json /home/$USERNAME/base
 
 #We're gonna add a pseudo-user here
 
