@@ -35,8 +35,7 @@ RUN \
 RUN useradd --password $USERNAME --create-home $USERNAME && usermod -aG sudo $USERNAME 
 
 # Preinstall a Node Version. In This case, we provided a ENV_Variable for it 
-RUN cd /home/$USERNAME && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
-&& ln -s /usr/local/bin/node /usr/local/bin/nodejs
+RUN cd /home/$USERNAME && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" && ln -s /usr/local/bin/node /usr/local/bin/nodejs
 
 
 # install NVM
