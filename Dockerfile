@@ -29,7 +29,9 @@ RUN \
           ffmpeg \
 
 # now we add a normal user with sudo privs
-RUN useradd -p $USERNAME --create-home $USERNAME && usermod -aG sudo $USERNAME 
+# we use the USERNAME variable as the pwd for the container.
+
+RUN useradd --password $USERNAME --create-home $USERNAME && usermod -aG sudo $USERNAME 
 
 # Preinstall a Node Version. In This case, we provided a ENV_Variable for it 
 RUN cd /home/$USERNAME && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
