@@ -27,7 +27,9 @@ RUN \
           unzip \
           curl \
           build-essential \
-          ffmpeg 
+          ffmpeg \
+          nodejs-legacy \
+          npm
 
 # now we add a normal user with sudo privs
 # we use the USERNAME variable as the pwd for the container.
