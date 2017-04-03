@@ -18,6 +18,7 @@ RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 RUN \
   apt-get update && \
   apt-get -y install \
+          sudo\
           openssh-client \
           software-properties-common \
           git \
@@ -35,7 +36,7 @@ RUN useradd --password $USERNAME --create-home $USERNAME && usermod -aG sudo $US
 
 # Preinstall a Node Version. In This case, we provided a ENV_Variable for it 
 RUN cd /home/$USERNAME && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
-&& sudo ln -s /usr/local/bin/node /usr/local/bin/nodejs
+&& ln -s /usr/local/bin/node /usr/local/bin/nodejs
 
 
 # install NVM
