@@ -51,7 +51,7 @@ RUN mkdir $HOME_PATH/base
 # then stab it on the container like no one cares.
 
 COPY src/ /home/$USERNAME/base
-COPY /package.json /home/$USERNAME/base
+COPY ./package.json /home/$USERNAME/base
 
 #We're gonna add a pseudo-user here
 
