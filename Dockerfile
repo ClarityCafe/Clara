@@ -68,3 +68,7 @@ CMD tail -f /dev/null
 #Expose Local port and SSH Port just because we can
 
 EXPOSE 22 8080
+
+# We should echo this if build succeeds
+
+RUN echo "Senpai it worked!"
