@@ -4,6 +4,9 @@
  * 
  *  Contributed by Capuccino
  */
+
+/* eslint-env node */
+
 exports.commands = [
     'saucenao'
 ];
@@ -19,7 +22,7 @@ exports.saucenao = {
             if (!ctx.suffix) {
                 //grab the last message with an attachment
                 if (!ctx.msg.channel.attachments) {
-                    ctx.msg.channel.createMessage('Aw, no Image here.').then(reject);
+                    ctx.msg.channel.createMessage('Aw, no Image here.');
                 } else {
                     let imgUrl = ctx.msg.channel.attachments[0].url;
                     got(`https://saucenao.com`, {
@@ -37,7 +40,7 @@ exports.saucenao = {
                                 desccription: 'This is the closest I can find.',
                                 fields
                             }
-                        }).then(resolve).catch(reject);
+                        });
                     }).then(resolve).catch(reject);
                 }
             } else {
