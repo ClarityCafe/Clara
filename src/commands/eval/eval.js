@@ -4,12 +4,9 @@
  * Contributed by Ovyerus.
  */
 
-/* eslint-env node */
-
 /* eslint-disable no-unused-vars */
 const Eris = require('eris');
 const util = require('util');
-const utils = require(`${__baseDir}/modules/utils.js`);
 const fs = require('fs');
 const cp = require('child_process');
 const path = require('path');
@@ -17,8 +14,16 @@ const got = require('got');
 const PassThrough = require('stream').PassThrough;
 /* eslint-enable */
 
-const FAILCOL = 0xF44336;
-const SUCCESSCOL = 0x8BC34A;
+const FailCol = 0xF44336;
+const SuccessCol = 0x8BC34A;
+const ReplaceRegex = {};
+
+exports.init = bot => {
+    ReplaceRegex.token = new RegExp(`${bot.token}`, 'gi');
+    Object.keys(bot.config).filter(key => /(key|token)/i.test(key)).forEach(key => {
+        ReplaceRegex[key] = new RegExp(bot.config[key], 'gi');
+    });
+};
 
 exports.commands = [
     'eval'
@@ -27,39 +32,34 @@ exports.commands = [
 exports.eval = {
     desc: 'Evaluate code in Discord.',
     fullDesc: 'Used to evaluate JavaScript code in Discord. Mostly for debug purposes.',
-    adminOnly: true,
+    owner: true,
     usage: '<code>',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage('Please give arguments to evaluate.').then(resolve).catch(reject);
+            if (ctx.raw.length === 0) {
+                ctx.createMessage('Please give arguments to evaluate.').then(resolve).catch(reject);
             } else {
-                let {msg, args, cmd, suffix, cleanSuffix, guildBot, settings} = ctx; // eslint-disable-line
+                let {args, cmd, raw, cleanRaw, settings, guildBot} = ctx; // eslint-disable-line
                 try {
-                    let returned = eval(ctx.suffix);
+                    let returned = eval(ctx.raw);
                     let str = util.inspect(returned, {depth: 1});
-                    str = str.replace(new RegExp(bot.token, 'gi'), '(token)');
+                    str = str.replace(ReplaceRegex.token, '(token)');
 
                     let embed = {
                         title: 'Evaluation Results',
-                        color: SUCCESSCOL,
+                        color: SuccessCol,
                         fields: [
-                            {name: 'Input', value: generateCodeblock(ctx.suffix)},
+                            {name: 'Input', value: generateCodeblock(ctx.raw)},
                             {name: 'Output', value: generateCodeblock(str)}
                         ]
                     };
 
                     if (returned instanceof Promise) embed.fields[1].value = generateCodeblock('[object Promise]');
 
-
                     if (str.length < 1000) {
                         sendEval(bot, ctx, embed, returned).then(resolve).catch(reject);
                     } else {
-                        got('https://hastebin.com/documents', {
-                            method: 'POST',
-                            body: str
-                        }).then(res => {
-                            let key = JSON.parse(res.body).key;
+                        bot.hastePost(str).then(key => {
                             let url = `https://hastebin.com/${key}.js`;
                             embed.fields[1].value = `Output is too long to display nicely.\nOutput has been uploaded [here](${url})`;
 
@@ -67,16 +67,17 @@ exports.eval = {
                         }).then(resolve).catch(reject);
                     }
                 } catch(err) {
+                    logger.error(err.stack || err);
                     let embed = {
                         title: 'Evaluation Results',
-                        color: FAILCOL,
+                        color: FailCol,
                         fields: [
-                            {name: 'Input', value: generateCodeblock(ctx.suffix)},
+                            {name: 'Input', value: generateCodeblock(ctx.raw)},
                             {name: 'Error', value: generateCodeblock(err)}
                         ]
                     };
 
-                    ctx.msg.channel.createMessage({embed}).then(resolve).catch(reject);
+                    ctx.createMessage({embed}).then(resolve).catch(reject);
                 }
             }
         });
@@ -90,7 +91,7 @@ function generateCodeblock(text) {
 function sendEval(bot, ctx, embed, returned) {
     return new Promise((resolve, reject) => {
         let outer;
-        ctx.msg.channel.createMessage({embed}).then(m => {
+        ctx.createMessage({embed}).then(m => {
             outer = m;
             if (returned instanceof Promise) {
                 return returned;
@@ -108,19 +109,16 @@ function sendEval(bot, ctx, embed, returned) {
                 } else {
                     strN = util.inspect(res, {depth: 1});
                 }
-                strN = strN.replace(new RegExp(bot.token, 'gi'), '(token)');
+                strN = strN.replace(ReplaceRegex.token, '(token)');
 
                 if (strN.length >= 1000) {
-                    return got('https://hastebin.com/documents', {
-                        method: 'POST',
-                        body: strN
-                    });
+                    return bot.hastePost(strN);
                 } else {
                     return outer.edit({embed: {
                         title: 'Evaluation Results',
-                        color: SUCCESSCOL,
+                        color: SuccessCol,
                         fields: [
-                            {name: 'Input', value: generateCodeblock(ctx.suffix)},
+                            {name: 'Input', value: generateCodeblock(ctx.raw)},
                             {name: 'Output', value: generateCodeblock(strN)}
                         ]
                     }});
@@ -129,31 +127,31 @@ function sendEval(bot, ctx, embed, returned) {
         }).then(res => {
             if (!res || res instanceof Eris.Message) return null;
 
-            let key = JSON.parse(res.body).key;
-            let url = `https://hastebin.com/${key}.js`;
+            let url = `https://hastebin.com/${res}.js`;
 
             return outer.edit({embed: {
                 title: 'Evaluation Results',
-                color: SUCCESSCOL,
+                color: SuccessCol,
                 fields: [
-                    {name: 'Input', value: generateCodeblock(ctx.suffix)},
+                    {name: 'Input', value: generateCodeblock(ctx.raw)},
                     {name: 'Output', value: `Output is too long to display nicely.\nOutput has been uploaded [here](${url})`}
                 ]
             }});
         }).then(resolve).catch(err => {
-            if (err.req && err.req._headers.host === 'discordapp.com') {
+            if (err.req && err.req._headers.host === 'discordapp.com' && err.resp && err.resp.statusCode !== 404) {
                 reject(err);
                 return null;
             } else {
+                logger.error(err.stack || err);
                 return outer.edit({embed: {
                     title: 'Evaluation Results',
-                    color: FAILCOL,
+                    color: FailCol,
                     fields: [
-                        {name: 'Input', value: generateCodeblock(ctx.suffix)},
+                        {name: 'Input', value: generateCodeblock(ctx.raw)},
                         {name: 'Error', value: generateCodeblock(err)}
                     ]
                 }});
             }
-        });
+        }).then(res => {if (res) resolve(res);});
     });
 }

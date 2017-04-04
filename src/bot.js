@@ -11,7 +11,6 @@
 // Module requies
 const Eris = require('eris');
 const fs = require('fs');
-const CommandHolder = require(`${__dirname}/modules/CommandHolder`);
 
 // Setup stuff
 const config = require(`${__dirname}/config.json`);
@@ -38,34 +37,15 @@ Promise.config({
 
 exports.bot = bot;
 
-require(`${__dirname}/modules/botExtensions`);
-
-// Create data files
-try {
-    require.resolve(`${__dirname}/data/data.json`);
-    require.resolve(`${__dirname}/data/prefixes.json`);
-} catch(err) {
-    if (!fs.existsSync(`${__dirname}/data/`)) fs.mkdirSync(`${__dirname}/data/`);
-    if (!fs.existsSync(`${__dirname}/data/data.json`)) fs.writeFile(`${__dirname}/data/data.json`, JSON.stringify({admins: [], blacklist: []}), e => {
-        if (e) {
-            throw e;
-        } else {
-            logger.info('Created data.json.');
-        }
-    });
-
-    if (!fs.existsSync(`${__dirname}/data/prefixes.json`)) fs.writeFile(`${__dirname}/data/prefixes.json`, JSON.stringify([]), e => {
-        if (e) {
-            throw e;
-        } else {
-            logger.info('Created Prefixes data');
-        }    
-    });
-}
+// Create data folder and files if they don't exist
+if (!fs.existsSync(`${__dirname}/data/`)) fs.mkdirSync(`${__dirname}/data/`);
+if (!fs.existsSync(`${__dirname}/cache/`)) fs.mkdirSync(`${__dirname}/cache/`);
+if (!fs.existsSync(`${__dirname}/data/data.json`)) fs.writeFileSync(`${__dirname}/data/data.json`, '{"admins": [], "blacklist": []}');
+if (!fs.existsSync(`${__dirname}/data/prefixes.json`)) fs.writeFileSync(`${__diirname}/data/prefixes.json`, '[]');
 
 // Bot object modification
 bot.db = require('rethinkdbdash')(config.rethinkOptions);
-bot.commands = new CommandHolder(bot);
+bot.commands = new (require(`${__dirname}/modules/CommandHolder`)).CommandHolder(bot);
 bot.config = config;
 bot.loadCommands = true;
 bot.allowCommandUse = false;
@@ -84,5 +64,6 @@ bot.settings = {
 
 // Init events
 require(`${__dirname}/events`)(bot);
+require(`${__dirname}/modules/botExtensions`)(bot);
 
 bot.connect();
