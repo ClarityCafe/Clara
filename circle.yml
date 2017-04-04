@@ -16,8 +16,5 @@ jobs:
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             mv /tmp/docker/* /usr/bin
       - run:
-          name: Install Dependencies
-          command: npm i -S
-      - run:
           name: Docker Build
           command: docker build -f Dockerfile -t clara:continous .
