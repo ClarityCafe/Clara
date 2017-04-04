@@ -24,7 +24,7 @@ exports.about = {
     desc: 'All you need to know where the bot came from.',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.createMessage({embed: {
+            ctx.createMessage({embed: {
                 title: 'About Clara',
                 description: localeManager.t('about-nya', ctx.settings.locale, {github: 'https://github.com/awau/Clara', patreon: 'https://patreon.com/capuccino'}),
                 image: {url: 'https://github.com/awau/Clara/raw/master/nodebot_logo.png'},

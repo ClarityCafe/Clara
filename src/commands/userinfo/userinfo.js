@@ -46,7 +46,7 @@ exports.userinfo = {
                 roleColour = roleColour ? ctx.msg.channel.guild.roles.get(roleColour).color : 0;
                 let roles = [];
                 ctx.msg.member.roles.forEach(r => {roles.push(ctx.msg.channel.guild.roles.get(r).name);});
-                ctx.msg.channel.createMessage(infoBlock(ctx.msg.member, roles, roleColour)).then(resolve).catch(reject);
+                ctx.createMessage(infoBlock(ctx.msg.member, roles, roleColour)).then(resolve).catch(reject);
             } else {
                 let member = ctx.msg.channel.guild.members.get(ctx.msg.mentions[0].id);
                 let roleColour = member.roles.sort((a, b) => {
@@ -55,7 +55,7 @@ exports.userinfo = {
                 roleColour = roleColour ? member.guild.roles.get(roleColour).color : 0;
                 let roles = [];
                 member.roles.forEach(r => {roles.push(member.guild.roles.get(r).name);});
-                ctx.msg.channel.createMessage(infoBlock(member, roles, roleColour)).then(resolve).catch(reject);
+                ctx.createMessage(infoBlock(member, roles, roleColour)).then(resolve).catch(reject);
             }
         });
     }

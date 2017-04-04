@@ -18,9 +18,9 @@ exports.choose = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.args < 2) {
-                ctx.msg.channel.createMessage(localeManager.t('choose-insufficientArgs', ctx.settings.locale));
+                ctx.createMessage(localeManager.t('choose-insufficientArgs', ctx.settings.locale));
             } else if (ctx.args > 2) {
-                ctx.msg.channel.createMessage(localeManager.t('choose-exceededLimit', ctx.settings.locale));
+                ctx.createMessage(localeManager.t('choose-exceededLimit', ctx.settings.locale));
             } else {
                 /*
                 * We should only pars String ID 0 and 1, kinda like this
@@ -30,7 +30,7 @@ exports.choose = {
                 */
                 let choices = [ctx.args[0], ctx.args[2]];
                 let choice = choices[Math.floor(Math.random()* choices.length)];
-                ctx.msg.channel.createMessage(localeManager.t('choose', ctx.settings.locale, {name: ctx.msg.author.mention, choice})).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('choose', ctx.settings.locale, {name: ctx.msg.author.mention, choice})).then(resolve).catch(reject);
             }
         });
     }

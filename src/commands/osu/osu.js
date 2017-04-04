@@ -26,15 +26,15 @@ exports.osu = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage(localeManager.t('osu-noName', ctx.settings.locale)).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('osu-noName', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
                 ctx.msg.channel.sendTyping();
                 osu.get_user({u: ctx.suffix}, res => {
                     var user = res[0];
                     if (!user || !user.user_id) {
-                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', ctx.settings.locale)).then(resolve).catch(reject);
+                        ctx.createMessage(localeManager.t('osu-noRes', ctx.settings.locale)).then(resolve).catch(reject);
                     } else {
-                        ctx.msg.channel.createMessage(osuBlock(user, ctx.settings)).then(resolve).catch(reject);
+                        ctx.createMessage(osuBlock(user, ctx.settings)).then(resolve).catch(reject);
                     }
                 });
             }
@@ -49,15 +49,15 @@ exports.ctb = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage(localeManager.t('osu-noName', ctx.settings.locale)).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('osu-noName', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
                 ctx.msg.channel.sendTyping();
                 osu.get_user({u: ctx.suffix, m: 2}, res => {
                     var user = res[0];
                     if (!user || !user.user_id) {
-                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', ctx.settings.locale)).then(resolve).catch(reject);
+                        ctx.createMessage(localeManager.t('osu-noRes', ctx.settings.locale)).then(resolve).catch(reject);
                     } else {
-                        ctx.msg.channel.createMessage(osuBlock(user, ctx.settings)).then(resolve).catch(reject);
+                        ctx.createMessage(osuBlock(user, ctx.settings)).then(resolve).catch(reject);
                     }
                 });
             }
@@ -72,15 +72,15 @@ exports.mania = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage(localeManager.t('osu-noName', ctx.settings.locale)).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('osu-noName', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
                 ctx.msg.channel.sendTyping();
                 osu.get_user({u: ctx.suffix, m: 3}, res => {
                     var user = res[0];
                     if (!user || !user.user_id) {
-                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', ctx.settings.locale)).then(resolve).catch(reject);
+                        ctx.createMessage(localeManager.t('osu-noRes', ctx.settings.locale)).then(resolve).catch(reject);
                     } else {
-                        ctx.msg.channel.createMessage(osuBlock(user, ctx.settings)).then(resolve).catch(reject);
+                        ctx.createMessage(osuBlock(user, ctx.settings)).then(resolve).catch(reject);
                     }
                 });
             }
@@ -95,15 +95,15 @@ exports.taiko = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage(localeManager.t('osu-noName', ctx.settings.locale)).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('osu-noName', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
                 ctx.msg.channel.sendTyping();
                 osu.get_user({u: ctx.suffix, m: 1}, res => {
                     var user = res[0];
                     if (!user || !user.user_id) {
-                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', ctx.settings.locale)).then(resolve).catch(reject);
+                        ctx.createMessage(localeManager.t('osu-noRes', ctx.settings.locale)).then(resolve).catch(reject);
                     } else {
-                        ctx.msg.channel.createMessage(osuBlock(user, ctx.settings)).then(resolve).catch(reject);
+                        ctx.createMessage(osuBlock(user, ctx.settings)).then(resolve).catch(reject);
                     }
                 });
             }

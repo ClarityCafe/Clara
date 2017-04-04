@@ -42,10 +42,10 @@ exports.main = {
 
             embed.description += loaded.join('\n');
 
-            ctx.msg.channel.createMessage({embed}).then(() => {
+            ctx.createMessage({embed}).then(() => {
                 if (unloaded.length !== 0) {
                     embed.description = `Showing **${cmdFolders.length}** command modules.\n\`Unloaded Modules\`\n\n${unloaded.join('\n')}`;
-                    return ctx.msg.channel.createMessage({embed});
+                    return ctx.createMessage({embed});
                 } else {
                     reject;
                 }
@@ -60,13 +60,13 @@ exports.load = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.args[0]) {
-                ctx.msg.channel.createMessage('No module given to load.').then(resolve).catch(reject);
+                ctx.createMessage('No module given to load.').then(resolve).catch(reject);
             } else if (bot.commands.checkModule(ctx.args[0])) {
-                ctx.msg.channel.createMessage(`Module **${ctx.args[0]}** already exist's in the command holder.`).then(resolve).catch(reject);
+                ctx.createMessage(`Module **${ctx.args[0]}** already exist's in the command holder.`).then(resolve).catch(reject);
             } else {
                 readDir(`${__baseDir}/commands`).then(folders => {
                     if (folders.indexOf(ctx.args[0]) === -1) {
-                        return ctx.msg.channel.createMessage(`Module **${ctx.args[0]}** does not exist.`);
+                        return ctx.createMessage(`Module **${ctx.args[0]}** does not exist.`);
                     } else {
                         let pkg = require(path.join(__dirname,  '../', ctx.args[0], 'package.json'));
                         let mod = require(path.join(__dirname, '../', ctx.args[0], pkg.main));
@@ -82,7 +82,7 @@ exports.load = {
                             }
                         }
 
-                        return ctx.msg.channel.createMessage(`Loaded **${loadedAmt}/${mod.commands.length}** commands from module **${ctx.args[0]}**`);
+                        return ctx.createMessage(`Loaded **${loadedAmt}/${mod.commands.length}** commands from module **${ctx.args[0]}**`);
                     }
                 }).then(resolve).catch(reject);
             }
@@ -96,9 +96,9 @@ exports.unload = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.args[0]) {
-                ctx.msg.channel.createMessage('No module given to unload.').then(resolve).catch(reject);
+                ctx.createMessage('No module given to unload.').then(resolve).catch(reject);
             } else if (!bot.commands.checkModule(ctx.args[0])) {
-                ctx.msg.channel.createMessage(`Module **${ctx.args[0]}** is not loaded or does not exist.`).then(resolve).catch(reject);
+                ctx.createMessage(`Module **${ctx.args[0]}** is not loaded or does not exist.`).then(resolve).catch(reject);
             } else {
                 let pkg = require(path.join(__dirname, '../', ctx.args[0], 'package.json'));
                 let mod = require(path.join(__dirname, '../', ctx.args[0], pkg.main));
@@ -111,7 +111,7 @@ exports.unload = {
                     fs.writeFileSync(`${__baseDir}/data/unloadedCommands.json`, JSON.stringify(unloadedMods));
                 }
 
-                ctx.msg.channel.createMessage(`Unloaded **${unloadedAmt}/${mod.commands.length}** commands from module **${ctx.args[0]}**`).then(resolve).catch(reject);
+                ctx.createMessage(`Unloaded **${unloadedAmt}/${mod.commands.length}** commands from module **${ctx.args[0]}**`).then(resolve).catch(reject);
             }
         });
     }
@@ -123,9 +123,9 @@ exports.reload = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.args[0]) {
-                ctx.msg.channel.createMessage('No module given to reload.').then(resolve).catch(reject);
+                ctx.createMessage('No module given to reload.').then(resolve).catch(reject);
             } else if (!bot.commands.checkModule(ctx.args[0])) {
-                ctx.msg.channel.createMessage(`Module **${ctx.args[0]}** is not loaded or does not exist.`).then(resolve).catch(reject);
+                ctx.createMessage(`Module **${ctx.args[0]}** is not loaded or does not exist.`).then(resolve).catch(reject);
             } else {
                 decache(path.join(__dirname, '../', ctx.args[0], 'package.json'));
                 let pkg = require(path.join(__dirname,  '../', ctx.args[0], 'package.json'));
@@ -134,7 +134,7 @@ exports.reload = {
 
                 let reloadedAmt = bot.commands.reloadModule(ctx.args[0], mod, path.join(__dirname, '../', ctx.args[0], pkg.main)) || 0;
 
-                ctx.msg.channel.createMessage(`Reloaded **${reloadedAmt}/${mod.commands.length}** commands from module **${ctx.args[0]}**`).then(resolve).catch(reject);
+                ctx.createMessage(`Reloaded **${reloadedAmt}/${mod.commands.length}** commands from module **${ctx.args[0]}**`).then(resolve).catch(reject);
             }
         });
     }

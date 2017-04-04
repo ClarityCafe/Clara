@@ -27,13 +27,13 @@ for ctx messages/Promise chaining make sure to do
 
 ```js 
 
-ctx.msg.channel.createMessage().then(resolve).catch(err);
+ctx.createMessage().then(resolve).catch(err);
 ```
 or 
 
 ```js
 
-ctx.msg.channel.createMessage().then(() => {
+ctx.createMessage().then(() => {
     //code awau
 }).catch(reject);
 ```
@@ -41,7 +41,7 @@ ctx.msg.channel.createMessage().then(() => {
 Avoid using this type of indents for messages 
 ```js 
 
-ctx.msg.channel.createMessage()
+ctx.createMessage()
 .then(resolve)
 .catch(reject)
 ```

@@ -20,7 +20,7 @@ exports.nadeko = {
     longDesc: 'owo whats this?',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.createMessage(localeManager.t('nadeko', ctx.settings.locale, {user: ctx.msg.author.mention, emote: emotes[Math.floor(Math.random() * emotes.length)]})).then(resolve).catch(reject);
+            ctx.createMessage(localeManager.t('nadeko', ctx.settings.locale, {user: ctx.msg.author.mention, emote: emotes[Math.floor(Math.random() * emotes.length)]})).then(resolve).catch(reject);
         });
     }
 };
