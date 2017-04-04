@@ -19,7 +19,7 @@ exports.nyaa = {
         return new Promise((resolve, reject) => {
             got('http://random.cat/meow').then(res => {
                 let kitty = JSON.parse(res.body).file;
-                return ctx.msg.channel.createMessage(kitty);
+                return ctx.createMessage(kitty);
             }).then(resolve).catch(reject);
         });
     }

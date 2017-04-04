@@ -17,7 +17,7 @@ exports.cat = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             var cat = cats();
-            ctx.msg.channel.createMessage(cat).then(resolve).catch(reject);
+            ctx.createMessage(cat).then(resolve).catch(reject);
         });
     }
 };

@@ -17,11 +17,11 @@ exports.apod = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!bot.config.nasaKey) {
-                ctx.msg.channel.createMessage(localeManager.t('nasa-noKey', ctx.settings.locale)).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('nasa-noKey', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
                 got(`https://api.nasa.gov/planetary/apod?api_key=${bot.config.nasaKey}`).then(res => {
                     let data = JSON.parse(res.body);
-                    return ctx.msg.channel.createMessage({embed: {
+                    return ctx.createMessage({embed: {
                         title: data.title,
                         description: data.copyright ? localeManager.t('nasa-copyright', ctx.settings.locale, {copyright: data.copyright}) : '',
                         thumbnail: {url: 'https://api.nasa.gov/images/logo.png'},

@@ -34,7 +34,7 @@ exports.yori = {
                 let $ = cheerio.load(res.body);
                 let imgs = $('a').text().trim().substring(16).trim().split(' ').filter(i => imgRegex.test(i));
                 let img = imgs[Math.floor(Math.random() * albums.length)];
-                return ctx.msg.channel.createMessage(baseUrl + album + img);
+                return ctx.createMessage(baseUrl + album + img);
             }).then(resolve).catch(reject);
         });
     }

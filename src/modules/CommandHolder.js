@@ -118,7 +118,7 @@ class CommandHolder {
             if (!module.main.main) {
                 command.main = (bot, ctx) => {
                     return new Promise((resolve, reject) => {
-                        ctx.msg.channel.createMessage('soon').then(resolve).catch(reject);
+                        ctx.createMessage('soon').then(resolve).catch(reject);
                     });
                 };
             }

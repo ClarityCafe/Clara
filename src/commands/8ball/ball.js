@@ -24,10 +24,10 @@ exports.ball = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix || !/(?:\?|\uff1f)$/.test(ctx.suffix)) {
-                ctx.msg.channel.createMessage(localeManager.t('ball-noQuestion', ctx.settings.locale)).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('ball-noQuestion', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
                 let response = localeManager.t(responses[Math.floor(Math.random() * responses.length)], ctx.settings.locale);
-                ctx.msg.channel.createMessage(response).then(resolve).catch(reject);
+                ctx.createMessage(response).then(resolve).catch(reject);
             }
         });
     }

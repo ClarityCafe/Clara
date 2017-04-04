@@ -22,7 +22,7 @@ exports.anime = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix) {
-                ctx.msg.channel.createMessage(localeManager.t('anime-noArgs', ctx.settings.locale)).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('anime-noArgs', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
                 ctx.msg.channel.sendTyping();
                 if (/^\d+$/.test(ctx.suffix)) {
@@ -34,7 +34,7 @@ exports.anime = {
                                     reject(err);
                                 } else {
                                     fs.unlink(savePath, () => {
-                                        ctx.msg.channel.createMessage(animeBlock(animu, color, ctx.settings)).then(resolve).catch(reject);
+                                        ctx.createMessage(animeBlock(animu, color, ctx.settings)).then(resolve).catch(reject);
                                     });
                                 }
                             });
@@ -49,7 +49,7 @@ exports.anime = {
                                     reject(err);
                                 } else {
                                     fs.unlink(savePath, () => {
-                                        ctx.msg.channel.createMessage(animeBlock(animu, color, ctx.settings)).then(resolve).catch(reject);
+                                        ctx.createMessage(animeBlock(animu, color, ctx.settings)).then(resolve).catch(reject);
                                     });
                                 }
                             });
@@ -64,7 +64,7 @@ exports.anime = {
                                     reject(err);
                                 } else {
                                     fs.unlink(savePath, () => {
-                                        ctx.msg.channel.createMessage(animeBlock(animu, color, ctx.settings)).then(resolve).catch(reject);
+                                        ctx.createMessage(animeBlock(animu, color, ctx.settings)).then(resolve).catch(reject);
                                     });
                                 }
                             });

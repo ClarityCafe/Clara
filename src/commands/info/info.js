@@ -32,7 +32,7 @@ exports.info = {
             let roleColour = ctx.msg.channel.guild.roles.get(ctx.guildBot.roles.sort((a, b) => {
                 return ctx.guildBot.guild.roles.get(b).position - ctx.guildBot.guild.roles.get(a).position;
             })[0]).color;
-            ctx.msg.channel.createMessage({embed: {
+            ctx.createMessage({embed: {
                 title: `${bot.user.username}'s Info`,
                 description: `[${localeManager.t('info-source', ctx.settings.locale)}](https://github.com/awau/Clara) | [${localeManager.t('info-supportServer', ctx.settings.locale)}](https://discord.gg/ZgQkCkm)`,
                 thumbnail: {url: bot.user.avatarURL},

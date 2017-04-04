@@ -19,7 +19,7 @@ exports.clean = {
                 msgs = msgs.filter(m => m.author.id === bot.user.id);
                 msgs.forEach(m => delet.push(m.delete()));
                 return Promise.all(delet);
-            }).then(amt => ctx.msg.channel.createMessage(localeManager.t('clean', ctx.settings.locale, {amt: amt.length}))).then(deleteDelay).then(() => resolve).catch(reject);
+            }).then(amt => ctx.createMessage(localeManager.t('clean', ctx.settings.locale, {amt: amt.length}))).then(deleteDelay).then(() => resolve).catch(reject);
         });
     }
 };

@@ -23,8 +23,8 @@ exports.awwnime = {
                     let images = JSON.parse(res.body);
                     let image = images[Math.floor(Math.random() * images.length)];
 
-                    if (!image) return ctx.msg.channel.createMessage('No results found.');
-                    return ctx.msg.channel.createMessage(image.full);
+                    if (!image) return ctx.createMessage('No results found.');
+                    return ctx.createMessage(image.full);
                 }).then(resolve).catch(reject);
             } else {
                 let query = encodeURIComponent(ctx.suffix).replace(/%20/g, '+');
@@ -33,8 +33,8 @@ exports.awwnime = {
                     let images = JSON.parse(res.body);
                     let image = images[Math.floor(Math.random() * images.length)];
 
-                    if (!image) return ctx.msg.channel.createMessage('No results found.');
-                    return ctx.msg.channel.createMessage(image.full);
+                    if (!image) return ctx.createMessage('No results found.');
+                    return ctx.createMessage(image.full);
                 }).then(resolve).catch(reject);
             }
         });
