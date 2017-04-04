@@ -18,34 +18,34 @@ exports.greetings = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.args.length === 0) {
-                ctx.msg.channel.createMessage({embed: greetingBlock(ctx.settings)}).then(resolve).catch(reject);
+                ctx.createMessage({embed: greetingBlock(ctx.settings)}).then(resolve).catch(reject);
             } else if (ctx.args[0] === 'enable') {
                 if (!ctx.msg.member.permission.has('manageGuild')) {
-                    ctx.msg.channel.createMessage(localeManager.t('user-noPerm', ctx.settings.locale, {perm: 'Manage Server'})).then(resolve).catch(reject);
+                    ctx.createMessage(localeManager.t('user-noPerm', ctx.settings.locale, {perm: 'Manage Server'})).then(resolve).catch(reject);
                 } else {
                     bot.getGuildSettings(ctx.msg.channel.guild.id).then(res => {
                         let settings = res;
                         settings.greeting.enabled = true;
                         return bot.setGuildSettings(res.id, settings);
                     }).then(() => {
-                        return ctx.msg.channel.createMessage(localeManager.t('greetings-enable', ctx.settings.locale));
+                        return ctx.createMessage(localeManager.t('greetings-enable', ctx.settings.locale));
                     }).then(resolve).catch(reject);
                 }
             }  else if (ctx.args[0] === 'disable') {
                 if (!ctx.msg.member.permission.has('manageGuild')) {
-                    ctx.msg.channel.createMessage(localeManager.t('user-noPerm', ctx.settings.locale, {perm: 'Manage Server'})).then(resolve).catch(reject);
+                    ctx.createMessage(localeManager.t('user-noPerm', ctx.settings.locale, {perm: 'Manage Server'})).then(resolve).catch(reject);
                 } else {
                     bot.getGuildSettings(ctx.msg.channel.guild.id).then(res => {
                         let settings = res;
                         settings.greeting.enabled = false;
                         return bot.setGuildSettings(res.id, settings);
                     }).then(() => {
-                        return ctx.msg.channel.createMessage(localeManager.t('greetings-disable', ctx.settings.locale));
+                        return ctx.createMessage(localeManager.t('greetings-disable', ctx.settings.locale));
                     }).then(resolve).catch(reject);
                 }
             } else if (ctx.args[0] === 'channel' && ctx.args.length >= 2) {
                 if (!ctx.msg.member.permission.has('manageGuild')) {
-                    ctx.msg.channel.createMessage(localeManager.t('user-noPerm', ctx.settings.locale, {perm: 'Manage Server'})).then(resolve).catch(reject);
+                    ctx.createMessage(localeManager.t('user-noPerm', ctx.settings.locale, {perm: 'Manage Server'})).then(resolve).catch(reject);
                 } else {
                     bot.getGuildSettings(ctx.msg.channel.guild.id).then(res => {
                         let settings = res;
@@ -59,7 +59,7 @@ exports.greetings = {
                             let chans = ctx.msg.channel.guild.channels.filter(c => c.name.toLowerCase().includes(meme.join(' ')));
 
                             if (chans.length === 0) {
-                                return ctx.msg.channel.createMessage(localeManager.t('greetings-noChan', ctx.settings.locale, {name: meme.join(' ')}));
+                                return ctx.createMessage(localeManager.t('greetings-noChan', ctx.settings.locale, {name: meme.join(' ')}));
                             } else {
                                 settings.greeting.channelID = chans[0].id;
                                 return bot.setGuildSettings(res.id, settings);
@@ -76,7 +76,7 @@ exports.greetings = {
                             return null;
                         } else {
                             console.log(res);
-                            return ctx.msg.channel.createMessage(localeManager.t('greetings-setChan', ctx.settings.locale, {id: res.greeting.channelID}));
+                            return ctx.createMessage(localeManager.t('greetings-setChan', ctx.settings.locale, {id: res.greeting.channelID}));
                         }
                     }).then(resolve).catch(reject);
                 }
@@ -91,10 +91,10 @@ exports.greetings = {
 
                     return bot.setGuildSettings(res.id, settings);
                 }).then(() => {
-                    return ctx.msg.channel.createMessage(localeManager.t('greetings-setMsg', ctx.settings.locale));
+                    return ctx.createMessage(localeManager.t('greetings-setMsg', ctx.settings.locale));
                 }).then(resolve).catch(reject);
             } else {
-                ctx.msg.channel.createMessage({embed: greetingBlock(ctx.settings)}).then(resolve).catch(reject);
+                ctx.createMessage({embed: greetingBlock(ctx.settings)}).then(resolve).catch(reject);
             }
         });
     }

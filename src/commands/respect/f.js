@@ -20,9 +20,9 @@ exports.f = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.cleanSuffix) {
-                ctx.msg.channel.createMessage(localeManager.t('respects-args', ctx.settings.locale, {user: utils.formatUsername(ctx.msg.member, true), object: ctx.cleanSuffix})).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('respects-args', ctx.settings.locale, {user: utils.formatUsername(ctx.msg.member, true), object: ctx.cleanSuffix})).then(resolve).catch(reject);
             } else {
-                ctx.msg.channel.createMessage(localeManager.t('respects', ctx.settings.locale, {user: utils.formatUsername(ctx.msg.member, true)})).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('respects', ctx.settings.locale, {user: utils.formatUsername(ctx.msg.member, true)})).then(resolve).catch(reject);
             }
         });
     }
@@ -36,9 +36,9 @@ exports.rip = {
         return new Promise((resolve, reject) => {
             if (ctx.cleanSuffix) {
                 let url = encodeURI(`https://ripme.xyz/#${ctx.cleanSuffix}`);
-                ctx.msg.channel.createMessage(localeManager.t('rip-args', ctx.settings.locale, {url})).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('rip-args', ctx.settings.locale, {url})).then(resolve).catch(reject);
             } else {
-                ctx.msg.channel.createMessage(localeManager.t('rip', ctx.settings.locale)).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('rip', ctx.settings.locale)).then(resolve).catch(reject);
             }
         });
     }

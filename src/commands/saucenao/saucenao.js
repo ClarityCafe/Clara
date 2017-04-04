@@ -22,7 +22,7 @@ exports.saucenao = {
             if (!ctx.suffix) {
                 //grab the last message with an attachment
                 if (!ctx.msg.channel.attachments) {
-                    ctx.msg.channel.createMessage('Aw, no Image here.');
+                    ctx.createMessage('Aw, no Image here.');
                 } else {
                     let imgUrl = ctx.msg.channel.attachments[0].url;
                     got(`https://saucenao.com`, {
@@ -34,7 +34,7 @@ exports.saucenao = {
                         const fields = [];
                         fields.push({name: '', value: res[0].url, inline: true});
                         //finally send the message in embed
-                        ctx.msg.channel.createMessage({
+                        ctx.createMessage({
                             embed: {
                                 title: 'saucenao Query',
                                 desccription: 'This is the closest I can find.',
@@ -45,7 +45,7 @@ exports.saucenao = {
                 }
             } else {
                 if (!imgRegex) {
-                    ctx.msg.channel.createMessage('Your URL is invalid!, Please make sure it\'s a valid image URL.');
+                    ctx.createMessage('Your URL is invalid!, Please make sure it\'s a valid image URL.');
                 } else {
                     //query saucenao but this time, we use the suffix value
                     got('https://saucenao.com', {
@@ -55,7 +55,7 @@ exports.saucenao = {
                     }).then(res => {
                         const fields = [];
                         fields.push({name: '', value: res.url});
-                        ctx.msg.channel.createMessage({
+                        ctx.createMessage({
                             embed: {
                                 title: 'saucenao query',
                                 desccription: 'this is the closest I can find',

@@ -36,7 +36,7 @@ exports.main = {
                 embed.fields[1].value = embed.fields[1].value.join('\n');
             }
 
-            ctx.msg.channel.createMessage({embed}).then(resolve).catch(reject);
+            ctx.createMessage({embed}).then(resolve).catch(reject);
         });
     }
 };
@@ -48,7 +48,7 @@ exports.add = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.args.length === 0) {
-                ctx.msg.channel.createMessage('Please give me a prefix to add.').then(resolve).catch(reject);
+                ctx.createMessage('Please give me a prefix to add.').then(resolve).catch(reject);
             } else {
                 let prefix = ctx.args.join(' ');
                 let newPrefixes = JSON.stringify(JSON.parse(fs.readFileSync(`${__baseDir}/data/prefixes.json`)).concat(prefix));
@@ -56,7 +56,7 @@ exports.add = {
                     if (err) {
                         reject(err);
                     } else {
-                        ctx.msg.channel.createMessage(`Added prefix \`${prefix}\``).then(resolve).catch(reject);
+                        ctx.createMessage(`Added prefix \`${prefix}\``).then(resolve).catch(reject);
                     }
                 });
             }
@@ -71,7 +71,7 @@ exports.remove = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.args.length === 0) {
-                ctx.msg.channel.createMessage('Please give me a prefix to remove.').then(resolve).catch(reject);
+                ctx.createMessage('Please give me a prefix to remove.').then(resolve).catch(reject);
             } else {
                 let prefix = ctx.args.join(' ');
                 let prefixes = JSON.parse(fs.readFileSync(`${__baseDir}/data/prefixes.json`));
@@ -79,13 +79,13 @@ exports.remove = {
                 console.log(newPrefixes);
 
                 if (newPrefixes.equals(prefixes)) {
-                    ctx.msg.channel.createMessage("That prefix doesn't exist or can't be removed.");
+                    ctx.createMessage("That prefix doesn't exist or can't be removed.");
                 } else {
                     fs.writeFile(`${__baseDir}/data/prefixes.json`, JSON.stringify(newPrefixes), err => {
                         if (err) {
                             reject(err);
                         } else {
-                            ctx.msg.channel.createMessage(`Removed prefixes \`${prefix}\``).then(resolve).catch(reject);
+                            ctx.createMessage(`Removed prefixes \`${prefix}\``).then(resolve).catch(reject);
                         }
                     });
                 }

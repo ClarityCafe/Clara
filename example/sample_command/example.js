@@ -20,7 +20,7 @@ exports.ping = {
     usage: '',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.createMessage('Ping!').then(() => resolve()).catch(err => reject([err]));
+            ctx.createMessage('Ping!').then(() => resolve()).catch(err => reject([err]));
         });
     }
 };
@@ -31,7 +31,7 @@ exports.pong = {
     fullDesc: 'Simple response command.',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.createMessage('Pong!').then(() => resolve()).catch(err => reject([err]));
+            ctx.createMessage('Pong!').then(() => resolve()).catch(err => reject([err]));
         });
     }
 };

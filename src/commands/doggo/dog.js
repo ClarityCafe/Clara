@@ -18,7 +18,7 @@ exports.woof = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             got('http://random.dog/woof').then(res => {
-                return ctx.msg.channel.createMessage(`http://random.dog/${res.body}`);
+                return ctx.createMessage(`http://random.dog/${res.body}`);
             }).then(resolve).catch(reject);
         });
     }

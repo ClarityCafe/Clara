@@ -34,7 +34,7 @@ exports.ibsearch = {
                     }
                 }).then(res => {
                     let results = JSON.parse(res.body);
-                    if (results.length === 0) return ctx.msg.channel.createMessage('No results found.');
+                    if (results.length === 0) return ctx.createMessage('No results found.');
                     
                     let item = info.item = results[Math.floor(Math.random() * results.length)];
                     info.url = `https://${item.server}.ibsear.ch/resize/${item.path}?width=500&height=500`;
@@ -42,7 +42,7 @@ exports.ibsearch = {
                     return null;
                 }).then(() => {
                     let {item, url} = info;
-                    return ctx.msg.channel.createMessage({embed: {
+                    return ctx.createMessage({embed: {
                         title: 'Image Source',
                         url: `https://ibsear.ch/images/${item.id}`,
                         image: {url},
@@ -65,7 +65,7 @@ exports.ibsearch = {
                     }
                 }).then(res => {
                     let results = JSON.parse(res.body);
-                    if (results.length === 0) return ctx.msg.channel.createMessage('No results found.');
+                    if (results.length === 0) return ctx.createMessage('No results found.');
                     
                     let item = info.item = results[Math.floor(Math.random() * results.length)];
                     info.url = `https://${item.server}.ibsear.ch/resize/${item.path}?width=500&height=500`;
@@ -73,7 +73,7 @@ exports.ibsearch = {
                     return null;
                 }).then(() => {
                     let {item, url} = info;
-                    return ctx.msg.channel.createMessage({embed: {
+                    return ctx.createMessage({embed: {
                         title: 'Image Source',
                         url: `https://ibsear.ch/images/${item.id}`,
                         image: {url},
