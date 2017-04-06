@@ -26,7 +26,7 @@ exports.locales = {
                 exposed = bot;
                 changeLocale(ctx).then(resolve).catch(reject);
             } else if (ctx.args.length === 3 && ctx.args[1] === 'guild' && /[a-z]{2}-[A-Z]{2}/i.test(ctx.args[2])) {
-                if (!ctx.msg.member.permission.has('manageGuild')) {
+                if (!ctx.member.permission.has('manageGuild')) {
                     ctx.createMessage(localeManager.t('user-noPerm', 'en-UK', {perm: 'Manage Guild'})).then(resolve).catch(reject);
                 } else {
                     exposed = bot;
@@ -75,7 +75,7 @@ function changeLocale(ctx, guild) {
                 ctx.createMessage(localeManager.t('locales-invalidLocale', userChoice, {locale: userChoice})).then(resolve).catch(reject);
             } else {
                 let bot = exposed;
-                bot.setUserSettings(ctx.msg.author.id, {locale: userChoice}).then(() => {
+                bot.setUserSettings(ctx.author.id, {locale: userChoice}).then(() => {
                     return ctx.createMessage(localeManager.t('locales-userLocaleUpdated', userChoice, {locale: userChoice}));
                 }).then(resolve).catch(reject);
             }
@@ -92,7 +92,7 @@ function changeLocale(ctx, guild) {
                 ctx.createMessage(localeManager.t('locales-invalidLocale', ctx.settings.locale, {locale: userChoice})).then(resolve).catch(reject);
             } else {
                 let bot = exposed;
-                bot.setGuildSettings(ctx.msg.channel.guild.id, {locale: userChoice}).then(() => {
+                bot.setGuildSettings(ctx.guild.id, {locale: userChoice}).then(() => {
                     return ctx.createMessage(localeManager.t('locales-guildLocaleUpdated', userChoice, {locale: userChoice}));
                 }).then(resolve).catch(reject);
             }

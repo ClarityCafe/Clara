@@ -16,7 +16,7 @@ exports.awau = {
     desc: 'Awaus at you.',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.sendTyping();
+            ctx.channel.sendTyping();
             let files = fs.readdirSync(`${__baseDir}/res/awau`);
             let file = fs.readFileSync(`${__baseDir}/res/awau/${files[Math.floor(Math.random() * files.length)]}`);
             ctx.createMessage('', {file, name: 'awau.png'}).then(resolve).catch(reject);

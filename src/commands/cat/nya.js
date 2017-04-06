@@ -16,8 +16,7 @@ exports.cat = {
     desc: 'Prints out a random cat.',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            var cat = cats();
-            ctx.createMessage(cat).then(resolve).catch(reject);
+            ctx.createMessage(cats()).then(resolve).catch(reject);
         });
     }
 };

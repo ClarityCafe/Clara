@@ -6,13 +6,11 @@
 
 /* eslint-env node */
 
-const fs = require('fs');
 const Eris = require('eris');
-const config = require(`${__baseDir}/config.json`);
 
 /**
  * Convert millisecond time into a more human-readable format.
- * @arg {Number} ms Milliseconds to convert.
+ * @param {Number} ms Milliseconds to convert.
  * @returns {String} Formatted string with days, hours, minutes and seconds.
  */
 function msToTime(ms) {
@@ -39,31 +37,12 @@ function msToTime(ms) {
 
 /**
  * Easily format user names and discriminators.
- * @arg {Eris.User|Eris.Member} user The user to format.
- * @arg {Boolean} [noDiscrim=false] Whether or not to include the user's discriminator.
+ * @param {Eris.User|Eris.Member} user The user to format.
+ * @param {Boolean} [noDiscrim=false] Whether or not to include the user's discriminator.
  * @returns {String} The users formatted name in the format 'name#discriminator'. Will have users nickname if a member is passed in as the user.
  */
 function formatUsername(user, noDiscrim=false) {
     return user instanceof Eris.Member ? `${user.nick ? user.nick : user.user.username}${noDiscrim ? '' : `#${user.user.discriminator}`}` : `${user.username}${noDiscrim ? '' : `#${user.discriminator}`}`;
 }
 
-/**
- * Check if the user has bot perms.
- * @param {String} userID ID of the user to check.
- * @returns {Boolean}
- */
-
-function checkBotPerms(userID) {
-    return userID === config.ownerID || JSON.parse(fs.readFileSync(`${__baseDir}/data/data.json`)).admins.indexOf(userID) !== -1;
-}
-
-/**
- * Check if the user is blacklisted.
- * @arg {String} userID ID of the user to check.
- * @returns {Boolean}
- */
-function isBlacklisted(userID) {
-    return JSON.parse(fs.readFileSync(`${__baseDir}/data/data.json`)).blacklist.indexOf(userID) !== -1;
-}
-
-module.exports = {msToTime, formatUsername, isBlacklisted, checkBotPerms};
+module.exports = {msToTime, formatUsername};

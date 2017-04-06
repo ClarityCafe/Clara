@@ -20,10 +20,10 @@ exports.greetings = {
             if (ctx.args.length === 0) {
                 ctx.createMessage({embed: greetingBlock(ctx.settings)}).then(resolve).catch(reject);
             } else if (ctx.args[0] === 'enable') {
-                if (!ctx.msg.member.permission.has('manageGuild')) {
+                if (!ctx.member.permission.has('manageGuild')) {
                     ctx.createMessage(localeManager.t('user-noPerm', ctx.settings.locale, {perm: 'Manage Server'})).then(resolve).catch(reject);
                 } else {
-                    bot.getGuildSettings(ctx.msg.channel.guild.id).then(res => {
+                    bot.getGuildSettings(ctx.guild.id).then(res => {
                         let settings = res;
                         settings.greeting.enabled = true;
                         return bot.setGuildSettings(res.id, settings);
@@ -32,10 +32,10 @@ exports.greetings = {
                     }).then(resolve).catch(reject);
                 }
             }  else if (ctx.args[0] === 'disable') {
-                if (!ctx.msg.member.permission.has('manageGuild')) {
+                if (!ctx.member.permission.has('manageGuild')) {
                     ctx.createMessage(localeManager.t('user-noPerm', ctx.settings.locale, {perm: 'Manage Server'})).then(resolve).catch(reject);
                 } else {
-                    bot.getGuildSettings(ctx.msg.channel.guild.id).then(res => {
+                    bot.getGuildSettings(ctx.guild.id).then(res => {
                         let settings = res;
                         settings.greeting.enabled = false;
                         return bot.setGuildSettings(res.id, settings);
@@ -44,19 +44,19 @@ exports.greetings = {
                     }).then(resolve).catch(reject);
                 }
             } else if (ctx.args[0] === 'channel' && ctx.args.length >= 2) {
-                if (!ctx.msg.member.permission.has('manageGuild')) {
+                if (!ctx.member.permission.has('manageGuild')) {
                     ctx.createMessage(localeManager.t('user-noPerm', ctx.settings.locale, {perm: 'Manage Server'})).then(resolve).catch(reject);
                 } else {
-                    bot.getGuildSettings(ctx.msg.channel.guild.id).then(res => {
+                    bot.getGuildSettings(ctx.guild.id).then(res => {
                         let settings = res;
 
-                        if (ctx.msg.channelMentions.length > 0) {
-                            settings.greeting.channelID = ctx.msg.channelMentions[0];
+                        if (ctx.channelMentions.length > 0) {
+                            settings.greeting.channelID = ctx.channelMentions[0];
                             return bot.setGuildSettings(res.id, settings);
                         } else {
                             let meme = ctx.suffix.split(' ');
                             meme.shift();
-                            let chans = ctx.msg.channel.guild.channels.filter(c => c.name.toLowerCase().includes(meme.join(' ')));
+                            let chans = ctx.guild.channels.filter(c => c.name.toLowerCase().includes(meme.join(' ')));
 
                             if (chans.length === 0) {
                                 return ctx.createMessage(localeManager.t('greetings-noChan', ctx.settings.locale, {name: meme.join(' ')}));
@@ -69,7 +69,7 @@ exports.greetings = {
                         if (res instanceof Eris.Message) {
                             return null;
                         } else {
-                            return bot.getGuildSettings(ctx.msg.channel.guild.id);
+                            return bot.getGuildSettings(ctx.guild.id);
                         }
                     }).then(res => {
                         if (!res) {
@@ -81,7 +81,7 @@ exports.greetings = {
                     }).then(resolve).catch(reject);
                 }
             } else if (ctx.args[0] === 'text' && ctx.args.length >= 2) {
-                bot.getGuildSettings(ctx.msg.channel.guild.id).then(res => {
+                bot.getGuildSettings(ctx.guild.id).then(res => {
                     let settings = res;
                     let message = ctx.suffix.split(' ');
                     message.shift();

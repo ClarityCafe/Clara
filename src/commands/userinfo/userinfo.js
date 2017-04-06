@@ -39,16 +39,16 @@ exports.userinfo = {
     example: '@b1nzy#1337',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            if (ctx.msg.mentions.length === 0) {
-                let roleColour = ctx.msg.member.roles.sort((a, b) => {
-                    return ctx.msg.member.guild.roles.get(b).position - ctx.msg.member.guild.roles.get(a).position;
+            if (ctx.mentions.length === 0) {
+                let roleColour = ctx.member.roles.sort((a, b) => {
+                    return ctx.member.guild.roles.get(b).position - ctx.member.guild.roles.get(a).position;
                 })[0];
-                roleColour = roleColour ? ctx.msg.channel.guild.roles.get(roleColour).color : 0;
+                roleColour = roleColour ? ctx.channel.guild.roles.get(roleColour).color : 0;
                 let roles = [];
-                ctx.msg.member.roles.forEach(r => {roles.push(ctx.msg.channel.guild.roles.get(r).name);});
-                ctx.createMessage(infoBlock(ctx.msg.member, roles, roleColour)).then(resolve).catch(reject);
+                ctx.member.roles.forEach(r => {roles.push(ctx.channel.guild.roles.get(r).name);});
+                ctx.createMessage(infoBlock(ctx.member, roles, roleColour)).then(resolve).catch(reject);
             } else {
-                let member = ctx.msg.channel.guild.members.get(ctx.msg.mentions[0].id);
+                let member = ctx.channel.guild.members.get(ctx.mentions[0].id);
                 let roleColour = member.roles.sort((a, b) => {
                     return member.guild.roles.get(b).position - member.guild.roles.get(a).position;
                 })[0];

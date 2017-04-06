@@ -25,7 +25,7 @@ exports.ibsearch = {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix) {
                 let info = {};
-                ctx.msg.channel.sendTyping();
+                ctx.channel.sendTyping();
                 
                 got(`https://ibsear.ch/api/v1/images.json?${defaultQuery ? `q=${encodeURIComponent(defaultQuery.toLowerCase()).replace('&20', '+')}&` : ''}limit=${queryLimit}`, {
                     headers: {
@@ -56,7 +56,7 @@ exports.ibsearch = {
             } else {
                 let query = encodeURIComponent(ctx.suffix.toLowerCase()).replace('%20', '+');
                 let info = {};
-                ctx.msg.channel.sendTyping();
+                ctx.channel.sendTyping();
                 
                 got(`https://ibsear.ch/api/v1/images.json?${query}limit=${queryLimit}`, {
                     headers: {

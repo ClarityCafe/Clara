@@ -31,7 +31,7 @@ class LocaleManager {
     /**
      * Load all locales in the locale directory.
      *
-     * @returns {Promise}
+     * @returns {Promise} .
      */
     loadLocales() {
         return new Promise((resolve, reject) => {
@@ -76,7 +76,7 @@ class LocaleManager {
      * @param {String} key The key whose value to translate
      * @param {String} locale Name of locale to translate too.
      * @param {Object=} replacers Object of values in string.
-     * @returns {String}
+     * @returns {String} Translated string.
      */
     t(key, locale = this.fallbackLocale, replacers = {}) {
         if (typeof key !== 'string') {

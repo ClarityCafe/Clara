@@ -4,7 +4,7 @@ const QUOTEREGEX = /(")(?:(?=(\\?))\2.)*?\1/g;
  * Parse a string and return arguments for command runner.
  * 
  * @param {String} str String to parse from
- * @returns {Promise<Object>} Object with three keys: args, cmd, raw
+ * @returns {Promise<Object>} Object with three keys: args, cmd, suffix
  */
 function parseArgs(str) {
     return new Promise(resolve => {
@@ -31,7 +31,7 @@ function parseArgs(str) {
 
             // Move multi word args into main array
             args.forEach((v, i) => {
-                if (suffix.split(' ')[i].startsWith('"')) args.splice(i + 1, 0, tmp.shift());
+                if (str.split(' ')[i].startsWith('"')) args.splice(i + 1, 0, tmp.shift());
             });
 
             // Concat rest of multi word args, flatten and filter
@@ -48,9 +48,9 @@ function parseArgs(str) {
         }
 
         // String without command in front
-        let raw = str.split(cmd).slice(1).join(' ').trim();
+        let suffix = str.split(cmd).slice(1).join(' ').trim();
 
-        resolve({args, cmd, raw});
+        resolve({args, cmd, suffix});
     });
 }
 
