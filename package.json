@@ -1,5 +1,5 @@
 {
-  "name": "clara-owo",
+  "name": "clara",
   "version": "0.3.0-lts",
   "description": "A general-purpose discord bot.",
   "main": "src/bot.js",
