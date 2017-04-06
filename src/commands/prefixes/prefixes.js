@@ -54,8 +54,9 @@ exports.add = {
                 ctx.createMessage('Please give me a prefix to add.').then(resolve).catch(reject);
             } else {
                 let prefix = ctx.args.join(' ');
-                let newPrefixes = bot.prefixes.concat(prefix);
-                fs.writeFile(`${__baseDir}/data/prefixes.json`, newPrefixes, err => {
+                let newPrefixes = bot.prefixes.concat(prefix).filter(p => p !== bot.config.mainPrefix && !RegExp(`^<@!?${bot.user.id}> $`).test(p));
+
+                fs.writeFile(`${__baseDir}/data/prefixes.json`, JSON.stringify(newPrefixes), err => {
                     if (err) {
                         reject(err);
                     } else {
@@ -79,11 +80,11 @@ exports.remove = {
             } else {
                 let prefix = ctx.args.join(' ');
                 let newPrefixes = bot.prefixes.filter(p => p !== prefix);
-                console.log(newPrefixes);
 
                 if (newPrefixes.equals(bot.prefixes)) {
                     ctx.createMessage("That prefix doesn't exist or can't be removed.");
                 } else {
+                    newPrefixes = newPrefixes.filter(p => p !== bot.config.mainPrefix && !RegExp(`^<@!?${bot.user.id}> $`).test(p));
                     fs.writeFile(`${__baseDir}/data/prefixes.json`, JSON.stringify(newPrefixes), err => {
                         if (err) {
                             reject(err);
