@@ -19,7 +19,7 @@ exports.kick = {
     desc: 'Kicks the mentioned people from the guild.',
     fullDesc: "Kicks the mentioned people from the guild the command is executed in. Can kick multiple people at once. Requires the 'Kick Members' permission.",
     usage: '<user mention(s)>',
-    permission: {},
+    permission: {both: ['kickMembers']},
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.msg.member.permission.has('kickMembers')) {
@@ -65,6 +65,7 @@ exports.ban = {
     desc: 'Bans the mentioned people from the guild.',
     fullDesc: "Bans the mentioned people from the guild the command is executed in. Can ban multiple people at once. Requires the 'Ban Members' permission.",
     usage: '<user mention(s)>',
+    permission: {both: ['banMembers']},
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.msg.member.permission.has('banMembers')) {
@@ -110,6 +111,7 @@ exports.purge = {
     desc: 'Purge messages',
     longDesc: 'Purges a specified type of message with an optional amount.',
     usage: '<type> [amount up to 100]',
+    permission: {both: ['manageMessages']},
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.msg.member.permission.has('manageMessages')) {
