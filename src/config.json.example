@@ -1,46 +1,18 @@
 {
   
-  "_comment_token": "your Bot token",
   "token": "",
-
-  "_comment_debug": "Boolean. True if Debug Stack is needed for Errors. False if simplified is only needed",
   "debug": true,
-
-  "_comment_promiseWarnings": "Boolean. Decide if you want stupidly long stack traces and warnings for Promises.",
   "promiseWarnings": false,
-
-  "_comment_ibKey": "ibsearch key, used by ibsearch",
   "ibKey": "",
-
-  "_comment_mainPrefix": "Main Prefix",
   "mainPrefix": "?",
-
-  "_comment_osuApiKey": "API key for osu!Related Requests",
   "osuApiKey": "",
-
-  "_comment_gameName" : "your selected game name for the bot",
   "gameName" : "",
-  
-  "_comment_gameURL" : "the game's URL, must be a twitch URL"
   "gameURL" :"",
-
-  "_comment_ownerID": "your own ID. Needed if you need exclusive access",
   "ownerID": "",
-  "_comment_maxShards" : "sets the bots maximum shards(default 1)",
   "maxShards": 1,
-
-  "_comment_ytSearchKey": "Key to use youtube search in music.",
   "ytSearchKey": "",
-
-  "_comment_twitchKey": "Key to use with Twitch streaming.",
   "twitchKey": "",
-  
-  "_comment_nasaKey": "Key to use with nasa apod command",
   "nasaKey": "",
-
-  "_comment_rethinkOptions": "Object to use when connecting to a Rethink instance",
   "rethinkOptions: {},
-
-  "_comment_discordBotsKey": "Token for posting guild count to Discord Bots",
   "discordBotsKey": ""
 }
