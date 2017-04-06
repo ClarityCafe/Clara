@@ -259,4 +259,24 @@ module.exports = bot => {
             }).then(res => resolve(JSON.parse(res.body).key)).catch(reject);
         });
     };
+
+    /**
+     * Check if a user has elevated bot permissions.
+     * 
+     * @param {String} userID ID of the user to check.
+     * @returns {Boolean} If the user has perms.
+     */
+    bot.checkBotPerms = userID => {
+        return userID === bot.config.ownerID || JSON.parse(fs.readFileSync(`${__baseDir}/data/data.json`)).admins.indexOf(userID) !== -1;
+    };
+
+    /**
+     * Check if a user is blacklisted.
+     * 
+     * @param {String} userID ID of the user to check.
+     * @returns {Boolean} If the user is blacklisted.
+     */
+    bot.isBlacklisted = userID => {
+        return ~bot.blacklist.indexOf(userID);
+    };
 };

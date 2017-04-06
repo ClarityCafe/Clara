@@ -36,12 +36,12 @@ exports.eval = {
     usage: '<code>',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            if (ctx.raw.length === 0) {
+            if (ctx.suffix.length === 0) {
                 ctx.createMessage('Please give arguments to evaluate.').then(resolve).catch(reject);
             } else {
-                let {args, cmd, raw, cleanRaw, settings, guildBot} = ctx; // eslint-disable-line
+                let {args, cmd, suffix, cleansuffix, settings, guildBot} = ctx; // eslint-disable-line
                 try {
-                    let returned = eval(ctx.raw);
+                    let returned = eval(ctx.suffix);
                     let str = util.inspect(returned, {depth: 1});
                     str = str.replace(ReplaceRegex.token, '(token)');
 
@@ -49,7 +49,7 @@ exports.eval = {
                         title: 'Evaluation Results',
                         color: SuccessCol,
                         fields: [
-                            {name: 'Input', value: generateCodeblock(ctx.raw)},
+                            {name: 'Input', value: generateCodeblock(ctx.suffix)},
                             {name: 'Output', value: generateCodeblock(str)}
                         ]
                     };
@@ -72,7 +72,7 @@ exports.eval = {
                         title: 'Evaluation Results',
                         color: FailCol,
                         fields: [
-                            {name: 'Input', value: generateCodeblock(ctx.raw)},
+                            {name: 'Input', value: generateCodeblock(ctx.suffix)},
                             {name: 'Error', value: generateCodeblock(err)}
                         ]
                     };
@@ -118,7 +118,7 @@ function sendEval(bot, ctx, embed, returned) {
                         title: 'Evaluation Results',
                         color: SuccessCol,
                         fields: [
-                            {name: 'Input', value: generateCodeblock(ctx.raw)},
+                            {name: 'Input', value: generateCodeblock(ctx.suffix)},
                             {name: 'Output', value: generateCodeblock(strN)}
                         ]
                     }});
@@ -133,7 +133,7 @@ function sendEval(bot, ctx, embed, returned) {
                 title: 'Evaluation Results',
                 color: SuccessCol,
                 fields: [
-                    {name: 'Input', value: generateCodeblock(ctx.raw)},
+                    {name: 'Input', value: generateCodeblock(ctx.suffix)},
                     {name: 'Output', value: `Output is too long to display nicely.\nOutput has been uploaded [here](${url})`}
                 ]
             }});
@@ -147,7 +147,7 @@ function sendEval(bot, ctx, embed, returned) {
                     title: 'Evaluation Results',
                     color: FailCol,
                     fields: [
-                        {name: 'Input', value: generateCodeblock(ctx.raw)},
+                        {name: 'Input', value: generateCodeblock(ctx.suffix)},
                         {name: 'Error', value: generateCodeblock(err)}
                     ]
                 }});

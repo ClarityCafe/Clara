@@ -18,8 +18,8 @@ const bot = new Eris(config.token, {
     autoreconnect: true,
     seedVoiceConnections: true,
     maxShards: config.maxShards || 1,
-    defaultImageFormat: 'png',
-    defaultImageSize: 1024,
+    defaultImageFormat: 'webp',
+    defaultImageSize: 512,
     disableEvents: {
         TYPING_START: true
     }
@@ -46,6 +46,8 @@ if (!fs.existsSync(`${__dirname}/data/prefixes.json`)) fs.writeFileSync(`${__dii
 // Bot object modification
 bot.db = require('rethinkdbdash')(config.rethinkOptions);
 bot.commands = new (require(`${__dirname}/modules/CommandHolder`)).CommandHolder(bot);
+bot.blacklist = JSON.parse(fs.readFileSync(`${__dirname}/data/data.json`)).blacklist;
+bot.prefixes = JSON.parse(fs.readFileSync(`${__dirname}/data/prefixes.json`)).concat([config.mainPrefix]);
 bot.config = config;
 bot.loadCommands = true;
 bot.allowCommandUse = false;

@@ -23,7 +23,7 @@ exports.yori = {
     longDesc: 'Scrapes i.yorium.moe for a random anime picture.',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.sendTyping();
+            ctx.channel.sendTyping();
             let albums, album;
             got(baseUrl).then(res => {
                 let $ = cheerio.load(res.body);
