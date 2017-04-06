@@ -1,5 +1,5 @@
-/* marry.js - Marry your imaginary waifu or someone
- * 
+/*
+ * marry.js - Marry your imaginary waifu or someone
  * 
  *  Contributed by Capuccino
  */

@@ -28,7 +28,7 @@ exports.osu = {
             if (ctx.suffix.length === 0) {
                 ctx.createMessage(localeManager.t('osu-noName', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
-                ctx.msg.channel.sendTyping();
+                ctx.channel.sendTyping();
                 osu.get_user({u: ctx.suffix}, res => {
                     var user = res[0];
                     if (!user || !user.user_id) {
@@ -51,7 +51,7 @@ exports.ctb = {
             if (ctx.suffix.length === 0) {
                 ctx.createMessage(localeManager.t('osu-noName', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
-                ctx.msg.channel.sendTyping();
+                ctx.channel.sendTyping();
                 osu.get_user({u: ctx.suffix, m: 2}, res => {
                     var user = res[0];
                     if (!user || !user.user_id) {
@@ -74,7 +74,7 @@ exports.mania = {
             if (ctx.suffix.length === 0) {
                 ctx.createMessage(localeManager.t('osu-noName', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
-                ctx.msg.channel.sendTyping();
+                ctx.channel.sendTyping();
                 osu.get_user({u: ctx.suffix, m: 3}, res => {
                     var user = res[0];
                     if (!user || !user.user_id) {
@@ -97,7 +97,7 @@ exports.taiko = {
             if (ctx.suffix.length === 0) {
                 ctx.createMessage(localeManager.t('osu-noName', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
-                ctx.msg.channel.sendTyping();
+                ctx.channel.sendTyping();
                 osu.get_user({u: ctx.suffix, m: 1}, res => {
                     var user = res[0];
                     if (!user || !user.user_id) {

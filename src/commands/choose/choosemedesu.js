@@ -11,26 +11,17 @@ exports.commands = [
 ];
 
 exports.choose = {
-    desc: "Randomly chooses between 2 or more arguments seperated with a '/'.",
-    fullDesc: 'Uses a randomiser to pick a random value out of two given arguments. Arguments must be seperated by "or" ',
-    usage: '<choice1> or <choice2>',
-    example: 'coke zero or coke',
+    desc: "Randomly chooses between 2 or more arguments.",
+    fullDesc: 'Uses a randomiser to pick a random value out of two given arguments.',
+    usage: '<choice1> <choice2>',
+    example: '"coke zero" coke',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.args < 2) {
                 ctx.createMessage(localeManager.t('choose-insufficientArgs', ctx.settings.locale));
-            } else if (ctx.args > 2) {
-                ctx.createMessage(localeManager.t('choose-exceededLimit', ctx.settings.locale));
             } else {
-                /*
-                * We should only pars String ID 0 and 1, kinda like this
-                * [x or y]
-                *  ^    ^
-                * "or" is only there for naturalization
-                */
-                let choices = [ctx.args[0], ctx.args[2]];
-                let choice = choices[Math.floor(Math.random()* choices.length)];
-                ctx.createMessage(localeManager.t('choose', ctx.settings.locale, {name: ctx.msg.author.mention, choice})).then(resolve).catch(reject);
+                let choice = ctx.args[Math.floor(Math.random() * ctx.args.length)];
+                ctx.createMessage(localeManager.t('choose', ctx.settings.locale, {name: ctx.author.mention, choice})).then(resolve).catch(reject);
             }
         });
     }

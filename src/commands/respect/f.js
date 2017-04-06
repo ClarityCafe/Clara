@@ -20,9 +20,9 @@ exports.f = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.cleanSuffix) {
-                ctx.createMessage(localeManager.t('respects-args', ctx.settings.locale, {user: utils.formatUsername(ctx.msg.member, true), object: ctx.cleanSuffix})).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('respects-args', ctx.settings.locale, {user: utils.formatUsername(ctx.member, true), object: ctx.cleanSuffix})).then(resolve).catch(reject);
             } else {
-                ctx.createMessage(localeManager.t('respects', ctx.settings.locale, {user: utils.formatUsername(ctx.msg.member, true)})).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('respects', ctx.settings.locale, {user: utils.formatUsername(ctx.member, true)})).then(resolve).catch(reject);
             }
         });
     }

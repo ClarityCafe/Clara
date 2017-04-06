@@ -5,6 +5,7 @@ const fs = require('fs');
 module.exports = bot => {
     bot.on('ready', () => {
         if (bot.loadCommands) {
+            bot.prefixes = bot.prefixes.concat([`<@${bot.user.id}> `, `<@!${bot.user.id}> `]);
             let meme;
             localeManager.loadLocales().then(() => {
                 logger.info(`Loaded ${Object.keys(localeManager.locales).length} locales.`);
