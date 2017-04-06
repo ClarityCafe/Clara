@@ -19,7 +19,7 @@ exports.kick = {
     desc: 'Kicks the mentioned people from the guild.',
     fullDesc: "Kicks the mentioned people from the guild the command is executed in. Can kick multiple people at once. Requires the 'Kick Members' permission.",
     usage: '<user mention(s)>',
-    permission: 
+    permission: '',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.msg.member.permission.has('kickMembers')) {
