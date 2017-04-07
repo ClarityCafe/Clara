@@ -81,16 +81,17 @@ exports.remove = {
                 let prefix = ctx.args.join(' ');
                 let newPrefixes = bot.prefixes.filter(p => p !== prefix);
 
-                if (newPrefixes.equals(bot.prefixes)) {
-                    ctx.createMessage("That prefix doesn't exist or can't be removed.");
+                if (RegExp(`^<@!?${bot.user.id}> ?$`).test(prefix) || prefix === bot.config.mainPrefix || newPrefixes.equals(bot.prefixes)) {
+                    ctx.createMessage("That prefix doesn't exist or can't be removed.").then(resolve).catch(reject);
                 } else {
                     newPrefixes = newPrefixes.filter(p => p !== bot.config.mainPrefix && !RegExp(`^<@!?${bot.user.id}> $`).test(p));
+
                     fs.writeFile(`${__baseDir}/data/prefixes.json`, JSON.stringify(newPrefixes), err => {
                         if (err) {
                             reject(err);
                         } else {
                             bot.prefixes.splice(bot.prefixes.indexOf(prefix), 1);
-                            ctx.createMessage(`Removed prefixes \`${prefix}\``).then(resolve).catch(reject);
+                            ctx.createMessage(`Removed prefix \`${prefix}\``).then(resolve).catch(reject);
                         }
                     });
                 }
