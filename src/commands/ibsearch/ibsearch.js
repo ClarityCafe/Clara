@@ -9,6 +9,7 @@
 const got = require('got');
 const prettyBytes = require('pretty-bytes');
 const moment = require('moment');
+const utils = require(`${__baseDir}/modules/utils`);
 
 const defaultQuery = 'foxgirl'; // Default: 'foxgirl'
 const queryLimit = 75; // Default: 75
@@ -46,6 +47,7 @@ exports.ibsearch = {
                         title: 'Image Source',
                         url: `https://ibsear.ch/images/${item.id}`,
                         image: {url},
+                        color: utils.randomColour(),
                         footer: {text: `Time First Indexed by IbSearch: ${moment.unix(item.found).format('dddd Do MMMM Y')} at ${moment.unix(item.found).format('HH:mm:ss A')}`},
                         fields: [
                             {name: 'Image Information', value: `${item.width}x${item.width} - ${prettyBytes(Number(item.size))}`},
@@ -77,6 +79,7 @@ exports.ibsearch = {
                         title: 'Image Source',
                         url: `https://ibsear.ch/images/${item.id}`,
                         image: {url},
+                        color: utils.randomColour(),
                         footer: {text: `Time First Indexed by IbSearch: ${moment.unix(item.found).format('dddd Do MMMM Y')} at ${moment.unix(item.found).format('HH:mm:ss A')}`},
                         fields: [
                             {name: 'Image Information', value: `${item.width}x${item.width} - ${prettyBytes(Number(item.size))}`},

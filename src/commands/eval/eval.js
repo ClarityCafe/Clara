@@ -40,7 +40,7 @@ exports.eval = {
             if (ctx.suffix.length === 0) {
                 ctx.createMessage('Please give arguments to evaluate.').then(resolve).catch(reject);
             } else {
-                let {args, cmd, suffix, cleansuffix, settings, guildBot} = ctx; // eslint-disable-line
+                let {args, cmd, suffix, cleansuffix, settings, guildBot, channel, guild} = ctx; // eslint-disable-line
                 try {
                     let returned = eval(ctx.suffix);
                     let str = util.inspect(returned, {depth: 1});

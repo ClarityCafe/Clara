@@ -7,6 +7,7 @@
 /* eslint-env node */
 
 const Eris = require('eris');
+const utils = require(`${__baseDir}/modules/utils`);
 
 exports.commands = [
     'greetings'
@@ -103,6 +104,7 @@ exports.greetings = {
 function greetingBlock(settings) {
     return {
         title: 'Greeting Management',
+        color: utils.randomColour(),
         description: `**${localeManager.t('greetings-enabled', settings.locale)}:** ${settings.guild.greeting.enabled ? localeManager.t('yes', settings.locale) : localeManager.t('no', settings.locale)}\n**${localeManager.t('greetings-channel')}:** ${settings.guild.greeting.channelID ? `<#${settings.guild.greeting.channelID}>` : localeManager.t('none', settings.locale)}\n**${localeManager.t('greetings-message')}:** ${settings.guild.greeting.message || localeManager.t('none', settings.locale)}`,
         fields: [{
             name: 'Example Usage',
