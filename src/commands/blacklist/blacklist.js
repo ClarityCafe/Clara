@@ -22,7 +22,7 @@ exports.main = {
             let embed = {
                 title: 'Blacklisted Users',
                 description: [],
-                color: 0x7289DA
+                color: utils.randomColour()
             };
 
             if (bot.blacklist.length === 0) {

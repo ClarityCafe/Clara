@@ -23,7 +23,7 @@ exports.main = {
             let embed = {
                 title: 'Bot Admins',
                 description: `**${utils.formatUsername(bot.users.get(bot.config.ownerID))}** (Bot owner)`,
-                color: 0x7289DA
+                color: utils.randomColour()
             };
 
             bot.admins.forEach(a => embed.description += `\n**${utils.formatUsername(bot.users.get(a))}**`);

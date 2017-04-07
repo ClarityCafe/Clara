@@ -45,4 +45,33 @@ function formatUsername(user, noDiscrim=false) {
     return user instanceof Eris.Member ? `${user.nick ? user.nick : user.user.username}${noDiscrim ? '' : `#${user.user.discriminator}`}` : `${user.username}${noDiscrim ? '' : `#${user.discriminator}`}`;
 }
 
-module.exports = {msToTime, formatUsername};
+/**
+ * Output a random colour for embeds.
+ * @returns {Number} A colour.
+ */
+function randomColour() {
+    let colours = [
+        0x7289DA, // Discord Blurple
+        0x99AAB5, // Discord Greyple
+        0xF44336, // Red - Rest are Material Design colours from here on
+        0xE91E63, // Pink
+        0x9C27B0, // Purple
+        0x673AB7, // Deep Purple
+        0x3F51B5, // Indigo
+        0x2196F3, // Blue
+        0x03A9F4, // Light Blue
+        0x00BCD4, // Cyan
+        0x009688, // Teal
+        0x4CAF50, // Green
+        0x8BC34A, // Light Green
+        0xCDDC39, // Lime
+        0xFFEB3B, // Yellow
+        0xFFC107, // Amber
+        0xFF9800, // Orange
+        0xFF5722, // Deep Orange
+        0x607D8B // Blue Grey
+    ];
+    return colours[Math.floor(Math.random() * colours.length)];
+}
+
+module.exports = {msToTime, formatUsername, randomColour};
