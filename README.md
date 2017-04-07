@@ -8,7 +8,7 @@
 
 # Running
 
-Go to the  [Getting Started Article in The Wiki] (https://github.com/awau/Clara/wiki/Getting-Started) for full instructions
+Go to the  [Getting Started Article in The Wiki](https://github.com/awau/Clara/wiki/Getting-Started) for full instructions
 
 ### Deploying via Docker
 If you don't want to install node on your host, or you are having problems with native build tools, you can deploy this bot with the help of Docker.
