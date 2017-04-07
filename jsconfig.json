@@ -5,7 +5,7 @@
         "charset": "utf-8"
     },
     "files": [
-        "**.js"
+        "*.js"
     ],
     "exclude": [
         "node_modules"
