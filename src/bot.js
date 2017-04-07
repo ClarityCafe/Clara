@@ -45,7 +45,7 @@ if (!fs.existsSync(`${__dirname}/data/prefixes.json`)) fs.writeFileSync(`${__dir
 
 // Bot object modification
 
-// possible workaround for  Issue #66.
+// possible workaround for Issue #66.
 bot.db = require('rethinkdbdash')(config.rethinkOptions ||  {db: 'clara', servers: [{host: '0.0.0.0', port: 8081}]});
 bot.commands = new (require(`${__dirname}/modules/CommandHolder`)).CommandHolder(bot);
 bot.blacklist = JSON.parse(fs.readFileSync(`${__dirname}/data/data.json`)).blacklist;
