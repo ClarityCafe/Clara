@@ -255,6 +255,7 @@ class CommandHolder {
 
             let cmd = this.getCommand(cmdName);
 
+            // Subcommand checking
             if (cmd.subcommands && cmd.subcommands[ctx.args[0]]) {
                 // Remove subcommand from suffix and args.
                 let subcommand = ctx.args.shift();
@@ -296,6 +297,7 @@ class CommandHolder {
 
     /**
      * Loop through the commands.
+     * 
      * @param {Function} callback Function to run on each iteration.
      */
     forEach(callback) {
@@ -431,7 +433,7 @@ class CommandHolder {
  * @prop {String} [usage] Arguments for the command.
  */
 class Command { // eslint-disable-line
-    constructor() {}
+    constructor() {} // This is just for documentation purposes.
 }
 
 let _msg = Symbol();
