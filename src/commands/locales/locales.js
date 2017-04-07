@@ -6,6 +6,8 @@
 
 /* eslint-env node */
 
+const utils = require(`${__baseDir}/modules/utils`);
+
 var exposed;
 
 exports.commands = [
@@ -40,7 +42,12 @@ exports.locales = {
 };
 
 function localeBlock(settings) {
-    let embed = {title: localeManager.t('locales-infoHeader', settings.locale), description: '', fields: []};
+    let embed = {
+        title: localeManager.t('locales-infoHeader', settings.locale),
+        description: '',
+        color: utils.randomColour(),
+        fields: []
+    };
 
     Object.keys(localeManager.locales).forEach(v => embed.description += `\n${v} - **${localeManager.locales[v].locales[v]} [${localeManager.locales[settings.locale].locales[v]}]**`);
     

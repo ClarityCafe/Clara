@@ -7,7 +7,7 @@
 /* eslint-env node */
 
 const mal = require('malapi').Anime;
-const fs = require('fs');
+const utils = require(`${__baseDir}/modules/utils`);
 
 exports.commands = [
     'anime'
@@ -46,6 +46,7 @@ function animeBlock(animu, settings) {
         title: animu.title,
         url: animu.detailsLink,
         thumbnail: {url: animu.image},
+        color: utils.randomColour(),
         fields: [
             {name: localeManager.t('id', settings.locale), value: animu.id, inline: true},
             {name: localeManager.t('anime-japanese', settings.locale), value: animu.alternativeTitles.japanese.join(', ').substring(9).trim(), inline: true},

@@ -7,6 +7,7 @@
 /* eslint-env node */
 
 const fs = require('fs');
+const utils = require(`${__baseDir}/modules/utils`);
 
 exports.loadAsSubcommands = true;
 exports.commands = [
@@ -23,7 +24,7 @@ exports.main = {
             let embed = {
                 title: `Displaying **${bot.prefixes.length - 1}** prefixes`,
                 description: [],
-                color: 0x7289DA,
+                color: utils.randomColour(),
                 author: {
                     name: 'Current Prefixes'
                 }
