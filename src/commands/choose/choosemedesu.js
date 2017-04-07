@@ -17,11 +17,12 @@ exports.choose = {
     example: '"coke zero" coke',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            if (ctx.args < 2) {
-                ctx.createMessage(localeManager.t('choose-insufficientArgs', ctx.settings.locale));
+            let choices = ctx.suffix.split(' or ');
+            if (choices.length < 2) {
+                ctx.msg.channel.createMessage(localeManager.t('choose-insufficientArgs', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
-                let choice = ctx.args[Math.floor(Math.random() * ctx.args.length)];
-                ctx.createMessage(localeManager.t('choose', ctx.settings.locale, {name: ctx.author.mention, choice})).then(resolve).catch(reject);
+                var choice = choices[Math.floor(Math.random() * choices.length)];
+                ctx.msg.channel.createMessage(localeManager.t('choose', ctx.settings.locale, {name: ctx.msg.author.username, choice})).then(resolve).catch(reject);
             }
         });
     }
