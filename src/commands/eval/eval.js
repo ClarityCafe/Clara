@@ -12,6 +12,7 @@ const cp = require('child_process');
 const path = require('path');
 const got = require('got');
 const PassThrough = require('stream').PassThrough;
+const utils = require(`${__baseDir}/modules/utils`);
 /* eslint-enable */
 
 const FailCol = 0xF44336;
