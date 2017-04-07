@@ -8,11 +8,7 @@
 
 # Running
 
-In order to run this bot, you will need one of the most recent versions of Node.JS. Anything that is 6.x.x or above should work, but it's best to make sure that your Node version is the latest stable version.
-
-NOTE: Any version of Node.JS that is below 6.10.0 **WILL NOT WORK** due to this bot relying on things that are present in ES6.
-
-If you are running this on Linux, you may need to install [Node Version Manager](http://nvm.sh) in order to get the latest version, as the official packages in some distros like Ubuntu and Debian only have a version of 4.x.x.
+Go to the  [Getting Started Article in The Wiki] (https://github.com/awau/Clara/wiki/Getting-Started) for full instructions
 
 ### Deploying via Docker
 If you don't want to install node on your host, or you are having problems with native build tools, you can deploy this bot with the help of Docker.
