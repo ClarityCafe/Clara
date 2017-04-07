@@ -41,10 +41,12 @@ exports.bot = bot;
 if (!fs.existsSync(`${__dirname}/data/`)) fs.mkdirSync(`${__dirname}/data/`);
 if (!fs.existsSync(`${__dirname}/cache/`)) fs.mkdirSync(`${__dirname}/cache/`);
 if (!fs.existsSync(`${__dirname}/data/data.json`)) fs.writeFileSync(`${__dirname}/data/data.json`, '{"admins": [], "blacklist": []}');
-if (!fs.existsSync(`${__dirname}/data/prefixes.json`)) fs.writeFileSync(`${__diirname}/data/prefixes.json`, '[]');
+if (!fs.existsSync(`${__dirname}/data/prefixes.json`)) fs.writeFileSync(`${__dirname}/data/prefixes.json`, '[]');
 
 // Bot object modification
-bot.db = require('rethinkdbdash')(config.rethinkOptions);
+
+// possible workaround for  Issue #66.
+bot.db = require('rethinkdbdash')(config.rethinkOptions ||  {db: 'clara', servers: [{host: '0.0.0.0', port: 8081}]});
 bot.commands = new (require(`${__dirname}/modules/CommandHolder`)).CommandHolder(bot);
 bot.blacklist = JSON.parse(fs.readFileSync(`${__dirname}/data/data.json`)).blacklist;
 bot.prefixes = JSON.parse(fs.readFileSync(`${__dirname}/data/prefixes.json`)).concat([config.mainPrefix]);
