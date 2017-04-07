@@ -42,7 +42,7 @@ exports.add = {
             if (ctx.author.id !== bot.config.ownerID) {
                 ctx.createMessage('This is restricted to the bot owner.').then(resolve).catch(reject);
             } else {
-                if (!/^(<@!?\d+>|\d+)$/.test(ctx.args[0])) {
+                if (!/^<@!?\d+>$/.test(ctx.args[0])) {
                     ctx.createMessage('Please mention the user to add, or their id.').then(resolve).catch(reject);
                 } else {
                     let id = /^(<@!?\d+>|\d+)$/.test(ctx.args[0]) ? ctx.args[0].replace(/^<@!?/, '').slice(0, -1) : ctx.args[0];
@@ -80,9 +80,9 @@ exports.remove = {
                 if (!/^(<@!?\d+>|\d+)$/.test(ctx.args[0])) {
                     ctx.createMessage('Please mention the user to add, or their id.').then(resolve).catch(reject);
                 } else {
-                    let id = /^(<@!?\d+>|\d+)$/.test(ctx.args[0]) ? ctx.args[0].replace(/^<@!?/, '').slice(0, -1) : ctx.args[0];
+                    let id = /^<@!?\d+>$/.test(ctx.args[0]) ? ctx.args[0].replace(/^<@!?/, '').slice(0, -1) : ctx.args[0];
 
-                    if (!~bot.admins.indexOf(id)) {
+                    if (!bot.admins.includes(id)) {
                         ctx.createMessage('That user is not an admin.').then(resolve).catch(reject);
                     } else {
                         let newAdmins = bot.admins.filter(a => a !== id);
