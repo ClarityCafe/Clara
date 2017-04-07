@@ -27,7 +27,7 @@ exports.about = {
             ctx.createMessage({embed: {
                 title: 'About Clara',
                 description: localeManager.t('about-nya', ctx.settings.locale, {github: 'https://github.com/awau/Clara', patreon: 'https://patreon.com/capuccino'}),
-                image: {url: 'https://github.com/awau/Clara/raw/master/nodebot_logo.png'},
+                image: {url: 'https://github.com/awau/Clara/raw/release/nodebot_logo.png'},
                 footer: {text: `${bot.user.username} uses Clara ${version}`}
             }}).then(resolve).catch(reject);
         });
