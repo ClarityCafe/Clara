@@ -44,10 +44,12 @@ if (!fs.existsSync(`${__dirname}/data/data.json`)) fs.writeFileSync(`${__dirname
 if (!fs.existsSync(`${__dirname}/data/prefixes.json`)) fs.writeFileSync(`${__dirname}/data/prefixes.json`, '[]');
 
 // Bot object modification
-
+let tmp = JSON.parse(fs.readFileSync(`${__dirname}/data/data.json`));
 bot.db = require('rethinkdbdash')(config.rethinkOptions);
 bot.commands = new (require(`${__dirname}/modules/CommandHolder`)).CommandHolder(bot);
-bot.blacklist = JSON.parse(fs.readFileSync(`${__dirname}/data/data.json`)).blacklist;
+bot.blacklist = tmp.blacklist;
+bot.admins = tmp.admins;
+tmp = null;
 bot.prefixes = JSON.parse(fs.readFileSync(`${__dirname}/data/prefixes.json`)).concat([config.mainPrefix]);
 bot.config = config;
 bot.loadCommands = true;
@@ -59,7 +61,6 @@ bot.music = {
     streams: new Eris.Collection(Object),
     stopped: []
 };
-
 bot.settings = {
     guilds: new Eris.Collection(Object),
     users: new Eris.Collection(Object)
