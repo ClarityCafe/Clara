@@ -9,6 +9,7 @@
 const fs = require('fs');
 const path = require('path');
 const decache = require('decache');
+const utils = require(`${__baseDir}/modules/utils`);
 
 exports.loadAsSubcommands = true;
 
@@ -28,28 +29,28 @@ exports.main = {
         return new Promise((resolve, reject) => {
             let cmdFolders = fs.readdirSync(path.join(__dirname, '../'));
             let unloadedMods = JSON.parse(fs.readFileSync(`${__baseDir}/data/unloadedCommands.json`));
-            let embed = {title: 'Current Modules', description: `Showing **${cmdFolders.length}** command modules.\n\`Loaded Modules\`\n\n`};
-            let loaded = [];
-            let unloaded = [];
+            let embed = {
+                title: 'Current Modules',
+                description: `Showing **${cmdFolders.length}** command modules.`,
+                color: utils.randomColour(),
+                fields: [
+                    {name: 'Loaded Modules', value: []},
+                    {name: 'Unloaded Modules', value: []}
+                ]
+            };
 
-            for (let mod in bot.commands.modules) {
-                loaded.push(`**${mod}**`);
-            }
-
-            unloadedMods.forEach(mod =>  {
-                unloaded.push(`**${mod}**`);
+            Object.keys(bot.commands.modules).filter(m => !m.endsWith('-fixed')).forEach(mod => {
+                embed.fields[0].value.push(`\`${mod}\``);
             });
 
-            embed.description += loaded.join('\n');
+            unloadedMods.forEach(mod =>  {
+                embed.fields[1].value.push(`\`${mod}\``);
+            });
 
-            ctx.createMessage({embed}).then(() => {
-                if (unloaded.length !== 0) {
-                    embed.description = `Showing **${cmdFolders.length}** command modules.\n\`Unloaded Modules\`\n\n${unloaded.join('\n')}`;
-                    return ctx.createMessage({embed});
-                } else {
-                    reject;
-                }
-            }).then(resolve).catch(reject);
+            embed.fields[0].value = embed.fields[0].value.join(', ');
+            embed.fields[1].value = embed.fields[1].value.join(', ');
+
+            ctx.createMessage({embed}).then(resolve).catch(reject);
         });
     }
 };
