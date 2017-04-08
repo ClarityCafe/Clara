@@ -4,9 +4,6 @@
         "experimentalDecorators": true,
         "charset": "utf-8"
     },
-    "files": [
-        "*.js"
-    ],
     "exclude": [
         "node_modules"
     ]
