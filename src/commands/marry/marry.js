@@ -24,9 +24,9 @@ exports.marry = {
                 ctx.createMessage(`${ctx.mentions[0]}, Will you marry ${ctx.author}? (yes/no) (You have 30 seconds to respond).`).then(() => {
                     bot.awaitMessage(ctx.channel.id, ctx.mentions[0].id, 30000).then(m => {
                         if (/y(es)?/i.test(m.content)) {
-                            return m.createMessage(`${ctx.author}, congrats! You are now married to ${ctx.mention[0]}!`);
+                            return m.createMessage(`${ctx.author.mention}, congrats! You are now married to ${ctx.mentions[0]}!`);
                         } else if (/no?/i.test(m.content)) {
-                            return m.createMessage(`I'm sorry ${ctx.author}, but your partner declined.`);
+                            return m.createMessage(`I'm sorry ${ctx.author.mention}, but your partner declined.`);
                         }
                     }).catch(() => {
                         ctx.createMessage('Your partner didn\'t respond in time.');
