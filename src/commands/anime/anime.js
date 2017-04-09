@@ -7,7 +7,6 @@
 /* eslint-env node */
 
 const mal = require('malapi').Anime;
-(`${__baseDir}/modules/utils`);
 
 exports.commands = [
     'anime'
