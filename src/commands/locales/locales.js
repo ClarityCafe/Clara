@@ -6,8 +6,6 @@
 
 /* eslint-env node */
 
-(`${__baseDir}/modules/utils`);
-
 var exposed;
 
 exports.commands = [

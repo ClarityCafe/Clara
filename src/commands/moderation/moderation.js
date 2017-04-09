@@ -6,7 +6,6 @@
 
 /* eslint-env node */
 
-(`${__baseDir}/modules/utils.js`);
 const safe = require('safe-regex');
 
 exports.commands = [
