@@ -22,7 +22,7 @@ exports.marry = {
                 ctx.createMessage('Hey! You\'re not allowed to marry yourself.');
             } else {
                 ctx.createMessage(`${ctx.mentions[0]}, Will you marry ${ctx.author}? (yes/no) (You have 30 seconds to respond).`).then(() => {
-                    bot.awaitMessage(ctx.channel.id, ctx.mentions[0].id, 30000).then(m => {
+                    bot.awaitMessage(ctx.channel.id, ctx.mentions[0].id, () => true, 30000).then(m => {
                         if (/y(es)?/i.test(m.content)) {
                             return m.createMessage(`${ctx.author.mention}, congrats! You are now married to ${ctx.mentions[0]}!`);
                         } else if (/no?/i.test(m.content)) {
