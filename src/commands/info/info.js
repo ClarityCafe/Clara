@@ -9,7 +9,6 @@
 const prettyBytes = require('pretty-bytes');
 const fs = require('fs');
 const path = require('path');
-(`${__baseDir}/modules/utils`);
 
 var version;
 try {

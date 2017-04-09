@@ -7,7 +7,6 @@
 /* eslint-env node */
 
 const Eris = require('eris');
-(`${__baseDir}/modules/utils`);
 
 exports.commands = [
     'greetings'
