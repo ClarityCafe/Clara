@@ -25,6 +25,9 @@ const bot = new Eris(config.token, {
     }
 });
 
+//global stuff
+
+global.utils = require(`${__dirname}/modules/utils`);
 global.__baseDir = __dirname;
 global.Promise = require('bluebird');
 global.logger = require(`${__dirname}/modules/logger`);
