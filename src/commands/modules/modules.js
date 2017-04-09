@@ -9,7 +9,7 @@
 const fs = require('fs');
 const path = require('path');
 const decache = require('decache');
-const utils = require(`${__baseDir}/modules/utils`);
+(`${__baseDir}/modules/utils`);
 
 exports.loadAsSubcommands = true;
 

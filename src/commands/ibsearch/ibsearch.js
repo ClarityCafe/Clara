@@ -9,7 +9,7 @@
 const got = require('got');
 const prettyBytes = require('pretty-bytes');
 const moment = require('moment');
-const utils = require(`${__baseDir}/modules/utils`);
+(`${__baseDir}/modules/utils`);
 
 const defaultQuery = 'foxgirl'; // Default: 'foxgirl'
 const queryLimit = 75; // Default: 75

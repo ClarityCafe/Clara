@@ -6,7 +6,7 @@
 
 /* eslint-env node */
 
-const utils = require(`${__baseDir}/modules/utils`);
+(`${__baseDir}/modules/utils`);
 
 var exposed;
 

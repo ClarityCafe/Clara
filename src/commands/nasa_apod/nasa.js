@@ -7,7 +7,7 @@
 /* eslint-env node */
 
 const got = require('got');
-const utils = require(`${__baseDir}/modules/utils`);
+
 
 exports.commands = [
     'apod'

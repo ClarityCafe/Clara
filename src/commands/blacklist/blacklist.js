@@ -5,7 +5,7 @@
  */
 
 const fs = require('fs');
-const utils = require(`${__baseDir}/modules/utils`);
+(`${__baseDir}/modules/utils`);
 
 exports.loadAsSubcommands = true;
 exports.commands = [
