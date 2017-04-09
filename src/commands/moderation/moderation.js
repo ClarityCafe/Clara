@@ -15,6 +15,14 @@ exports.commands = [
     'purge'
 ];
 
+function deleteDelay(msg) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            msg.delete().then(() => resolve()).catch(reject);
+        }, 2000);
+    });
+}
+
 exports.kick = {
     desc: 'Kicks the mentioned people from the guild.',
     fullDesc: "Kicks the mentioned people from the guild the command is executed in. Can kick multiple people at once. Requires the 'Kick Members' permission.",
@@ -360,11 +368,3 @@ exports.purge = {
         });
     }
 };
-
-function deleteDelay(msg) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            msg.delete().then(() => resolve()).catch(reject);
-        }, 2000);
-    });
-}
