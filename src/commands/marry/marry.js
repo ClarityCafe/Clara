@@ -21,15 +21,13 @@ exports.marry = {
             } else if (ctx.mentions[0].id === ctx.author.id) {
                 ctx.createMessage('Hey! You\'re not allowed to marry yourself.');
             } else {
-                ctx.createMessage(`${ctx.mentions[0]}, Will you marry ${ctx.author}? (yes/no) (You have 30 seconds to respond).`).then(() => {
+                ctx.createMessage(`${ctx.mentions[0].mention}, Will you marry ${ctx.author.mention}? (yes/no) (You have 30 seconds to respond).`).then(() => {
                     bot.awaitMessage(ctx.channel.id, ctx.mentions[0].id, () => true, 30000).then(m => {
                         if (/y(es)?/i.test(m.content)) {
-                            return m.createMessage(`${ctx.author.mention}, congrats! You are now married to ${ctx.mentions[0]}!`);
+                            return m.createMessage(`I hereby Pronounce ${ctx.mentions[0].mention} and ${ctx.author.mention} as husband and wife! :two_hearts:`);
                         } else if (/no?/i.test(m.content)) {
                             return m.createMessage(`I'm sorry ${ctx.author.mention}, but your partner declined.`);
                         }
-                    }).then(() => {
-                        ctx.createMessage(`I hereby Pronounce ${ctx.mentions[0].mention} and ${ctx.author.mention} as husband and wife! :two_hearts:`);
                     }).catch(() => {
                         ctx.createMessage('Your partner didn\'t respond in time.');
                     });
