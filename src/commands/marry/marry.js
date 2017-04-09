@@ -29,7 +29,7 @@ exports.marry = {
                         } else if (/no?/i.test(m.content)) {
                             return ctx.createMessage(`I'm sorry ${ctx.author.mention}, but your partner declined.`);
                         }
-                    }).catch(() => {
+                    }).then(resolve).catch(() => {
                         ctx.createMessage('Your partner didn\'t respond in time.');
                     });
                 }).then(resolve).catch(reject);
@@ -54,7 +54,7 @@ exports.divorce = {
                         } else if (/no?/i.test(m.content)) {
                             return ctx.createMessage('Your partner decided not to let go of you. I can\'t seperate you.');
                         }
-                    }).catch(() => {
+                    }).then(resolve).catch(() => {
                         ctx.createMessage('Your partner didn\'t respond in time.');
                     });
                 }).then(resolve).catch(reject);
