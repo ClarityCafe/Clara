@@ -31,7 +31,7 @@ exports.marry = {
                     }).then(resolve).catch(() => {
                         ctx.createMessage('Your partner didn\'t respond in time.');
                     });
-                });
+                }).then(resolve).catch(reject);
             }
         });
     }
