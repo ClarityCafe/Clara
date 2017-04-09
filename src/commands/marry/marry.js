@@ -55,7 +55,7 @@ exports.divorce = {
                             return ctx.createMessage('Your partner decided not to let go of you. I can\'t seperate you.');
                         }
                     }).catch(() => {
-                        ctx.createMessage('Your partner didn\'t respond in time.')''
+                        ctx.createMessage('Your partner didn\'t respond in time.');
                     });
                 }).then(resolve).catch(reject);
             }
