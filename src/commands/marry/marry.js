@@ -28,6 +28,8 @@ exports.marry = {
                         } else if (/no?/i.test(m.content)) {
                             return m.createMessage(`I'm sorry ${ctx.author.mention}, but your partner declined.`);
                         }
+                    }).then(() => {
+                        ctx.createMessage(`I hereby Pronounce ${ctx.mentions[0].mention} and ${ctx.author.mention} as husband and wife! :two_hearts:`);
                     }).catch(() => {
                         ctx.createMessage('Your partner didn\'t respond in time.');
                     });
