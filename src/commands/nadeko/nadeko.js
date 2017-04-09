@@ -12,10 +12,10 @@ const emotes = [
 ];
 
 exports.commands = [
-    'nadeko'
+    'e'
 ];
 
-exports.nadeko = {
+exports.e = {
     desc: 'who did it?',
     longDesc: 'owo whats this?',
     main(bot, ctx) {
