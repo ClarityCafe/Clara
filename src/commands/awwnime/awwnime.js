@@ -18,7 +18,7 @@ exports.awwnime = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix) {
-                ctx.sendTyping();
+                ctx.channel.sendTyping();
                 got('https://raw-api.now.sh/').then(res => {
                     let images = JSON.parse(res.body);
                     let image = images[Math.floor(Math.random() * images.length)];
@@ -28,7 +28,7 @@ exports.awwnime = {
                 }).then(resolve).catch(reject);
             } else {
                 let query = encodeURIComponent(ctx.suffix).replace(/%20/g, '+');
-                ctx.sendTyping();
+                ctx.channel.sendTyping();
                 got(`https://raw-api.now.sh/?q=${query}`).then(res => {
                     let images = JSON.parse(res.body);
                     let image = images[Math.floor(Math.random() * images.length)];
