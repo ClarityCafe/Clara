@@ -7,7 +7,8 @@
 /* eslint-env node */
 
 exports.commands = [
-    'marry'
+    'marry',
+    'divorce'
 ];
 
 exports.marry = {
@@ -28,7 +29,7 @@ exports.marry = {
                         } else if (/no?/i.test(m.content)) {
                             return ctx.createMessage(`I'm sorry ${ctx.author.mention}, but your partner declined.`);
                         }
-                    }).then(resolve).catch(() => {
+                    }).catch(() => {
                         ctx.createMessage('Your partner didn\'t respond in time.');
                     });
                 }).then(resolve).catch(reject);
@@ -36,3 +37,28 @@ exports.marry = {
         });
     }
 };
+
+exports.divorce = {
+    desc: 'Divorce your waifu',
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            if (!ctx.suffix) {
+                ctx.createMessage('We need to find out the partner you are trying to divorce first. Mention him/her.');
+            } else if (ctx.mentions[0].id === ctx.author.id) {
+                ctx.createMessage('Wew lad.');
+            } else {
+                ctx.createMessage(`${ctx.mentions[0].mention}, will you let go of ${ctx.author.mention}?\n You have 30 seconds to respond yes or no.`).then(() => {
+                    bot.awaitMessage(ctx.channel.id, ctx.mentions[0].id, () => true, 30000).then(m => {
+                        if (/y(es)?/i.test(m.content)) {
+                            return ctx.createMessage(`${ctx.msg.author}, you're no longer married to ${ctx.mentions[0].mention}`);
+                        } else if (/no?/i.test(m.content)) {
+                            return ctx.createMessage('Your partner decided not to let go of you. I can\'t seperate you.');
+                        }
+                    }).catch(() => {
+                        ctx.createMessage('Your partner didn\'t respond in time.')''
+                    });
+                }).then(resolve).catch(reject);
+            }
+        });
+    }
+}
