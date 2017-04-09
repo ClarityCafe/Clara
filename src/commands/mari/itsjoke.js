@@ -19,7 +19,7 @@ exports.mari = {
         return new Promise((resolve, reject) => {
             ctx.msg.channel.sendTyping();
             let fileName = files[Math.floor(Math.random() * files.length)];
-            let file = fs.readFileSync(`${__baseDir}/res/${fileName}`);
+            let file = fs.readFileSync(`${__baseDir}/res/itsjoke/${fileName}`);
             ctx.msg.channel.createMessage('', {file, name: fileName}).then(resolve).catch(reject);
         });
     }
