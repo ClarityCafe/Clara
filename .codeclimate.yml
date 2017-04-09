@@ -3,7 +3,7 @@ engines:
     enabled: true
     config: .eslintrc
   duplication:
-    enabled: false
+    enabled: true
     config:
       languages:
       - javascript
