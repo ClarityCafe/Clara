@@ -9,9 +9,9 @@
 const got = require('got');
 const prettyBytes = require('pretty-bytes');
 const moment = require('moment');
-(`${__baseDir}/modules/utils`);
 
-const defaultQuery = 'foxgirl'; // Default: 'foxgirl'
+
+const defaultQuery = 'catgirl'; // Default: 'catgirl'
 const queryLimit = 75; // Default: 75
 
 exports.commands = [

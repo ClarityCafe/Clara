@@ -7,7 +7,6 @@
 /* eslint-env node */
 
 const handler = require(`${__dirname}/musicHandler.js`);
-(`${__baseDir}/modules/utils`);
 const Eris = require('eris');
 
 exports.commands = [
