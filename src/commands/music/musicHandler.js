@@ -13,7 +13,7 @@ const twitch = require('twitch.tv');
 const twitchStream = require('twitch-get-stream')(config.twitchKey);
 const request = require('request');
 const PassThrough = require('stream').PassThrough;
-const utils = require(`${__baseDir}/modules/utils`);
+(`${__baseDir}/modules/utils`);
 
 const ytRegex = exports.ytRegex = str => /(https?:\/\/)?(www\.|m.)?youtube\.com\/watch\?v=.+(&.+)?/.test(str) || /(https?:\/\/)?youtu\.be\/.+/.test(str);
 const scRegex = exports.scRegex = str => /(https?:\/\/)?soundcloud\.com\/.+\/.+/.test(str);

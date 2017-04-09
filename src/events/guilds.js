@@ -1,6 +1,6 @@
 /* eslint-env node */
 
-const utils = require(`${__baseDir}/modules/utils`);
+(`${__baseDir}/modules/utils`);
 
 module.exports = bot => {
     bot.on('guildCreate', g => {
