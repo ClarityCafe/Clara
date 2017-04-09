@@ -6,7 +6,6 @@
 
 /* eslint-env node */
 
-const utils = require(`${__baseDir}/modules/utils.js`);
 
 exports.commands = [
     'f',
