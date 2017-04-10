@@ -1,7 +1,7 @@
 /*
  * marry.js - Marry your imaginary waifu or someone
  * 
- *  Contributed by Capuccino
+ * Contributed by Capuccino and Ovyerus
  */
 
 /* eslint-env node */
@@ -12,53 +12,65 @@ exports.commands = [
 ];
 
 exports.marry = {
-    desc: 'Marry Someone',
-    longDesc: 'Marry your waifu in the guild.',
-    usage: '<Mention>',
+    desc: 'Marry someone.',
+    usage: '<mention>',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            if (!ctx.suffix) {
-                ctx.createMessage('Mention or cite your partner\'s name.');
-            } else if (ctx.mentions[0].id === ctx.author.id) {
-                ctx.createMessage('Hey! You\'re not allowed to marry yourself.');
+            if (ctx.args.length === 0 || ctx.mentionStrings.length === 0) {
+                ctx.createMessage('Please mention your partner.').then(resolve).catch(reject);
+            } else if (ctx.mentionStrings[0] === ctx.author.id) {
+                ctx.createMessage("Hey! You're not allowed to marry yourself.").then(resolve).catch(reject);
             } else {
-                ctx.createMessage(`${ctx.mentions[0].mention}, Will you marry ${ctx.author.mention}?\n You have 30 seconds to respond yes or no.`).then(() => {
-                    bot.awaitMessage(ctx.channel.id, ctx.mentions[0].id, () => true, 30000).then(m => {
-                        if (/y(es)?/i.test(m.content)) {
-                            return ctx.createMessage(`I hereby Pronounce ${ctx.mentions[0].mention} and ${ctx.author.mention} as husband and wife! :two_hearts:`);
-                        } else if (/no?/i.test(m.content)) {
-                            return ctx.createMessage(`I'm sorry ${ctx.author.mention}, but your partner declined.`);
-                        }
-                    }).then(resolve).catch(() => {
-                        ctx.createMessage('Your partner didn\'t respond in time or gave an invalid response.');
-                    });
-                }).then(resolve).catch(reject);
+                ctx.createMessage(`<@${ctx.mentionStrings[0]}> will you marry ${ctx.author.mention}?\nRespond with yes or no. (30 seconds)`).then(() => {
+                    return bot.awaitMessage(ctx.channel.id, ctx.mentionStrings[0], () => true, 30000);
+                }).then(m => {
+                    if (/y(es)?/i.test(m.content)) {
+                        return ctx.createMessage(`I hereby pronounce <@${ctx.mentionStrings[0]}> and ${ctx.author.mention} as husband and wife. :sparkling_heart:`);
+                    } else if (/no?/i.test(m.content)) {
+                        return ctx.createMessage(`${ctx.author.mention}, unfortunately, your partner declined.`);
+                    } else {
+                        return ctx.createMessage(`<@${ctx.mentionStrings[0]}> that is not a valid answer.`);
+                    }
+                }).then(resolve).catch(err => {
+                    if (err.message && err.message === 'Message await expired.') {
+                        return ctx.createMessage(`${ctx.author.mention} your partner did not respond in time.`);
+                    } else {
+                        reject(err);
+                    }
+                }).then(resolve);
             }
         });
     }
 };
 
 exports.divorce = {
-    desc: 'Divorce your waifu',
+    desc: 'Divorce your partner.',
+    usage: '<mention>',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            if (!ctx.suffix) {
-                ctx.createMessage('We need to find out the partner you are trying to divorce first. Mention him/her.');
-            } else if (ctx.mentions[0].id === ctx.author.id) {
-                ctx.createMessage('Wew lad.');
+            if (ctx.args.length === 0 || ctx.mentionStrings.length === 0) {
+                ctx.createMessage('Please mention your partner.').then(resolve).catch(reject);
+            } else if (ctx.mentionStrings[0] === ctx.author.id) {
+                ctx.createMessage("Hey! You can't divorce yourself.").then(resolve).catch(reject);
             } else {
-                ctx.createMessage(`${ctx.mentions[0].mention}, will you let go of ${ctx.author.mention}?\n You have 30 seconds to respond yes or no.`).then(() => {
-                    bot.awaitMessage(ctx.channel.id, ctx.mentions[0].id, () => true, 30000).then(m => {
-                        if (/y(es)?/i.test(m.content)) {
-                            return ctx.createMessage(`${ctx.msg.author}, you're no longer married to ${ctx.mentions[0].mention}`);
-                        } else if (/no?/i.test(m.content)) {
-                            return ctx.createMessage('Your partner decided not to let go of you. I can\'t seperate you.');
-                        }
-                    }).then(resolve).catch(() => {
-                        ctx.createMessage('Your partner didn\'t respond in time or gave an invalid response.');
-                    });
-                }).then(resolve).catch(reject);
+                ctx.createMessage(`<@${ctx.mentionStrings[0]}>, will you let go of ${ctx.author.mention}?\nRespond with yes or no. (30 seconds)`).then(() => {
+                    return bot.awaitMessage(ctx.channel.id, ctx.mentionStrings[0], () => true, 30000);
+                }).then(m => {
+                    if (/y(es)?/i.test(m.content)) {
+                        return ctx.createMessage(`${ctx.author.mention} you're no longer married to <@${ctx.mentionStrings[0]}>.`);
+                    } else if (/no?/i.test(m.content)) {
+                        return ctx.createMessage(`${ctx.author.mention}, your partner won't let go.`);
+                    } else {
+                        return ctx.createMessage(`<@${ctx.mentionStrings[0]}> that is not a valid answer.`);
+                    }
+                }).then(resolve).catch(err => {
+                    if (err.message && err.message === 'Message await expired.') {
+                        return ctx.createMessage(`${ctx.author.mention} your partner did not respond in time.`);
+                    } else {
+                        reject(err);
+                    }
+                }).then(resolve);
             }
         });
     }
-};
+}
