@@ -30,7 +30,7 @@ exports.marry = {
                             return ctx.createMessage(`I'm sorry ${ctx.author.mention}, but your partner declined.`);
                         }
                     }).then(resolve).catch(() => {
-                        ctx.createMessage('Your partner didn\'t respond in time.');
+                        ctx.createMessage('Your partner didn\'t respond in time or gave an invalid response.');
                     });
                 }).then(resolve).catch(reject);
             }
@@ -55,10 +55,10 @@ exports.divorce = {
                             return ctx.createMessage('Your partner decided not to let go of you. I can\'t seperate you.');
                         }
                     }).then(resolve).catch(() => {
-                        ctx.createMessage('Your partner didn\'t respond in time.');
+                        ctx.createMessage('Your partner didn\'t respond in time or gave an invalid response.');
                     });
                 }).then(resolve).catch(reject);
             }
         });
     }
-}
+};
