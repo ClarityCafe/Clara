@@ -13,19 +13,12 @@ WORKDIR /home/clara
 #We're gonna add a pseudo-user here
 RUN git config --global user.name nyan && git config --global user.email nyan@pa.su
 
+# It's advisable to add your config files so if we run docker run, it wouldn't error out.
+
 COPY . . 
 
 # Install deps
 RUN npm i --silent
-
-RUN echo "deb http://download.rethinkdb.com/apt xenial main" | tee /etc/apt/sources.list.d/rethinkdb.list && \
-   wget -qO- https://download.rethinkdb.com/apt/pubkey.gpg | apt-key add - && \
-   apt-get update && \
-   apt-get install \ 
-   libstdc++6 \
-   libprotobuf9v5 \
-   rethinkdb
-
 
 #Expose Local port and SSH Port just because we can
 
