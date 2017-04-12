@@ -11,7 +11,7 @@ const Eris = require('eris');
 class dataHandler {
     /**
      *  Creates a new Data Adapter
-     * @param {*} dataHandlerType Type of Data Handler. 'eris' if Eris.Collection, 'rethink' if Rethonk
+     * @param {String} dataHandlerType Type of Data Handler. 'eris' if Eris.Collection, 'rethink' if Rethonk
      * @todo automatically fallback to eris Collection if Rethink is not present.
      * @see {link} https://github.com/awau/Clara/issues/68
      * @returns {*} Could return a ReQL driver or a Eris Collection
