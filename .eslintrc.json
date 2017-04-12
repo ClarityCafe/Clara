@@ -17,7 +17,8 @@
         "__baseDir": false,
         "logger" : false,
         "localeManager": false,
-        "got": false
+        "got": false,
+        "utils": false
     },
 
     "ignore": [
@@ -27,7 +28,6 @@
     "rules": {
         "no-console": 0,
         "global-require":"off",
-        "no-undef" :"off",
         
         "quotes": ["warn", "single", {"avoidEscape": true, "allowTemplateLiterals": true}],
         "semi": "warn",
