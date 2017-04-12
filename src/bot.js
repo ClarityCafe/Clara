@@ -60,7 +60,7 @@ bot.allowCommandUse = false;
 bot.music = {
     skips: new Eris.Collection(Object),
     queues: new Eris.Collection(Object),
-    connections: new Eris.Collection(Eris.VoiceConnection),
+    connections: bot.voiceConnections,
     streams: new Eris.Collection(Object),
     stopped: []
 };
