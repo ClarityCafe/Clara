@@ -1,1 +1,1 @@
-worker : node src/bot.js --harmony
+web : node bot.js
