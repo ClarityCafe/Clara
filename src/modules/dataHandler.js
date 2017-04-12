@@ -17,10 +17,10 @@ class dataHandler {
      * @returns {*} Could return a ReQL driver or a Eris Collection
      */
     static dataAdapter(dataHandlerType) {
-        if (this.dataHandlerType === 'eris') {
+        if (dataHandlerType === 'eris') {
             //do nothing for now
             return undefined;
-        } else if (this.dataHandlerType === 'rethink') {
+        } else if (dataHandlerType === 'rethink') {
             /**
              * @todo do a dynamic connect and parse error automatically so we can fallback
              */
