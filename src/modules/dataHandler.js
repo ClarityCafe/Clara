@@ -12,6 +12,8 @@ class dataHandler {
     static dataAdapter() {
         try {
             
+        } catch(err) {
+            
         }
     }
 }
