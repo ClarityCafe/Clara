@@ -19,6 +19,7 @@ class dataHandler {
     static dataAdapter(dataHandlerType) {
         if (this.dataHandlerType === 'eris') {
             //do nothing for now
+            return undefined;
         } else if (this.dataHandlerType === 'rethink') {
             /**
              * @todo do a dynamic connect and parse error automatically so we can fallback
