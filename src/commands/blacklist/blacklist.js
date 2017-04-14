@@ -20,8 +20,7 @@ exports.main = {
         return new Promise((resolve, reject) => {
             let embed = {
                 title: 'Blacklisted Users',
-                description: [],
-                color: utils.randomColour()
+                description: []
             };
 
             if (bot.blacklist.length === 0) {

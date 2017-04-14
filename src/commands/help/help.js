@@ -6,50 +6,71 @@
 
 /* eslint-env node */
 
-exports.commands = [
-    'help'
-];
+
+exports.commands = ['help'];
 
 exports.help = {
-    desc: 'The help command.',
-    fullDesc: 'Displays information for all the avaliable commands in the bot. If an argument is given, displays additional information on that command.',
+    desc: 'Show bot help.',
     usage: '[command]',
-    fixed: true,
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            if (ctx.args.length === 0) {
-                let embedTemplate = {title: `${bot.user.username} Help`, description: `**Main Prefix:** ${bot.config.mainPrefix}`, color: 2201331};
-                let cmdFields = [];
-
-                bot.commands.forEach((cmd, cmnd) => {
-                    cmdFields.push({name: cmd, value: `${cmnd.usage ? `${cmnd.usage} - ` : ''}${cmnd.desc}${cmnd.example ? `\n**Example:** \`${bot.config.mainPrefix}${cmd} ${cmnd.example}\`` : ''}`});
+            if (!ctx.args[0]) {
+                let cmds = [];
+                
+                bot.commands.forEach((cmd, name) => {
+                    cmds.push(`${bot.config.mainPrefix}${name}${cmd.usage ? ` ${cmd.usage}` : ''}`);
                 });
 
-                ctx.createMessage(localeManager.t('help-sending', ctx.settings.locale)).then(() => {
-                    return ctx.msg.author.getDMChannel();
-                }).then(dm => {
-                    let fieldCollect = [];
+                ctx.createMessage('Sending help to your DMs.').then(() => {
+                    let cmdCollect = [];
                     let msgs = [];
-                    for (let i in cmdFields) {
-                        fieldCollect.push(cmdFields[i]);
-                        if ((Number(i) % 24 === 0 && Number(i) !== 0) || Number(i) === cmdFields.length - 1) {
-                            let embed = embedTemplate;
-                            embed.fields = fieldCollect;
-                            fieldCollect = [];
-                            msgs.push(dm.createMessage({embed}));
+                    let colour = utils.randomColour();
+
+                    for (let i in cmds) {
+                        cmdCollect.push(cmds[i]);
+                        if (i === '29' || Number(i) === cmds.length - 1) {
+                            let embed = new embedTemplate(bot);
+                            embed.color = colour;
+                            if (cmdCollect.length > 15) {
+                                embed.fields[0].value = `\`${cmdCollect.slice(0, 15).join('\n')}\``;
+                                embed.fields[1] = {
+                                    name: '\u200b',
+                                    value: `\`${cmdCollect.slice(15, 30).join('\n')}\``,
+                                    inline: true
+                                };
+                            } else {
+                                embed.fields[0].value = `\`${cmdCollect.join('\n')}\``;
+                            }
+
+                            cmdCollect = [];
+                            msgs.push(ctx.createMessage({embed}, null, 'author'));
                         }
                     }
+
                     return Promise.all(msgs);
                 }).then(resolve).catch(reject);
             } else {
                 if (!bot.commands.getCommand(ctx.args[0])) {
-                    ctx.createMessage(localeManager.t('help-noCmd', ctx.settings.locale)).then(resolve).catch(reject);
+                    ctx.createMessage(`Command \`${ctx.args[0]}\` could not be found. Make sure to check your spelling.`);
                 } else {
                     let cmd = bot.commands.getCommand(ctx.args[0]);
-                    let embed = {title: ctx.args[0], description: `${cmd.usage ? `\`${cmd.usage}\` - `: ''}**${cmd.longDesc ? cmd.longDesc : cmd.desc}**${cmd.example ? `\n**Example:** \`${bot.config.mainPrefix}${ctx.args[0]} ${cmd.example}\``: ''}`, color: 2201331};
+                    let embed = {
+                        description: `\`${bot.config.mainPrefix}${ctx.args[0]}${cmd.usage ? ` ${cmd.usage}` : ''}\n\u200b - ${cmd.desc}\``
+                    };
+
                     ctx.createMessage({embed}).then(resolve).catch(reject);
                 }
             }
         });
     }
 };
+
+// TFW cant force JS to gimme a new object when referring to others
+function embedTemplate(bot) {
+    this.title = `${bot.user.username} Help`;
+    this.description =`${bot.commands.length} Commands`;
+    this.fields = [
+        {name: '\u200b', inline: true}
+    ];
+    this.footer = {text: 'Powered by Clara'};
+}
