@@ -106,7 +106,20 @@ class CommandHolder {
             if (!module.main.main) {
                 command.main = (bot, ctx) => {
                     return new Promise((resolve, reject) => {
-                        ctx.createMessage('soon').then(resolve).catch(reject);
+                        let collect = [];
+                        let embed = {
+                            title: moduleName,
+                            color: utils.randomColour()
+                        };
+
+                        for (let name in command.subcommands) {
+                            let cmd = command.subcommands[name];
+                            collect.push(`${moduleName} ${name}${cmd.usage ? ` ${cmd.usage}` : ''}\n\u200b - ${cmd.desc}`);
+                        }
+
+                        embed.description = `\`${collect.join('\n\n')}\``;
+
+                        ctx.createMessage({embed}).then(resolve).catch(reject);
                     });
                 };
             }
@@ -216,8 +229,8 @@ class CommandHolder {
      * @param {Command} cmdObject Object of the command to register.
      */
     reloadCommand(cmdName, cmdObject) {
-        removeCommand(cmdName, true);
-        addCommand(cmdName, cmdObject);
+        this.removeCommand(cmdName, true);
+        this.addCommand(cmdName, cmdObject);
     }
 
     /**
@@ -417,7 +430,7 @@ class CommandHolder {
     }
 
     get usedCommandOptions() {
-        return ['desc', 'longDesc', 'usage', 'owner', 'fixed', 'main', 'permissions'];
+        return ['desc', 'usage', 'owner', 'fixed', 'main', 'permissions'];
     }
 }
 
@@ -426,7 +439,6 @@ class CommandHolder {
  * 
  * @prop {String} desc Short description of what the command does.
  * @prop {Boolean} [fixed] Says if the command can be unloaded or not.
- * @prop {String} [longDesc] Full description of the command.
  * @prop {Function} main Function for when the command is run.
  * @prop {Boolean} [owner=false] Restricts the command to the bot admins.
  * @prop {Object} [permissions] Discord permissions required for users and the bot.
