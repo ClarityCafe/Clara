@@ -16,7 +16,7 @@ const imgRegex = str => /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-z
 exports.saucenao = {
     desc: 'Grab an image\'s source using saucenao API.',
     longDesc: 'Gets the image source from sacuenao.',
-    usage: '(Image URL [If not provided, it would grab the last message with image attachment\'s URL and sends it to the API])',
+    usage: '[image url]',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix) {

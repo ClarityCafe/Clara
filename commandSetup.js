@@ -10,13 +10,10 @@ const cmdDefault = name =>
  * Contributed by YOUR NAME HERE
  */
 
-exports.commands = [
-    '${name}'
-];
+exports.commands = ['${name}'];
 
 exports.${name} = {
     desc: '',
-    longDesc: '',
     usage: '',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
