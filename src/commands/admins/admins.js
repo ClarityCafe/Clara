@@ -21,8 +21,7 @@ exports.main = {
         return new Promise((resolve, reject) => {
             let embed = {
                 title: 'Bot Admins',
-                description: `**${utils.formatUsername(bot.users.get(bot.config.ownerID))}** (Bot owner)`,
-                color: utils.randomColour()
+                description: `**${utils.formatUsername(bot.users.get(bot.config.ownerID))}** (Bot owner)`
             };
 
             bot.admins.forEach(a => embed.description += `\n**${utils.formatUsername(bot.users.get(a))}**`);

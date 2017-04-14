@@ -23,7 +23,6 @@ exports.main = {
             let embed = {
                 title: `Displaying **${bot.prefixes.length - 1}** prefixes`,
                 description: [],
-                color: utils.randomColour(),
                 author: {
                     name: 'Current Prefixes'
                 }

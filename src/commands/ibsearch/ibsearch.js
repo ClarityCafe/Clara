@@ -46,7 +46,6 @@ exports.ibsearch = {
                     return ctx.createMessage({embed: {
                         title: 'Image Source',
                         url: `https://ibsear.ch/images/${item.id}`,
-                        image: {url},
                         color: utils.randomColour(),
                         footer: {text: `Time First Indexed by IbSearch: ${moment.unix(item.found).format('dddd Do MMMM Y')} at ${moment.unix(item.found).format('HH:mm:ss A')}`},
                         fields: [
@@ -79,7 +78,6 @@ exports.ibsearch = {
                         title: 'Image Source',
                         url: `https://ibsear.ch/images/${item.id}`,
                         image: {url},
-                        color: utils.randomColour(),
                         footer: {text: `Time First Indexed by IbSearch: ${moment.unix(item.found).format('dddd Do MMMM Y')} at ${moment.unix(item.found).format('HH:mm:ss A')}`},
                         fields: [
                             {name: 'Image Information', value: `${item.width}x${item.width} - ${prettyBytes(Number(item.size))}`},

@@ -55,8 +55,7 @@ exports.help = {
                 } else {
                     let cmd = bot.commands.getCommand(ctx.args[0]);
                     let embed = {
-                        description: `\`${bot.config.mainPrefix}${ctx.args[0]}${cmd.usage ? ` ${cmd.usage}` : ''}\n\u200b - ${cmd.desc}\``,
-                        color: utils.randomColour()
+                        description: `\`${bot.config.mainPrefix}${ctx.args[0]}${cmd.usage ? ` ${cmd.usage}` : ''}\n\u200b - ${cmd.desc}\``
                     };
 
                     ctx.createMessage({embed}).then(resolve).catch(reject);
