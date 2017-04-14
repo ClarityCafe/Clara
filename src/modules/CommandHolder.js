@@ -558,6 +558,8 @@ class Context {
             if (typeof where !== 'string') throw new TypeError('where is not a string.');
             if (!~['channel', 'author'].indexOf(where)) throw new Error('where is an invalid value. Must either be `channel` or `author`');
             
+            if (content.embed && typeof content.embed.color !== 'number') content.embed.color = utils.randomColour();
+
             if (where === 'channel') {
                 this.channel.createMessage(content, file).then(resolve).catch(reject);
             } else if (where === 'author') {

@@ -31,7 +31,6 @@ exports.main = {
             let embed = {
                 title: 'Current Modules',
                 description: `Showing **${cmdFolders.length}** command modules.`,
-                color: utils.randomColour(),
                 fields: [
                     {name: 'Loaded Modules', value: []},
                     {name: 'Unloaded Modules', value: []}

@@ -43,7 +43,6 @@ function localeBlock(settings) {
     let embed = {
         title: localeManager.t('locales-infoHeader', settings.locale),
         description: '',
-        color: utils.randomColour(),
         fields: []
     };
 

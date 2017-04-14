@@ -27,7 +27,6 @@ exports.apod = {
                         title: data.title,
                         description: data.copyright ? localeManager.t('nasa-copyright', ctx.settings.locale, {copyright: data.copyright}) : '',
                         thumbnail: {url: 'https://api.nasa.gov/images/logo.png'},
-                        color: utils.randomColour(),
                         image: {url: data.url},
                         footer: {text: localeManager.t('nasa-date', ctx.settings.locale, {date: data.date})}
                     }});
