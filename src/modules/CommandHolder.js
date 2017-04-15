@@ -272,8 +272,8 @@ class CommandHolder {
             if (cmd.subcommands && cmd.subcommands[ctx.args[0]]) {
                 // Remove subcommand from suffix and args.
                 let subcommand = ctx.args.shift();
-                ctx.suffix = ctx.suffix.substring(subcommand.length);
-                ctx.cleanSuffix = ctx.cleanSuffix.substring(subcommand.length);
+                ctx.suffix = ctx.suffix.substring(subcommand.length).trim();
+                ctx.cleanSuffix = ctx.cleanSuffix.substring(subcommand.length).trim();
 
                 // Check if the subcommand is owner only
                 if ((cmd.owner || cmd.subcommands[subcommand].owner) && this[_bot].checkBotPerms(ctx.author.id)) {
