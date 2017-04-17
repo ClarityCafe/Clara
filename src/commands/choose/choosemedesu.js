@@ -17,7 +17,7 @@ exports.choose = {
     example: '"coke zero" coke',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            let choices = ctx.suffix.split(' or ');
+            let choices = ctx.suffix.split('/');
             if (choices.length < 2) {
                 ctx.msg.channel.createMessage(localeManager.t('choose-insufficientArgs', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
