@@ -6,7 +6,7 @@
 
 const Eris = require('eris');
 const decache = require('decache');
-const logger = require(`${__dirname}/logger`);
+const logger = new(require(`${__dirname}/Logger`))();
 
 const PermissionsPrettyPrinted = {
     createInstantInvite: 'Create Instant Invite',
