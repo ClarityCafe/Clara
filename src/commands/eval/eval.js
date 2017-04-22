@@ -11,8 +11,7 @@ const fs = require('fs');
 const cp = require('child_process');
 const path = require('path');
 const got = require('got');
-const PassThrough = require('stream').PassThrough;
-(`${__baseDir}/modules/utils`);
+const IncomingMessage = require('http').IncomingMessage;
 /* eslint-enable */
 
 const FailCol = 0xF44336;
@@ -105,7 +104,7 @@ function sendEval(bot, ctx, embed, returned) {
                 return null;
             } else {
                 let strN;
-                if (res instanceof PassThrough && res.requestUrl) {
+                if (res instanceof IncomingMessage && res.requestUrl) {
                     strN = res.headers['content-type'].split(';')[0] === 'application/json' ? util.inspect(JSON.parse(res.body), {depth: 1}) : res.body;
                 } else {
                     strN = util.inspect(res, {depth: 1});
