@@ -32,7 +32,7 @@ exports.saucenao = {
                     }).then(res => {
                         //add entries
                         const fields = [];
-                        for (res of res.url) {
+                        for (res.url of res) {
                             /**
                              * @todo Limit results to 5. Assuming saucenao emits more than we need.
                              */
