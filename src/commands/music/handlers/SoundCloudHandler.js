@@ -7,22 +7,26 @@ class SoundCloudHandler {
     }
 
     getInfo(url) {
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             if (typeof url !== 'string') throw new TypeError('url is not a string.');
 
-            scr(this.clientID, url, (err, json, url) => {
-                if (err) throw err;
+            scr(this.clientID, url, (err, json, stream) => {
+                if (err) {
+                    reject(err);
+                } else {
 
-                let res = {
-                    url,
-                    title: json.title,
-                    uploader: json.user.username,
-                    thumbnail: json.artwork_url,
-                    length: json.duration,
-                    type: 'SoundCloudTrack'
-                };
+                    let res = {
+                        url: json.permalink_url,
+                        stream,
+                        title: json.title,
+                        uploader: json.user.username,
+                        thumbnail: json.artwork_url,
+                        length: json.duration / 1000,
+                        type: 'SoundCloudTrack'
+                    };
 
-                resolve(res);
+                    resolve(res);
+                }
             });
         });
     }
@@ -32,7 +36,10 @@ class SoundCloudHandler {
             if (typeof url !== 'string') throw new TypeError('url is not a string.');
 
             this.getInfo(url).then(info => {
-                return [got.stream(info.url), info];
+                let stream = info.stream;
+                delete info.stream;
+
+                return [got.stream(stream), info];
             }).then(resolve).catch(reject);
         });
     }
