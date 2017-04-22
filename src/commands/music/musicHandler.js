@@ -1,6 +1,5 @@
-const {Context} = require(`${__baseDir}/modules/CommandHandler`);
-const ytSearch = require('youtube-search');
-const Eris = require('eris');
+const {Context} = require(`${__baseDir}/modules/CommandHolder`);
+const ytSearch = require('youtube-simple-search');
 
 // Link regexs
 const YTRegex = /^(?:https?:\/\/)?(?:(?:www\.|m.)?youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9-_]{11})/;
@@ -11,10 +10,9 @@ const ClypRegex = /^(?:https:\/\/)?clyp\.it\/([a-z0-9]{8})/;
 const TwitchRegex = /^(?:https:\/\/)?(?:www\.)?twitch\.tv\/([a-z0-9_]+)/;
 
 class MusicHandler {
-    constructor(bot, queueHandler) {
-        let tmp = handlers = require(`${__dirname}/handlers`)(bot);
+    constructor(bot) {
+        let tmp = require(`${__dirname}/handlers`)(bot);
         this._bot = bot;
-        this.queue = queueHandler;
         this.handlers = {
             YouTubeVideo: tmp.YouTubeHandler,
             SoundCloudTrack: tmp.SoundCloudHandler,
@@ -29,10 +27,14 @@ class MusicHandler {
             if (typeof url !== 'string') throw new TypeError('url is not a string.');
             if (!checkURL(url)) throw new Error('Unsupported music source.');
 
-            if (!bot.music.queues.get(ctx.guild.id)) bot.music.queues.add({id: ctx.guild.id, queue: []});
-            let q = bot.music.queues.get(ctx.guild.id);
+            // Get queue. If it doesn't exist, create it
+            if (!this._bot.music.queues.get(ctx.guild.id)) this._bot.music.queues.add({id: ctx.guild.id, queue: []});
+            let q = this._bot.music.queues.get(ctx.guild.id).queue;
+
+            // Get clean url and type
             let [getURL, type] = matchURL(url);
 
+            // Get song info and queue it
             this.handlers[type].getInfo(getURL).then(info => {
                 q.push({info, ctx, timestamp: Date.now()});
                 return ctx.createMessage(`Queued **${info.title}** to position **${q.length}** (including currently playing).`);
@@ -45,9 +47,9 @@ class MusicHandler {
             if (!(ctx instanceof Context)) throw new TypeError('ctx is not an instance of Context.');
             if (typeof terms !== 'string') throw new TypeError('terms is not a string.');
 
-            let tmp;
-            searchP(terms, {maxResults: 25, key: bot.config.ytSearchKey}).then(res => {
-                res = res.filter(r => r.kind === 'youtube#video').slice(0, 5);
+            let tmp, outRes;
+            searchP(terms, {key: this._bot.config.ytSearchKey, maxResults: 10}).then(res => {
+                res = res.filter(r => r.id.kind === 'youtube#video').slice(0, 5);
                 if (res.length > 0) {
                     let embed = {
                         title: 'Search Results',
@@ -57,22 +59,23 @@ class MusicHandler {
 
                     for (let i = 0; i <= 4; i++) {
                         if (!res[i]) break;
-                        embed.fields.push({name: `${i + 1}: ${res[i].channelTitle}`, value: res[i].title});
+                        embed.fields.push({name: `${i + 1}. ${res[i].snippet.channelTitle}`, value: res[i].snippet.title});
                     }
 
-                    return ctx.createMessage({embed})
+                    outRes = res;
+                    return ctx.createMessage({embed});
                 } else {
                     throw new Error('No search results.');
                 }
             }).then(m => {
                 tmp = m;
-                return bot.awaitMessage(ctx.channel.id, ctx.author.id);
+                return this._bot.awaitMessage(ctx.channel.id, ctx.author.id);
             }).then(m => {
                 tmp.delete();
 
                 if (/^[1-5]$/.test(m.content.split(' ')[0])) {
-                    let choice = res[Number(m.content.split(' ')[0]) - 1];
-                    return {msg: m, url: choice.link};
+                    let choice = outRes[Number(m.content.split(' ')[0]) - 1];
+                    return `https://youtube.com/watch?v=${choice.id.videoId}`;
                 } else {
                     throw new Error('Invalid selection (Number too high or not a number).');
                 }
@@ -80,9 +83,86 @@ class MusicHandler {
         });
     }
 
-    play() {
+    getStream(url, type) {
         return new Promise((resolve, reject) => {
+            if (!this.handlers[type]) throw new Error(`Unsupported type '${type}'`);
 
+            this.handlers[type].getStream(url).then(resolve).catch(reject);
+        });
+    }
+
+    prePlay(ctx, url) {
+        return new Promise((resolve, reject) => {
+            let bot = this._bot;
+            if (!bot.music.connections.get(ctx.guild.id)) {
+                // If no connection, create it
+                this.queue(ctx, url).then(() => {
+                    return bot.joinVoiceChannel(ctx.member.voiceState.channelID);
+                }).then(() => {
+                    let item = bot.music.queues.get(ctx.guild.id).queue[0];
+                    return this.getStream(item.info.url, item.info.type);
+                }).then(res => {
+                    return this.play(ctx, res);
+                }).then(resolve).catch(reject);
+            } else if (bot.music.connections.get(ctx.guild.id) && !bot.music.connections.get(ctx.guild.id).playing) {
+                this.queue(ctx, url).then(() => {
+                    let item = bot.music.queues.get(ctx.guild.id).queue[0];
+                    return this.getStream(item.info.url, item.info.type);
+                }).then(res => {
+                    return this.play(ctx, res);
+                }).then(resolve).catch(reject);
+            } else {
+                this.queue(ctx, url).then(resolve).catch(reject);
+            }
+        });
+    }
+
+    play(ctx, res) {
+        return new Promise((resolve, reject) => {
+            let bot = this._bot;
+            let [stream, info] = res;
+            let cnc = bot.music.connections.get(ctx.guild.id);
+            let now = Date.now();
+            bot.music.streams.add({id: ctx.guild.id, stream, url: info.url});
+
+            cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5', '-b:a', '96k', '-bufsize', '96k']});
+
+            stream.once('data', () => {
+                ctx.createMessage({embed: {
+                    author: {name: 'Now Playing'},
+                    title: info.title,
+                    description: `Duration: ${timeFormat(info.length)}, [**Link**](${info.url})`,
+                    color: utils.randomColour(),
+                    image: {url: info.thumbnail},
+                    footer: {
+                        text: `Queued by ${utils.formatUsername(ctx.member)} | ${info.type}`
+                    }
+                }});
+            });
+
+            cnc.on('error', err => {
+                logger.error(`Voice error in guild ${ctx.guild.id}\n${err.stack}`);
+                ctx.createMessage(`Voice connection error: \`${err}\``);
+            });
+
+            cnc.on('end', () => {
+                if (cnc.playing || !bot.music.queues.get(ctx.guild.id) || bot.music.stopped.includes(ctx.guild.id) || Date.now() - now < info.length) return;
+                
+                let q = bot.music.queues.get(ctx.guild.id).queue;
+
+                if (q[0].info.url === info.url) {
+                    q.splice(0, 1);
+                    bot.music.streams.delete(ctx.guild.id);
+                    cnc.stopPlaying();
+
+                    if (q.length > 0) {
+                        this.getStream(q[0].info.url, q[0].info.type).then(bepis => {
+                            return this.play(q[0].ctx, bepis);
+                        }).then(resolve).catch(reject);
+                    }
+                    cnc.removeAllListeners('error');
+                }
+            });
         });
     }
 }
@@ -90,7 +170,7 @@ class MusicHandler {
 // Functions
 function checkURL(url) {
     if (typeof url !== 'string') return false;
-    return YTRegex.test(url) || YTPlaylistRegex.test(url) || SCRegex.test(url) || SCPlaylistRegex.test(url) || ClypRegex(url) || TwitchRegex(url);
+    return YTRegex.test(url) || YTPlaylistRegex.test(url) || SCRegex.test(url) || SCPlaylistRegex.test(url) || ClypRegex.test(url) || TwitchRegex.test(url);
 }
 
 function matchURL(url) {
@@ -122,13 +202,25 @@ function matchURL(url) {
 }
 
 
-function searchP(search, opts) {
+function searchP(query, options) {
     return new Promise(resolve => {
-        ytSearch(search, opts, (err, res) => {
-            if (err) throw err;
-            resolve(res);
-        });
+        ytSearch(Object.assign({}, options, {query}), resolve);
     });
 }
 
-module.exports = {MusicHandler, QueueHandler};
+function timeFormat(secs) {
+    let seconds = secs % 60;
+    let minutes = (secs / 60) % 60;
+    let hours = (minutes / 60) % 24;
+
+    seconds = Math.floor(seconds);
+    minutes = Math.floor(minutes);
+    hours = Math.floor(hours);
+
+    seconds.toString().length === 1 ? seconds = `0${seconds.toString()}` : seconds = seconds.toString();
+    minutes.toString().length === 1 && hours !== 0 ? minutes = `0${minutes.toString()}` : minutes = minutes.toString();
+
+    return `${hours === 0  ? '' : `${hours}:`}${minutes}:${seconds}`;
+}
+
+module.exports = MusicHandler;

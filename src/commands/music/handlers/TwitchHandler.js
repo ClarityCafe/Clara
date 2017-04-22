@@ -4,6 +4,7 @@ const got = require('got');
 
 class TwitchHandler {
     constructor(bot) {
+        this.clientID = bot.config.twitchKey;
         this.streamGetter = twitchStream(bot.config.twitchKey);
     }
     
@@ -13,6 +14,7 @@ class TwitchHandler {
 
             twitchInfo(`streams/${url.split('/').pop()}`, {clientID: this.clientID}).then(res => {
                 let r = {
+                    url,
                     title: res.status,
                     uploader: res.display_name,
                     thumbnail: res.video_banner,
@@ -20,12 +22,12 @@ class TwitchHandler {
                     type: 'TwitchStream'
                 };
 
-                return Promise.all([this.streamGetter(url.split('/').pop()), r]);
+                return Promise.all([this.streamGetter.get(url.split('/').pop()), r]);
             }).then(res => {
                 let want = res[0].find(s => s.quality === 'Audio Only');
                 if (!want) throw new Error('Unable to find ideal quality for Twitch stream.');
 
-                res[1].url = want.url;
+                res[1].stream = want.url;
                 return res[1];
             }).then(resolve).catch(reject);
         });
@@ -36,7 +38,10 @@ class TwitchHandler {
             if (typeof url !== 'string') throw new TypeError('url is not a string.');
 
             this.getInfo(url).then(info => {
-                return [got.stream(info.url), info];
+                let stream = info.stream;
+                delete info.stream;
+                
+                return [got.stream(stream), info];
             }).then(resolve).catch(reject);
         });
     }
@@ -44,7 +49,7 @@ class TwitchHandler {
 
 // Promises are dank yo
 function twitchInfo(url, options) {
-    return new Promsie(resolve => {
+    return new Promise(resolve => {
         twitch(url, options, (err, res) => {
             if (err) throw err;
             resolve(res);
