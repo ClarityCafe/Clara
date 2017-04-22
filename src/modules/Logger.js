@@ -7,77 +7,58 @@
 const chalk = require('chalk');
 
 /**
- * A logger class with 6 types of logging
- * mainly info, error and warning with also support for custom errors and custom logging
- * 
+ * Class for logging with custom colours.
  */
 class Logger {
-    //needs an empty constructor so we can invoke a "new" statement
-    constructor() {
 
+    /**
+     * Generic information logger
+     * @param {String} message Message to print.
+     * @static
+     */
+    static info(message) {
+        console.log(`${chalk.bgGreen('info')} ${chalk.green(message)}`);
     }
 
     /**
-     * Generic Info Logging. 
-     * @param {String} message the message you want to print out.
-     * @returns {String} accompanied with green colour
+     * Generic warnings. Used for non-fatal errors.
+     * @param {String} message Message to print.
+     * @static
      */
-
-
-    info(message) {
-        return console.log(`${chalk.bgGreen('info')} ${chalk.green(message)}`);
+    static warn(message) {
+        console.log(`${chalk.bgYellow('warn')} ${chalk.yellow(message)}`);
     }
 
-
     /**
-     * Generic Warnings. Used for non-fatal errors.
-     * @param {String} message the message you want to print out.
-     * @returns {String} accompanied with yellow colour 
+     * Generic error logging.
+    * @param {String} message Message to print.
+     * @static
      */
-
-
-    warn(message) {
-        return console.log(`${chalk.bgYellow('warn')} ${chalk.yellow(message)}`);
+    static error(message) {
+        console.log(`${chalk.bgRed('err')} ${chalk.red(message)}`);
     }
 
-
     /**
-     * Generic Error logging.
-     * @param {String} message the message you want to print out
-     * @returns {String} accompanied with red color.
+     * Custom logging using custom colours (within chalk range)
+     * @param {String} colour Colour to use. Must be a valid chalk colour.
+     * @param {String} name Text to display before the message.
+     * @param {String} message Message to print.
+     * @static
      */
-
-
-    error(message) {
-        return console.log(`${chalk.bgRed('err')} ${chalk.red(message)}`);
-    }
-
-
-    /**
-     * Customized logging using custom colours (within chalk range)
-     * @param {String} colour the colour to use. Must be a valid chalk colour.
-     * @param {String} name the text to display in the box.
-     * @param {String} message the message you want to print out
-     * @returns {String} accompanied with a custom colour.
-     */
-
-
-    custom(colour, name, message) {
+    static custom(colour, name, message) {
         if (!chalk[colour]) throw new Error('colour is not a valid chalk colour.');
-        return console.log(`${chalk['bg' + colour.toLowerCase().charAt(0).toUpperCase() + colour.toLowerCase().slice(1)](name)} ${chalk[colour](message)}`);
+        console.log(`${chalk['bg' + colour.toLowerCase().charAt(0).toUpperCase() + colour.toLowerCase().slice(1)](name)} ${chalk[colour](message)}`);
     }
 
 
     /**
-     * Customized Error logging
-     * @param {String} name Text to display in the coloured box.
-     * @param {String} message the text you want to print out.
-     * @returns {String} accompanied with a custom name in the error box.
+     * Custom error logging
+     * @param {String} name Text to display before the message.
+     * @param {String} message Message to print.
+     * @static
      */
-
-
-    customError(name, message) {
-        return console.error(`${chalk.bgRed(name)} ${chalk.red(message)}`);
+    static customError(name, message) {
+        console.error(`${chalk.bgRed(name)} ${chalk.red(message)}`);
     }
 }
 

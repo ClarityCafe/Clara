@@ -12,7 +12,7 @@ const fs = require('fs');
 const path = require('path');
 
 const cp = require('child_process');
-const logger = new(require(`${__dirname}/Logger`))();
+const logger = require(`${__dirname}/Logger`);
 
 // Variables
 var commandsDirectory = 'commands';
