@@ -29,6 +29,9 @@ module.exports = bot => {
                     return null;
                 }
             }).then(() => {
+                /**
+                 * @todo Kindly explain what this bools supposed to do. 
+                 */
                 bot.loadCommands = false;
                 bot.allowCommandUse = true;
 
