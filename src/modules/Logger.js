@@ -31,11 +31,19 @@ class Logger {
 
     /**
      * Generic error logging.
-    * @param {String} message Message to print.
+     * @param {String} message Message to print.
      * @static
      */
     static error(message) {
         console.log(`${chalk.bgRed('err')} ${chalk.red(message)}`);
+    }
+
+    /**
+     * Command logging.
+     * @param {String} message Message to print.
+     */
+    static cmd(message) {
+        console.log(`${chalk.bgMagenta('cmd')} ${chalk.magenta(message)}`);
     }
 
     /**
