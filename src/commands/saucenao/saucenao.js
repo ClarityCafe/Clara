@@ -30,9 +30,14 @@ exports.saucenao = {
                         'Content-Type': 'application/json',
                         body: JSON.stringify({url: imgUrl})
                     }).then(res => {
-                        //only return the top result
+                        //add entries
                         const fields = [];
-                        fields.push({name: '', value: res[0].url, inline: true});
+                        for (res of res.url) {
+                            /**
+                             * @todo Limit results to 5. Assuming saucenao emits more than we need.
+                             */
+                            fields.push({name: '', value: res[0].url, inline: true});
+                        }
                         //finally send the message in embed
                         ctx.createMessage({
                             embed: {
