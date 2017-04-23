@@ -59,7 +59,12 @@ exports.saucenao = {
                         body: JSON.stringify({url: ctx.suffix})
                     }).then(res => {
                         const fields = [];
-                        fields.push({name: '', value: res.url});
+                        for (res of res.url) {
+                            /**
+                             * @todo Limit results to 5. Assuming saucenao emits more than we need.
+                             */
+                            fields.push({name: '', value: res.url});
+                        }
                         ctx.createMessage({
                             embed: {
                                 title: 'saucenao query',
