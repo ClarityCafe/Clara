@@ -636,9 +636,10 @@ class Context {
 
     /**
      * @deprecated since 0.3.0
+     * throws an undefined.
      */
     get msg() {
-        throw new Error('Context.msg is deprecated. Context now inherits message properties.');
+        return undefined;
     }
 }
 
