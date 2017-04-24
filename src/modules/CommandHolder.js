@@ -639,7 +639,7 @@ class Context {
      * throws an undefined.
      */
     get msg() {
-        return undefined;
+        throw undefined;
     }
 }
 
