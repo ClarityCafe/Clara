@@ -635,8 +635,9 @@ class Context {
     }
 
     /**
+     * Context#Message. Legacy Message handler.
      * @deprecated since 0.3.0
-     * throws an undefined.
+     * @throws undefined
      */
     get msg() {
         throw undefined;
