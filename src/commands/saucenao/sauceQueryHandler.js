@@ -36,7 +36,7 @@ class SauceHandler {
             /** @todo figure out how to upload images/links in saucenao */
             //do nothing for now
         } else if (link) {
-            if (!urlRegex === link) {
+            if (!urlRegex) {
                 throw new Error('Link is not valid HTTP/HTTPS Address.');
             } else {
                 got('').then();
