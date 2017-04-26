@@ -22,7 +22,7 @@ class SauceHandler {
      * @param {Number} options.numRes number to change maximum results requested. Default 5.
      * @param {String} apiKey  API Key for SauceNao.
      */
-    constructor(options, apiKey) {
+    constructor(options = {}, apiKey) {
         this.apiKey = apiKey;
         this.options = {
             outputType: 2,
