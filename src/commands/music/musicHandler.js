@@ -8,6 +8,7 @@ const SCRegex = /^(?:https:\/\/)soundcloud\.com\/([a-z0-9-]+\/[a-z0-9-]+)/;
 const SCPlaylistRegex = /^(?:https:\/\/)?soundcloud\.com\/([a-z0-9-]+\/sets\/[a-z0-9-]+)$/;
 const ClypRegex = /^(?:https:\/\/)?clyp\.it\/([a-z0-9]{8})/;
 const TwitchRegex = /^(?:https:\/\/)?(?:www\.)?twitch\.tv\/([a-z0-9_]+)/;
+const PlaylistTypes = ['YouTubePlaylist', 'SoundCloudPlaylist'];
 
 class MusicHandler {
     constructor(bot) {
@@ -18,6 +19,10 @@ class MusicHandler {
             SoundCloudTrack: tmp.SoundCloudHandler,
             ClypAudio: tmp.ClypHandler,
             TwitchStream: tmp.TwitchHandler
+        };
+        this.playlistHandlers = {
+            YouTubePlaylist: tmp.YouTubePlaylistHandler,
+            SoundCloudPlaylist: tmp.SoundCloudPlaylistHandler
         };
     }
 
@@ -35,9 +40,44 @@ class MusicHandler {
             let [getURL, type] = matchURL(url);
 
             // Get song info and queue it
-            this.handlers[type].getInfo(getURL).then(info => {
-                q.push({info, ctx, timestamp: Date.now()});
-                return ctx.createMessage(`Queued **${info.title}** to position **${q.length}** (including currently playing).`);
+            if (!PlaylistTypes.includes(type)) {
+                this.handlers[type].getInfo(getURL).then(info => {
+                    q.push({info, ctx, timestamp: Date.now()});
+                    return ctx.createMessage(`Queued **${info.title}** to position **${q.length}** (including currently playing).`);
+                }).then(resolve).catch(reject);
+            } else {
+                this.queuePlaylist(ctx, getURL).then(resolve).catch(reject);
+            }
+        });
+    }
+
+    queuePlaylist(ctx, url) {
+        return new Promise((resolve, reject) => {
+            if (!(ctx instanceof Context)) throw new TypeError('ctx is not an instance of Context.');
+            if (typeof url !== 'string') throw new TypeError('url is not a string.');
+            if (!checkURL(url)) throw new Error('Unsupported music source.');
+
+            /// Get queue. If it doesn't exist, create it
+            if (!this._bot.music.queues.get(ctx.guild.id)) this._bot.music.queues.add({id: ctx.guild.id, queue: []});
+            let q = this._bot.music.queues.get(ctx.guild.id).queue;
+
+            // Get clean url and type
+            let [getURL, type] = matchURL(url);
+
+            // Get playlist info
+            this.playlistHandlers[type].getPlaylist(getURL).then(playlist => {
+                if (playlist.items.length === 0) throw new Error('Playlist is empty.');
+
+                let queuedAmt = 0;
+                let fullDuration = 0;
+
+                for (let item of playlist.items) {
+                    q.push({info: item, ctx, timestamp: Date.now()});
+                    fullDuration += item.length;
+                    queuedAmt++;
+                }
+
+                return ctx.createMessage(`Queued **${queuedAmt}** items from playlist ${playlist.title}.\n**Duration**: ${timeFormat(fullDuration)}`);
             }).then(resolve).catch(reject);
         });
     }
@@ -183,12 +223,12 @@ function matchURL(url) {
     } else if (YTPlaylistRegex.test(url)) {
         let id = url.match(YTPlaylistRegex)[1];
         return [`https://youtube.com/playlist?list=${id}`, 'YouTubePlaylist'];
-    } else if (SCRegex.test(url)) {
-        let id = url.match(SCRegex)[1];
-        return [`https://soundcloud.com/${id}`, 'SoundCloudTrack'];
     } else if (SCPlaylistRegex.test(url)) {
         let id = url.match(SCPlaylistRegex)[1];
         return [`https://soundcloud.com/${id}`, 'SoundCloudPlaylist'];
+    } else if (SCRegex.test(url)) {
+        let id = url.match(SCRegex)[1];
+        return [`https://soundcloud.com/${id}`, 'SoundCloudTrack'];
     } else if (ClypRegex.test(url)) {
         let id = url.match(ClypRegex)[1];
         return [`https://clyp.it/${id}`, 'ClypAudio'];
@@ -209,18 +249,14 @@ function searchP(query, options) {
 }
 
 function timeFormat(secs) {
-    let seconds = secs % 60;
-    let minutes = (secs / 60) % 60;
-    let hours = (minutes / 60) % 24;
+    let all = [secs / 60 / 60, secs / 60 % 60, secs % 60];
 
-    seconds = Math.floor(seconds);
-    minutes = Math.floor(minutes);
-    hours = Math.floor(hours);
+    for (let i in all) {
+        all[i] = Math.floor(all[i]);
+        all[i] = all[i].toString().length === 1 ? `0${all[i]}` : all[i];
+    }
 
-    seconds.toString().length === 1 ? seconds = `0${seconds.toString()}` : seconds = seconds.toString();
-    minutes.toString().length === 1 && hours !== 0 ? minutes = `0${minutes.toString()}` : minutes = minutes.toString();
-
-    return `${hours === 0  ? '' : `${hours}:`}${minutes}:${seconds}`;
+    return all[0] === '00' ? all.slice(1).join(':') : all.join(':');
 }
 
 module.exports = MusicHandler;
