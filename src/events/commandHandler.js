@@ -85,7 +85,7 @@ module.exports = bot => {
             let m = `Experienced error while executing \`${cmd}\`\n`;
             m += '```js\n';
             m += err + '\n'; // eslint-disable-line prefer-template
-            m += "``` If you feel this shouldn't be happening, join my support server. Invite can be found in the `invite` command.";
+            m += '```';
             msg.channel.createMessage(m);
         }
     }
