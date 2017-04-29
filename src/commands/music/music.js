@@ -115,7 +115,7 @@ exports.nowplaying = {
                     }
                 };
 
-                ctx.cteMessage({embed}).then(resolve).catch(reject);
+                ctx.createMessage({embed}).then(resolve).catch(reject);
             }
         });
     }
