@@ -12,7 +12,8 @@ exports.commands = [
     'play',
     'queue',
     'leave',
-    'join'
+    'join',
+    'nowplaying'
 ];
 
 exports.init = bot => {
@@ -112,7 +113,8 @@ exports.nowplaying = {
                     footer: {
                         text: `Queued by ${utils.formatUsername(c.member)} | ${item.type}`
                     }
-                }
+                };
+
                 ctx.cteMessage({embed}).then(resolve).catch(reject);
             }
         });
