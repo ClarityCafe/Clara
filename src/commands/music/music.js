@@ -159,7 +159,7 @@ exports.leave = {
 function queuePaginate(q, page, pageAmt, collect) {
     for (let i = page * pageAmt; i < page * pageAmt + pageAmt; i++) {
         if (!q[i]) break;
-        collect.push(`**${Number(i) + 1}.** \`${q[i].info.title}\` (${q[i].info.uploader}) **[timeFormat(q[i].info.length)]**`);
+        collect.push(`**${Number(i) + 1}.** \`${q[i].info.title}\` (${q[i].info.uploader}) **[${timeFormat(q[i].info.length)}]**`);
     }
 }
 
