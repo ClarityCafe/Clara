@@ -103,7 +103,7 @@ exports.nowplaying = {
             if ((bot.music.connections.get(ctx.guild.id) && !bot.music.connections.get(ctx.guild.id).playing) || !bot.music.queues.get(ctx.guild.id) || bot.music.queues.get(ctx.guild.id).queue.length === 0) {
                 ctx.createMessage('I am currently not playing anything.').then(resolve).catch(reject);
             } else {
-                let {item, c} = bot.music.queues.get(ctx.guild.id).queue[0];
+                let item = bot.music.queues.get(ctx.guild.id).queue[0];
                 let embed = {
                     author: {name: 'Now Playing'},
                     title: item.title,
