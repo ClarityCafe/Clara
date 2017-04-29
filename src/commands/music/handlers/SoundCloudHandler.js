@@ -14,7 +14,6 @@ class SoundCloudHandler {
                 if (err) {
                     reject(err);
                 } else {
-
                     let res = {
                         url: json.permalink_url,
                         stream,
