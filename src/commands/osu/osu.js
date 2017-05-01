@@ -12,6 +12,8 @@ const iso3166 = require('iso-3166-1-alpha-2');
 
 const commaRegex = /\B(?=(\d{3})+(?!\d))/g; // Thank you Brayzure uwu
 
+exports.loadAsSubcommands = true;
+
 exports.commands = [
     'osu',
     'mania',
@@ -19,7 +21,7 @@ exports.commands = [
     'ctb'
 ];
 
-exports.osu = {
+exports.main = {
     desc: "Retrive stats for osu!'s standard mode for a user.",
     fullDesc: "Uses the osu! API to get information for osu!'s standard mode for a user.",
     usage: '<osu! username/id>',
