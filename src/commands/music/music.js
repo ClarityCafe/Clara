@@ -12,7 +12,8 @@ exports.commands = [
     'play',
     'queue',
     'leave',
-    'join'
+    'join',
+    'nowplaying'
 ];
 
 exports.init = bot => {
@@ -102,7 +103,7 @@ exports.nowplaying = {
             if ((bot.music.connections.get(ctx.guild.id) && !bot.music.connections.get(ctx.guild.id).playing) || !bot.music.queues.get(ctx.guild.id) || bot.music.queues.get(ctx.guild.id).queue.length === 0) {
                 ctx.createMessage('I am currently not playing anything.').then(resolve).catch(reject);
             } else {
-                let {item, c} = bot.music.queues.get(ctx.guild.id).queue[0];
+                let {info: item, ctx: c} = bot.music.queues.get(ctx.guild.id).queue[0];
                 let embed = {
                     author: {name: 'Now Playing'},
                     title: item.title,
@@ -112,8 +113,9 @@ exports.nowplaying = {
                     footer: {
                         text: `Queued by ${utils.formatUsername(c.member)} | ${item.type}`
                     }
-                }
-                ctx.cteMessage({embed}).then(resolve).catch(reject);
+                };
+
+                ctx.createMessage({embed}).then(resolve).catch(reject);
             }
         });
     }
@@ -159,7 +161,7 @@ exports.leave = {
 function queuePaginate(q, page, pageAmt, collect) {
     for (let i = page * pageAmt; i < page * pageAmt + pageAmt; i++) {
         if (!q[i]) break;
-        collect.push(`**${Number(i) + 1}.** \`${q[i].info.title}\` (${q[i].info.uploader}) **[timeFormat(q[i].info.length)]**`);
+        collect.push(`**${Number(i) + 1}.** \`${q[i].info.title}\` (${q[i].info.uploader}) **[${timeFormat(q[i].info.length)}]**`);
     }
 }
 
