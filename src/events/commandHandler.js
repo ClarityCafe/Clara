@@ -75,18 +75,28 @@ module.exports = bot => {
             }).catch(() => logger.warn(`Couldn't get DM channel for/send DM to ${formatUsername(msg.author)} (${msg.author.id})`));
         } else if (resp && /\{'code':.+, 'message':.+\}/.test(err.response) && resp.code !== 50013) {
             logger.warn(loggerPrefix(msg) + `Discord error running command "${cmd}":\n:${err.stack}`); // eslint-disable-line prefer-template
-            let m = `Discord error while trying to execute \`${cmd}\`\n`;
-            m += '```js\n';
+            let m = '```js\n';
             m += `Code: ${resp.code}. Message: ${resp.message}\n`;
-            m += "``` If you feel this shouldn't be happening, join my support server. Invite can be found in the `invite` command.";
-            msg.channel.createMessage(m);
+            m += '```';
+            msg.channel.createMessage({embed: {
+                title: `There was an error while processing "${cmd}"`,
+                fields: [
+                    {name: 'Error Message', value: m, inline: true}
+                ],
+                footer: "If This isn't supposed to happen, let us know in the Discord Server found in ``invite``."
+            }});
         } else {
             logger.error(loggerPrefix(msg) + `Error running command "${cmd}":\n${err.stack}`); // eslint-disable-line prefer-template
-            let m = `Experienced error while executing \`${cmd}\`\n`;
-            m += '```js\n';
+            let m = '```js\n';
             m += err + '\n'; // eslint-disable-line prefer-template
             m += '```';
-            msg.channel.createMessage(m);
+            msg.channel.createMessage({embed: {
+                title: `An internal error happened in ${bot.user.username}`,
+                fields: [
+                    {name: 'Error Message', value: m, inline: true}
+                ],
+                footer: "If This isn't supposed to happen, let us know in the Discord Server found in ``invite``."
+            }});
         }
     }
 };
