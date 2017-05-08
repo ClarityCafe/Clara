@@ -35,8 +35,8 @@ exports.saucenao = {
                         title: 'Saucenao query results',
                         description: 'This is the closest I can find. Sorry if it is not accurate.',
                         fields
-                    }}).then(resolve).catch(reject);
-                });
+                    }});
+                }).then(resolve).catch(reject);
             }
         });
     }
