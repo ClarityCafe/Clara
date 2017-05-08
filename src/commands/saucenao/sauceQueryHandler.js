@@ -34,6 +34,7 @@ class SauceHandler {
     getSauce(file, link) {
         if (file === typeof path) {
             /** @todo figure out how to upload images/links in saucenao */
+            throw new Error('This is not yet implemented.');
             //do nothing for now
         } else if (link) {
             if (!urlRegex) {
