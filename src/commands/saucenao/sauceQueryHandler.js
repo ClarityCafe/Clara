@@ -5,7 +5,6 @@
  */
 
 const got = require('got');
-const fs = require('fs');
 const urlRegex = str => /(http(s)?:\/\/)?(www\.)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi.test(str);
 
 /** 
@@ -25,28 +24,33 @@ class SauceHandler {
     constructor(options = {}, apiKey) {
         this.apiKey = apiKey;
         this.options = {
-            outputType: 2,
-            dbMask: this.dbMask,
-            dbMaskI: this.dbMaskI,
-            numRes: 5
+            outputType: this.options.outputType || 2,
+            numRes: this.options.numRes || 5
         };
-    }
-    getSauce(file, link) {
-        if (file === typeof path) {
-            /** @todo figure out how to upload images/links in saucenao */
-            throw new Error('This is not yet implemented.');
-            //do nothing for now
-        } else if (link) {
-            if (!urlRegex) {
-                throw new Error('Link is not valid HTTP/HTTPS Address.');
-            } else {
-                got('', () => {
-                    
-                }).then();
-            }
-            /** @todo figure out how to upload images/links in saucenao */
-            //do nothing for now
+        if (!this.apiKey || apiKey === typeof string) {
+            throw new TypeError('No API Key or invalid key was provided');
         }
+    }
+    getSauce(path, link) {
+        return new Promise((resolve, reject) => {
+            if (!path === typeof path) {
+                throw new TypeError('path is not string');
+            } else if (path) {
+                /** @todo Finalize this. We need to output this as a stream then convert to MIMEType */
+                throw new Error('This is not implemented yet!');
+                /* got(`http://saucenao.com/search.php?output_type=${this.options.outputType}&numres=${this.options.numRes}&api_key=${this.apiKey}`, {}).then(res => {               
+                 });*/
+            } else if (link) {
+                if (!urlRegex) {
+                    throw new Error('Link is not valid HTTP/HTTPS Address.');
+                } else {
+                    /** @todo I need a regex for making the following URL in the URL parameter */
+                    got(`http://saucenao.com/search.php?output_type=${this.options.outputType}&numres=${this.options.numRes}&api_key=${this.apiKey}&url=${encodeURIComponent(link)}`).then(res => {
+                        resolve(res);
+                    }).catch(reject);
+                }
+            }
+        });
     }
 }
 
