@@ -23,7 +23,7 @@ class SauceHandler {
             outputType: this.options.outputType || 2,
             numRes: this.options.numRes || 5
         };
-        if (!this.apiKey || apiKey === typeof string) {
+        if (!this.apiKey || !apiKey === typeof string) {
             throw new TypeError('No API Key or invalid key was provided');
         }
     }
