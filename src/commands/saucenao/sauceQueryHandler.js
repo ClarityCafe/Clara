@@ -15,8 +15,6 @@ const urlRegex = str => /(http(s)?:\/\/)?(www\.)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,25
 class SauceHandler {
     /**
      * @param {Object} options Query Options for queries.
-     * @param {Number} options.dbMaskI Mask for selecting specific indexes to ENABLE. dbmask=8191 will search all of the first 14 indexes. If intending to search all databases, the db=999 option is more appropriate.
-     * @param {Number} options.dbMask  Mask for selecting specific indexes to DISABLE. dbmaski=8191 would search only indexes higher than the first 14. This is ideal when attempting to disable only certain indexes, while allowing future indexes to be included by default.
      * @param {Number} options.outputType 0=normal html 1=xml api(not implemented) 2=json api.
      * @param {Number} options.numRes number to change maximum results requested. Default 5.
      * @param {String} apiKey  API Key for SauceNao.
