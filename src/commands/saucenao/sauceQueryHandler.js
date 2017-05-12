@@ -31,12 +31,19 @@ class SauceHandler {
             throw new TypeError('No API Key or invalid key was provided');
         }
     }
+    /**
+     * Gets the source and outputs it in your preffered output type
+     * @param {String} path filepath for the image you want to get the source from (Not Implemented yet).
+     * @param {String} link web address for the source, must be a valid HTTP/HTTPS address.
+     * @returns {Promise} and JSON output.
+     * @example client.getSauce(path/link).then(res => { console.log(res) });
+     */
     getSauce(path, link) {
         return new Promise((resolve, reject) => {
             if (!path === typeof path) {
                 throw new TypeError('path is not string');
             } else if (path) {
-                /** @todo Finalize this. We need to output this as a stream then convert to MIMEType */
+                /** @todo Finalize this. We need to input file as a stream then convert to MIMEType */
                 throw new Error('This is not implemented yet!');
                 /* got(`http://saucenao.com/search.php?output_type=${this.options.outputType}&numres=${this.options.numRes}&api_key=${this.apiKey}`, {}).then(res => {               
                  });*/
