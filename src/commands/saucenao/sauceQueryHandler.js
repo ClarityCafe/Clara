@@ -9,15 +9,13 @@ const urlRegex = str => /(http(s)?:\/\/)?(www\.)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,25
 
 /** 
  * Query Handler for SauceNao-related requests.
- * PEPPYNOTE: Do not add Discord-Related hooks here as this would be backported to Sagiri
  */
 
 class SauceHandler {
     /**
-     * @param {Object} options Query Options for queries.
-     * @param {Number} options.outputType 0=normal html 1=xml api(not implemented) 2=json api.
-     * @param {Number} options.numRes number to change maximum results requested. Default 5.
-     * @param {String} apiKey  API Key for SauceNao.
+     * @param {Object} options Object for overriding the query system for API. valid parameters are outputType (the type of output you want) and numRes (number of responses you want returned) 
+     * @param {String} apiKey the API key for interacting with sauceNao
+     * @see {link} https://saucenao.com/user.php?page=search-api
      */
     constructor(options = {}, apiKey) {
         this.apiKey = apiKey;
