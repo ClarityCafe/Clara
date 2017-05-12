@@ -53,7 +53,7 @@ class SauceHandler {
                 } else {
                     /** @todo I need a regex for making the following URL in the URL parameter */
                     got(`http://saucenao.com/search.php?output_type=${this.options.outputType}&numres=${this.options.numRes}&api_key=${this.apiKey}&url=${encodeURIComponent(link)}`).then(res => {
-                        resolve(res);
+                        resolve(res.body);
                     }).catch(reject);
                 }
             }
