@@ -12,7 +12,7 @@ const cp = require('child_process');
 const path = require('path');
 const got = require('got');
 const IncomingMessage = require('http').IncomingMessage;
-const PassThrough = require('streams').PassThrough;
+const PassThrough = require('stream').PassThrough;
 /* eslint-enable */
 
 const FailCol = 0xF44336;
