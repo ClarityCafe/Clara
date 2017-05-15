@@ -10,6 +10,11 @@ const fs = require('fs');
 const path = require('path');
 const cp = require('child_process');
 const logger = require(`${__dirname}/Logger`);
+
+// stuff to make shit work
+const noLoad=[];
+const unloadedCommands;
+
 /**
  *  Handler for command initialization
  * 
