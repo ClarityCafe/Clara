@@ -21,7 +21,7 @@ class MusicHandler {
             TwitchStream: tmp.TwitchHandler
         };
         this.playlistHandlers = {
-            YouTubePlaylist: tmp.YouTubePlaylistHandler,
+            //YouTubePlaylist: tmp.YouTubePlaylistHandler,
             SoundCloudPlaylist: tmp.SoundCloudPlaylistHandler
         };
     }
@@ -167,18 +167,31 @@ class MusicHandler {
             bot.music.streams.add(streamInfo);
             cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5', '-b:a', '96k', '-bufsize', '96k']});
 
-            stream.once('data', () => {
+            if (typeof stream === 'string') {
                 ctx.createMessage({embed: {
                     author: {name: 'Now Playing'},
                     title: info.title,
-                    description: `Duration: ${timeFormat(info.length)}, [**Link**](${info.url})`,
+                    description: `Duration: ${typeof info.length === 'string'? info.length : timeFormat(info.length)}, [**Link**](${info.url})`,
                     color: utils.randomColour(),
                     image: {url: info.thumbnail},
                     footer: {
                         text: `Queued by ${utils.formatUsername(ctx.member)} | ${info.type}`
                     }
                 }});
-            });
+            } else {
+                stream.once('data', () => {
+                    ctx.createMessage({embed: {
+                        author: {name: 'Now Playing'},
+                        title: info.title,
+                        description: `Duration: ${typeof info.length === 'string'? info.length : timeFormat(info.length)}, [**Link**](${info.url})`,
+                        color: utils.randomColour(),
+                        image: {url: info.thumbnail},
+                        footer: {
+                            text: `Queued by ${utils.formatUsername(ctx.member)} | ${info.type}`
+                        }
+                    }});
+                });
+            }
 
             cnc.on('error', err => {
                 logger.error(`Voice error in guild ${ctx.guild.id}\n${err.stack}`);

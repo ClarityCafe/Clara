@@ -1,6 +1,5 @@
 const twitch = require('twitch.tv');
 const twitchStream = require('twitch-get-stream');
-const got = require('got');
 
 class TwitchHandler {
     constructor(bot) {
@@ -15,9 +14,9 @@ class TwitchHandler {
             twitchInfo(`streams/${url.split('/').pop()}`, {clientID: this.clientID}).then(res => {
                 let r = {
                     url,
-                    title: res.status,
+                    title: res.channel.status,
                     uploader: res.display_name,
-                    thumbnail: res.video_banner,
+                    thumbnail: res.preview.large,
                     length: 'Unknown',
                     type: 'TwitchStream'
                 };
@@ -41,7 +40,7 @@ class TwitchHandler {
                 let stream = info.stream;
                 delete info.stream;
                 
-                return [got.stream(stream), info];
+                return [stream, info];
             }).then(resolve).catch(reject);
         });
     }
@@ -52,7 +51,7 @@ function twitchInfo(url, options) {
     return new Promise(resolve => {
         twitch(url, options, (err, res) => {
             if (err) throw err;
-            resolve(res);
+            resolve(res.stream);
         });
     });
 }
