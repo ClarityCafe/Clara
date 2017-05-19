@@ -39,7 +39,13 @@ exports.play = {
                     if (!urlRegex.test(ctx.suffix) && bot.config.ytSearchKey) {
                         handler.search(ctx, ctx.suffix).then(res => {
                             return handler.prePlay(ctx, res);
-                        }).then(resolve).catch(reject);
+                        }).then(resolve).catch(err => {
+                            if (err.message && err.message === 'Invalid selection (Number too high or not a number).') {
+                                return ctx.createMessage(err.message);
+                            } else {
+                                reject(err);
+                            }
+                        }).then(resolve);
                     } else if (!urlRegex.test(ctx.suffix) && !bot.config.ytSearchKey) {
                         ctx.createMessage('Search token appears to be missing. Please queue songs via direct links.').then(resolve).catch(reject);
                     } else {
@@ -192,4 +198,4 @@ function timeFormat(secs) {
     return all[0] === '00' ? all.slice(1).join(':') : all.join(':');
 }
 
-const urlRegex = /^(?:(?:https?:)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+const urlRegex = /^(?:(?:https?:)?\/\/)?(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i;
