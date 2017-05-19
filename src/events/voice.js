@@ -12,6 +12,17 @@ module.exports = bot => {
             }, 60000);
         }*/
 
+        if (mem.id !== bot.user.id && chan.voiceMembers.get(bot.user.id) && chan.voiceMembers.filter(m => m.id !== bot.user.id && !m.bot).length === 0) {
+            setTimeout(() => {
+                if (chan.voiceMembers.filter(m => m.id !== bot.user.id && !m.bot).length === 0) {
+                    let cnc = bot.music.connections.get(chan.guild.id);
+                    if (cnc.playing) cnc.stopPlaying();
+                    bot.leaveVoiceChannel(chan.id);
+
+                }
+            }, 300000);
+        }
+
         if (mem.id !== bot.user.id) return;
         if (bot.music.connections.get(chan.guild.id)) bot.music.connections.delete(chan.guild.id);
         if (bot.music.queues.get(chan.guild.id)) bot.music.queues.delete(chan.guild.id);
