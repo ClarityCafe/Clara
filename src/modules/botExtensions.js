@@ -1,6 +1,7 @@
 /* eslint-env node */
 
 const got = require('got');
+const Eris = require('eris');
 
 module.exports = bot => {
 
@@ -278,5 +279,75 @@ module.exports = bot => {
      */
     bot.isBlacklisted = userID => {
         return ~bot.blacklist.indexOf(userID);
+    };
+
+    bot.hasPermission = (permission, channel) => {
+        // Check if permission actually exists
+        if (!Object.keys(Eris.Constants.Permissions).includes(permission)) return false;
+
+        let allowed = false;
+        let guildBot = channel.guild.members.get(bot.user.id);
+
+        if (guildBot.permission.has(permission)) allowed = true;
+            
+        // Channel overwrites
+        if (!guildBot.permission.has('administrator')) {
+            let everyone = channel.guild.roles.find(r => r.name === '@everyone');
+            let chanPerms = channel.permissionOverwrites.filter(v => {
+                return (v.type === 'member' && v.id === guildBot.id) || (v.type === 'role' && (guildBot.roles.includes(v.id) || v.id === everyone.id));
+            });
+
+            chanPerms = chanPerms.map(p => p.json);
+
+            for (let permGroup of chanPerms) {
+                if (permGroup[permission] === true) {
+                    allowed = true;
+                } else if (permGroup[permission] === false) {
+                    allowed = false;
+                }
+            }
+        }
+
+        return allowed;
+    };
+
+    /**
+     * Flattens an embed into plain text to use when the bot can't use embeds.
+     * 
+     * @param {Object} embed The embed to flatten. Must be a valid Discord embed object.
+     * @returns {String} The flattened embed.
+     * @see https://discordapp.com/developers/docs/resources/channel#embed-object
+     */
+    bot.flattenEmbed = embed => {
+        let flattened = '';
+
+        if (embed.author) {
+            flattened += `**${embed.author.name}`;
+            flattened += embed.author.url ? ` <${embed.author.url}>**\n` : '**\n';
+        }
+
+        if (embed.title) {
+            flattened += `**${embed.title}`;
+            flattened += embed.url ? ` <${embed.url}>**\n\n` : '**\n\n';
+        }
+
+        if (embed.description) flattened += `${embed.description}\n`;
+        if (embed.fields) embed.fields.forEach(f => {
+            flattened += !f.name.match(/^`.*`$/) ? `**${f.name}**\n` : `${f.name}\n`;
+            flattened += `${f.value}\n`;
+        });
+    
+        if (embed.footer && !embed.timestamp) {
+            flattened += `${embed.footer.text}\n`;
+        } else if (!embed.footer && embed.timestamp) {
+            flattened += `${embed.timestamp}\n`;
+        } else {
+            flattened += `\n${embed.footer.text} | ${embed.timestamp}\n`;
+        }
+
+        if (embed.thumbnail) flattened += `${embed.thumbnail.url}\n`;
+        if (embed.image) flattened += `${embed.image.url}\n`;
+
+        return flattened;
     };
 };
