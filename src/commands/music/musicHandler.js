@@ -164,6 +164,7 @@ class MusicHandler {
             let cnc = bot.music.connections.get(ctx.guild.id);
             let streamInfo = {id: ctx.guild.id, stream, url: info.url};
 
+            bot.music.streams.add(streamInfo);
             cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5', '-b:a', '96k', '-bufsize', '96k']});
 
             stream.once('data', () => {
@@ -177,32 +178,30 @@ class MusicHandler {
                         text: `Queued by ${utils.formatUsername(ctx.member)} | ${info.type}`
                     }
                 }});
-
-                streamInfo.timer = setTimeout(() => {
-                    if (!bot.music.queues.get(ctx.guild.id) || bot.music.stopped.includes(ctx.guild.id)) return;
-
-                    let q = bot.music.queues.get(ctx.guild.id).queue;
-
-                    if (q[0].info.url === info.url) {
-                        q.splice(0, 1);
-                        bot.music.streams.delete(ctx.guild.id);
-                        cnc.stopPlaying();
-
-                        if (q.length > 0) {
-                            this.getStream(q[0].info.url, q[0].info.type).then(bepis => {
-                                return this.play(q[0].ctx, bepis);
-                            }).then(resolve).catch(reject);
-                        }
-                        cnc.removeAllListeners('error');
-                    }
-                }, Date.now() + info.length);
-
-                bot.music.streams.add();
             });
 
             cnc.on('error', err => {
                 logger.error(`Voice error in guild ${ctx.guild.id}\n${err.stack}`);
                 ctx.createMessage(`Voice connection error: \`${err}\``);
+            });
+
+            cnc.on('end', () => {
+                if (!bot.music.queues.get(ctx.guild.id) || bot.music.stopped.includes(ctx.guild.id)) return;
+
+                let q = bot.music.queues.get(ctx.guild.id).queue;
+
+                if (q[0].info.url === info.url) {
+                    q.splice(0, 1);
+                    bot.music.streams.delete(ctx.guild.id);
+                    cnc.stopPlaying();
+
+                    if (q.length > 0) {
+                        this.getStream(q[0].info.url, q[0].info.type).then(bepis => {
+                            return this.play(q[0].ctx, bepis);
+                        }).then(resolve).catch(reject);
+                    }
+                    cnc.removeAllListeners('error');
+                }
             });
         });
     }
