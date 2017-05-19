@@ -13,7 +13,8 @@ exports.commands = [
     'queue',
     'leave',
     'join',
-    'nowplaying'
+    'nowplaying',
+    'sources'
 ];
 
 exports.init = bot => {
@@ -155,6 +156,21 @@ exports.leave = {
                 ctx.createMessage('Left the voice channel and destroyed music data.').then(resolve).catch(reject);
             }
         });
+    }
+};
+
+exports.sources = {
+    desc: 'Show all available sources for music.',
+    main(bot, ctx) {
+        return ctx.createMessage({embed: {
+            title: 'Music Sources',
+            description: '**YouTube**: `https://youtube.com/watch?v=ID | https://youtu.be/ID`\n'
+            + '**SoundCloud**: `https://soundcloud.com/USER/SONG`\n'
+            + '**Clyp**: `https://clyp.it/ID`\n'
+            + '**Twitch**: `https://twitch.tv/USER`\n'
+            + '**YouTube Playlist**: `https://youtube.com/playlist?list=ID`\n'
+            + '**SoundCloud Playlist**: `https://soundcloud.com/USER/sets/NAME`\n'
+        }});
     }
 };
 
