@@ -65,38 +65,70 @@ module.exports = bot => {
      * @param {Object} err The error object to analyse.
      */
     function handleCmdErr(msg, cmd, err) {
-        if (err.response && typeof err.response === 'string') var resp = JSON.parse(err.response);
-        if (resp && resp.code === 50013) {
-            logger.warn(`Can't send message in '#${msg.channel.name}' (${msg.channel.id}), cmd from user '${
-            formatUsername(msg.author)}' (${msg.author.id})`);
-            msg.author.getDMChannel().then(dm => {
-                console.log(dm.id);
-                return dm.createMessage(`It appears I was unable to send a message in \`#${msg.channel.name}\` on the server \`${msg.channel.guild.name}\`. Please give me the Send Messages permission or notify a mod or admin if you cannot do this.`);
-            }).catch(() => logger.warn(`Couldn't get DM channel for/send DM to ${formatUsername(msg.author)} (${msg.author.id})`));
-        } else if (resp && /\{'code':.+, 'message':.+\}/.test(err.response) && resp.code !== 50013) {
-            logger.warn(loggerPrefix(msg) + `Discord error running command "${cmd}":\n:${err.stack}`); // eslint-disable-line prefer-template
-            let m = '```js\n';
-            m += `Code: ${resp.code}. Message: ${resp.message}\n`;
-            m += '```';
-            msg.channel.createMessage({embed: {
-                title: `There was an error while processing "${cmd}"`,
-                fields: [
-                    {name: 'Error Message', value: m, inline: true}
-                ],
-                footer: "If This isn't supposed to happen, let us know in the Discord Server found in ``invite``."
-            }});
-        } else {
-            logger.error(loggerPrefix(msg) + `Error running command "${cmd}":\n${err.stack}`); // eslint-disable-line prefer-template
-            let m = '```js\n';
-            m += err + '\n'; // eslint-disable-line prefer-template
-            m += '```';
-            msg.channel.createMessage({embed: {
-                title: `An internal error happened in ${bot.user.username}`,
-                fields: [
-                    {name: 'Error Message', value: m, inline: true}
-                ],
-                footer: "If This isn't supposed to happen, let us know in the Discord Server found in ``invite``."
-            }});
-        }
+        return new Promise((resolve, reject) => {
+            let resp = typeof err.response === 'string' && /^\{'code':\d+, 'message':.*\}$/.test(err.response) ? JSON.parse(err.response) : null;
+
+            if (resp && resp.code === 50013 && !msg.channel.guild.members.get(bot.user.id).permissions.has('sendMessages')) {
+                logger.warn(`Can't send message in '#${msg.channel.name}' (${msg.channel.id}), cmd from user '${bot.formatUser(msg.author)}' (${msg.author.id})`);
+
+                msg.author.getDMChannel().then(dm => {
+                    console.log(dm.id);
+                    return dm.createMessage(`It appears I was unable to send a message in \`#${msg.channel.name}\` on the server \`${msg.channel.guild.name}\`.\nPlease give me the Send Messages permission or notify a mod or admin if you cannot do this.`);
+                }).then(resolve).catch(() => logger.warn(`Couldn't get DM channel for/send DM to ${bot.formatUser(msg.author)} (${msg.author.id})`));
+            } else if (resp && resp.code !== 50013) {
+                logger.warn(`${loggerPrefix(msg)}Discord error while running command "${cmd}":\n${err.stack}`);
+                    
+                let embed = {
+                    title: 'Error',
+                    description: `An error occurred while trying to execute command \`${cmd}\``,
+                    color: 0xF44336,
+                    timestamp: new Date(),
+                    footer: {text: 'Powered by Clara'},
+                    fields: [
+                        {
+                            name: '\u200b',
+                            value: '```js\n'
+                            + `Code: ${resp.code}\n`
+                            + `Message: ${resp.message}\n`
+                            + '```\n'
+                            + 'This has been logged, but if you wish to report this now so it can get fixed faster, you can join my [**support server**](https://discord.gg/rmMTZue).'
+                        }
+                    ]
+                };
+
+                if (!bot.hasPermission('embedLinks', msg.channel)) {
+                    let content = bot.flattenEmbed(embed);
+                    msg.channel.createMessage(content).then(resolve).catch(reject);
+                } else {
+                    msg.channel.createMessage({embed}).then(resolve).catch(reject);
+                }
+            } else {
+                logger.error(`${loggerPrefix(msg)}Error running command "${cmd}":\n${err.stack}`);
+
+                let embed = {
+                    title: 'Error',
+                    description: `An error occurred while trying to execute command \`${cmd}\``,
+                    color: 0xF44336,
+                    timestamp: new Date(),
+                    footer: {text: 'Powered by Clara'},
+                    fields: [
+                        {
+                            name: '\u200b',
+                            value: '```js\n'
+                            + `${err}\n`
+                            + '```\n'
+                            + 'This has been logged, but if you wish to report this now so it can get fixed faster, you can join my [**support server**](https://discord.gg/rmMTZue).'
+                        }
+                    ]
+                };
+
+                if (!bot.hasPermission('embedLinks', msg.channel)) {
+                    let content = bot.flattenEmbed(embed);
+                    msg.channel.createMessage(content).then(resolve).catch(reject);
+                } else {
+                    msg.channel.createMessage({embed}).then(resolve).catch(reject);
+                }
+            }
+        });
     }
 };
