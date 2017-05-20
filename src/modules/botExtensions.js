@@ -268,7 +268,7 @@ module.exports = bot => {
      * @returns {Boolean} If the user has perms.
      */
     bot.checkBotPerms = userID => {
-        return userID === bot.config.ownerID || ~bot.admins.indexOf(userID);
+        return userID === bot.config.ownerID || bot.admins.includes(userID);
     };
 
     /**
@@ -278,7 +278,7 @@ module.exports = bot => {
      * @returns {Boolean} If the user is blacklisted.
      */
     bot.isBlacklisted = userID => {
-        return ~bot.blacklist.indexOf(userID);
+        return bot.blacklist.includes(userID);
     };
 
     bot.hasPermission = (permission, channel) => {
