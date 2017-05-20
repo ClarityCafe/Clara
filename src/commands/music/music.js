@@ -5,6 +5,7 @@
  */
 
 const MusicHandler = require(`${__dirname}/musicHandler`);
+const got = require('got');
 var handler;
 
 exports.loadAsSubcommands = true;
@@ -18,7 +19,15 @@ exports.commands = [
 ];
 
 exports.init = bot => {
-    handler = new MusicHandler(bot);
+    if (!bot.config.soundCloudKey) {
+        got('https://raw.githubusercontent.com/rg3/youtube-dl/master/youtube_dl/extractor/soundcloud.py').then(r => {
+            bot.config.soundCloudKey = r.body.match(/_CLIENT_ID = '([A-Z0-9]+)'/i)[1];
+            logger.info('SoundCloud key has been automatically scraped from Youtube-DL. If you do not wish for this to happen, please insert a key into the config.json manually.');
+            handler = new MusicHandler(bot);
+        }).catch(logger.error);
+    } else {
+        handler = new MusicHandler(bot);
+    }
 };
 
 exports.main = {
