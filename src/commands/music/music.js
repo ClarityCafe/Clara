@@ -123,7 +123,7 @@ exports.nowplaying = {
                 let embed = {
                     author: {name: 'Now Playing'},
                     title: item.title,
-                    description: `Duration: ${timeFormat(item.length)}, [**Link**](${item.url})`,
+                    description: `Duration: ${typeof item.length === 'string'? item.length : timeFormat(item.length)}, [**Link**](${item.url})`,
                     color: utils.randomColour(),
                     image: {url: item.thumbnail},
                     footer: {
@@ -146,7 +146,8 @@ exports.join = {
             } else if (!ctx.member.voiceState.channelID) {
                 ctx.createMessage('You are not in a voice channel.').then(resolve).catch(reject);
             } else {
-                bot.joinVoiceChannel(ctx.member.voiceState.channelID).then(() => {
+                bot.joinVoiceChannel(ctx.member.voiceState.channelID).then(cnc => {
+                    bot.music.inactives.push([bot.guilds.get(cnc.id).channels.get(cnc.channelID), Date.now()]);
                     return ctx.createMessage(`Joined your voice channel. Run \`${bot.config.mainPrefix}music play <song>\` to play something.`);
                 }).then(resolve).catch(reject);
             }
