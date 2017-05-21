@@ -203,7 +203,7 @@ class MusicHandler {
 
                 let q = bot.music.queues.get(ctx.guild.id).queue;
 
-                if (q[0].info.url === info.url) {
+                if (q[0] && q[0].info.url === info.url) {
                     q.splice(0, 1);
                     bot.music.streams.delete(ctx.guild.id);
                     cnc.stopPlaying();
