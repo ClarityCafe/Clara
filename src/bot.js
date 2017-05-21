@@ -57,13 +57,6 @@ bot.prefixes = JSON.parse(fs.readFileSync(`${__dirname}/data/prefixes.json`)).co
 bot.config = config;
 bot.loadCommands = true;
 bot.allowCommandUse = false;
-bot.music = {
-    skips: new Eris.Collection(Object),
-    queues: new Eris.Collection(Object),
-    connections: bot.voiceConnections,
-    streams: new Eris.Collection(Object),
-    stopped: []
-};
 bot.settings = {
     guilds: new Eris.Collection(Object),
     users: new Eris.Collection(Object)
