@@ -13,8 +13,8 @@ class YouTubeHandler {
                     url,
                     title: info.title,
                     uploader: info.author.name,
-                    thumbnail: info.thumbnail_url.replace('default.jpg', 'maxresdefault.jpg'),
-                    length: info.length_seconds,
+                    thumbnail: info.thumbnail_url.replace('default.jpg', 'hqdefault.jpg'),
+                    length: Number(info.length_seconds),
                     type: 'YouTubeVideo',
                     formats: info.formats
                 };
