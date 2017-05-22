@@ -31,9 +31,9 @@
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "eslint": "^3.19.0",
-    "eslint-plugin-react": "7.0.0",
+    "eslint-plugin-react": "7.0.1",
     "eslint-config-defaults": "^9.0.0",
-    "tslint": "^4.5.1",
+    "tslint": "^5.2.0",
     "typescript": "^2.3.2"
   }
 }
