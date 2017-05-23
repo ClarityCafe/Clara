@@ -26,17 +26,20 @@ exports.saucenao = {
             } else if (!ctx.suffix === urlRegex) {
                 return ctx.createMessage('Oi, your URL is invalid!');
             } else if (ctx.attachments[0]) {
-                ayaneru.getSauce(ctx.attachments[0].url).then(res => {
-                    for (res.url of res) {
-                        var fields = [];
-                        fields.push(`${{name: 'Item', value: res.url, inline: true}}`);
+                ayaneru.getSauce(ctx.attachments[0].url).then(res => {}).catch(reject);
+            } else if (ctx.suffix) {
+                ayaneru.getSauce(ctx.suffix).then(res => {
+                    let ovy = JSON.parse(res.results);
+                    for (ovy.data of ovy) {
+                        const fields = [];
+                        fields.push(`${{name: ovy.title, value: ovy.thumbnail, inline: true}}`, 0);
+                        ctx.createMessage({embed : {
+                            title: 'saucenao query',
+                            description: 'this is what we can find from your image.',
+                            fields
+                        }})
                     }
-                    ctx.createMessage({embed: {
-                        title: 'Saucenao query results',
-                        description: 'This is the closest I can find. Sorry if it is not accurate.',
-                        fields
-                    }});
-                }).then(resolve).catch(reject);
+                }).catch(reject);
             }
         });
     }
