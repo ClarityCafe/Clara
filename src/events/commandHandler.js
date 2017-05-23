@@ -19,8 +19,6 @@ module.exports = bot => {
             return parseArgs(content);
         }).then(res => {
             if (!res) return null;
-            /** @todo delete Line23. */
-            if (/^vs$/i.test(res.cmd)) res.cmd = 'vs';
             if (!bot.commands.checkCommand(res.cmd)) return null;
 
             res.cleanSuffix = msg.cleanContent.split(res.cmd).slice(1).join(res.cmd);
