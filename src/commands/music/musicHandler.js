@@ -198,7 +198,7 @@ class MusicHandler {
                 ctx.createMessage(`Voice connection error: \`${err}\``);
             });
 
-            cnc.on('end', () => {
+            cnc.once('end', () => {
                 if (!bot.music.queues.get(ctx.guild.id) || bot.music.stopped.includes(ctx.guild.id)) return;
 
                 let q = bot.music.queues.get(ctx.guild.id).queue;

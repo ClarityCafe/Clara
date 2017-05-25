@@ -15,7 +15,8 @@ exports.commands = [
     'leave',
     'join',
     'nowplaying',
-    'sources'
+    'sources',
+    'skip'
 ];
 
 exports.init = bot => {
@@ -187,6 +188,56 @@ exports.sources = {
             + '**YouTube Playlist**: `https://youtube.com/playlist?list=ID`\n'
             + '**SoundCloud Playlist**: `https://soundcloud.com/USER/sets/NAME`\n'
         }});
+    }
+};
+
+exports.skip = {
+    desc: 'Skip the current playing song.',
+    usage: '[force]',
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            if (!bot.music.connections.get(ctx.guild.id)) {
+                ctx.createMessage('I am not in a voice channel.').then(resolve).catch(reject);
+            } else if (!ctx.member.voiceState.channelID) {
+                ctx.createMessage('You are not in a voice channel.').then(resolve).catch(reject);
+            } else if (ctx.member.voiceState.channelID !== bot.music.connections.get(ctx.guild.id).channelID) {
+                ctx.createMessage('You are not in my voice channel.').then(resolve).catch(reject);
+            } else if (!bot.music.connections.get(ctx.guild.id).playing) {
+                ctx.createMessage('I am not playing anything.').then(resolve).catch(reject);
+            } else if (ctx.args[0] !== 'force') {
+                if (!bot.music.skips.get(ctx.guild.id)) bot.music.skips.add({id: ctx.guild.id, users: []});
+                let skips = bot.music.skips.get(ctx.guild.id);
+
+                if (!skips.users.includes(ctx.author.id)) {
+                    skips.users.push(ctx.author.id);
+                    let chan = ctx.guild.channels.get(bot.music.connections.get(ctx.guild.id).channelID);
+
+                    if (skips.users.length >= Math.floor(chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf && !m.voiceState.deaf && m.id !== bot.id).length)) {
+                        skips.users = [];
+                        let track = bot.music.queues.get(ctx.guild.id).queue[0].info;
+
+                        bot.music.connections.get(ctx.guild.id).stopPlaying();
+                        ctx.createMessage(`Skipped **${track.title}**.`).then(resolve).catch(reject);
+                    } else {
+                        let track = bot.music.queues.get(ctx.guild.id).queue[0].info;
+                        let chan = ctx.guild.channels.get(bot.music.connections.get(ctx.guild.id).channelID);
+
+                        ctx.createMessage(`**${bot.formatUsername(ctx.member)}** voted to skip **${track.title}**.\n`
+                        + `${skips.users.length}/${chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf && !m.voiceState.deaf && m.id !== bot.id).length} votes.`).then(resolve).catch(reject);
+                    }
+                }
+            } else if (ctx.args[0] === 'force' && !(bot.checkBotPerms(ctx.author.id) || ctx.hasPermission('manageGuild', 'author'))) {
+                ctx.createMessage('You do not have permissions to force skip.\n(Manage Server permission required)').then(resolve).catch(reject);
+            } else {
+                if (!bot.music.skips.get(ctx.guild.id)) bot.music.skips.add({id: ctx.guild.id, users: []});
+                let skips = bot.music.skips.get(ctx.guild.id);
+                let track = bot.music.queues.get(ctx.guild.id).queue[0].info;
+                skips.users = [];
+
+                bot.music.connections.get(ctx.guild.id).stopPlaying();
+                ctx.createMessage(`Skipped **${track.title}**.`).then(resolve).catch(reject);
+            }
+        });
     }
 };
 
