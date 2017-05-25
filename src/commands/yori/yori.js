@@ -2,6 +2,8 @@
  * yori.js - Random anime image command.
  *
  * Contributed by Capuccino, Ovyerus.
+ * 
+ * API and service provided by Yorium (yorium.moe)
  */
 
 /* eslint-env node */
