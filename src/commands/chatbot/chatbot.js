@@ -1,73 +1,31 @@
 /*
- * chatbot.js - Chatbot made using markov chains.
- *
- * Contributed by Ovyerus
+ * chatbot.js - make Chatbot io again 
+ * 
+ * Contributed by Capuccino
  */
 
-/* eslint-env node */
+//we'll use wolke's version of the lib
+const chatbot = require('better-cleverbot-io');
 
-const Markov = require('markov-strings');
-const fs = require('fs');
-
-try {
-    require.resolve(`${__dirname}/lines.txt`);
-} catch(err) {
-    logger.custom('yellow', 'commands/chatbot', 'Markov line file not found. Generating pre-seeded one.');
-    fs.writeFileSync(`${__dirname}/lines.txt`, fs.readFileSync(`${__dirname}/sample.txt`).toString());
-}
+// I don't care if everyone rips this out, we have unlimited API calls here anyways
+const ayaneru = new chatbot({user: 'lp8S8eXmkOoUmzTa', key: '8wYsJCD710H2WUygfDe07gwnjHYyQs2C', nick: 'H9dG2tvV'});
 
 exports.commands = [
     'chat'
 ];
 
-function readLines() {
-    return new Promise((resolve, reject) => {
-        fs.readFile(`${__dirname}/lines.txt`, 'utf8', (err, lines) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(lines.split('\n'));
-            }
-        });
-    });
-}
-
-function appendLines(msg) {
-    return new Promise((resolve, reject) => {
-        fs.appendFile(`${__dirname}/lines.txt`, msg.replace(/\n+/g, ' ').trim() + '\n', err => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
-            }
-        });
-    });
-}
-
 exports.chat = {
     desc: 'Chat with the bot.',
-    longDesc: 'Uses an algorithm to simulate chatting with a human. May be extremely dumb and offtopic at times.',
+    longDesc: 'Uses an Cloud API to simulate chatting with a human. May be extremely dumb and offtopic at times.',
     usage: '<message>',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix) {
-                ctx.createMessage(localeManager.t('chatbot-noArgs', ctx.settings.locale)).then(resolve).catch(reject);
-            } else if (/how (dumb|smart) are you\??/i.test(ctx.suffix.toLowerCase())) {
-                readLines().then(lines => {
-                    return ctx.createMessage(`I currently know **${lines.length}** things.`);
-                }).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('chatbot-noArgs', ctx.settings.locale));
             } else {
-                let chat;
-                readLines().then(lines => {
-                    chat = new Markov(lines, {stateSize: 3});
-                    return chat.buildCorpus();
-                }).then(() => {
-                    return appendLines(ctx.suffix);
-                }).then(() => {
-                    return chat.generateSentence({maxLength: 420});
-                }).then(sent => {
-                    return ctx.createMessage(sent.string);
-                }).then(resolve).catch(reject);
+                ayaneru.ask(ctx.suffix).then(res => {
+                    ctx.createMessage(res);
+                }).catch(reject);
             }
         });
     }
