@@ -1,5 +1,9 @@
 /* eslint-env node */
 
+//we'll use wolke's version of the lib
+const chatbot = require('better-cleverbot-io');
+// I don't care if everyone rips this out, we have unlimited API calls here anyways
+const ayaneru = new chatbot({user: 'lp8S8eXmkOoUmzTa', key: '8wYsJCD710H2WUygfDe07gwnjHYyQs2C', nick: 'H9dG2tvV'});
 const {parseArgs, parsePrefix} = require(`${__baseDir}/modules/messageParser`);
 const {Context} = require(`${__baseDir}/modules/CommandHolder`);
 const {formatUsername} = require(`${__baseDir}/modules/utils`);
@@ -19,7 +23,13 @@ module.exports = bot => {
             return parseArgs(content);
         }).then(res => {
             if (!res) return null;
-            if (!bot.commands.checkCommand(res.cmd)) return null;
+            if (!bot.commands.checkCommand(res.cmd)) {
+                return new Promise((resolve, reject) => {
+                    ayaneru.ask(msg.content).then(res => {
+                        msg.channel.createMessage(res);
+                    }).catch(reject);
+                });             
+            }
 
             res.cleanSuffix = msg.cleanContent.split(res.cmd).slice(1).join(res.cmd);
             Object.assign(outer, res);
