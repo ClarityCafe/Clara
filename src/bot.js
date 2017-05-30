@@ -12,8 +12,16 @@
 const Eris = require('eris');
 const fs = require('fs');
 
+//global stuff
+
+global.utils = require(`${__dirname}/modules/utils`);
+global.config = require('./config.json');
+global.__baseDir = __dirname;
+global.Promise = require('bluebird');
+global.logger = require(`${__dirname}/modules/Logger`);
+global.localeManager = new (require(`${__dirname}/modules/LocaleManager`))();
+
 // Setup stuff
-const config = require(`${__dirname}/config.json`);
 const bot = new Eris(config.token, {
     autoreconnect: true,
     seedVoiceConnections: true,
@@ -24,14 +32,6 @@ const bot = new Eris(config.token, {
         TYPING_START: true
     }
 });
-
-//global stuff
-
-global.utils = require(`${__dirname}/modules/utils`);
-global.__baseDir = __dirname;
-global.Promise = require('bluebird');
-global.logger = require(`${__dirname}/modules/Logger`);
-global.localeManager = new (require(`${__dirname}/modules/LocaleManager`))();
 
 Promise.config({
     warnings: {wForgottenReturn: config.promiseWarnings || false},

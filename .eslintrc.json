@@ -18,6 +18,7 @@
         "logger" : false,
         "localeManager": false,
         "got": false,
+        "config": false,
         "utils": false
     },
 
