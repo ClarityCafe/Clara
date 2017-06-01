@@ -1,9 +1,5 @@
 /* eslint-env node */
 
-//we'll use wolke's version of the lib
-const chatbot = require('better-cleverbot-io');
-// I don't care if everyone rips this out, we have unlimited API calls here anyways
-const ayaneru = new chatbot({user: config.cbUser, key: config.cbKey, nick: 'H9dG2tvV'});
 const {parseArgs, parsePrefix} = require(`${__baseDir}/modules/messageParser`);
 const {Context} = require(`${__baseDir}/modules/CommandHolder`);
 const {formatUsername} = require(`${__baseDir}/modules/utils`);
@@ -24,11 +20,11 @@ module.exports = bot => {
         }).then(res => {
             if (!res) return null;
             if (!bot.commands.checkCommand(res.cmd)) {
-                return new Promise((resolve, reject) => {
-                    ayaneru.ask(msg.content).then(res => {
-                        msg.channel.createMessage(res);
-                    }).catch(reject);
-                });             
+                if (RegExp(`^<@!?${bot.user.id}> ?.+$`).test(msg.content) && bot.commands.getCommand('chat')) {
+                    res.cmd = 'chat';
+                } else {
+                    return;
+                }
             }
 
             res.cleanSuffix = msg.cleanContent.split(res.cmd).slice(1).join(res.cmd);
@@ -72,6 +68,7 @@ module.exports = bot => {
      * @param {Eris.Message} msg Message to pass for sending messages.
      * @param {String} cmd Command name.
      * @param {Object} err The error object to analyse.
+     * @returns {Promise} .
      */
     function handleCmdErr(msg, cmd, err) {
         return new Promise((resolve, reject) => {
