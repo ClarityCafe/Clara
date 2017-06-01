@@ -112,7 +112,7 @@ module.exports = bot => {
                 logger.error(`${loggerPrefix(msg)}Error running command "${cmd}":\n${err.stack}`);
 
                 let embed = {
-                    title: 'Error',
+                    title: 'Whoops!',
                     description: `An error occurred while trying to execute command \`${cmd}\``,
                     color: 0xF44336,
                     timestamp: new Date(),
