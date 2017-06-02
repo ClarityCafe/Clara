@@ -13,19 +13,16 @@ const urlRegex = str => /(http(s)?:\/\/)?(www\.)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,25
 
 class SauceHandler {
     /**
-     * @param {Object} options Object for overriding the query system for API. valid parameters are outputType (the type of output you want) and numRes (number of responses you want returned) 
-     * @param {String} apiKey the API key for interacting with sauceNao
+     * @param {String} key your API Key for Saucenao
+     * @param {Number} outputType type of output you want the API to show. Default is value 2 (JSON Response)
+     * @param {Number} numRes amount of responses you want returned from the API. Default is 5 Responses.
      * @see {link} https://saucenao.com/user.php?page=search-api
      */
-    constructor(options = {}, apiKey) {
-        this.apiKey = apiKey;
-        this.options = {
-            outputType: this.options.outputType || 2,
-            numRes: this.options.numRes || 5
-        };
-        if (!this.apiKey || !apiKey === typeof string) {
-            throw new TypeError('No API Key or invalid key was provided');
-        }
+    constructor({key, numRes, outputType}) {
+        if (!key) throw new TypeError('NO API Key provided!');
+        this.key = key,
+        this.outputType = outputType || 2,
+        this.numRes = numRes || 5;
     }
     /**
      * Gets the source and outputs it in your preffered output type
@@ -48,7 +45,7 @@ class SauceHandler {
                     throw new Error('Link is not valid HTTP/HTTPS Address.');
                 } else {
                     /** @todo I need a regex for making the following URL in the URL parameter */
-                    got(`http://saucenao.com/search.php?output_type=${this.options.outputType}&numres=${this.options.numRes}&api_key=${this.apiKey}&url=${encodeURIComponent(link)}`).then(res => {
+                    got(`http://saucenao.com/search.php?output_type=${this.options.outputType}&numres=${this.options.numRes}&api_key=${this.options.apiKey}&url=${encodeURIComponent(link)}`).then(res => {
                         resolve(res.body);
                     }).catch(reject);
                 }
