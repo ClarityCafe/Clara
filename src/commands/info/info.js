@@ -29,7 +29,7 @@ exports.info = {
             let sysTime = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${date.getDate()}\n${('0' + (date.getHours() + 1)).slice(-2)}:${('0' + (date.getMinutes() + 1)).slice(-2)}:${('0' + (date.getSeconds() + 1)).slice(-2)}`;
             let roleColour = ctx.channel.guild.roles.get(ctx.guildBot.roles.sort((a, b) => {
                 return ctx.guild.roles.get(b).position - ctx.guild.roles.get(a).position;
-            })[0]).color;
+            })[0]).color || utils.randomColour();
             ctx.createMessage({embed: {
                 title: `${bot.user.username}'s Info`,
                 description: `[${localeManager.t('info-source', ctx.settings.locale)}](https://github.com/awau/Clara) | [${localeManager.t('info-supportServer', ctx.settings.locale)}](https://discord.gg/ZgQkCkm)`,
