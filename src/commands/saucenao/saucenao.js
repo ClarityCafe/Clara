@@ -9,7 +9,7 @@
 
 //this handles the SauceNao handling
 const ayaneru = new (require('./sauceQueryHandler'))({
-    key: ''
+    key: config.saucenaoKey
 });
 //this regex is gay
 
