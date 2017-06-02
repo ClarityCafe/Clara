@@ -38,14 +38,14 @@ class SauceHandler {
             } else if (path) {
                 /** @todo Finalize this. We need to input file as a stream then convert to MIMEType */
                 throw new Error('This is not implemented yet!');
-                /* got(`http://saucenao.com/search.php?output_type=${this.options.outputType}&numres=${this.options.numRes}&api_key=${this.apiKey}`, {}).then(res => {               
+                /* got(`http://saucenao.com/search.php?output_type=${this.outputType}&numres=${this.numRes}&api_key=${this.key}`, {}).then(res => {               
                  });*/
             } else if (link) {
                 if (!urlRegex) {
                     throw new Error('Link is not valid HTTP/HTTPS Address.');
                 } else {
                     /** @todo I need a regex for making the following URL in the URL parameter */
-                    got(`http://saucenao.com/search.php?output_type=${this.options.outputType}&numres=${this.options.numRes}&api_key=${this.options.apiKey}&url=${encodeURIComponent(link)}`).then(res => {
+                    got(`http://saucenao.com/search.php?output_type=${this.outputType}&numres=${this.numRes}&api_key=${this.key}&url=${encodeURIComponent(link)}`).then(res => {
                         resolve(res.body);
                     }).catch(reject);
                 }
