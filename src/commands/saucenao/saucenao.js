@@ -8,7 +8,9 @@
 /* eslint-env node */
 
 //this handles the SauceNao handling
-const ayaneru = new (require('./sauceQueryHandler'))();
+const ayaneru = new (require('./sauceQueryHandler'))({
+    key: ''
+});
 //this regex is gay
 
 const urlRegex = str => /(http(s)?:\/\/)?(www\.)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi.test(str);
@@ -26,14 +28,16 @@ exports.saucenao = {
             } else if (!ctx.suffix === urlRegex) {
                 return ctx.createMessage('Oi, your URL is invalid!');
             } else if (ctx.attachments[0]) {
-                ayaneru.getSauce(ctx.attachments[0].url).then(res => {}).catch(reject);
+                ayaneru.getSauce(ctx.attachments[0].url).then(res => {
+
+                }).catch(reject);
             } else if (ctx.suffix) {
                 ayaneru.getSauce(ctx.suffix).then(res => {
                     let ovy = JSON.parse(res.results);
                     for (ovy.data of ovy) {
                         const fields = [];
                         fields.push(`${{name: ovy.title, value: ovy.thumbnail, inline: true}}`, 0);
-                        ctx.createMessage({embed : {
+                        ctx.createMessage({embed: {
                             title: 'saucenao query',
                             description: 'this is what we can find from your image.',
                             fields
