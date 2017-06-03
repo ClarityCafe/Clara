@@ -13,8 +13,8 @@ exports.commands = [
 ];
 
 exports.init = bot => {
-    ayanero = new chatbot({user: bot.config.cbUser, key: bot.config.cbKey});
-}
+    ayaneru = new chatbot({user: bot.config.cbUser, key: bot.config.cbKey});
+};
 
 exports.chat = {
     desc: 'Chat with the bot.',
