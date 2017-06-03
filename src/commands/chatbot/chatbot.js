@@ -6,13 +6,15 @@
 
 //we'll use wolke's version of the lib
 const chatbot = require('better-cleverbot-io');
-
-// I don't care if everyone rips this out, we have unlimited API calls here anyways
-const ayaneru = new chatbot({user: config.cbUser, key: config.cbKey});
+let ayaneru;
 
 exports.commands = [
     'chat'
 ];
+
+exports.init = bot => {
+    ayanero = new chatbot({user: bot.config.cbUser, key: bot.config.cbKey});
+}
 
 exports.chat = {
     desc: 'Chat with the bot.',
