@@ -65,6 +65,7 @@ bin
 
 # Bot files    
 src/config.json
+rethink_data
 /data
 prefixes.json
 /.idea/workspace.xml
