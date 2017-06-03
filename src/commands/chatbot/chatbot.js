@@ -1,5 +1,5 @@
 /*
- * chatbot.js - make Chatbot io again 
+ * chatbot.js - make Chatbot io great again 
  * 
  * Contributed by Capuccino
  */
