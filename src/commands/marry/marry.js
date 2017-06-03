@@ -20,6 +20,8 @@ exports.marry = {
                 ctx.createMessage('Please mention your partner.').then(resolve).catch(reject);
             } else if (ctx.mentionStrings[0] === ctx.author.id) {
                 ctx.createMessage("Hey! You're not allowed to marry yourself.").then(resolve).catch(reject);
+            } else if (ctx.mentionStrings > 1) {
+                ctx.createMessage('only one wife only!');
             } else {
                 ctx.createMessage(`<@${ctx.mentionStrings[0]}> will you marry ${ctx.author.mention}?\nRespond with yes or no. (30 seconds)`).then(() => {
                     return bot.awaitMessage(ctx.channel.id, ctx.mentionStrings[0], () => true, 30000);
