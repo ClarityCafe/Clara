@@ -1,18 +1,20 @@
 /*
- * chatbot.js - make Chatbot io again 
+ * chatbot.js - make Chatbot io great again 
  * 
  * Contributed by Capuccino
  */
 
 //we'll use wolke's version of the lib
 const chatbot = require('better-cleverbot-io');
-
-// I don't care if everyone rips this out, we have unlimited API calls here anyways
-const ayaneru = new chatbot({user: config.cbUser, key: config.cbKey});
+let ayaneru;
 
 exports.commands = [
     'chat'
 ];
+
+exports.init = bot => {
+    ayaneru = new chatbot({user: bot.config.cbUser, key: bot.config.cbKey, nick: bot.config.cbNick || 'clara'});
+};
 
 exports.chat = {
     desc: 'Chat with the bot.',
