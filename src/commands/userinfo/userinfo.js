@@ -25,7 +25,7 @@ function infoBlock(member, roles, color) {
             {name: 'Game', value: !member.game ? 'None' : member.game.type === 0 ? member.game.name : `[${member.game.name}](${member.game.url})`, inline: true},
             {name: 'Permission Number', value: member.permission.allow, inline: true},
             {name: 'Joined At', value: `${moment(member.joinedAt).format('dddd Do MMMM Y')}\n${moment(member.joinedAt).format('HH:mm:ss A')}`, inline: true},
-            {name: 'Roles', value: roles.join(', '), inline: true}
+            {name: 'Roles', value: undefined ? 'None' : roles.join(', '), inline: true}
         ],
         footer: {text: `Account Created on ${moment(member.createdAt).format('dddd Do MMMM Y')} at ${moment(member.createdAt).format('HH:mm:ss A')}`}
     }};
