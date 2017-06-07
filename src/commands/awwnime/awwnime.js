@@ -18,23 +18,23 @@ exports.awwnime = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix) {
-                ctx.channel.sendTyping();
+                ctx.msg.channel.sendTyping();
                 got('https://raw-api.now.sh/').then(res => {
                     let images = JSON.parse(res.body);
                     let image = images[Math.floor(Math.random() * images.length)];
 
                     if (!image) return ctx.createMessage('No results found.');
-                    return ctx.createMessage(image.full);
+                    return ctx.msg.createMessage(image.full);
                 }).then(resolve).catch(reject);
             } else {
                 let query = encodeURIComponent(ctx.suffix).replace(/%20/g, '+');
-                ctx.channel.sendTyping();
+                ctx.msg.channel.sendTyping();
                 got(`https://raw-api.now.sh/?q=${query}`).then(res => {
                     let images = JSON.parse(res.body);
                     let image = images[Math.floor(Math.random() * images.length)];
 
                     if (!image) return ctx.createMessage('No results found.');
-                    return ctx.createMessage(image.full);
+                    return ctx.msg.createMessage(image.full);
                 }).then(resolve).catch(reject);
             }
         });
