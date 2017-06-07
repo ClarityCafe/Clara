@@ -1,6 +1,6 @@
 {
     "main" : "awwnime.js",
     "dependencies": {
-        "random-anime-wallpapers" : "1.1.0"
+        "got": "7.0.0"
     }
 }
