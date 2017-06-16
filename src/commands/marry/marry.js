@@ -22,7 +22,7 @@ exports.marry = {
                 ctx.createMessage("Hey! You're not allowed to marry yourself.").then(resolve).catch(reject);
             } else if (ctx.mentionStrings.length > 1) {
                 ctx.createMessage('One wife only!');
-            } else if (ctx.mentionStrings[0] === ctx.bot.id) {
+            } else if (ctx.mentionStrings[0] === bot.user.id) {
                 ctx.createMessage("I-It's not like I'll say yes or anything >.<");
             } else {
                 ctx.createMessage(`<@${ctx.mentionStrings[0]}> will you marry ${ctx.author.mention}?\nRespond with yes or no. (30 seconds)`).then(() => {
