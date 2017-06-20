@@ -33,8 +33,9 @@ exports.saucenao = {
             } else if (ctx.attachments[0]) {
                 ayaneru.getSauce(ctx.attachments[0].url).then(res => {
                     let fields =[];
-                    for (res.url in res) {
-                        fields.push(`${{name: res.name, value: `(Link)[${res.url}]`}}`, 0);
+                    let ovy = JSON.parse(res).results;
+                    for (res.results in res) {
+                        fields.push(`${{name: ovy.name, value: `(Link)[${ovy.url}]`}}`, 0);
                     }
                     ctx.createMessage({embed: {
                         title: 'Saucenao query results',
@@ -47,7 +48,7 @@ exports.saucenao = {
                     let ovy = JSON.parse(res.results);
                     for (ovy.data of ovy) {
                         const fields = [];
-                        fields.push(`${{name: ovy.title, value: ovy.thumbnail, inline: true}}`, 0);
+                        fields.push(`${{name: ovy.title, value: ovy.url, inline: true}}`, 0);
                         ctx.createMessage({embed: {
                             title: 'saucenao query',
                             description: 'this is what we can find from your image.',
