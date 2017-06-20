@@ -13,7 +13,7 @@ let ayaneru;
 
 exports.init = bot => {
     ayaneru = new saucenao({key: bot.config.sauceKey});
-}
+};
 //this regex is gay
 
 const urlRegex = str => /(http(s)?:\/\/)?(www\.)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi.test(str);
@@ -32,7 +32,15 @@ exports.saucenao = {
                 return ctx.createMessage('Oi, your URL is invalid!');
             } else if (ctx.attachments[0]) {
                 ayaneru.getSauce(ctx.attachments[0].url).then(res => {
-
+                    let fields =[];
+                    for (res.url in res) {
+                        fields.push(`${{name: res.name, value: `(Link)[${res.url}]`}}`, 0);
+                    }
+                    ctx.createMessage({embed: {
+                        title: 'Saucenao query results',
+                        description: 'this is what we can find',
+                        fields
+                    }});
                 }).catch(reject);
             } else if (ctx.suffix) {
                 ayaneru.getSauce(ctx.suffix).then(res => {
@@ -44,7 +52,7 @@ exports.saucenao = {
                             title: 'saucenao query',
                             description: 'this is what we can find from your image.',
                             fields
-                        }})
+                        }});
                     }
                 }).catch(reject);
             }
