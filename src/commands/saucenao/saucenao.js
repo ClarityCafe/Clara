@@ -8,9 +8,12 @@
 /* eslint-env node */
 
 //this handles the SauceNao handling
-const ayaneru = new (require('./sauceQueryHandler'))({
-    key: config.saucenaoKey
-});
+const saucenao = require('./sauceQueryHandler');
+let ayaneru;
+
+exports.init = bot => {
+    ayaneru = new saucenao({key: bot.config.sauceKey});
+}
 //this regex is gay
 
 const urlRegex = str => /(http(s)?:\/\/)?(www\.)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi.test(str);
