@@ -10,6 +10,7 @@ RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 # get dependencies
 RUN apt update && \
     apt -y install \
+    apt-utils \ 
     wget \
     sudo \
     bash \
@@ -50,4 +51,4 @@ COPY . .
 
 # finally echo this in a fancy way
 
-RUN echo "senpai it worked!S"
+RUN echo "senpai it worked!"
