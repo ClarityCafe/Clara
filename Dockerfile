@@ -8,10 +8,9 @@ RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
 RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 
 # get dependencies
-RUN apt install -y curl 
-RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 RUN apt update && \
     apt -y install \
+    wget \
     sudo \
     bash \
     git \
@@ -23,6 +22,14 @@ RUN apt update && \
     ffmpeg \
     python3-pip && \
     python3 -m pip install flake8
+
+# node    
+
+RUN wget -qO- https://deb.nodesource.com/setup_8.x | sudo -E bash -
+RUN apt update && apt -y install \
+nodejs && \
+ln -s /usr/bin/nodejs /usr/bin/node
+
     
 # now we create a dummy account 
 RUN adduser --disabled-password --gecos "" clara && adduser clara sudo && su clara
