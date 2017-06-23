@@ -21,9 +21,7 @@ RUN apt update && \
     gzip \
     build-essential \
     ffmpeg \
-    python3-pip && \
-    python3 -m pip install flake8
-
+    python3-pip
 # node    
 
 RUN wget -qO- https://deb.nodesource.com/setup_8.x | sudo -E bash -
