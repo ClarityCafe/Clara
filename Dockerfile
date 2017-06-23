@@ -1,31 +1,29 @@
-# Clara -Dockerfile
-# This is a highly experimental Dockerfile. Use with caution.
-# Licensed Under MIT. Contributed by Capuccino
+# Clara Dockerfile
+# Copyright 2017 (c) Clara
+# Licensed under MIT
+FROM ubuntu:16.04
 
-FROM node:boron
-
+#overrides for APT cache
 RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
 RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 
+# get dependencies
+RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+RUN apt update && \
+    apt -y install \
+    sudo \
+    bash \
+    git \
+    wget \
+    ssh \
+    tar \
+    gzip \
+    build-essential \
+    ffmpeg \
+    python3-pip && \
+    python3 -m pip install flake8
+    
+# now we create a dummy account 
 RUN adduser --disabled-password --gecos "" clara && adduser clara sudo && su clara
 WORKDIR /home/clara
-
-#We're gonna add a pseudo-user here
 RUN git config --global user.name nyan && git config --global user.email nyan@pa.su
-
-# It's advisable to add your config files so if we run docker run, it wouldn't error out.
-
-COPY . . 
-
-# Install deps
-RUN npm i --silent
-
-#Expose Local port and SSH Port just because we can
-
-EXPOSE 22 8080
-
-ENTRYPOINT ["node", "~/src/bot.js"]
-
-# We should echo this if build succeeds
-
-RUN echo "Senpai it worked!"
