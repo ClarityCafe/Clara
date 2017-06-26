@@ -48,7 +48,7 @@ exports.saucenao = {
                     let ovy = JSON.parse(res.results);
                     for (ovy.data of ovy) {
                         const fields = [];
-                        fields.push(`${{name: ovy.title, value: ovy.url, inline: true}}`, 0);
+                        fields.push(`${{name: ovy.title, value: `(Link)[${ovy.url}]`, inline: true}}`, 0);
                         ctx.createMessage({embed: {
                             title: 'saucenao query',
                             description: 'this is what we can find from your image.',
