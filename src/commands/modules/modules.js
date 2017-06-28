@@ -61,7 +61,7 @@ exports.load = {
             if (!ctx.args[0]) {
                 ctx.createMessage('No module given to load.').then(resolve).catch(reject);
             } else if (bot.commands.checkModule(ctx.args[0])) {
-                ctx.createMessage(`Module **${ctx.args[0]}** already exist's in the command holder.`).then(resolve).catch(reject);
+                ctx.createMessage(`Module **${ctx.args[0]}** is already loaded.`).then(resolve).catch(reject);
             } else {
                 readDir(`${__baseDir}/commands`).then(folders => {
                     if (folders.indexOf(ctx.args[0]) === -1) {
