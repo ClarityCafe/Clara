@@ -17,7 +17,7 @@ function infoBlock(member, roles, color) {
         author: {name: utils.formatUsername(member.user), icon_url: member.bot ? 'https://cdn.discordapp.com/emojis/230105988211015680.png' : ''},
         description: `**[Full Avatar](${member.avatarURL})**`,
         thumbnail: {url: member.avatarURL},
-        color: color === undefined ? utils.randomColour() : color,
+        color: color,
         fields: [
             {name: 'Nickname', value: member.nick || 'None', inline: true},
             {name: 'ID', value: member.id, inline: true},
@@ -39,20 +39,18 @@ exports.userinfo = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.mentions.length === 0) {
-                let roleColour = ctx.member.roles.sort((a, b) => {
-                    return ctx.member.guild.roles.get(b).position - ctx.member.guild.roles.get(a).position;
-                })[0];
-                roleColour = roleColour ? ctx.channel.guild.roles.get(roleColour).color : 0;
+                let roleColour = ctx.member.roles.sort((a, b) => ctx.guild.roles.get(b).position - ctx.guild.roles.get(a).position)[0];
+                roleColour = roleColour ? ctx.guild.roles.get(roleColour).color : 0;
                 let roles = [];
+
                 ctx.member.roles.forEach(r => {roles.push(ctx.channel.guild.roles.get(r).name);});
                 ctx.createMessage(infoBlock(ctx.member, roles, roleColour)).then(resolve).catch(reject);
             } else {
                 let member = ctx.channel.guild.members.get(ctx.mentions[0].id);
-                let roleColour = member.roles.sort((a, b) => {
-                    return member.guild.roles.get(b).position - member.guild.roles.get(a).position;
-                })[0];
-                roleColour = roleColour ? member.guild.roles.get(roleColour).color : 0;
+                let roleColour = member.roles.sort((a, b) => ctx.guild.roles.get(b).position - ctx.guild.roles.get(a).position)[0];
+                roleColour = roleColour ? ctx.guild.roles.get(roleColour).color : 0;
                 let roles = [];
+
                 member.roles.forEach(r => {roles.push(member.guild.roles.get(r).name);});
                 ctx.createMessage(infoBlock(member, roles, roleColour)).then(resolve).catch(reject);
             }
