@@ -8,7 +8,7 @@
 /* eslint-env node */
 
 //this handles the SauceNao handling
-const saucenao = require('./sauceQueryHandler');
+const saucenao = require('./sauceQueryHandlercd
 let ayaneru;
 
 exports.init = bot => {
