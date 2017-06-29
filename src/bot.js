@@ -15,6 +15,7 @@ const fs = require('fs');
 //global stuff
 
 global.utils = require(`${__dirname}/modules/utils`);
+global.got = require('got');
 global.config = require('./config.json');
 global.__baseDir = __dirname;
 global.Promise = require('bluebird');
