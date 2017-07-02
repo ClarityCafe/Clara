@@ -14,7 +14,7 @@ exports.commands = [
     'queue',
     'leave',
     'join',
-    'nowplaying',
+    'np',
     'sources',
     'skip'
 ];
@@ -113,7 +113,7 @@ exports.queue = {
     }
 };
 
-exports.nowplaying = {
+exports.np = {
     desc: 'Show what song is now playing.',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
