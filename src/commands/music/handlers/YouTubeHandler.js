@@ -1,5 +1,5 @@
 const ytdl = require('ytdl-core');
-const got = require('got');
+// const got = require('got');
 
 class YouTubeHandler {
     constructor() {}
@@ -33,7 +33,7 @@ class YouTubeHandler {
                 bitrates = bitrates.map(f => {return {bitrate: f.bitrate, url: f.url};}).sort((a, b) => b.bitrate - a.bitrate);
 
                 delete info.formats;
-                return [got.stream(bitrates[0].url), info];
+                return [bitrates[0].url, info];
             }).then(resolve).catch(reject);
         });
     }
