@@ -24,14 +24,24 @@ RUN apt update && \
     gzip \
     build-essential \
     ffmpeg \
-    python3-pip
+    python3-pip \
+    protobuf-compiler python \
+    libprotobuf-dev \ 
+    libcurl4-openssl-dev \
+    libboost-all-dev \ 
+    libncurses5-dev \
+    libjemalloc-dev \
+    m4
     
 #RethinkDB
 
-source /etc/lsb-release && echo "deb http://download.rethinkdb.com/apt $DISTRIB_CODENAME main" | sudo tee /etc/apt/sources.list.d/rethinkdb.list && \
-wget -qO- https://download.rethinkdb.com/apt/pubkey.gpg | sudo apt-key add - && \
-sudo apt-get update && \
-sudo apt-get install rethinkdb
+wget https://download.rethinkdb.com/dist/rethinkdb-2.3.5.tgz && \
+tar xf rethinkdb-2.3.5.tgz && \
+cd rethinkdb-2.3.5 && \
+./configure --allow-fetch && \
+make && \
+sudo make install && \
+rm -rf /rethinkdb-2.3.5
     
 # node    
 
