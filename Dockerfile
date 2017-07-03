@@ -35,13 +35,10 @@ RUN apt update && \
     
 #RethinkDB
 
-RUN wget https://download.rethinkdb.com/dist/rethinkdb-2.3.5.tgz && \
-tar xf rethinkdb-2.3.5.tgz && \
-cd rethinkdb-2.3.5 && \
-./configure --allow-fetch && \
-make && \
-sudo make install && \
-rm -rf /rethinkdb-2.3.5
+RUN source /etc/lsb-release && echo "deb http://download.rethinkdb.com/apt $DISTRIB_CODENAME main" | sudo tee /etc/apt/sources.list.d/rethinkdb.list && \
+wget -qO- https://download.rethinkdb.com/apt/pubkey.gpg | sudo apt-key add - 
+RUN sudo apt-get update && \
+sudo apt-get install rethinkdb
     
 # node    
 
