@@ -6,8 +6,6 @@
   "mainPrefix": "?",
   "osuApiKey": "",
   "sauceKey" : "",
-  "cbUser": "",
-  "cbKey": "",
   "gameName" : "",
   "gameURL" :"",
   "ownerID": "",
