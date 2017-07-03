@@ -24,7 +24,14 @@ RUN apt update && \
     gzip \
     build-essential \
     ffmpeg \
-    python3-pip
+    python3-pip \
+    protobuf-compiler python \
+    libprotobuf-dev \ 
+    libcurl4-openssl-dev \
+    libboost-all-dev \ 
+    libncurses5-dev \
+    libjemalloc-dev \
+    m4
     
 # node    
 
