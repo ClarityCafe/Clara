@@ -46,11 +46,11 @@ exports.ibsearch = {
                     return ctx.createMessage({embed: {
                         title: 'Image Source',
                         url: `https://ibsear.ch/images/${item.id}`,
-                        color: utils.randomColour(),
+                        image: {url},
                         footer: {text: `Time First Indexed by IbSearch: ${moment.unix(item.found).format('dddd Do MMMM Y')} at ${moment.unix(item.found).format('HH:mm:ss A')}`},
                         fields: [
                             {name: 'Image Information', value: `${item.width}x${item.width} - ${prettyBytes(Number(item.size))}`},
-                            {name: 'Tags', value: item.tags.replace(/_/g, '\_')}
+                            {name: 'Tags', value: item.tags.replace(/_/g, '\\_').slice(0, 1500)}
                         ]
                     }});
                 }).then(resolve).catch(reject);
@@ -81,7 +81,7 @@ exports.ibsearch = {
                         footer: {text: `Time First Indexed by IbSearch: ${moment.unix(item.found).format('dddd Do MMMM Y')} at ${moment.unix(item.found).format('HH:mm:ss A')}`},
                         fields: [
                             {name: 'Image Information', value: `${item.width}x${item.width} - ${prettyBytes(Number(item.size))}`},
-                            {name: 'Tags', value: item.tags.replace(/_/g, '\_')}
+                            {name: 'Tags', value: item.tags.replace(/_/g, '\\_').slice(0, 1500)}
                         ]
                     }});
                 }).then(resolve).catch(reject);
