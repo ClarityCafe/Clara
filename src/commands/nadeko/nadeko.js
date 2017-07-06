@@ -4,21 +4,23 @@
  * Contributed by Capuccino.
  */
 
+/* eslint-env node */
+
 const emotes = [
     ':joy:',
     ':unamused:'
 ];
 
 exports.commands = [
-    'nadeko'
+    'e'
 ];
 
-exports.nadeko = {
+exports.e = {
     desc: 'who did it?',
     longDesc: 'owo whats this?',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            ctx.msg.channel.createMessage(localeManager.t('nadeko', settings.locale, {user: ctx.msg.author.mention, emote: emotes[Math.floor(Math.random() * emotes.length)]})).then(resolve).catch(reject);
+            ctx.createMessage(localeManager.t('nadeko', ctx.settings.locale, {user: ctx.author.mention, emote: emotes[Math.floor(Math.random() * emotes.length)]})).then(resolve).catch(reject);
         });
     }
 };

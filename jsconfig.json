@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "experimentalDecorators": true,
+        "charset": "utf-8"
+    },
+    "exclude": [
+        "node_modules"
+    ]
+    
+}

@@ -4,11 +4,15 @@
  * Contributed by Capuccino and Ovyerus.
  */
 
+/* eslint-env node */
+
 const config = require(`${__baseDir}/config.json`);
 const osu = require('osu')(config.osuApiKey);
 const iso3166 = require('iso-3166-1-alpha-2');
 
 const commaRegex = /\B(?=(\d{3})+(?!\d))/g; // Thank you Brayzure uwu
+
+exports.loadAsSubcommands = true;
 
 exports.commands = [
     'osu',
@@ -17,22 +21,22 @@ exports.commands = [
     'ctb'
 ];
 
-exports.osu = {
+exports.main = {
     desc: "Retrive stats for osu!'s standard mode for a user.",
     fullDesc: "Uses the osu! API to get information for osu!'s standard mode for a user.",
     usage: '<osu! username/id>',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage(localeManager.t('osu-noName', settings.locale)).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('osu-noName', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
-                ctx.msg.channel.sendTyping();
+                ctx.channel.sendTyping();
                 osu.get_user({u: ctx.suffix}, res => {
                     var user = res[0];
                     if (!user || !user.user_id) {
-                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
+                        ctx.createMessage(localeManager.t('osu-noRes', ctx.settings.locale)).then(resolve).catch(reject);
                     } else {
-                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
+                        ctx.createMessage(osuBlock(user, ctx.settings)).then(resolve).catch(reject);
                     }
                 });
             }
@@ -47,15 +51,15 @@ exports.ctb = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage(localeManager.t('osu-noName', settings.locale)).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('osu-noName', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
-                ctx.msg.channel.sendTyping();
+                ctx.channel.sendTyping();
                 osu.get_user({u: ctx.suffix, m: 2}, res => {
                     var user = res[0];
                     if (!user || !user.user_id) {
-                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
+                        ctx.createMessage(localeManager.t('osu-noRes', ctx.settings.locale)).then(resolve).catch(reject);
                     } else {
-                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
+                        ctx.createMessage(osuBlock(user, ctx.settings)).then(resolve).catch(reject);
                     }
                 });
             }
@@ -70,15 +74,15 @@ exports.mania = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage(localeManager.t('osu-noName', settings.locale)).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('osu-noName', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
-                ctx.msg.channel.sendTyping();
+                ctx.channel.sendTyping();
                 osu.get_user({u: ctx.suffix, m: 3}, res => {
                     var user = res[0];
                     if (!user || !user.user_id) {
-                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
+                        ctx.createMessage(localeManager.t('osu-noRes', ctx.settings.locale)).then(resolve).catch(reject);
                     } else {
-                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
+                        ctx.createMessage(osuBlock(user, ctx.settings)).then(resolve).catch(reject);
                     }
                 });
             }
@@ -93,15 +97,15 @@ exports.taiko = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.suffix.length === 0) {
-                ctx.msg.channel.createMessage(localeManager.t('osu-noName', settings.locale)).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('osu-noName', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
-                ctx.msg.channel.sendTyping();
+                ctx.channel.sendTyping();
                 osu.get_user({u: ctx.suffix, m: 1}, res => {
                     var user = res[0];
                     if (!user || !user.user_id) {
-                        ctx.msg.channel.createMessage(localeManager.t('osu-noRes', settings.locale)).then(resolve).catch(reject);
+                        ctx.createMessage(localeManager.t('osu-noRes', ctx.settings.locale)).then(resolve).catch(reject);
                     } else {
-                        ctx.msg.channel.createMessage(osuBlock(user)).then(resolve).catch(reject);
+                        ctx.createMessage(osuBlock(user, ctx.settings)).then(resolve).catch(reject);
                     }
                 });
             }
@@ -109,7 +113,7 @@ exports.taiko = {
     }
 };
 
-function osuBlock(user) {
+function osuBlock(user, settings) {
     return {embed: {
         title: `osu! stats for **${user.username}**`,
         url: `https://osu.ppy.sh/u/${user.user_id}`,

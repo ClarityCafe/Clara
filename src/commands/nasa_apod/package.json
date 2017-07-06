@@ -1,6 +1,4 @@
 {
     "main" : "nasa.js",
-    "dependencies": {
-        "request": "^2.80.0"
-    }
+    "dependencies": {}
 }

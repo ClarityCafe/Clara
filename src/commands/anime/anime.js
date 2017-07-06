@@ -4,10 +4,9 @@
  *  Contributed by Capuccino and Ovyerus
  */
 
+/* eslint-env node */
+
 const mal = require('malapi').Anime;
-const color = require('dominant-color');
-const request = require('request');
-const fs = require('fs');
 
 exports.commands = [
     'anime'
@@ -20,66 +19,32 @@ exports.anime = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix) {
-                ctx.msg.channel.createMessage(localeManager.t('anime-noArgs', ctx.settings.locale)).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('anime-noArgs', ctx.settings.locale)).then(resolve).catch(reject);
             } else {
-                ctx.msg.channel.sendTyping();
+                ctx.channel.sendTyping();
                 if (/^\d+$/.test(ctx.suffix)) {
                     mal.fromId(Number(ctx.suffix)).then(animu => {
-                        var savePath = `${__baseDir}/cache/${animu.image.split('/')[animu.image.split('/').length - 1]}`;
-                        request(animu.image).pipe(fs.createWriteStream(savePath)).on('close', () => {
-                            color(savePath, (err, color) => {
-                                if (err) {
-                                    reject(err);
-                                } else {
-                                    fs.unlink(savePath, () => {
-                                        ctx.msg.channel.createMessage(animeBlock(animu, color, ctx.settings)).then(resolve).catch(reject);
-                                    });
-                                }
-                            });
-                        });
-                    }).catch(reject);
+                        return ctx.createMessage(animeBlock(animu, ctx.settings));
+                    }).then(resolve).catch(reject);
                 } else if (/^https?:\/\/myanimelist\.net\/anime\/\d+\/.+$/.test(ctx.suffix)) {
                     mal.fromUrl(ctx.suffix).then(animu => {
-                        var savePath = `${__baseDir}/cache/${animu.image.split('/')[animu.image.split('/').length - 1]}`;
-                        request(animu.image).pipe(fs.createWriteStream(savePath)).on('close', () => {
-                            color(savePath, (err, color) => {
-                                if (err) {
-                                    reject(err);
-                                } else {
-                                    fs.unlink(savePath, () => {
-                                        ctx.msg.channel.createMessage(animeBlock(animu, color, ctx.settings)).then(resolve).catch(reject);
-                                    });
-                                }
-                            });
-                        });
-                    }).catch(reject);
+                        return ctx.createMessage(animeBlock(animu, ctx.settings));
+                    }).then(resolve).catch(reject);
                 } else {
                     mal.fromName(ctx.suffix).then(animu => {
-                        var savePath = `${__baseDir}/cache/${animu.image.split('/')[animu.image.split('/').length - 1]}`;
-                        request(animu.image).pipe(fs.createWriteStream(savePath)).on('close', () => {
-                            color(savePath, (err, color) => {
-                                if (err) {
-                                    reject(err);
-                                } else {
-                                    fs.unlink(savePath, () => {
-                                        ctx.msg.channel.createMessage(animeBlock(animu, color, ctx.settings)).then(resolve).catch(reject);
-                                    });
-                                }
-                            });
-                        });
-                    }).catch(reject);
+                        return ctx.createMessage(animeBlock(animu, ctx.settings));
+                    }).then(resolve).catch(reject);
                 }
             }
         });
     }
 };
 
-function animeBlock(animu, color, settings) {
+function animeBlock(animu, settings) {
     return {embed: {
         title: animu.title,
         url: animu.detailsLink,
         thumbnail: {url: animu.image},
-        color: parseInt(color, 16),
         fields: [
             {name: localeManager.t('id', settings.locale), value: animu.id, inline: true},
             {name: localeManager.t('anime-japanese', settings.locale), value: animu.alternativeTitles.japanese.join(', ').substring(9).trim(), inline: true},

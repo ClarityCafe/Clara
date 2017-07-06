@@ -1,34 +1,64 @@
-# Clara -Dockerfile
-# This is a highly experimental Dockerfile. Use with caution.
-# Licensed Under MIT. Contributed by Capuccino
+# Clara Dockerfile
+# Copyright 2017 (c) Clara
+# Licensed under MIT
 
-FROM ubuntu:16.04 
+FROM ubuntu:16.04
 
+#overrides for APT cache
 
 RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
 RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
-RUN \
-  apt-get update && \
-  apt-get -y install \
-          software-properties-common \
-          nano \
-          pwgen \
-          unzip \
-          curl \
-          build-essential \
-          ffmpeg
-RUN echo $'#!/bin/sh\nexit 101' > /usr/sbin/policy-rc.d
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
-RUN chmod +x /usr/sbin/policy-rc.d
 
-RUN mkdir base
-# It's advisable to create your config.json before launching this because we copy files
-# then stab it on the container like no one cares.
-COPY src/ base
-COPY package.json base
-RUN cd base && npm i -S && npm i -g pm2
-ENV DEBIAN_FRONTEND noninteractive
-ENV LANG en_GB.UTF-8
-ENV LANG en_US.UTF-8
-CMD tail -f /dev/null
+# get dependencies
+
+RUN apt update && \
+    apt -y install \
+    apt-utils \ 
+    wget \
+    sudo \
+    bash \
+    git \
+    wget \
+    ssh \
+    tar \
+    gzip \
+    build-essential \
+    ffmpeg \
+    python3-pip \
+    protobuf-compiler python \
+    libprotobuf-dev \ 
+    libcurl4-openssl-dev \
+    libboost-all-dev \ 
+    libncurses5-dev \
+    libjemalloc-dev \
+    m4
+    
+# node    
+
+RUN wget -qO- https://deb.nodesource.com/setup_8.x | sudo -E bash -
+RUN apt update && apt -y install nodejs
+
+    
+# now we create a dummy account 
+
+RUN adduser --disabled-password --gecos "" clara && adduser clara sudo && su clara
+WORKDIR /home/clara
+RUN git config --global user.name nyan && git config --global user.email nyan@pa.su
+
+#Expose Local port and SSH Port just because we can
+
 EXPOSE 22 8080
+
+ENTRYPOINT ["node", "~/src/bot.js"]
+
+# Install deps
+
+RUN npm i --silent
+
+# It's advisable to add your config files so if we run docker run, it wouldn't error out.
+
+COPY . . 
+
+# finally echo this in a fancy way
+
+RUN echo "senpai it worked!"

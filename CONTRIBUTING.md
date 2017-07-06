@@ -18,19 +18,22 @@ Information on properly creating commands for the bot can be found [here](https:
 To fit in with the 'theme' of the bot, please use any ES6 features where possible/needed, e.g. arrow functions, template strings, promises, etc.
 Remember, arrow functions don't change `this`, so if for some reason you need `this` changed, eg. using a library which does so, then you'll need to use the regular `function() {}`.
 
+Although we would like you to follow Harmony, we use strictly **Promise** for async to be backwards-compatible
+with older Node versions.
+
 ### Indents
 
 for ctx messages/Promise chaining make sure to do 
 
 ```js 
 
-ctx.msg.channel.createMessage().then(resolve).catch(err);
+ctx.createMessage().then(resolve).catch(err);
 ```
 or 
 
 ```js
 
-ctx.msg.channel.createMessage().then(() => {
+ctx.createMessage().then(() => {
     //code awau
 }).catch(reject);
 ```
@@ -38,7 +41,7 @@ ctx.msg.channel.createMessage().then(() => {
 Avoid using this type of indents for messages 
 ```js 
 
-ctx.msg.channel.createMessage()
+ctx.createMessage()
 .then(resolve)
 .catch(reject)
 ```
@@ -67,4 +70,8 @@ PRs are only accepted in the ``development``branch. if you PR to ``master``, it 
 
 # Code Verification
 
-We use CodeClimate for code coverage. If your code falls below A, it may not be merged.
+We use CodeClimate for code coverage. If your code falls below A, it would not be merged.
+
+# Docker CI
+
+We use CircleCI to test if the Dockerfile can build. If you edited the Dockerfile and it fails, your PR would not be merged.

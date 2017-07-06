@@ -1,6 +1,4 @@
 {
     "main": "dog.js",
-    "dependencies": {
-        "request" : "2.79.0"
-    }
+    "dependencies": {}
 }
