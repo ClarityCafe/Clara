@@ -31,7 +31,7 @@ RUN apt update && \
     libboost-all-dev \ 
     libncurses5-dev \
     libjemalloc-dev \
-    m4
+    m4 
     
 # node    
 
@@ -44,6 +44,11 @@ RUN apt update && apt -y install nodejs
 RUN adduser --disabled-password --gecos "" clara && adduser clara sudo && su clara
 WORKDIR /home/clara
 RUN git config --global user.name nyan && git config --global user.email nyan@pa.su
+RUN mkdir /var/run/sshd && \
+    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
+    echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    useradd -u 1000 -G users,sudo -d /home/clara --shell /bin/bash -m clara && \
+    usermod -p "*" clara
 
 #Expose Local port and SSH Port just because we can
 
