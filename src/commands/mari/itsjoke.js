@@ -7,7 +7,7 @@
 /* eslint-env node */
 
 const fs = require('fs');
-const files = fs.readdirSync(`${__baseDir}/res/itsjoke`);
+const files = fs.readdirSync(`${__baseDir}/assets/itsjoke`);
 
 exports.commands = [
     'mari'
