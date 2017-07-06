@@ -12,14 +12,14 @@ exports.tweet = {
     desc: 'Return a random image from random.birb.pw',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            got('https://random.birb.pw/tweet.json/').then(res => {
-                const chun = JSON.parse(res.body).file;
-                ctx.createMessage({embed: {
+            ctx.channel.sendTyping();
+            got('https://random.birb.pw/tweet').then(res => {
+                return ctx.createMessage({embed: {
                     title: 'What a cute little birby!',
-                    image: {url: `https://random.birb.pw/img/${chun}`},
-                    footer: `Powered by birb.pw, queried last ${new Date()}`
+                    image: {url: `https://random.birb.pw/img/${res.body}`},
+                    footer: {text: 'Powered by birb.pw'}
                 }});
-            }).catch(reject);
+            }).then(resolve).catch(reject);
         });
     }
 };
