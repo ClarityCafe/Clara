@@ -7,7 +7,7 @@
 /* eslint-env node */
 
 const fs = require('fs');
-const localeDir = `${__baseDir}/res/locales`;
+const localeDir = `${__baseDir}/assests/locales`;
 
 /**
  * Object for managing locales and translating strings
