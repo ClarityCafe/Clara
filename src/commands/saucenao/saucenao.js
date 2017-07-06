@@ -25,8 +25,6 @@ exports.saucenao = {
         return new Promise((resolve, reject) => {
             if (!ctx.attachments[0]) {
                 return ctx.createMessage('Aw, no image here.');
-            } else if (!ctx.suffix === urlRegex) {
-                return ctx.createMessage('Oi, your URL is invalid!');
             } else if (ctx.attachments[0]) {
                 ayaneru.getSauce(ctx.attachments[0].url).then(res => {
                     let fields =[];
