@@ -1,6 +1,6 @@
 {
     "main" : "awwnime.js",
-    "dependencies": {
-        "got": "7.0.0"
-    }
+
+    "dependencies": {}
+
 }

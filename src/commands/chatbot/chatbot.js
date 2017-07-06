@@ -4,6 +4,8 @@
  * Contributed by Ovyerus
  */
 
+/* eslint-env node */
+
 const Markov = require('markov-strings');
 const fs = require('fs');
 
@@ -17,35 +19,6 @@ try {
 exports.commands = [
     'chat'
 ];
-
-exports.chat = {
-    desc: 'Chat with the bot.',
-    longDesc: 'Uses an algorithm to simulate chatting with a human. May be extremely dumb and offtopic at times.',
-    usage: '<message>',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (!ctx.suffix) {
-                ctx.msg.channel.createMessage(localeManager.t('chatbot-noArgs', ctx.settings.locale)).then(resolve).catch(reject);
-            } else if (/how (dumb|smart) are you\??/i.test(ctx.suffix.toLowerCase())) {
-                readLines().then(lines => {
-                    return ctx.msg.channel.createMessage(`I currently know **${lines.length}** things.`);
-                }).then(resolve).catch(reject);
-            } else {
-                let chat;
-                readLines().then(lines => {
-                    chat = new Markov(lines, {stateSize: 3});
-                    return chat.buildCorpus();
-                }).then(() => {
-                    return appendLines(ctx.suffix);
-                }).then(() => {
-                    return chat.generateSentence({maxLength: 420});
-                }).then(sent => {
-                    return ctx.msg.channel.createMessage(sent.string);
-                }).then(resolve).catch(reject);
-            }
-        });
-    }
-};
 
 function readLines() {
     return new Promise((resolve, reject) => {
@@ -70,3 +43,35 @@ function appendLines(msg) {
         });
     });
 }
+
+exports.chat = {
+    desc: 'Chat with the bot.',
+    longDesc: 'Uses an algorithm to simulate chatting with a human. May be extremely dumb and offtopic at times.',
+    usage: '<message>',
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            if (!ctx.suffix) {
+                ctx.createMessage(localeManager.t('chatbot-noArgs', ctx.settings.locale)).then(resolve).catch(reject);
+            } else if (/how (dumb|smart) are you\??/i.test(ctx.suffix.toLowerCase())) {
+                readLines().then(lines => {
+                    return ctx.createMessage(`I currently know **${lines.length}** things.`);
+                }).then(resolve).catch(reject);
+            } else {
+                let chat;
+                readLines().then(lines => {
+                    chat = new Markov(lines, {stateSize: 3});
+                    return chat.buildCorpus();
+                }).then(() => {
+                    return appendLines(ctx.suffix);
+                }).then(() => {
+                    // The commented code was an attempt at trying to make the sentence length similar to the user.
+                    // However nothing could be generated.
+                    // May try something different.
+                    return chat.generateSentence(/*{maxLength: ctx.cleanSuffix.length + Math.ceil(Math.random() * 10) + 2}*/);
+                }).then(sent => {
+                    return ctx.createMessage(sent.string);
+                }).then(resolve).catch(reject);
+            }
+        });
+    }
+};

@@ -1,0 +1,14 @@
+{
+    "info-guilds": "Gremios",
+    "info-users": "Usuarios vistos",
+    "info-uptime": "Tiempo en linea",
+    "info-sysTime": "Hora del sistema",
+    "info-os": "Plataforma del OS",
+    "info-shards": "Fragmentos activos",
+    "info-mem": "Uso de memoria",
+    "info-version": "Versión",
+    "info-footer": "{{name}} está construido por Clara. Haz clic en \"Código fuente\" para revisar el repositorio!",
+    "info-source": "Código fuente",
+    "info-supportServer": "Servidor de Soporte Clara",
+    "info-NodeVersion": "Version de Node.js"
+}

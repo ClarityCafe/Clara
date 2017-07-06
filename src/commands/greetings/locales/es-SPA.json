@@ -1,0 +1,13 @@
+{
+    "greetings-enable": "Los saludos del servidor han sido habilitados. Define el mensaje y canal si no lo has hecho para que pueda saludar a los usuarios.",
+    "greetings-disable": "Los saludos han sido deshabilitados.",
+    "greetings-noChan": "No se encontró ningún canal con el nombre `{{name}}`",
+    "greetings-setChan": "Se ha definido el canal <#{{id}}> para el saludo del servidor.",
+    "greetings-setMsg": "Se ha definido correctamente el saludo de bienvenida.",
+    "greetings-enabled": "Habilitado",
+    "greetings-channel": "Canal",
+    "greetings-message": "Mensaje",
+    "greetings-example1": "Habilitar saludos para el servidor",
+    "greetings-example2": "Define el canal para el saludo de bienvenida.\nTambién puedes mencionar el canal para seleccionarlo.",
+    "greetings-example3": "Seleccione el texto para el saludo de bienvenida.\nSe reemplazará `{{user}}` con una mención del usuario y `{{name}}` con solo el usuario y discriminador, como: \"NombreUsuario#0001\""
+}

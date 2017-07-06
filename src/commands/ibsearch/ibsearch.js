@@ -4,14 +4,14 @@
  * Contributed by Ovyerus
  */
 
-const request = require('request');
-const color = require('dominant-color');
+/* eslint-env node */
+
+const got = require('got');
 const prettyBytes = require('pretty-bytes');
 const moment = require('moment');
-const fs = require('fs');
-const ibKey = require(`${__baseDir}/config.json`).ibKey;
 
-const defaultQuery = 'foxgirl'; // Default: 'foxgirl'
+
+const defaultQuery = 'catgirl'; // Default: 'catgirl'
 const queryLimit = 75; // Default: 75
 
 exports.commands = [
@@ -25,98 +25,66 @@ exports.ibsearch = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix) {
-                ctx.msg.channel.sendTyping();
-                request({
-                    url: `https://ibsear.ch/api/v1/images.json?${defaultQuery ? `q=${encodeURIComponent(defaultQuery.toLowerCase()).replace('&20', '+')}&` : ''}limit=${queryLimit}`,
-                    method: 'GET',
+                let info = {};
+                ctx.channel.sendTyping();
+                
+                got(`https://ibsear.ch/api/v1/images.json?${defaultQuery ? `q=${encodeURIComponent(defaultQuery.toLowerCase()).replace('&20', '+')}&` : ''}limit=${queryLimit}`, {
                     headers: {
-                        'X-IbSearch-Key': ibKey,
-                        'User-Agent': 'Clara/0.2.2'
+                        'X-IbSearch-Key': bot.config.ibKey,
+                        'User-Agent': 'Clara/0.3.0'
                     }
-                }, (err, res, body) => {
-                    if (err) {
-                        reject(err);
-                    } else if (res.statusCode !== 200) {
-                        reject(new Error(`Invalid status code for ibsear.ch: ${res.statusCode}`));
-                    } else {
-                        var results = JSON.parse(body);
-                        if (results.length === 0) {
-                            ctx.msg.channel.createMessage('No results found.').then(resolve).catch(reject);
-                        } else {
-                            var item = results[Math.floor(Math.random() * results.length)];
-                            var imgURL = `https://${item.server}.ibsear.ch/resize/${item.path}?width=${Number(item.width) > 1000 ? Math.floor(Number(item.width) / 2) : item.width}&height=${Number(item.width) > 1000 ? Math.floor(Number(item.height) / 2) : item.height}`;
-                            var saveName = `${__baseDir}/cache/${item.path.split('/')[item.path.split('/').length - 1]}`;
-                            request(imgURL).pipe(fs.createWriteStream(saveName)).on('close', () => {
-                                color(saveName, (err, color) => {
-                                    if (err) {
-                                        reject(err);
-                                    } else {
-                                        fs.unlink(saveName, () => {
-                                            ctx.msg.channel.createMessage({embed: {
-                                                title: 'Image Source',
-                                                url: `https://ibsear.ch/images/${item.id}`,
-                                                image: {url: imgURL},
-                                                color: parseInt(color, 16),
-                                                fields: [
-                                                    {name: 'Image Information', value: `${item.width}x${item.height} ${prettyBytes(Number(item.size))}`},
-                                                    {name: 'Tags', value: item.tags.replace(/_/g, '\_')}
-                                                ],
-                                                footer: {text: `Time First Indexed by IbSearch: ${moment.unix(item.found).format('dddd Do MMMM Y')} at ${moment.unix(item.found).format('HH:mm:ss A')}`}
-                                            }}).then(resolve).catch(reject);
-                                        });
-                                    }
-                                });
-                            });
-                        }
-                    }
-                });
+                }).then(res => {
+                    let results = JSON.parse(res.body);
+                    if (results.length === 0) return ctx.createMessage('No results found.');
+                    
+                    let item = info.item = results[Math.floor(Math.random() * results.length)];
+                    info.url = `https://${item.server}.ibsear.ch/resize/${item.path}?width=500&height=500`;
+                    
+                    return null;
+                }).then(() => {
+                    let {item, url} = info;
+                    return ctx.createMessage({embed: {
+                        title: 'Image Source',
+                        url: `https://ibsear.ch/images/${item.id}`,
+                        image: {url},
+                        footer: {text: `Time First Indexed by IbSearch: ${moment.unix(item.found).format('dddd Do MMMM Y')} at ${moment.unix(item.found).format('HH:mm:ss A')}`},
+                        fields: [
+                            {name: 'Image Information', value: `${item.width}x${item.width} - ${prettyBytes(Number(item.size))}`},
+                            {name: 'Tags', value: item.tags.replace(/_/g, '\\_').slice(0, 1500)}
+                        ]
+                    }});
+                }).then(resolve).catch(reject);
             } else {
                 let query = encodeURIComponent(ctx.suffix.toLowerCase()).replace('%20', '+');
-                ctx.msg.channel.sendTyping();
-                request({
-                    url: `https://ibsear.ch/api/v1/images.json?q=${query}&limit=${queryLimit}`,
-                    method: 'GET',
+                let info = {};
+                ctx.channel.sendTyping();
+                
+                got(`https://ibsear.ch/api/v1/images.json?${query}limit=${queryLimit}`, {
                     headers: {
-                        'X-IbSearch-Key': ibKey,
-                        'User-Agent': 'Clara/0.2.2'
+                        'X-IbSearch-Key': bot.config.ibKey,
+                        'User-Agent': 'Clara/0.3.0'
                     }
-                }, (err, res, body) => {
-                    if (err) {
-                        reject(err);
-                    } else if (res.statusCode !== 200) {
-                        reject(new Error(`Invalid status code for ibsear.ch: ${res.statusCode}`));
-                    } else {
-                        var results = JSON.parse(body);
-                        if (results.length === 0) {
-                            ctx.msg.channel.createMessage('No results found.').then(resolve).catch(reject);
-                        } else {
-                            var item = results[Math.floor(Math.random() * results.length)];
-                            var imgURL = `https://${item.server}.ibsear.ch/resize/${item.path}?width=${Number(item.width) > 1000 ? Math.floor(Number(item.width) / 2) : item.width}&height=${Number(item.width) > 1000 ? Math.floor(Number(item.height) / 2) : item.height}`;
-                            var saveName = `${__baseDir}/cache/${item.path.split('/')[item.path.split('/').length - 1]}`;
-                            request(imgURL).pipe(fs.createWriteStream(saveName)).on('close', () => {
-                                color(saveName, (err, color) => {
-                                    if (err) {
-                                        reject(err);
-                                    } else {
-                                        fs.unlink(saveName, () => {
-                                            ctx.msg.channel.createMessage({embed: {
-                                                title: 'Image Source',
-                                                url: `https://ibsear.ch/images/${item.id}`,
-                                                image: {url: imgURL},
-                                                color: parseInt(color, 16),
-                                                fields: [
-                                                    {name: 'Image Information', value: `${item.width}x${item.height} ${prettyBytes(Number(item.size))}`},
-                                                    {name: 'Tags', value: item.tags.replace(/_/g, '\_')}
-                                                ],
-                                                footer: {text: `Time First Indexed by IbSearch: ${moment.unix(item.found).format('dddd Do MMMM Y')} at ${moment.unix(item.found).format('HH:mm:ss A')}`}
-                                            }}).then(resolve).catch(reject);
-                                        });
-                                    }
-                                });
-                            });
-                        }
-                    }
-                });
+                }).then(res => {
+                    let results = JSON.parse(res.body);
+                    if (results.length === 0) return ctx.createMessage('No results found.');
+                    
+                    let item = info.item = results[Math.floor(Math.random() * results.length)];
+                    info.url = `https://${item.server}.ibsear.ch/resize/${item.path}?width=500&height=500`;
+
+                    return null;
+                }).then(() => {
+                    let {item, url} = info;
+                    return ctx.createMessage({embed: {
+                        title: 'Image Source',
+                        url: `https://ibsear.ch/images/${item.id}`,
+                        image: {url},
+                        footer: {text: `Time First Indexed by IbSearch: ${moment.unix(item.found).format('dddd Do MMMM Y')} at ${moment.unix(item.found).format('HH:mm:ss A')}`},
+                        fields: [
+                            {name: 'Image Information', value: `${item.width}x${item.width} - ${prettyBytes(Number(item.size))}`},
+                            {name: 'Tags', value: item.tags.replace(/_/g, '\\_').slice(0, 1500)}
+                        ]
+                    }});
+                }).then(resolve).catch(reject);
             }
         });
     }
