@@ -4,7 +4,9 @@
  * Contributed by Capuccino and Ovyerus
  */
 
-const request = require('request');
+/* eslint-env node */
+
+const got = require('got');
 
 exports.commands = [
     'woof'
@@ -15,16 +17,9 @@ exports.woof = {
     longDesc: 'Prints out a random dog image from random.dog',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            request('http://random.dog/woof', (err, res, body) => {
-                if (err) {
-                    reject(err);
-                } else if (res.statusCode !== 200) {
-                    reject(new Error(`Unexpected Response Code from random.dog (Code ${res.statusCode})`));
-                } else {
-                    ctx.msg.channel.createMessage(`http://random.dog/${body}`).then(resolve).catch(reject);
-                }
-            });
+            got('http://random.dog/woof').then(res => {
+                return ctx.createMessage(`http://random.dog/${res.body}`);
+            }).then(resolve).catch(reject);
         });
     }
-
 };

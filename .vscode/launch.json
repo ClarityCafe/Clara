@@ -5,15 +5,29 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Program",
-            "type": "node2",
+            "type": "node",
             "request": "launch",
-            "program": "${workspaceRoot}\/src/bot.js",
+            "name": "Launch Bot (NoDemon)",
+            "runtimeExecutable": "nodemon",
+            "runtimeArgs": [
+                "--debug=5858"
+            ],
+            "program": "${workspaceRoot}/src/bot.js",
+            "restart": true,
+            "port": 5858,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "type": "node",
+            "name": "Launch Bot (without NodeMon)",
+            "request": "launch",
+            "program": "${workspaceRoot}/src/bot.js",
             "cwd": "${workspaceRoot}"
         },
         {
+            "type": "node",
             "name": "Attach to Process",
-            "type": "node2",
             "request": "attach",
             "port": 9229
         }

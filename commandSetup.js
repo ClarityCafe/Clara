@@ -10,13 +10,10 @@ const cmdDefault = name =>
  * Contributed by YOUR NAME HERE
  */
 
-exports.commands = [
-    '${name}'
-];
+exports.commands = ['${name}'];
 
 exports.${name} = {
     desc: '',
-    longDesc: '',
     usage: '',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
@@ -46,7 +43,7 @@ process.stdin.once('data', txt => {
                 console.log('Created main command file.\n');
 
                 console.log('Finished command setup.');
-                console.log(`Files can be found in `);
+                console.log(`Files can be found in src/commands/${cmdName}`);
                 process.exit();
             });
         });
