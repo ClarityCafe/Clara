@@ -22,8 +22,8 @@ module.exports = bot => {
             if (!bot.commands.checkCommand(res.cmd)) {
                 if (RegExp(`^<@!?${bot.user.id}> ?.+$`).test(msg.content) && bot.commands.getCommand('chat')) {
                     res.cmd = 'chat';
-                    res.suffix = msg.content.split(' ')[1] + res.suffix
-                    res.args = [msg.content.split(' ')[1]].concat(res.args)
+                    res.suffix = msg.content.split(' ')[1] + res.suffix;
+                    res.args = [msg.content.split(' ')[1]].concat(res.args);
                 } else {
                     return;
                 }
