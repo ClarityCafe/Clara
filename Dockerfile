@@ -41,15 +41,12 @@ RUN apt update && apt -y install nodejs
 
     
 # now we create a dummy account 
-USER clara
-RUN adduser --disabled-password --gecos "" clara && adduser clara sudo && su clara
-WORKDIR /home/clara
-RUN git config --global user.name nyan && git config --global user.email nyan@pa.su
 RUN mkdir /var/run/sshd && \
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-    useradd -u 1000 -G users,sudo -d /home/clara --shell /bin/bash -m clara && \
+    useradd -u 1000 -G clara,sudo -d /home/clara --shell /bin/bash -m clara && \
     usermod -p "*" clara
+USER clara
 
 #Expose Local port and SSH Port just because we can
 
@@ -64,6 +61,8 @@ RUN npm i --silent
 # It's advisable to add your config files so if we run docker run, it wouldn't error out.
 
 COPY . . 
+
+CMD ["/usr/sbin/sshd", "-p 22", "-D"]
 
 # finally echo this in a fancy way
 
