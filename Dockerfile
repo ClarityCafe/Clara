@@ -22,6 +22,7 @@ RUN apt update && \
     ssh \
     tar \
     gzip \
+    openssh-server \
     build-essential \
     ffmpeg \
     python3-pip \
@@ -40,7 +41,7 @@ RUN apt update && apt -y install nodejs
 
     
 # now we create a dummy account 
-
+USER clara
 RUN adduser --disabled-password --gecos "" clara && adduser clara sudo && su clara
 WORKDIR /home/clara
 RUN git config --global user.name nyan && git config --global user.email nyan@pa.su
