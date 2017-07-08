@@ -24,7 +24,7 @@ exports.saucenao = {
     main(bot, ctx) { 
         return new Promise((resolve, reject) => {
             if (!ctx.attachments[0]) {
-                return ctx.createMessage('Aw, no image here.');
+                return ctx.createMessage(localeManager.t('saucenao-noImage', ctx.settings.locale));
             } else if (ctx.attachments[0]) {
                 ayaneru.getSauce(ctx.attachments[0].url).then(res => {
                     let fields =[];
@@ -33,8 +33,8 @@ exports.saucenao = {
                         fields.push(`${{name: ovy.name, value: `(Link)[${ovy.url}]`}}`, 0);
                     }
                     ctx.createMessage({embed: {
-                        title: 'Saucenao query results',
-                        description: 'this is what we can find',
+                        title: localeManager.t('sauce-embedTitle', ctx.settings.locale),
+                        description: localeManager.t('sauce-embedDescription', ctx.settings.locale),
                         fields
                     }});
                 }).catch(reject);
