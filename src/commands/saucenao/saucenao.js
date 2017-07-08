@@ -45,8 +45,8 @@ exports.saucenao = {
                         const fields = [];
                         fields.push(`${{name: ovy.title, value: `(Link)[${ovy.url}]`, inline: true}}`, 0);
                         ctx.createMessage({embed: {
-                            title: 'saucenao query',
-                            description: 'this is what we can find from your image.',
+                            title: localeManager.t('sauce-embedTitle', ctx.settings.locale),
+                            description: localeManager.t('sauce-embedDescription', ctx.settings.locale),
                             fields
                         }});
                     }
