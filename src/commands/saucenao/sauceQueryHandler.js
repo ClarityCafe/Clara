@@ -29,7 +29,7 @@ class SauceHandler {
      * @param {String} path filepath for the image you want to get the source from (Not Implemented yet).
      * @param {String} link web address for the source, must be a valid HTTP/HTTPS address.
      * @returns {Promise} and JSON output.
-     * @example client.getSauce(path/link).then(res => { console.log(res) });
+     * @example client.getSauce(path/link).then(res => { console.log(res); });
      */
     getSauce(path, link) {
         return new Promise((resolve, reject) => {
@@ -42,7 +42,7 @@ class SauceHandler {
                  });*/
             } else if (link) {
                 if (!urlRegex) {
-                    throw new Error('Link is not valid HTTP/HTTPS Address.');
+                    throw new TypeError('Link is not valid HTTP/HTTPS Address.');
                 } else {
                     /** @todo I need a regex for making the following URL in the URL parameter */
                     got(`http://saucenao.com/search.php?output_type=${this.outputType}&numres=${this.numRes}&api_key=${this.key}&url=${encodeURIComponent(link)}`).then(res => {
