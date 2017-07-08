@@ -27,7 +27,7 @@ exports.saucenao = {
                 return ctx.createMessage(localeManager.t('saucenao-noImage', ctx.settings.locale));
             } else if (ctx.attachments[0]) {
                 ayaneru.getSauce(ctx.attachments[0].url).then(res => {
-                    let fields =[];
+                    const fields =[];
                     let ovy = JSON.parse(res).results;
                     for (res.results in res) {
                         fields.push(`${{name: ovy.name, value: `(Link)[${ovy.url}]`}}`, 0);
