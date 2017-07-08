@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: chinodesuuu/ci-amethyst:latest
+      - image: chinodesuuu/ci-amethyst
     working_directory: src
     steps:
       - setup_remote_docker
