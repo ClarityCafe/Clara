@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: chinodesuuu/ci-amethyst
+      - image: chinodesuuu/ci-amethyst:latest
     working_directory: src
     steps:
       - setup_remote_docker
@@ -17,4 +17,4 @@ jobs:
             mv /tmp/docker/* /usr/bin
       - run:
           name: Docker Build
-          command: docker build -f Dockerfile -t clara:continous .
+          command: docker build -f Dockerfile -t clara:ci .
