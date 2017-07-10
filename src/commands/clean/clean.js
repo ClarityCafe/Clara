@@ -10,6 +10,14 @@ exports.commands = [
     'clean'
 ];
 
+function deleteDelay(msg) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            msg.delete().then(resolve).catch(reject);
+        }, 2000);
+    });
+}
+
 exports.clean = {
     desc: 'Clean messages created by the bot.',
     main(bot, ctx) {
@@ -23,11 +31,3 @@ exports.clean = {
         });
     }
 };
-
-function deleteDelay(msg) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            msg.delete().then(resolve).catch(reject);
-        }, 2000);
-    });
-}

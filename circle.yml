@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: node:7.4.0
+      - image: chinodesuuu/ci-amethyst
     working_directory: src
     steps:
       - setup_remote_docker
@@ -11,10 +11,10 @@ jobs:
           name: Install Docker client
           command: |
             set -x
-            VER="17.03.0-ce"
+            VER="17.05.0-ce"
             curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             mv /tmp/docker/* /usr/bin
       - run:
           name: Docker Build
-          command: docker build -f Dockerfile -t clara:continous .
+          command: docker build -f Dockerfile -t clara:ci .

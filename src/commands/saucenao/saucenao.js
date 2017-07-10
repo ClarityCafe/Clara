@@ -8,12 +8,12 @@
 /* eslint-env node */
 
 //this handles the SauceNao handling
-const ayaneru = new (require('./sauceQueryHandler'))({
-    key: config.saucenaoKey
-});
-//this regex is gay
+const saucenao = require('./sauceQueryHandler');
+let ayaneru;
 
-const urlRegex = str => /(http(s)?:\/\/)?(www\.)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi.test(str);
+exports.init = bot => {
+    ayaneru = new saucenao({key: bot.config.sauceKey});
+};
 
 exports.commands = [
     'saucenao'
@@ -24,24 +24,31 @@ exports.saucenao = {
     main(bot, ctx) { 
         return new Promise((resolve, reject) => {
             if (!ctx.attachments[0]) {
-                return ctx.createMessage('Aw, no image here.');
-            } else if (!ctx.suffix === urlRegex) {
-                return ctx.createMessage('Oi, your URL is invalid!');
+                return ctx.createMessage(localeManager.t('saucenao-noImage', ctx.settings.locale));
             } else if (ctx.attachments[0]) {
                 ayaneru.getSauce(ctx.attachments[0].url).then(res => {
-
+                    const fields =[];
+                    let ovy = JSON.parse(res).results;
+                    for (res.results in res) {
+                        fields.push(`${{name: ovy.name, value: `(Link)[${ovy.url}]`}}`, 0);
+                    }
+                    ctx.createMessage({embed: {
+                        title: localeManager.t('sauce-embedTitle', ctx.settings.locale),
+                        description: localeManager.t('sauce-embedDescription', ctx.settings.locale),
+                        fields
+                    }});
                 }).catch(reject);
             } else if (ctx.suffix) {
                 ayaneru.getSauce(ctx.suffix).then(res => {
                     let ovy = JSON.parse(res.results);
                     for (ovy.data of ovy) {
                         const fields = [];
-                        fields.push(`${{name: ovy.title, value: ovy.thumbnail, inline: true}}`, 0);
+                        fields.push(`${{name: ovy.title, value: `(Link)[${ovy.url}]`, inline: true}}`, 0);
                         ctx.createMessage({embed: {
-                            title: 'saucenao query',
-                            description: 'this is what we can find from your image.',
+                            title: localeManager.t('sauce-embedTitle', ctx.settings.locale),
+                            description: localeManager.t('sauce-embedDescription', ctx.settings.locale),
                             fields
-                        }})
+                        }});
                     }
                 }).catch(reject);
             }
