@@ -577,43 +577,15 @@ class Context {
      */
     hasPermission(permission, who='self') {
         // Check if permission actually exists.
-        if (!~Object.keys(Eris.Constants.Permissions).indexOf(permission)) return false;
-        if (!~['self', 'author', 'both'].indexOf(who)) return false;
+        if (!Object.keys(Eris.Constants.Permissions).includes(permission)) return false;
+        if (!['self', 'author', 'both'].includes(who)) return false;
 
         if (who === 'self') {
-            if (this.guildBot.permission.has(permission)) return true;
-            
-            // Channel overwrites
-            let everyone = this.guild.roles.find(r => r.name === '@everyone');
-            let chanPerms = this.channel.permissionOverwrites.filter(v => {
-                return (v.type === 'member' && v.id === this.guildBot.id) || (v.type === 'role' && (~this.guildBot.roles.indexOf(v.id) || v.id === everyone.id));
-            });
-
-            for (let perm of chanPerms) if (perm.has(permission)) return true;
-            return false;
+            return this.channel.permissionsOf(this.client.user.id).has(permission);
         } else if (who === 'author') {
-            if (this.member.permission.has(permission)) return true;
-
-            // Channel overwrites
-            let everyone = this.guild.roles.find(r => r.name === '@everyone');
-            let chanPerms = this.channel.permissionOverwrites.filter(v => {
-                return (v.type === 'member' && v.id === this.member.id) || (v.type === 'role' && (~this.member.roles.indexOf(v.id) || v.id === everyone.id));
-            });
-
-            for (let perm of chanPerms) if (perm.has(permission)) return true;
-            return false;
+            return this.channel.permissionsOf(this.author.id).has(permission);
         } else if (who === 'both') {
-            if (this.member.permission.has(permission) && this.guildBot.permission.has(permission)) return true;
-
-            // Channel permissionOverwrites
-            let everyone = this.guild.roles.find(r => r.name === '@everyone');
-            let chanPerms = this.channel.permissionOverwrites.filter(v => {
-                return (v.type === 'member' && (v.id === this.member.id || v.id === this.guildBot.id)) || (v.type === 'role' && ((~this.member.roles.indexOf(v.id) && ~this.guildBot.roles.indexOf(v.id)) || v.id === everyone.id));
-            });
-
-
-            for (let perm of chanPerms) if (perm.has(permission)) return true;
-            return false;
+            return this.hasPermission(permission) && this.hasPermission(permission, 'author');
         }
     }
 
