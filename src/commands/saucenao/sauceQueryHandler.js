@@ -36,8 +36,10 @@ class SauceHandler {
             if (!path === typeof path) {
                 throw new TypeError('path is not string');
             } else if (path) {
-                /** @todo Finalize this. We need to input file as a stream then convert to MIMEType */
-                throw new Error('This is not implemented yet!');
+                /**
+                 * @deprecated Due to engineering issues, this is deprecated.
+                 */
+                throw new Error('This function is deprecated. Use URL links instead');
                 /* got(`http://saucenao.com/search.php?output_type=${this.outputType}&numres=${this.numRes}&api_key=${this.key}`, {}).then(res => {               
                  });*/
             } else if (link) {
