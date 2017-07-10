@@ -86,7 +86,7 @@ class LocaleManager {
         } else if (!this.locales[locale]) {
             throw new Error(`${locale} is not a valid locale`);
         } else {
-            let res = this.locales[locale][key] || this.locales[this.fallbackLocale][key] || '';
+            let res = this.locales[locale][key] || this.locales[this.fallbackLocale][key] || key;
 
             if (/.*{{.+}}.*/g.test(res) && Object.keys(replacers).length !== 0) {
                 for (let rep of Object.keys(replacers)) {
