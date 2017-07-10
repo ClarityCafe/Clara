@@ -14,7 +14,7 @@ exports.commands = [
     'queue',
     'leave',
     'join',
-    'nowplaying',
+    'np',
     'sources',
     'skip'
 ];
@@ -113,7 +113,7 @@ exports.queue = {
     }
 };
 
-exports.nowplaying = {
+exports.np = {
     desc: 'Show what song is now playing.',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
@@ -222,7 +222,7 @@ exports.skip = {
                         let track = bot.music.queues.get(ctx.guild.id).queue[0].info;
                         let chan = ctx.guild.channels.get(bot.music.connections.get(ctx.guild.id).channelID);
 
-                        ctx.createMessage(`**${bot.formatUsername(ctx.member)}** voted to skip **${track.title}**.\n`
+                        ctx.createMessage(`**${bot.utils.formatUsername(ctx.member)}** voted to skip **${track.title}**.\n`
                         + `${skips.users.length}/${chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf && !m.voiceState.deaf && m.id !== bot.id).length} votes.`).then(resolve).catch(reject);
                     }
                 }
