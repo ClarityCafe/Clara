@@ -28,21 +28,23 @@ class SauceHandler {
      * Gets the source and outputs it in your preffered output type
      * @param {String} path filepath for the image you want to get the source from (Not Implemented yet).
      * @param {String} link web address for the source, must be a valid HTTP/HTTPS address.
-     * @returns {Promise} and JSON output.
-     * @example client.getSauce(path/link).then(res => { console.log(res) });
+     * @returns {Promise} JSON that contains the closest match.
+     * @example client.getSauce(path/link).then(res => { console.log(res); });
      */
     getSauce(path, link) {
         return new Promise((resolve, reject) => {
             if (!path === typeof path) {
                 throw new TypeError('path is not string');
             } else if (path) {
-                /** @todo Finalize this. We need to input file as a stream then convert to MIMEType */
-                throw new Error('This is not implemented yet!');
+                /**
+                 * @deprecated Due to engineering issues, this is deprecated.
+                 */
+                throw new Error('This function is deprecated. Use URL links instead');
                 /* got(`http://saucenao.com/search.php?output_type=${this.outputType}&numres=${this.numRes}&api_key=${this.key}`, {}).then(res => {               
                  });*/
             } else if (link) {
                 if (!urlRegex) {
-                    throw new Error('Link is not valid HTTP/HTTPS Address.');
+                    throw new TypeError('Link is not valid HTTP/HTTPS Address.');
                 } else {
                     /** @todo I need a regex for making the following URL in the URL parameter */
                     got(`http://saucenao.com/search.php?output_type=${this.outputType}&numres=${this.numRes}&api_key=${this.key}&url=${encodeURIComponent(link)}`).then(res => {

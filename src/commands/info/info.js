@@ -9,8 +9,8 @@
 const prettyBytes = require('pretty-bytes');
 const fs = require('fs');
 const path = require('path');
-
 var version;
+
 try {
     version = JSON.parse(fs.readFileSync(path.normalize(`${__baseDir}/../package.json`))).version;
 } catch(_) {
@@ -27,9 +27,9 @@ exports.info = {
         return new Promise((resolve, reject) => {
             let date = new Date();
             let sysTime = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${date.getDate()}\n${('0' + (date.getHours() + 1)).slice(-2)}:${('0' + (date.getMinutes() + 1)).slice(-2)}:${('0' + (date.getSeconds() + 1)).slice(-2)}`;
-            let roleColour = ctx.channel.guild.roles.get(ctx.guildBot.roles.sort((a, b) => {
-                return ctx.guild.roles.get(b).position - ctx.guild.roles.get(a).position;
-            })[0]).color || utils.randomColour();
+            let roleColour = ctx.guildBot.roles.sort((a, b) => ctx.guild.roles.get(b).position - ctx.guild.roles.get(a).position)[0];
+            roleColour = roleColour ? ctx.guild.roles.get(roleColour).color : 0;
+
             ctx.createMessage({embed: {
                 title: `${bot.user.username}'s Info`,
                 description: `[${localeManager.t('info-source', ctx.settings.locale)}](https://github.com/awau/Clara) | [${localeManager.t('info-supportServer', ctx.settings.locale)}](https://discord.gg/ZgQkCkm)`,

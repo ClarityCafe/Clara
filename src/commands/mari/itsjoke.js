@@ -7,7 +7,7 @@
 /* eslint-env node */
 
 const fs = require('fs');
-const files = fs.readdirSync(`${__baseDir}/res/itsjoke`);
+const files = fs.readdirSync(`${__baseDir}/assets/itsjoke`);
 
 exports.commands = [
     'mari'
@@ -20,7 +20,7 @@ exports.mari = {
         return new Promise((resolve, reject) => {
             ctx.channel.sendTyping();
             let fileName = files[Math.floor(Math.random() * files.length)];
-            let file = fs.readFileSync(`${__baseDir}/res/itsjoke/${fileName}`);
+            let file = fs.readFileSync(`${__baseDir}/assets/itsjoke/${fileName}`);
             ctx.createMessage('', {file, name: fileName}).then(resolve).catch(reject);
         });
     }

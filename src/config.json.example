@@ -5,9 +5,7 @@
   "ibKey": "",
   "mainPrefix": "?",
   "osuApiKey": "",
-  "saucenaoKey": "",
-  "cbUser": "",
-  "cbKey": "",
+  "sauceKey" : "",
   "gameName" : "",
   "gameURL" :"",
   "ownerID": "",
@@ -15,6 +13,6 @@
   "ytSearchKey": "",
   "twitchKey": "",
   "nasaKey": "",
-  "rethinkOptions: {},
+  "rethinkOptions": {},
   "discordBotsKey": ""
 }
