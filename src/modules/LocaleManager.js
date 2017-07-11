@@ -75,7 +75,7 @@ class LocaleManager {
      *
      * @param {String} key The key whose value to translate
      * @param {String} locale Name of locale to translate too.
-     * @param {Object=} replacers Object of values in string.
+     * @param {Object} [replacers] Object of values in string.
      * @returns {String} Translated string.
      */
     t(key, locale = this.fallbackLocale, replacers = {}) {
