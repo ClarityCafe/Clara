@@ -1,7 +1,6 @@
-/*
+/**
  * greetings.js - Manage greetings for servers
- * 
- * Contributed by Ovyerus
+ * @author Ovyerus
  */
 
 /* eslint-env node */
