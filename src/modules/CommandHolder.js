@@ -549,16 +549,47 @@ class Context {
      * 
      * @param {(String|Object)} content Content to send. If object, same as Eris options.
      * @param {Object} [file] File to send. Same as Eris file.
-     * @param {String} [where=channel] Where to send the message. Either 'channel' or 'author'.
+     * @param {String} [where='channel'] Where to send the message. Either 'channel' or 'author'.
+     * @param {Object} [replacers] Object of keys to replace with items for translation.
      * @returns {Promise<Eris.Message>} The sent message.
      * @see http://eris.tachibana.erendale.abal.moe/Eris/docs/Channel#function-createMessage
      */
-    createMessage(content, file, where='channel') {
+    createMessage(content, file, where='channel', replacers={}) {
         return new Promise((resolve, reject) => {
             if (typeof where !== 'string') throw new TypeError('where is not a string.');
             if (!~['channel', 'author'].indexOf(where)) throw new Error('where is an invalid value. Must either be `channel` or `author`');
-            
+
             if (content.embed && typeof content.embed.color !== 'number') content.embed.color = utils.randomColour();
+            let locale = this.settings.locale;
+
+            if (typeof content === 'string') {
+                content = localeManager.t(content, locale, replacers);
+            } else if (content.content || content.embed) {
+                if (content.content) content.content = localeManager.t(content, locale, replacers);
+
+                if (content.embed) {
+                    for (let key in content.embed) {
+                        if (['url', 'type', 'timestamp', 'color', 'fields', 'thumbnail', 'image', 'video', 'provider'].includes(key)) continue;
+
+                        let item = content.embed[key];
+
+                        if (['title', 'description'].includes(key)) {
+                            content.embed[key] = localeManager.t(item, locale, replacers);
+                        } else if (key === 'author' && item.name) {
+                            content.embed[key].name = localeManager.t(item.name, locale, replacers);
+                        } else if (key === 'footer' && item.text) {
+                            content.embed[key].text = localeManager.t(item.text, locale, replacers);
+                        }
+                    }
+
+                    if (content.embed.fields) {
+                        content.embed.fields.forEach((v, i, a) => {
+                            a[i].name = localeManager.t(v.name, locale, replacers);
+                            a[i].value = localeManager.t(v.value, locale, replacers);
+                        });
+                    }
+                }
+            }
 
             if (where === 'channel') {
                 this.channel.createMessage(content, file).then(resolve).catch(reject);
