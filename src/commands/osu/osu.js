@@ -15,10 +15,7 @@ const commaRegex = /\B(?=(\d{3})+(?!\d))/g; // Thank you Brayzure uwu
 exports.loadAsSubcommands = true;
 
 exports.commands = [
-    'osu',
-    'mania',
-    'taiko',
-    'ctb'
+    'osu'
 ];
 
 exports.main = {
