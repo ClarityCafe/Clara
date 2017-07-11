@@ -1,7 +1,7 @@
 /*
  * Clara - logger module
  *
- * Contributed by Ovyerus and Capuccino.
+ * @author Capuccino, Ovyerus
  */
 
 const chalk = require('chalk');
