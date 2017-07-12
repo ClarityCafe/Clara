@@ -1,5 +1,6 @@
 /**
- * greetings.js - Manage greetings for servers
+ * @file greetings.js  
+ * @description Manage greetings for servers
  * @author Ovyerus
  */
 
