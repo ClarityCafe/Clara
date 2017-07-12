@@ -1,7 +1,7 @@
-/*
- * ping.js - Simple command used to check ping time.
- * 
- * Contributed by Capuccino, Ovyerus.
+/**
+ * @file Simple command used to check ping time.
+ * @author Ovyerus
+ * @author Capuccino
  */
 
 /* eslint-env node */
@@ -11,12 +11,11 @@ exports.commands = [
 ];
 
 exports.ping = {
-    desc: 'Ping!',
-    fullDesc: "Ping the bot and check it's latency.",
+    desc: "Ping the bot and check it's latency.",
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            ctx.createMessage(localeManager.t('pong', ctx.settings.locale)).then(m => {
-                return m.edit(localeManager.t('pong', ctx.settings.locale) + ` \`${m.timestamp - ctx.timestamp}ms\``);
+            ctx.createMessage('pong').then(m => {
+                return m.edit(`${m.content} \`${m.timestamp - ctx.timestamp}ms\``);
             }).then(resolve).catch(reject);
         });
     }
