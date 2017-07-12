@@ -73,3 +73,27 @@ exports.disable = {
         });
     }
 };
+
+exports.channel = {
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            if (!ctx.member.permission.has('manageGuild')) {
+                return ctx.createMessage("you have no permissions to edit this server's settings.");
+            } else {
+                bot.getGuildSettings(ctx.guild.id).then(res => {
+                    let settings = res;
+                    if (ctx.channelMentions.length > 0) {
+                        settings.greeting.channelID = ctx.channelMentions[0];
+                    } else {
+                        let wank = ctx.suffix.split(' ');
+                        wank.shift();
+                        let chans = ctx.guild.channels.filter(c => c.name.toLowerCase().includes(wank.join(' ')));
+                        if (chans.length === 0) {
+                            
+                        }
+                    }
+                });
+            }
+        });
+    }
+};
