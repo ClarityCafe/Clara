@@ -33,7 +33,7 @@ exports.main = {
     desc: 'Show current settings for goodbye messages, and manage them if you have the correct permissions',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            ctx.createMessage({ embed: goodbyeBlock }).then(resolve).catch(reject);
+            ctx.createMessage({embed: goodbyeBlock}).then(resolve).catch(reject);
         });
     }
 };
