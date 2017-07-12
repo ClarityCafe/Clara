@@ -33,7 +33,7 @@ exports.main = {
     desc: 'Show current settings for goodbye messages, and manage them if you have the correct permissions',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            ctx.createMessage({embed: goodbyeBlock}).then(resolve).catch(reject);
+            ctx.createMessage({ embed: goodbyeBlock }).then(resolve).catch(reject);
         });
     }
 };
@@ -46,9 +46,10 @@ exports.enable = {
             } else {
                 bot.getGuildSettings(ctx.guild.id).then(res => {
                     let settings = res;
-                    settings.greeting.enabled = true;
+                    settings.goodbyes.enabled = true;
+                    return bot.setGuildSettings(res.id, settings);
                 }).then(() => {
-                    return ctx.createMessage('Goodbye messages are now enabled! (This also enabled greet messages!)');
+                    return ctx.createMessage('Goodbye messages are now enabled!');
                 }).then(resolve).catch(reject);
             }
         });
@@ -57,13 +58,18 @@ exports.enable = {
 
 exports.disabled = {
     main(bot, ctx) {
-        if (!ctx.member.permission.has('manageGuild')) {
-            return ctx.createMessage("you have no permissions to edit this server's settings for this command.");
-        } else {
-            bot.getGuildSettings(ctx.guild.id).then(res => {
-                let settings = res;
-                settings.greeting.enabled = false;
-            });
-        }
+        return new Promise((resolve, reject) => {
+            if (!ctx.member.permission.has('manageGuild')) {
+                return ctx.createMessage("you have no permissions to edit this server's settings for this command.");
+            } else {
+                bot.getGuildSettings(ctx.guild.id).then(res => {
+                    let settings = res;
+                    settings.goodbyes.enabled = false;
+                    return bot.setGuildSettings(res.id, settings);
+                }).then(() => {
+                    return ctx.createMessage('Goodbye messages are now disabled.');
+                }).then(resolve).catch(reject);
+            }
+        });
     }
 };
