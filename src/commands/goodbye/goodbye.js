@@ -56,7 +56,7 @@ exports.enable = {
     }
 };
 
-exports.disabled = {
+exports.disable = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.member.permission.has('manageGuild')) {
