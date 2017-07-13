@@ -73,3 +73,46 @@ exports.disable = {
         });
     }
 };
+
+exports.channel = {
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            bot.getGuildSettings(ctx.guild.id).then(res => {
+                let settings = res;
+                if(ctx.channelMentions.length > 0) {
+                    settings.goodbyes.channelID = ctx.channelMentions[0];
+                    return bot.setGuildSettings(res.id, settings);
+                } else {
+                    let nya = ctx.suffix.split(' ');
+                    nya.shift();
+                    let chans = ctx.guild.channels.filter(c => c.name.toLowerCase().includes(nya.join(' ')));
+                    
+                    if(chans.length === 0){
+                        return ctx.createMessage('This channel cannot be found.');
+                    } else {
+                        settings.goodbyes.channelID = chans[0].id;
+                        return bot.setGuildSettings(res.id, settings);
+                    }
+                }
+            }).then(res => {
+                if(res instanceof Eris.Message) {
+                    return null;
+                } else {
+                    return bot.getGuildSettings(ctx.guild.id);
+                }
+            }).then( res => {
+                if (!res) {
+                    return null;
+                } else {
+                    logger.info(res);
+                    return ctx.createMessage(`Successfuly set to send all goodbye messages to ${res.goodbye.channelID}`).then(resolve).catch(reject);
+                }
+            });
+        });
+    }
+};
+
+
+
+
+
