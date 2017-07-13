@@ -79,7 +79,7 @@ exports.channel = {
         return new Promise((resolve, reject) => {
             bot.getGuildSettings(ctx.guild.id).then(res => {
                 let settings = res;
-                if(ctx.channelMentions.length > 0) {
+                if (ctx.channelMentions.length > 0) {
                     settings.goodbyes.channelID = ctx.channelMentions[0];
                     return bot.setGuildSettings(res.id, settings);
                 } else {
@@ -87,7 +87,7 @@ exports.channel = {
                     nya.shift();
                     let chans = ctx.guild.channels.filter(c => c.name.toLowerCase().includes(nya.join(' ')));
                     
-                    if(chans.length === 0){
+                    if (chans.length === 0){
                         return ctx.createMessage('This channel cannot be found.');
                     } else {
                         settings.goodbyes.channelID = chans[0].id;
@@ -95,7 +95,7 @@ exports.channel = {
                     }
                 }
             }).then(res => {
-                if(res instanceof Eris.Message) {
+                if (res instanceof Eris.Message) {
                     return null;
                 } else {
                     return bot.getGuildSettings(ctx.guild.id);
