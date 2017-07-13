@@ -8,6 +8,8 @@ exports.commands = [
     'goodbye'
 ];
 
+const Eris = require('eris');
+
 function goodbyeBlock(settings) {
     return {
         title: 'Goodbye Message Management',
@@ -87,7 +89,7 @@ exports.channel = {
                     nya.shift();
                     let chans = ctx.guild.channels.filter(c => c.name.toLowerCase().includes(nya.join(' ')));
                     
-                    if (chans.length === 0){
+                    if (chans.length === 0) {
                         return ctx.createMessage('This channel cannot be found.');
                     } else {
                         settings.goodbyes.channelID = chans[0].id;
@@ -100,7 +102,7 @@ exports.channel = {
                 } else {
                     return bot.getGuildSettings(ctx.guild.id);
                 }
-            }).then( res => {
+            }).then(res => {
                 if (!res) {
                     return null;
                 } else {
