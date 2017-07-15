@@ -55,8 +55,16 @@ exports.help = {
                 } else {
                     let cmd = bot.commands.getCommand(ctx.args[0]);
                     let embed = {
-                        description: `\`${bot.config.mainPrefix}${ctx.args[0]}${cmd.usage ? ` ${cmd.usage}` : ''}\n\u200b - ${cmd.desc}\``
+                        description: `\`${bot.config.mainPrefix}${ctx.args[0]}${cmd.usage ? ` ${cmd.usage}` : ''}\n\u200b - ${cmd.desc}\`\n\n`
                     };
+
+                    if (cmd.subcommands) {
+                        for (let name in cmd.subcommands) {
+                            let scmd = cmd.subcommands[name];
+
+                            embed.description += `\`${bot.config.mainPrefix}${ctx.args[0]} ${name}${scmd.usage ? ` ${scmd.usage}` : ''}\n\u200b - ${scmd.desc}\`\n\n`;
+                        }
+                    }
 
                     ctx.createMessage({embed}).then(resolve).catch(reject);
                 }
