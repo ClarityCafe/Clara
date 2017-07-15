@@ -1,7 +1,6 @@
-/*
- * Clara - locale manager
- *
- * Contributed by Capuccino and Ovyerus
+/**
+ * @file Main locale manager.
+ * @author Ovyerus
  */
 
 /* eslint-env node */

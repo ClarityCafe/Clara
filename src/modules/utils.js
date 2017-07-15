@@ -1,7 +1,7 @@
-/*
- * Clara - utility module
- *
- * Contributed by Capuccino and Ovyerus
+/**
+ * @file Miscellaneous utility functions that aren't always needed.
+ * @author Capuccino
+ * @author Ovyerus
  */
 
 /* eslint-env node */

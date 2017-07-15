@@ -1,6 +1,10 @@
-/* eslint-env node */
+/**
+ * @file Guild events file.
+ * @author Capuccino
+ * @author Ovyerus
+ */
 
-(`${__baseDir}/modules/utils`);
+/* eslint-env node */
 
 module.exports = bot => {
     bot.on('guildCreate', g => {

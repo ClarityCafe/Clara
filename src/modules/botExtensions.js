@@ -1,3 +1,8 @@
+/**
+ * @file Various utility functions to inject into the bot instance.
+ * @author Ovyerus
+ */
+
 /* eslint-env node */
 
 const got = require('got');

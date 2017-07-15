@@ -1,3 +1,9 @@
+/**
+ * @file Giant ass ready event.
+ * @author Capuccino
+ * @author Ovyerus
+ */
+
 /* eslint-env node */
 
 const fs = require('fs');

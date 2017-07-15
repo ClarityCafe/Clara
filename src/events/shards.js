@@ -1,3 +1,8 @@
+/**
+ * @file Shard event logging.
+ * @author Capuccino
+ */
+
 /* eslint-env node */
 
 module.exports = bot => {
