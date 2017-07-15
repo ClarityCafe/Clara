@@ -1,7 +1,7 @@
-/*
- * awau.js - Awau
- * 
- * Contributed by Capuccino and Ovyerus
+/**
+ * @file Awau
+ * @author Capuccino
+ * @author Ovyerus
  */
 
 /* eslint-env node */

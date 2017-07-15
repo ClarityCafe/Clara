@@ -1,7 +1,6 @@
-/*
- * blacklist.js - Dynamic blacklist command.
- * 
- * Contributed by Ovyerus
+/**
+ * @file Dynamic blacklist command.
+ * @author Ovyerus
  */
 
 const fs = require('fs');

@@ -1,7 +1,7 @@
-/* 
- *  awwnime - Generates a random anime picture.
- * 
- *  Contributed by Capuccino and Ovyerus
+/**
+ * @file Generates a random anime picture.
+ * @author Capuccino
+ * @author Ovyerus
  */
 
 /* eslint-env node */
@@ -18,14 +18,13 @@ exports.awwnime = {
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix) {
-
                 ctx.channel.sendTyping();
 
                 got('https://raw-api.now.sh/').then(res => {
                     let images = JSON.parse(res.body);
                     let image = images[Math.floor(Math.random() * images.length)];
 
-                    if (!image) return ctx.createMessage('No results found.');
+                    if (!image) return ctx.createMessage('notFound');
 
                     return ctx.createMessage(image.full);
                 }).then(resolve).catch(reject);
@@ -37,7 +36,7 @@ exports.awwnime = {
                     let images = JSON.parse(res.body);
                     let image = images[Math.floor(Math.random() * images.length)];
 
-                    if (!image) return ctx.createMessage('No results found.');
+                    if (!image) return ctx.createMessage('notFound');
 
                     return ctx.createMessage(image.full);
 

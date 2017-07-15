@@ -1,7 +1,7 @@
-/*
- * help.js - Display information for all avaliable commands.
- *
- * Contributed by Capuccino and Ovyerus.
+/**
+ * @file Display information for all avaliable commands.
+ * @author Capuccino
+ * @author Ovyerus
  */
 
 /* eslint-env node */
@@ -21,7 +21,7 @@ exports.help = {
                     cmds.push(`${bot.config.mainPrefix}${name}${cmd.usage ? ` ${cmd.usage}` : ''}`);
                 });
 
-                ctx.createMessage('Sending help to your DMs.').then(() => {
+                ctx.createMessage('help-sending').then(() => {
                     let cmdCollect = [];
                     let msgs = [];
                     let colour = utils.randomColour();
@@ -51,7 +51,7 @@ exports.help = {
                 }).then(resolve).catch(reject);
             } else {
                 if (!bot.commands.getCommand(ctx.args[0])) {
-                    ctx.createMessage(`Command \`${ctx.args[0]}\` could not be found. Make sure to check your spelling.`);
+                    ctx.createMessage('help-noCmd');
                 } else {
                     let cmd = bot.commands.getCommand(ctx.args[0]);
                     let embed = {

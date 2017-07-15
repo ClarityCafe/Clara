@@ -1,7 +1,6 @@
-/*
- * nadeko.js - Emulates the (old) broken echo command from Nadeko
- * 
- * Contributed by Capuccino.
+/**
+ * @file Emulates the (old) broken echo command from Nadeko.
+ * @author Capuccino.
  */
 
 /* eslint-env node */
@@ -20,7 +19,10 @@ exports.e = {
     longDesc: 'owo whats this?',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            ctx.createMessage(localeManager.t('nadeko', ctx.settings.locale, {user: ctx.author.mention, emote: emotes[Math.floor(Math.random() * emotes.length)]})).then(resolve).catch(reject);
+            ctx.createMessage('nadeko', null, 'channel', {
+                user: ctx.author.mention,
+                emote: emotes[Math.floor(Math.random() * emotes.length)]
+            }).then(resolve).catch(reject);
         });
     }
 };

@@ -1,5 +1,5 @@
 /**
- * greetings.js - Manage greetings for servers
+ * @file Manage greetings for servers
  * @author Ovyerus
  */
 
@@ -20,31 +20,31 @@ exports.greetings = {
                 ctx.createMessage({embed: greetingBlock(ctx.settings)}).then(resolve).catch(reject);
             } else if (ctx.args[0] === 'enable') {
                 if (!ctx.member.permission.has('manageGuild')) {
-                    ctx.createMessage(localeManager.t('user-noPerm', ctx.settings.locale, {perm: 'Manage Server'})).then(resolve).catch(reject);
+                    ctx.createMessage('user-noPerm', null, 'channel', {perm: 'Manage Server'}).then(resolve).catch(reject);
                 } else {
                     bot.getGuildSettings(ctx.guild.id).then(res => {
                         let settings = res;
                         settings.greeting.enabled = true;
                         return bot.setGuildSettings(res.id, settings);
                     }).then(() => {
-                        return ctx.createMessage(localeManager.t('greetings-enable', ctx.settings.locale));
+                        return ctx.createMessage('greetings-enable');
                     }).then(resolve).catch(reject);
                 }
             }  else if (ctx.args[0] === 'disable') {
                 if (!ctx.member.permission.has('manageGuild')) {
-                    ctx.createMessage(localeManager.t('user-noPerm', ctx.settings.locale, {perm: 'Manage Server'})).then(resolve).catch(reject);
+                    ctx.createMessage('user-noPerm', null, 'channel', {perm: 'Manage Server'}).then(resolve).catch(reject);
                 } else {
                     bot.getGuildSettings(ctx.guild.id).then(res => {
                         let settings = res;
                         settings.greeting.enabled = false;
                         return bot.setGuildSettings(res.id, settings);
                     }).then(() => {
-                        return ctx.createMessage(localeManager.t('greetings-disable', ctx.settings.locale));
+                        return ctx.createMessage('greetings-disable');
                     }).then(resolve).catch(reject);
                 }
             } else if (ctx.args[0] === 'channel' && ctx.args.length >= 2) {
                 if (!ctx.member.permission.has('manageGuild')) {
-                    ctx.createMessage(localeManager.t('user-noPerm', ctx.settings.locale, {perm: 'Manage Server'})).then(resolve).catch(reject);
+                    ctx.createMessage('user-noPerm', null, 'channel', {perm: 'Manage Server'}).then(resolve).catch(reject);
                 } else {
                     bot.getGuildSettings(ctx.guild.id).then(res => {
                         let settings = res;
@@ -58,7 +58,7 @@ exports.greetings = {
                             let chans = ctx.guild.channels.filter(c => c.name.toLowerCase().includes(meme.join(' ')));
 
                             if (chans.length === 0) {
-                                return ctx.createMessage(localeManager.t('greetings-noChan', ctx.settings.locale, {name: meme.join(' ')}));
+                                return ctx.createMessage('greetings-noChan', null, 'channel', {name: meme.join(' ')});
                             } else {
                                 settings.greeting.channelID = chans[0].id;
                                 return bot.setGuildSettings(res.id, settings);
@@ -75,7 +75,7 @@ exports.greetings = {
                             return null;
                         } else {
                             console.log(res);
-                            return ctx.createMessage(localeManager.t('greetings-setChan', ctx.settings.locale, {id: res.greeting.channelID}));
+                            return ctx.createMessage('greetings-setChan', null, 'channel', {id: res.greeting.channelID});
                         }
                     }).then(resolve).catch(reject);
                 }
@@ -90,7 +90,7 @@ exports.greetings = {
 
                     return bot.setGuildSettings(res.id, settings);
                 }).then(() => {
-                    return ctx.createMessage(localeManager.t('greetings-setMsg', ctx.settings.locale));
+                    return ctx.createMessage('greetings-setMsg');
                 }).then(resolve).catch(reject);
             } else {
                 ctx.createMessage({embed: greetingBlock(ctx.settings)}).then(resolve).catch(reject);
@@ -102,7 +102,9 @@ exports.greetings = {
 function greetingBlock(settings) {
     return {
         title: 'Greeting Management',
-        description: `**${localeManager.t('greetings-enabled', settings.locale)}:** ${settings.guild.greeting.enabled ? localeManager.t('yes', settings.locale) : localeManager.t('no', settings.locale)}\n**${localeManager.t('greetings-channel')}:** ${settings.guild.greeting.channelID ? `<#${settings.guild.greeting.channelID}>` : localeManager.t('none', settings.locale)}\n**${localeManager.t('greetings-message')}:** ${settings.guild.greeting.message || localeManager.t('none', settings.locale)}`,
+        description: `**${localeManager.t('greetings-enabled', settings.locale)}:** ${settings.guild.greeting.enabled ? localeManager.t('yes', settings.locale) : localeManager.t('no', settings.locale)}\n`
+        + `**${localeManager.t('greetings-channel')}:** ${settings.guild.greeting.channelID ? `<#${settings.guild.greeting.channelID}>` : localeManager.t('none', settings.locale)}\n`
+        + `**${localeManager.t('greetings-message')}:** ${settings.guild.greeting.message || localeManager.t('none', settings.locale)}`,
         fields: [{
             name: 'Example Usage',
             value: '`greetings enable`\n'

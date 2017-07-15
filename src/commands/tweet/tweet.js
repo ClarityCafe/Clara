@@ -1,7 +1,6 @@
-/* tweet.js - random birb
- * 
- * 
- * Contributed by Capuccino 
+/**
+ * @file random.birb.pw command
+ * @author Capuccino 
  */
 
 exports.commands = [

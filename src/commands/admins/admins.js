@@ -1,7 +1,6 @@
-/*
- * admins.js - Add and remove admins
- * 
- * Contributed by Ovyerus
+/**
+ * @file Add and remove admins
+ * @author Ovyerus
  */
 
 const fs = require('fs');

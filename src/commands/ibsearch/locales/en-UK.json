@@ -1,0 +1,6 @@
+{
+    "ib-source": "Image Source",
+    "ib-info": "Image Information",
+    "ib-tags": "Tags",
+    "ib-indexTime": "Time First Indexed by IbSearch: {{date}} at {{time}}"
+}
