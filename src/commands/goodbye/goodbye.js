@@ -114,6 +114,27 @@ exports.channel = {
     }
 };
 
+exports.text = {
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            if (!ctx.suffix) {
+                ctx.createMessage({embed: goodbyeBlock(ctx.settings)}).then(resolve).catch(reject);
+            } else {
+                bot.getGuildSettings(ctx.guild.id).then(res => {
+                    let settings = res;
+                    let message = ctx.suffix.split(' ');
+                    message.shift();
+                    message = message.join(' ');
+
+                    settings.goodbyes.message = message;
+                    return bot.setGuildSettings(res.id, settings);
+                }).then(() => {
+                    return ctx.createMessage('Successfully set guild message.').then(resolve).catch(reject);
+                });
+            }
+        });
+    }
+};
 
 
 
