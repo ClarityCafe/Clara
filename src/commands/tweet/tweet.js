@@ -14,9 +14,9 @@ exports.tweet = {
             ctx.channel.sendTyping();
             got('https://random.birb.pw/tweet').then(res => {
                 return ctx.createMessage({embed: {
-                    title: 'What a cute little birby!',
+                    title: 'tweet-title',
                     image: {url: `https://random.birb.pw/img/${res.body}`},
-                    footer: {text: 'Powered by birb.pw'}
+                    footer: {text: 'tweet-credits'}
                 }});
             }).then(resolve).catch(reject);
         });

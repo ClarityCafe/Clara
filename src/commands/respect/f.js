@@ -16,10 +16,10 @@ exports.f = {
     usage: '[object for respects]',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            if (ctx.cleanSuffix) {
+            if (ctx.suffix) {
                 ctx.createMessage('respects-args', null, 'channel', {
                     user: utils.formatUsername(ctx.member, true),
-                    object: ctx.cleanSuffix
+                    object: ctx.suffix
                 }).then(resolve).catch(reject);
             } else {
                 ctx.createMessage('respects', null, 'channel', {
@@ -35,8 +35,8 @@ exports.rip = {
     usage: '[thing]',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            if (ctx.cleanSuffix) {
-                let url = encodeURI(`https://ripme.xyz/#${ctx.cleanSuffix}`);
+            if (ctx.suffix) {
+                let url = encodeURI(`https://ripme.xyz/#${ctx.suffix}`);
                 ctx.createMessage('rip-args', null, 'channel', {url}).then(resolve).catch(reject);
             } else {
                 ctx.createMessage('rip').then(resolve).catch(reject);

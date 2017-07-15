@@ -12,7 +12,6 @@ exports.commands = [
 
 exports.choose = {
     desc: 'Randomly chooses between 2 or more arguments.',
-    fullDesc: 'Uses a randomiser to pick a random value out of two given arguments.',
     usage: '<choice 1>/<choice 2>/...',
     example: 'coke zero/coke',
     main(bot, ctx) {
