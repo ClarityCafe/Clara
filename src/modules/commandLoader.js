@@ -1,8 +1,8 @@
-/*
- * Clara - Command Loader File
- * based from chalda/DiscordBot
- *
- * Contributed by Capuccino and Ovyerus
+/**
+ * @file Command loader and dependency installer for bot startup.
+ * Based from chalda/DiscordBot
+ * @author Capuccino
+ * @author Ovyerus
  */
 
 /* eslint-env node */
