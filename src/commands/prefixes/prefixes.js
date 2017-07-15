@@ -1,7 +1,6 @@
-/*
- * prefixes.js - Add/remove and view alternative prefixes
- *
- * Contributed by Ovyerus
+/**
+ * @file Add/remove and view alternative prefixes
+ * @author Ovyerus
  */
 
 /* eslint-env node */

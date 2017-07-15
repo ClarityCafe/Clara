@@ -1,3 +1,10 @@
+/**
+ * @file Music handler for Twitch.tv streams.
+ * @author Ovyerus
+ */
+
+// TFW two libraries.
+// I'll probably write my own thing for 0.4
 const twitch = require('twitch.tv');
 const twitchStream = require('twitch-get-stream');
 

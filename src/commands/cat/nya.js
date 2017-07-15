@@ -1,7 +1,6 @@
-/*
- * nya.js - Send randomised ASCII cats.
- * 
- * Contributed by Capuccino.
+/**
+ * @file Send randomised ASCII cats.
+ * @author Capuccino
  */
 
 /* eslint-env node */

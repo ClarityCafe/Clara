@@ -1,3 +1,8 @@
+/**
+ * @file Music handler for Clyp.it sources.
+ * @author Ovyerus
+ */
+
 const got = require('got');
 
 class ClypHandler {

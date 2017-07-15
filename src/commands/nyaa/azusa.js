@@ -1,7 +1,6 @@
-/*
- * azusa.js - random.cat command.
- *
- * Contributed by Capuccino
+/**
+ * @author random.cat command.
+ * @author Capuccino
  */
 
 /* eslint-env node */

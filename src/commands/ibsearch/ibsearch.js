@@ -1,7 +1,6 @@
-/*
- * info.js - Various information of the bot.
- *
- * Contributed by Ovyerus
+/**
+ * @file Search anime pictures from ibsear.ch. No NSFW.
+ * @author Ovyerus
  */
 
 /* eslint-env node */
@@ -9,7 +8,6 @@
 const got = require('got');
 const prettyBytes = require('pretty-bytes');
 const moment = require('moment');
-
 
 const defaultQuery = 'catgirl'; // Default: 'catgirl'
 const queryLimit = 75; // Default: 75
@@ -44,15 +42,26 @@ exports.ibsearch = {
                 }).then(() => {
                     let {item, url} = info;
                     return ctx.createMessage({embed: {
-                        title: 'Image Source',
+                        title: 'ib-source',
                         url: `https://ibsear.ch/images/${item.id}`,
                         image: {url},
-                        footer: {text: `Time First Indexed by IbSearch: ${moment.unix(item.found).format('dddd Do MMMM Y')} at ${moment.unix(item.found).format('HH:mm:ss A')}`},
+                        footer: {
+                            text: 'ib-indexTime'
+                        },
                         fields: [
-                            {name: 'Image Information', value: `${item.width}x${item.width} - ${prettyBytes(Number(item.size))}`},
-                            {name: 'Tags', value: item.tags.replace(/_/g, '\\_').slice(0, 1500)}
+                            {
+                                name: 'ib-info',
+                                value: `${item.width}x${item.width} - ${prettyBytes(Number(item.size))}`
+                            },
+                            {
+                                name: 'ib-tags',
+                                value: item.tags.replace(/_/g, '\\_').slice(0, 1500)
+                            }
                         ]
-                    }});
+                    }}, null, 'channel', {
+                        date: moment.unix(item.found).format('dddd Do MMMM Y'),
+                        time: moment.unix(item.found).format('HH:mm:ss A')
+                    });
                 }).then(resolve).catch(reject);
             } else {
                 let query = encodeURIComponent(ctx.suffix.toLowerCase()).replace('%20', '+');
@@ -75,15 +84,26 @@ exports.ibsearch = {
                 }).then(() => {
                     let {item, url} = info;
                     return ctx.createMessage({embed: {
-                        title: 'Image Source',
+                        title: 'ib-source',
                         url: `https://ibsear.ch/images/${item.id}`,
                         image: {url},
-                        footer: {text: `Time First Indexed by IbSearch: ${moment.unix(item.found).format('dddd Do MMMM Y')} at ${moment.unix(item.found).format('HH:mm:ss A')}`},
+                        footer: {
+                            text: 'ib-indexTime'
+                        },
                         fields: [
-                            {name: 'Image Information', value: `${item.width}x${item.width} - ${prettyBytes(Number(item.size))}`},
-                            {name: 'Tags', value: item.tags.replace(/_/g, '\\_').slice(0, 1500)}
+                            {
+                                name: 'ib-info',
+                                value: `${item.width}x${item.width} - ${prettyBytes(Number(item.size))}`
+                            },
+                            {
+                                name: 'ib-tags',
+                                value: item.tags.replace(/_/g, '\\_').slice(0, 1500)
+                            }
                         ]
-                    }});
+                    }}, null, 'channel', {
+                        date: moment.unix(item.found).format('dddd Do MMMM Y'),
+                        time: moment.unix(item.found).format('HH:mm:ss A')
+                    });
                 }).then(resolve).catch(reject);
             }
         });
