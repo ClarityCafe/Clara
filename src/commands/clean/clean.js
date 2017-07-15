@@ -1,7 +1,6 @@
-/*
- * clean.js - Clean only the bots messages.
- *
- * Contributed by Ovyerus
+/**
+ * @file Clean only the bots messages.
+ * @author Ovyerus
  */
 
 /* eslint-env node */

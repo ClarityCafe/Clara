@@ -1,7 +1,7 @@
-/* 
- * itsjoke.js - It's Joke!.
- *
- * Contributed by Capuccino and Ovyerus.
+/**
+ * @file It's joke! Like me.
+ * @author Capuccino 
+ * @author Ovyerus
  */
 
 /* eslint-env node */

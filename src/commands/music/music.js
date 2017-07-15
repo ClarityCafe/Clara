@@ -1,7 +1,8 @@
-/*
- * music.js - Music streaming commands
+/**
+ * @file Music streaming commands
+ * @author Ovyerus
  * 
- * Contributed by Ovyerus
+ * @todo Locales, again.
  */
 
 const MusicHandler = require(`${__dirname}/musicHandler`);

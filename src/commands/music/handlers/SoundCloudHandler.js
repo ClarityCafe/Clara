@@ -1,3 +1,8 @@
+/**
+ * @file Music handler for SoundCloud.com tracks.
+ * @author Ovyerus
+ */
+
 const scr = require('soundcloud-resolve');
 const got = require('got');
 

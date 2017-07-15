@@ -1,7 +1,6 @@
-/*
- * chatbot.js - Chatbot made using markov chains.
- *
- * Contributed by Ovyerus
+/**
+ * @file Chatbot made using markov chains.
+ * @author Ovyerus
  */
 
 /* eslint-env node */
@@ -51,7 +50,7 @@ exports.chat = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!ctx.suffix) {
-                ctx.createMessage(localeManager.t('chatbot-noArgs', ctx.settings.locale)).then(resolve).catch(reject);
+                ctx.createMessage('chatbot-noArgs').then(resolve).catch(reject);
             } else if (/how (dumb|smart) are you\??/i.test(ctx.suffix.toLowerCase())) {
                 readLines().then(lines => {
                     return ctx.createMessage(`I currently know **${lines.length}** things.`);

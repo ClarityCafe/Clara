@@ -1,6 +1,6 @@
-/* invite.js - Invite commands
- *
- * Contributed by Ovyerus
+/**
+ * @file Invite commands
+ * @author Ovyerus
  */
 
 /* eslint-env node */

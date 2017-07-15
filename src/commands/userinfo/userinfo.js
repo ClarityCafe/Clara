@@ -1,7 +1,7 @@
-/*
- * userinfo.js - Get information of a user.
- *
- * Contributed by Capuccino and Ovyerus
+/**
+ * @file Get information of a user.
+ * @author Capuccino
+ * @author Ovyerus
  */
 
 /* eslint-env node */

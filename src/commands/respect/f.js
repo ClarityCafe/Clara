@@ -1,11 +1,10 @@
-/*
- * f.js - Pay respects.
- *
- * Contributed by Capuccino and Ovyerus.
+/**
+ * @file Pay respects.
+ * @author Capuccino 
+ * @author Ovyerus
  */
 
 /* eslint-env node */
-
 
 exports.commands = [
     'f',
@@ -14,14 +13,18 @@ exports.commands = [
 
 exports.f = {
     desc: 'Pay respects.',
-    fullDesc: 'Pay your respects. You can also optionally pay your respects to a specific thing.',
     usage: '[object for respects]',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.cleanSuffix) {
-                ctx.createMessage(localeManager.t('respects-args', ctx.settings.locale, {user: utils.formatUsername(ctx.member, true), object: ctx.cleanSuffix})).then(resolve).catch(reject);
+                ctx.createMessage('respects-args', null, 'channel', {
+                    user: utils.formatUsername(ctx.member, true),
+                    object: ctx.cleanSuffix
+                }).then(resolve).catch(reject);
             } else {
-                ctx.createMessage(localeManager.t('respects', ctx.settings.locale, {user: utils.formatUsername(ctx.member, true)})).then(resolve).catch(reject);
+                ctx.createMessage('respects', null, 'channel', {
+                    user: utils.formatUsername(ctx.member, true)
+                }).then(resolve).catch(reject);
             }
         });
     }
@@ -29,15 +32,14 @@ exports.f = {
 
 exports.rip = {
     desc: 'Rest in pieces.',
-    fullDesc: 'Lets something rest in peace.',
     usage: '[thing]',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.cleanSuffix) {
                 let url = encodeURI(`https://ripme.xyz/#${ctx.cleanSuffix}`);
-                ctx.createMessage(localeManager.t('rip-args', ctx.settings.locale, {url})).then(resolve).catch(reject);
+                ctx.createMessage('rip-args', null, 'channel', {url}).then(resolve).catch(reject);
             } else {
-                ctx.createMessage(localeManager.t('rip', ctx.settings.locale)).then(resolve).catch(reject);
+                ctx.createMessage('rip').then(resolve).catch(reject);
             }
         });
     }

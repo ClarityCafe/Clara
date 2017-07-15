@@ -1,7 +1,6 @@
-/*
- * eval.js - Evaluate JavaScript code in Discord.
- *
- * Contributed by Ovyerus.
+/**
+ * @file Evaluate JavaScript code in Discord.
+ * @author Ovyerus.
  */
 
 /* eslint-disable no-unused-vars */

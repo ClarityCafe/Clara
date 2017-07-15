@@ -1,7 +1,7 @@
-/*
- * dog.js - Show dogs from random.dog
- * 
- * Contributed by Capuccino and Ovyerus
+/**
+ * @file Show dogs from random.dog
+ * @author Capuccino 
+ * @author Ovyerus
  */
 
 /* eslint-env node */

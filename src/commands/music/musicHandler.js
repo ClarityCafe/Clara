@@ -1,3 +1,8 @@
+/**
+ * @file Main music handler file.
+ * @author Ovyerus
+ */
+
 const {Context} = require(`${__baseDir}/modules/CommandHolder`);
 const ytSearch = require('youtube-simple-search');
 

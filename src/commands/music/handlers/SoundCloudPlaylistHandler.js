@@ -1,3 +1,8 @@
+/**
+ * @file Music handler for SoundCloud.com playlists.
+ * @author Ovyerus
+ */
+
 const scr = require('soundcloud-resolve');
 
 class SoundCloudPlaylistHandler {

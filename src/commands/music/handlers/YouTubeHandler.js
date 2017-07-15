@@ -1,3 +1,8 @@
+/**
+ * @file Music handler for YouTube videos. Does not support livestreams.
+ * @author Ovyerus
+ */
+
 const ytdl = require('ytdl-core');
 // const got = require('got');
 

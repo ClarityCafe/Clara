@@ -1,7 +1,6 @@
-/*
- * modules.js - Dynamic command module loading, unloading and reloading.
- *
- * Contributed by Ovyerus
+/**
+ * @file Dynamic command module loading, unloading and reloading.
+ * @author Ovyerus
  */
 
 /* eslint-env node */

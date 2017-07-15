@@ -1,7 +1,6 @@
-/*
- * info.js - Various information of the bot.
- *
- * Contributed by Ovyerus
+/**
+ * @file Various information of the bot.
+ * @author Ovyerus
  */
 
 /* eslint-env node */
@@ -32,21 +31,21 @@ exports.info = {
 
             ctx.createMessage({embed: {
                 title: `${bot.user.username}'s Info`,
-                description: `[${localeManager.t('info-source', ctx.settings.locale)}](https://github.com/awau/Clara) | [${localeManager.t('info-supportServer', ctx.settings.locale)}](https://discord.gg/ZgQkCkm)`,
+                description: `[${'info-source'}](https://github.com/awau/Clara) | [${'info-supportServer'}](https://discord.gg/ZgQkCkm)`,
                 thumbnail: {url: bot.user.avatarURL},
                 color: roleColour,
                 fields: [
-                    {name: localeManager.t('info-guilds', ctx.settings.locale), value: bot.guilds.size, inline: true},
-                    {name: localeManager.t('info-users', ctx.settings.locale), value: bot.users.size, inline: true},
-                    {name: localeManager.t('info-uptime', ctx.settings.locale), value: utils.msToTime(bot.uptime), inline: true},
-                    {name: localeManager.t('info-sysTime', ctx.settings.locale), value: sysTime, inline: true},
-                    {name: localeManager.t('info-shards', ctx.settings.locale), value: bot.shards.size, inline: true},
-                    {name: localeManager.t('info-mem', ctx.settings.locale), value: prettyBytes(process.memoryUsage().rss), inline: true},
-                    {name: localeManager.t('info-NodeVersion'), value: process.version, inline: true},
-                    {name: localeManager.t('info-version', ctx.settings.locale), value: version, inline: true}
+                    {name: 'info-guilds', value: bot.guilds.size, inline: true},
+                    {name: 'info-users', value: bot.users.size, inline: true},
+                    {name: 'info-uptime', value: utils.msToTime(bot.uptime), inline: true},
+                    {name: 'info-sysTime', value: sysTime, inline: true},
+                    {name: 'info-shards', value: bot.shards.size, inline: true},
+                    {name: 'info-mem', value: prettyBytes(process.memoryUsage().rss), inline: true},
+                    {name: 'info-NodeVersion', value: process.version, inline: true},
+                    {name: 'info-version', value: version, inline: true}
                 ],
-                footer: {text: localeManager.t('info-footer', ctx.settings.locale, {name: bot.user.username})}
-            }}).then(resolve).catch(reject);
+                footer: {text: 'info-footer'}
+            }}, null, 'channel', {name: bot.user.username}).then(resolve).catch(reject);
         });
     }
 };
