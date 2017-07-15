@@ -7,7 +7,7 @@
     "greetings-enabled": "Enabled",
     "greetings-channel": "Channel",
     "greetings-message": "Message",
-    "greetings-example1": "Enable greetings for the server.\n",
+    "greetings-example1": "Enable greetings for the server.\n\n",
     "greetings-example2": "Set the channel for greetings.\nYou can also mention the channel to set it.\n\n",
     "greetings-example3": "Set the text for the greeting.\nWill replace `{{user}}` with a mention of the user and\n`{{name}}` with just the username and discriminator like `Username#0001`"
 }

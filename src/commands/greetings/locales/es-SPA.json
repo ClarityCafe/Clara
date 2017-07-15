@@ -7,7 +7,7 @@
     "greetings-enabled": "Habilitado",
     "greetings-channel": "Canal",
     "greetings-message": "Mensaje",
-    "greetings-example1": "Habilitar saludos para el servidor",
-    "greetings-example2": "Define el canal para el saludo de bienvenida.\nTambién puedes mencionar el canal para seleccionarlo.",
+    "greetings-example1": "Habilitar saludos para el servidor\n\n",
+    "greetings-example2": "Define el canal para el saludo de bienvenida.\nTambién puedes mencionar el canal para seleccionarlo.\n\n",
     "greetings-example3": "Seleccione el texto para el saludo de bienvenida.\nSe reemplazará `{{user}}` con una mención del usuario y `{{name}}` con solo el usuario y discriminador, como: \"NombreUsuario#0001\""
 }

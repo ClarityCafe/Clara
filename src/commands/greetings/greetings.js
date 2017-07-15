@@ -110,7 +110,7 @@ function greetingBlock(settings) {
             value: '`greetings enable`\n'
             + localeManager.t('greetings-example1', settings.locale)
             + '`greetings channel general`\n'
-            + localeManager.t('greeting-example2', settings.locale)
+            + localeManager.t('greetings-example2', settings.locale)
             + '`greetings text Welcome to our server {{user}}`\n'
             + localeManager.t('greetings-example3', settings.locale)
         }]
