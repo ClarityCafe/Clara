@@ -1,3 +1,8 @@
+/**
+ * @file Disconnect event.
+ * @author Ovyerus
+ */
+
 /* eslint-env node */
 
 module.exports = bot => {

@@ -1,3 +1,9 @@
+/**
+ * @file Main command handler.
+ * @author Capuccino
+ * @author Ovyerus
+ */
+
 /* eslint-env node */
 
 const {parseArgs, parsePrefix} = require(`${__baseDir}/modules/messageParser`);

@@ -1,7 +1,7 @@
-/*
- * Clara - logger module
- *
- * @author Capuccino, Ovyerus
+/**
+ * @file Custom logging methods.
+ * @author Capuccino
+ * @author Ovyerus
  */
 
 const chalk = require('chalk');

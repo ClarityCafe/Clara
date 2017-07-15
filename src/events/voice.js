@@ -1,3 +1,8 @@
+/**
+ * @file Voice events for the music system.
+ * @author Ovyerus
+ */
+
 /* eslint-env node */
 
 const Eris = require('eris');

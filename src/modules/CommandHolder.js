@@ -1,7 +1,6 @@
-/*
- * Clara - command holder file
- *
- * Contributed by Ovyerus
+/**
+ * @file Command system files.
+ * @author Ovyerus
  */
 
 const Eris = require('eris');

@@ -1,4 +1,10 @@
-const QUOTEREGEX = /(")(?:(?=(\\?))\2.)*?\1/g;
+/**
+ * @file Various message parsing functions for the command system.
+ * Why the fuck did I make these Promises?
+ * @author Ovyerus
+ */
+
+const QUOTE_REGEX = /(")(?:(?=(\\?))\2.)*?\1/g;
 
 /**
  * Parse a string and return arguments for command runner.
@@ -16,8 +22,8 @@ function parseArgs(str) {
         let cmd = tmp.splice(0, 1)[0];
 
         // Match regex for multi word args.
-        tmp = tmp.join(' ').match(QUOTEREGEX);
-        let args = str.split(QUOTEREGEX).filter(v => v !== '' && v !== '"');
+        tmp = tmp.join(' ').match(QUOTE_REGEX);
+        let args = str.split(QUOTE_REGEX).filter(v => v !== '' && v !== '"');
         args[0] = args[0].split(' ').slice(1).join(' ');
 
         if (tmp) {
