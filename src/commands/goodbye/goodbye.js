@@ -8,6 +8,8 @@ exports.commands = [
     'goodbye'
 ];
 
+const Eris = require('eris');
+
 function goodbyeBlock(settings) {
     return {
         title: 'Goodbye Message Management',
@@ -77,23 +79,42 @@ exports.disable = {
 exports.channel = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            if (!ctx.member.permission.has('manageGuild')) {
-                return ctx.createMessage("you have no permissions to edit this server's settings.");
-            } else {
-                bot.getGuildSettings(ctx.guild.id).then(res => {
-                    let settings = res;
-                    if (ctx.channelMentions.length > 0) {
-                        settings.greeting.channelID = ctx.channelMentions[0];
+            bot.getGuildSettings(ctx.guild.id).then(res => {
+                let settings = res;
+                if (ctx.channelMentions.length > 0) {
+                    settings.goodbyes.channelID = ctx.channelMentions[0];
+                    return bot.setGuildSettings(res.id, settings);
+                } else {
+                    let nya = ctx.suffix.split(' ');
+                    nya.shift();
+                    let chans = ctx.guild.channels.filter(c => c.name.toLowerCase().includes(nya.join(' ')));
+                    
+                    if (chans.length === 0) {
+                        return ctx.createMessage('This channel cannot be found.');
                     } else {
-                        let wank = ctx.suffix.split(' ');
-                        wank.shift();
-                        let chans = ctx.guild.channels.filter(c => c.name.toLowerCase().includes(wank.join(' ')));
-                        if (chans.length === 0) {
-                            
-                        }
+                        settings.goodbyes.channelID = chans[0].id;
+                        return bot.setGuildSettings(res.id, settings);
                     }
-                });
-            }
+                }
+            }).then(res => {
+                if (res instanceof Eris.Message) {
+                    return null;
+                } else {
+                    return bot.getGuildSettings(ctx.guild.id);
+                }
+            }).then(res => {
+                if (!res) {
+                    return null;
+                } else {
+                    logger.info(res);
+                    return ctx.createMessage(`Successfuly set to send all goodbye messages to ${res.goodbye.channelID}`).then(resolve).catch(reject);
+                }
+            });
         });
     }
 };
+
+
+
+
+
