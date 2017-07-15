@@ -583,8 +583,8 @@ class Context {
 
                     if (content.embed.fields) {
                         content.embed.fields.forEach((v, i, a) => {
-                            a[i].name = localeManager.t(v.name, locale, replacers);
-                            a[i].value = localeManager.t(v.value, locale, replacers);
+                            if (typeof v.name === 'string') a[i].name = localeManager.t(v.name, locale, replacers);
+                            if (typeof v.value === 'string') a[i].value = localeManager.t(v.value, locale, replacers);
                         });
                     }
                 }

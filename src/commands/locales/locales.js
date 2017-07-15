@@ -93,9 +93,9 @@ function changeLocale(ctx, guild) {
                 let bot = exposed;
 
                 bot.setUserSettings(ctx.author.id, {locale: userChoice}).then(() => {
-                    return ctx.createMessage('locales-userLocaleUpdated', null, 'channel', {
+                    return ctx.createMessage(localeManager.t('locales-userLocaleUpdated', userChoice, {
                         locale: userChoice
-                    });
+                    }));
                 }).then(resolve).catch(reject);
             }
         } else {
