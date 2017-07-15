@@ -1,19 +1,19 @@
 {
     "env": {
+        "browser": false,
         "es6": true,
         "node": true
     },
-
     "extends": "eslint:recommended",
     "parserOptions": {
-        "sourceType": "module",
-        "ecmaVersion": 6,
         "ecmaFeatures": {
             "jsx": false
-        }
+        },
+        "sourceType": "module",
+        "ecmaVersion": 8
     },
 
-    "globals": {
+        "globals": {
         "__baseDir": false,
         "logger" : false,
         "localeManager": false,
@@ -22,11 +22,7 @@
         "utils": false
     },
 
-    "ignore": [
-        "*.min.js"
-    ],
-
-    "rules": {
+        "rules": {
         "no-console": 0,
         "global-require":"off",
         
@@ -90,4 +86,5 @@
             }
         ]
     }
+
 }
