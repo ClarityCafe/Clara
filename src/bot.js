@@ -1,10 +1,10 @@
-/*
- * Clara - Core file
- *
- * Contributed by Capuccino and Ovyerus
- *
- * Licensed under MIT. Copyright (c) 2017 Capuccino, Ovyerus and the repository contributors.
- */
+ /**
+  * @file the main file the makes everything work
+  * @author Capuccino
+  * @author Ovyerus
+  * @copyright Copyright (c) 2017 Capuccino, Ovyerus and the repository contributors.
+  * @license MIT
+  */
 
 /* eslint-env node */
 
