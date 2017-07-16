@@ -10,7 +10,7 @@ class Ratelimiter {
      * Constructs a new ratelimiter.
      * 
      * @param {Number} totalUses The total amount of uses the ratelimiter can be used before
-     * @param {Number} interval 
+     * @param {Number} interval Time in milliseoncds between resettings uses.
      */
     constructor(totalUses, interval) {
         if (typeof totalUses !== 'number') throw new TypeError('totalUses is not not a number.');
@@ -22,6 +22,9 @@ class Ratelimiter {
         this._timer = setInterval(() => this.uses = 0, interval);
     }
 
+    /**
+     * Add a use to the ratelimiter.
+     */
     use() {
         if (this.uses !== this.totalUses) {
             this.uses++;
