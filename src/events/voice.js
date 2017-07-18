@@ -9,6 +9,8 @@ const Eris = require('eris');
 
 module.exports = bot => {
     bot.on('voiceChannelLeave', (mem, chan) => {
+        if (!bot.music.connections.get(chan.guild.id)) return;
+
         if (mem.id !== bot.user.id && chan.voiceMembers.get(bot.user.id) && chan.voiceMembers.filter(m => m.id !== bot.user.id && !m.bot).length === 0) {
             setTimeout(() => {
                 if (chan.voiceMembers.filter(m => m.id !== bot.user.id && !m.bot).length === 0) {
@@ -20,22 +22,16 @@ module.exports = bot => {
             }, 300000);
         }
 
+        let cnc = bot.music.connections.get(chan.guild.id);
+
+        if (cnc.summoner && mem.id === cnc.summoner.id) delete cnc.summoner;
+
         if (mem.id !== bot.user.id) return;
         if (bot.music.connections.get(chan.guild.id)) bot.music.connections.delete(chan.guild.id);
         if (bot.music.queues.get(chan.guild.id)) bot.music.queues.delete(chan.guild.id);
         if (bot.music.skips.get(chan.guild.id)) bot.music.skips.delete(chan.guild.id);
         if (bot.music.streams.get(chan.guild.id)) {
             bot.music.streams.delete(chan.guild.id);
-        }
-    });
-
-    bot.on('voiceChannelSwitch', (mem, chan, old) => {
-        if (mem.id !== bot.user.id) return;
-        if (!bot.music.connections.get(old.id)) {
-            bot.music.connections.add(chan);
-        } else {
-            bot.music.connections.delete(old);
-            bot.music.connects.add(old);
         }
     });
 
