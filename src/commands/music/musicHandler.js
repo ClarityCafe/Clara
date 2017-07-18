@@ -144,6 +144,7 @@ class MusicHandler {
                 this.queue(ctx, url).then(() => {
                     return bot.joinVoiceChannel(ctx.member.voiceState.channelID);
                 }).then(() => {
+                    bot.music.connections.get(ctx.guild.id).summoner = ctx.member;
                     let item = bot.music.queues.get(ctx.guild.id).queue[0];
                     return this.getStream(item.info.url, item.info.type);
                 }).then(res => {
