@@ -1,7 +1,9 @@
-/* SauceNao query Handler
+/**
+ * @file sauceQueryHandler.js
+ * @description Sagiri thin client for Clara
+ * @author Capuccino
+ * @license MIT
  * 
- * 
- * Contributed by Capuccino
  */
 
 const got = require('got');
@@ -46,7 +48,6 @@ class SauceHandler {
                 if (!urlRegex) {
                     throw new TypeError('Link is not valid HTTP/HTTPS Address.');
                 } else {
-                    /** @todo I need a regex for making the following URL in the URL parameter */
                     got(`http://saucenao.com/search.php?output_type=${this.outputType}&numres=${this.numRes}&api_key=${this.key}&url=${encodeURIComponent(link)}`).then(res => {
                         resolve(res.body);
                     }).catch(reject);
