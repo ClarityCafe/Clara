@@ -39,8 +39,8 @@ module.exports = bot => {
             if (!res || !res.greeting || !res.greeting.enabled || !res.greeting.channelID || !res.parting.message) {
                 return null;
             }
-            let msg = res.parting.message.replace(/\{\user\}\}/g, m.mention).replace(/\{name\}\}/g, utils.formatUsername(m));
-            return g.channels.get(res.greeting.channelID).createMessage(msg);
+            let msg = res.goodbye.message.replace(/\{\user\}\}/g, m.mention).replace(/\{name\}\}/g, utils.formatUsername(m));
+            return g.channels.get(res.goodbye.channelID).createMessage(msg);
         });
     });
 };
