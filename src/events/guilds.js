@@ -36,10 +36,10 @@ module.exports = bot => {
 
     bot.on('guildMemberDelete', (g, m) => {
         bot.guildSettings(g.id).then(res => {
-            if (!res || !res.greeting || !res.greeting.enabled || !res.greeting.channelID || !res.parting.message) {
+            if (!res || !res.goodbyes || !res.goodbyes.enabled || !res.goodbyes.channelID || !res.goodbyes.message) {
                 return null;
             }
-            let msg = res.parting.message.replace(/\{\user\}\}/g, m.mention).replace(/\{name\}\}/g, utils.formatUsername(m));
+            let msg = res.goodbyes.message.replace(/\{\user\}\}/g, m.mention).replace(/\{name\}\}/g, utils.formatUsername(m));
             return g.channels.get(res.greeting.channelID).createMessage(msg);
         });
     });
