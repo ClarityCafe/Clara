@@ -28,7 +28,7 @@ class SauceHandler {
     }
     /**
      * Gets the source and outputs it in your preferred output type
-     * @param {String} path filepath for the image you want to get the source from (Not Implemented yet).
+     * @param {String} path filepath for the image you want to get the source from (Deprecated).
      * @param {String} link web address for the source, must be a valid HTTP/HTTPS address.
      * @returns {Promise} JSON that contains the closest match.
      * @example client.getSauce(path/link).then(res => { console.log(res); });
