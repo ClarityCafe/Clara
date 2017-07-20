@@ -35,15 +35,11 @@ class SauceHandler {
      */
     getSauce(path, link) {
         return new Promise((resolve, reject) => {
-            if (!path === typeof path) {
-                throw new TypeError('path is not string');
-            } else if (path) {
-                /**
-                 * @deprecated Due to engineering issues, this is deprecated.
+            if (path) {
+                /** @deprecated Since there is no native MIMEtype support that isn't ugly
+                 *  this is deprecated
                  */
-                throw new Error('This function is deprecated. Use URL links instead');
-                /* got(`http://saucenao.com/search.php?output_type=${this.outputType}&numres=${this.numRes}&api_key=${this.key}`, {}).then(res => {               
-                 });*/
+                throw new Error('This function is deprecated.');
             } else if (link) {
                 if (!urlRegex) {
                     throw new TypeError('Link is not valid HTTP/HTTPS Address.');
