@@ -66,7 +66,7 @@ module.exports = bot => {
                 headers: {Authorization: bot.config.discordBotsPWKey, 'Content-Type': 'application/json'},
                 body: JSON.stringify({server_count: bot.guilds.size})
             }).then(() => {
-                logger.info('POSTed to DBots.');
+                logger.info('POSTed to DBots.org');
             }).catch(err => logger.warn(`Unable to POST to DBots.pw: ${err}`));
         }
         if (bot.config.discordBotsOrgKey) {
