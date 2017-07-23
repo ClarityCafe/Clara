@@ -40,7 +40,7 @@ module.exports = bot => {
                 return null;
             }
             let msg = res.goodbyes.message.replace(/\{\user\}\}/g, m.mention).replace(/\{name\}\}/g, utils.formatUsername(m));
-            return g.channels.get(res.greeting.channelID).createMessage(msg);
+            return g.channels.get(res.goodbyes.channelID).createMessage(msg);
         });
     });
 };
