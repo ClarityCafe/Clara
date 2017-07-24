@@ -22,6 +22,7 @@
 
  exports.main = {
      desc: 'Spews out a random image or a birb, a dog or a cat',
+     usage: 'random <woof | meow | chirp>',
      main(bot, ctx) {
          return new Promise((resolve, reject) => {
              ctx.createMessage({embed: randomBlock}).then(resolve).catch(reject);
