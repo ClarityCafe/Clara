@@ -4,7 +4,10 @@
  */
 
  exports.commands = [
-     'random'
+     'random',
+     'chirp',
+     'woof',
+     'meow'
  ];
 
  function randomBlock() {
