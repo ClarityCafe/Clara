@@ -24,7 +24,7 @@
  exports.loadAsSubcommands = true;
 
  exports.main = {
-     desc: 'Spews out a random image or a birb, a dog or a cat',
+     desc: 'Spews out a random image of a birb, a dog or a cat',
      usage: 'random <woof | meow | chirp>',
      main(bot, ctx) {
          return new Promise((resolve, reject) => {
