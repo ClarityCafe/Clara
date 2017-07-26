@@ -1,8 +1,7 @@
-/*
- * saucenao.js - grab a image's source using saucenao. Grabs the last message attachment/URL, provided along with the command
- * or providing an attachment using the command as the caption.
- * 
- *  Contributed by Capuccino
+/**
+ * @file saucenao.js
+ * @description a command to get your waifu's source
+ * @author Capuccino
  */
 
 /* eslint-env node */
