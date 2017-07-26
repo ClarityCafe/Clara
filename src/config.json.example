@@ -14,5 +14,6 @@
   "twitchKey": "",
   "nasaKey": "",
   "rethinkOptions": {},
-  "discordBotsKey": ""
+  "discordBotsPWKey": "",
+  "discordBotsOrgKey": ""
 }

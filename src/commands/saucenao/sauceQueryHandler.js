@@ -1,7 +1,9 @@
-/* SauceNao query Handler
+/**
+ * @file sauceQueryHandler.js
+ * @description Sagiri thin client for Clara
+ * @author Capuccino
+ * @license MIT
  * 
- * 
- * Contributed by Capuccino
  */
 
 const got = require('got');
@@ -25,28 +27,23 @@ class SauceHandler {
         this.numRes = numRes || 5;
     }
     /**
-     * Gets the source and outputs it in your preffered output type
-     * @param {String} path filepath for the image you want to get the source from (Not Implemented yet).
+     * Gets the source and outputs it in your preferred output type
+     * @param {String} path filepath for the image you want to get the source from (Deprecated).
      * @param {String} link web address for the source, must be a valid HTTP/HTTPS address.
      * @returns {Promise} JSON that contains the closest match.
      * @example client.getSauce(path/link).then(res => { console.log(res); });
      */
     getSauce(path, link) {
         return new Promise((resolve, reject) => {
-            if (!path === typeof path) {
-                throw new TypeError('path is not string');
-            } else if (path) {
-                /**
-                 * @deprecated Due to engineering issues, this is deprecated.
+            if (path) {
+                /** @deprecated Since there is no native MIMEtype support that isn't ugly
+                 *  this is deprecated
                  */
-                throw new Error('This function is deprecated. Use URL links instead');
-                /* got(`http://saucenao.com/search.php?output_type=${this.outputType}&numres=${this.numRes}&api_key=${this.key}`, {}).then(res => {               
-                 });*/
+                throw new Error('This function is deprecated.');
             } else if (link) {
                 if (!urlRegex) {
                     throw new TypeError('Link is not valid HTTP/HTTPS Address.');
                 } else {
-                    /** @todo I need a regex for making the following URL in the URL parameter */
                     got(`http://saucenao.com/search.php?output_type=${this.outputType}&numres=${this.numRes}&api_key=${this.key}&url=${encodeURIComponent(link)}`).then(res => {
                         resolve(res.body);
                     }).catch(reject);

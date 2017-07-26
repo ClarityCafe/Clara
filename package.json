@@ -36,6 +36,7 @@
     "moment": "^2.18.1",
     "osu": "^1.1.2",
     "pretty-bytes": "^4.0.2",
+    "redis": "^2.7.1",
     "request": "^2.81.0",
     "rethinkdbdash": "^2.3.28",
     "safe-regex": "^1.1.0",

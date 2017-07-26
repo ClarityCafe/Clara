@@ -8,7 +8,11 @@ const Eris = require('eris');
 exports.loadAsSubcommands = true;
 
 exports.commands = [
-    'goodbye'
+    'goodbye',
+    'enable',
+    'disable',
+    'text',
+    'channel'
 ];
 
 function goodbyeBlock(settings) {
