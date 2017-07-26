@@ -97,8 +97,8 @@ class MusicHandler {
                 res = res.filter(r => r.id.kind === 'youtube#video').slice(0, 5);
                 if (res.length > 0) {
                     let embed = {
-                        title: 'Search Results',
-                        description: 'Please choose one of the following choices below by just typing its corresponding number.',
+                        title: 'music-searchTitle',
+                        description: 'music-searchDescription',
                         fields: []
                     };
 
@@ -175,27 +175,37 @@ class MusicHandler {
 
             if (typeof stream === 'string') {
                 ctx.createMessage({embed: {
-                    author: {name: 'Now Playing'},
+                    author: {name: 'music-nowPlayingTitle'},
                     title: info.title,
-                    description: `Duration: ${typeof info.length === 'string'? info.length : timeFormat(info.length)}, [**Link**](${info.url})`,
+                    description: 'music-nowPlayingInfo',
                     color: utils.randomColour(),
                     image: {url: info.thumbnail},
                     footer: {
-                        text: `Queued by ${utils.formatUsername(ctx.member)} | ${info.type}`
+                        text: 'music-nowPlayingFooter'
                     }
-                }});
+                }}, null, 'channel', {
+                    duration: typeof info.length === 'string' ? info.length : timeFormat(info.length),
+                    url: info.url,
+                    user: utils.formatUsername(ctx.member),
+                    type: info.type
+                });
             } else {
                 stream.once('data', () => {
                     ctx.createMessage({embed: {
-                        author: {name: 'Now Playing'},
+                        author: {name: 'music-nowPlayingTitle'},
                         title: info.title,
-                        description: `Duration: ${typeof info.length === 'string'? info.length : timeFormat(info.length)}, [**Link**](${info.url})`,
+                        description: 'music-nowPlayingInfo',
                         color: utils.randomColour(),
                         image: {url: info.thumbnail},
                         footer: {
-                            text: `Queued by ${utils.formatUsername(ctx.member)} | ${info.type}`
+                            text: 'music-nowPlayingFooter'
                         }
-                    }});
+                    }}, null, 'channel', {
+                        duration: typeof info.length === 'string' ? info.length : timeFormat(info.length),
+                        url: info.url,
+                        user: utils.formatUsername(ctx.member),
+                        type: info.type
+                    });
                 });
             }
 
