@@ -12,8 +12,7 @@ class ClypHandler {
         return new Promise((resolve, reject) => {
             if (typeof url !== 'string') throw new TypeError('url is not a string.');
 
-            let reqURL = `https://api.clyp.it/${url.split('/').pop()}`;
-            got(reqURL).then(res => {
+            got(`https://api.clyp.it/${url.split('/').pop()}`).then(res => {
                 let body = JSON.parse(res.body);
                 let r = {
                     url,
@@ -34,10 +33,10 @@ class ClypHandler {
         return new Promise((resolve, reject) => {
             if (typeof url !== 'string') throw new TypeError('url is not a string.');
 
-            this.getInfo(url).then(info => {
-                let stream = info.stream;
-                delete info.dream;
-                return [got.stream(stream), info];
+            got(`https://api.clyp.it/${url.split('/').pop()}`).then(res => {
+                let body = JSON.parse(res.body);
+
+                return got.stream(body.SecureOggUrl);
             }).then(resolve).catch(reject);
         });
     }

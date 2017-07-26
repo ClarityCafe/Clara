@@ -28,13 +28,7 @@ class TwitchHandler {
                     type: 'TwitchStream'
                 };
 
-                return Promise.all([this.streamGetter.get(url.split('/').pop()), r]);
-            }).then(res => {
-                let want = res[0].find(s => s.quality === 'Audio Only');
-                if (!want) throw new Error('Unable to find ideal quality for Twitch stream.');
-
-                res[1].stream = want.url;
-                return res[1];
+                return r;
             }).then(resolve).catch(reject);
         });
     }
@@ -43,11 +37,8 @@ class TwitchHandler {
         return new Promise((resolve, reject) => {
             if (typeof url !== 'string') throw new TypeError('url is not a string.');
 
-            this.getInfo(url).then(info => {
-                let stream = info.stream;
-                delete info.stream;
-                
-                return [stream, info];
+            this.streamGetter(url.split('/').pop()).then(res => {
+                return res.find(s => s.quality === 'Audio Only');
             }).then(resolve).catch(reject);
         });
     }
