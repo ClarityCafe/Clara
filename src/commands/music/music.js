@@ -53,6 +53,8 @@ exports.play = {
                         }).then(resolve).catch(err => {
                             if (err.message && err.message === 'Invalid selection (Number too high or not a number).') {
                                 return ctx.createMessage('music-searchBadSelection');
+                            } else if (err.message && err.message === 'No search results.') {
+                                return ctx.createMeessage('music-searchNoResults');
                             } else {
                                 reject(err);
                             }
@@ -100,15 +102,19 @@ exports.queue = {
                 }
 
                 if (pages > 1) {
-                    embed.footer = {text: `Page ${page + 1}/${pages}`};
+                    embed.footer = {text: 'music-queueFooter'};
                     embed.fields = [{
-                        name: `${q.length} items in queue`, value: thisPage.join('\n')
+                        name: 'music-queueTotalItems', value: thisPage.join('\n')
                     }];
                 } else {
                     embed.description = thisPage.join('\n');
                 }
 
-                ctx.createMessage({embed}).then(resolve).catch(reject);
+                ctx.createMessage({embed}, null, 'channel', {
+                    page: page + 1,
+                    total: pages,
+                    items: q.length
+                }).then(resolve).catch(reject);
             }
         });
     }
@@ -119,21 +125,26 @@ exports.np = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if ((bot.music.connections.get(ctx.guild.id) && !bot.music.connections.get(ctx.guild.id).playing) || !bot.music.queues.get(ctx.guild.id) || bot.music.queues.get(ctx.guild.id).queue.length === 0) {
-                ctx.createMessage('I am currently not playing anything.').then(resolve).catch(reject);
+                ctx.createMessage('music-notPlaying').then(resolve).catch(reject);
             } else {
                 let {info: item, ctx: c} = bot.music.queues.get(ctx.guild.id).queue[0];
                 let embed = {
-                    author: {name: 'Now Playing'},
+                    author: {name: 'music-nowPlayingTitle'},
                     title: item.title,
-                    description: `Duration: ${typeof item.length === 'string'? item.length : timeFormat(item.length)}, [**Link**](${item.url})`,
+                    description: 'music-nowPlayingInfo',
                     color: utils.randomColour(),
                     image: {url: item.thumbnail},
                     footer: {
-                        text: `Queued by ${utils.formatUsername(c.member)} | ${item.type}`
+                        text: 'music-nowPlayingFooter'
                     }
                 };
 
-                ctx.createMessage({embed}).then(resolve).catch(reject);
+                ctx.createMessage({embed}, null, 'channel', {
+                    duration: typeof item.length === 'string' ? item.length : timeFormat(item.length),
+                    url: item.url,
+                    user: utils.formatUsername(c.member),
+                    type: item.type
+                }).then(resolve).catch(reject);
             }
         });
     }
@@ -144,14 +155,16 @@ exports.join = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (bot.music.connections.get(ctx.guild.id)) {
-                ctx.createMessage('I am already in a voice channel.').then(resolve).catch(reject);
+                ctx.createMessage('music-botInChannel').then(resolve).catch(reject);
             } else if (!ctx.member.voiceState.channelID) {
-                ctx.createMessage('You are not in a voice channel.').then(resolve).catch(reject);
+                ctx.createMessage('music-userNotInChannel').then(resolve).catch(reject);
             } else {
                 bot.joinVoiceChannel(ctx.member.voiceState.channelID).then(cnc => {
                     bot.music.inactives.push([bot.guilds.get(cnc.id).channels.get(cnc.channelID), Date.now()]);
                     bot.music.connections.get(ctx.guild.id).summoner = ctx.member;
-                    return ctx.createMessage(`Joined your voice channel. Run \`${bot.config.mainPrefix}music play <song>\` to play something.`);
+                    return ctx.createMessage('music-join', null, 'channel', {
+                        prefix: bot.config.mainPrefix
+                    });
                 }).then(resolve).catch(reject);
             }
         });
@@ -165,18 +178,18 @@ exports.leave = {
             let cnc = bot.music.connections.get(ctx.guild.id);
 
             if (!cnc) {
-                ctx.createMessage('I am not in a voice channel.').then(resolve).catch(reject);
+                ctx.createMessage('music-botNotInChannel').then(resolve).catch(reject);
             } else if (!ctx.member.voiceState.channelID) {
-                ctx.createMessage('You are not in a voice channel.').then(resolve).catch(reject);
+                ctx.createMessage('music-userNotInChannel').then(resolve).catch(reject);
             } else if (ctx.member.voiceState.channelID !== cnc.channelID) {
-                ctx.createMessage('You are not in my voice channel.').then(resolve).catch(reject);
+                ctx.createMessage('music-userNotCSameChannel').then(resolve).catch(reject);
             } else if (cnc.summoner && cnc.summoner.id !== ctx.author.id && !ctx.hasPermission('manageGuild', 'author')) {
-                ctx.createMessage('You did not summon me to the channel.').then(resolve).catch(reject);
+                ctx.createMessage('music-userNotSummoner').then(resolve).catch(reject);
             } else {
                 let cnc = bot.music.connections.get(ctx.guild.id);
                 cnc.stopPlaying();
                 bot.leaveVoiceChannel(cnc.channelID);
-                ctx.createMessage('Left the voice channel and destroyed music data.').then(resolve).catch(reject);
+                ctx.createMessage('music-leave').then(resolve).catch(reject);
             }
         });
     }
@@ -203,13 +216,13 @@ exports.skip = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (!bot.music.connections.get(ctx.guild.id)) {
-                ctx.createMessage('I am not in a voice channel.').then(resolve).catch(reject);
+                ctx.createMessage('music-botNotInChannel').then(resolve).catch(reject);
             } else if (!ctx.member.voiceState.channelID) {
-                ctx.createMessage('You are not in a voice channel.').then(resolve).catch(reject);
+                ctx.createMessage('music-userNotInChannel').then(resolve).catch(reject);
             } else if (ctx.member.voiceState.channelID !== bot.music.connections.get(ctx.guild.id).channelID) {
-                ctx.createMessage('You are not in my voice channel.').then(resolve).catch(reject);
+                ctx.createMessage('music-userNotSameChannel').then(resolve).catch(reject);
             } else if (!bot.music.connections.get(ctx.guild.id).playing) {
-                ctx.createMessage('I am not playing anything.').then(resolve).catch(reject);
+                ctx.createMessage('music-notPlaying').then(resolve).catch(reject);
             } else if (ctx.args[0] !== 'force') {
                 if (!bot.music.skips.get(ctx.guild.id)) bot.music.skips.add({id: ctx.guild.id, users: []});
                 let skips = bot.music.skips.get(ctx.guild.id);
@@ -223,17 +236,23 @@ exports.skip = {
                         let track = bot.music.queues.get(ctx.guild.id).queue[0].info;
 
                         bot.music.connections.get(ctx.guild.id).stopPlaying();
-                        ctx.createMessage(`Skipped **${track.title}**.`).then(resolve).catch(reject);
+                        ctx.createMessage('music-skip', null, 'channel', {
+                            item: track.title
+                        }).then(resolve).catch(reject);
                     } else {
                         let track = bot.music.queues.get(ctx.guild.id).queue[0].info;
                         let chan = ctx.guild.channels.get(bot.music.connections.get(ctx.guild.id).channelID);
 
-                        ctx.createMessage(`**${utils.formatUsername(ctx.member)}** voted to skip **${track.title}**.\n`
-                        + `${skips.users.length}/${chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf && !m.voiceState.deaf && m.id !== bot.id).length} votes.`).then(resolve).catch(reject);
+                        ctx.createMessage('music-skipVote', null, 'channel', {
+                            usage: utils.formatUsername(ctx.member),
+                            item: track.title,
+                            votes: skips.users.length,
+                            total: chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf && !m.voiceState.deaf)
+                        }).then(resolve).catch(reject);
                     }
                 }
             } else if (ctx.args[0] === 'force' && !(bot.checkBotPerms(ctx.author.id) || ctx.hasPermission('manageGuild', 'author'))) {
-                ctx.createMessage('You do not have permissions to force skip.\n(Manage Server permission required)').then(resolve).catch(reject);
+                ctx.createMessage('music-skipCantForce').then(resolve).catch(reject);
             } else {
                 if (!bot.music.skips.get(ctx.guild.id)) bot.music.skips.add({id: ctx.guild.id, users: []});
                 let skips = bot.music.skips.get(ctx.guild.id);
@@ -241,7 +260,9 @@ exports.skip = {
                 skips.users = [];
 
                 bot.music.connections.get(ctx.guild.id).stopPlaying();
-                ctx.createMessage(`Skipped **${track.title}**.`).then(resolve).catch(reject);
+                ctx.createMessage('music-skip', null, 'channel', {
+                    item: track.title
+                }).then(resolve).catch(reject);
             }
         });
     }
