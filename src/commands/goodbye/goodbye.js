@@ -5,6 +5,8 @@
 
 const Eris = require('eris');
 
+exports.loadAsSubcommands = true;
+
 exports.commands = [
     'goodbye'
 ];
@@ -24,11 +26,6 @@ function goodbyeBlock(settings) {
         }]
     };
 }
-
-//this is the only way to simplify the command, the greetings command hasn't been simplified yet
-
-exports.loadAsSubcommands = true;
-
 
 exports.main = {
     desc: 'Show current settings for goodbye messages, and manage them if you have the correct permissions',
