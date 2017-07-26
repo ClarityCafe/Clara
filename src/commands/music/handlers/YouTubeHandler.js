@@ -20,8 +20,7 @@ class YouTubeHandler {
                     uploader: info.author.name,
                     thumbnail: info.thumbnail_url.replace('default.jpg', 'hqdefault.jpg'),
                     length: Number(info.length_seconds),
-                    type: 'YouTubeVideo',
-                    formats: info.formats
+                    type: 'YouTubeVideo'
                 };
 
                 return res;
@@ -33,12 +32,12 @@ class YouTubeHandler {
         return new Promise((resolve, reject) => {
             if (typeof url !== 'string') throw new TypeError('url is not a string.');
             
-            this.getInfo(url).then(info => {
+            ytdl.getInfo(url, {filter: 'audioonly'}).then(info => {
+                // Sort the various bitrates and pick the highest quality (that is 96kbps or less)
                 let bitrates = info.formats.filter(f => f.audioBitrate <= 96 && typeof f.audioBitrate === 'number');
                 bitrates = bitrates.map(f => {return {bitrate: f.bitrate, url: f.url};}).sort((a, b) => b.bitrate - a.bitrate);
 
-                delete info.formats;
-                return [bitrates[0].url, info];
+                return bitrates[0].url;
             }).then(resolve).catch(reject);
         });
     }

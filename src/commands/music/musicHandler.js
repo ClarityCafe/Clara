@@ -166,8 +166,9 @@ class MusicHandler {
     play(ctx, res) {
         return new Promise((resolve, reject) => {
             let bot = this._bot;
-            let [stream, info] = res;
+            let stream = res;
             let cnc = bot.music.connections.get(ctx.guild.id);
+            let info = bot.music.queues.get(ctx.guild.id).queue[0].info;
             let streamInfo = {id: ctx.guild.id, stream, url: info.url};
 
             bot.music.streams.add(streamInfo);
@@ -178,7 +179,6 @@ class MusicHandler {
                     author: {name: 'music-nowPlayingTitle'},
                     title: info.title,
                     description: 'music-nowPlayingInfo',
-                    color: utils.randomColour(),
                     image: {url: info.thumbnail},
                     footer: {
                         text: 'music-nowPlayingFooter'
@@ -195,7 +195,6 @@ class MusicHandler {
                         author: {name: 'music-nowPlayingTitle'},
                         title: info.title,
                         description: 'music-nowPlayingInfo',
-                        color: utils.randomColour(),
                         image: {url: info.thumbnail},
                         footer: {
                             text: 'music-nowPlayingFooter'

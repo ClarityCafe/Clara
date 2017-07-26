@@ -15,13 +15,12 @@ class SoundCloudHandler {
         return new Promise((resolve, reject) => {
             if (typeof url !== 'string') throw new TypeError('url is not a string.');
 
-            scr(this.clientID, url, (err, json, stream) => {
+            scr(this.clientID, url, (err, json) => {
                 if (err) {
                     reject(err);
                 } else {
                     let res = {
                         url: json.permalink_url,
-                        stream,
                         title: json.title,
                         uploader: json.user.username,
                         thumbnail: json.artwork_url,
@@ -39,12 +38,13 @@ class SoundCloudHandler {
         return new Promise((resolve, reject) => {
             if (typeof url !== 'string') throw new TypeError('url is not a string.');
 
-            this.getInfo(url).then(info => {
-                let stream = info.stream;
-                delete info.stream;
-
-                return [got.stream(stream), info];
-            }).then(resolve).catch(reject);
+            scr(this.clientID, url, (err, _, stream) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(got.stream(stream));
+                }
+            });
         });
     }
 }
