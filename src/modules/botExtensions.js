@@ -60,14 +60,23 @@ module.exports = bot => {
     * POSTs guild count to DBots.
     */
     bot.postGuildCount = () => {
-        if (bot.config.discordBotsKey) {
+        if (bot.config.discordBotsPWKey) {
             got(`https://bots.discord.pw/api/bots/${bot.user.id}/stats`, {
                 method: 'POST',
-                headers: {Authorization: bot.config.discordBotsKey, 'Content-Type': 'application/json'},
+                headers: {Authorization: bot.config.discordBotsPWKey, 'Content-Type': 'application/json'},
                 body: JSON.stringify({server_count: bot.guilds.size})
             }).then(() => {
-                logger.info('POSTed to DBots.');
-            }).catch(err => logger.warn(`Unable to POST to DBots: ${err}`));
+                logger.info('POSTed to DBots.pw');
+            }).catch(err => logger.warn(`Unable to POST to DBots.pw: ${err}`));
+        }
+        if (bot.config.discordBotsOrgKey) {
+            got(`https://discordbots.org/api/bots/${bot.user.id}/stats`, {
+                method: 'POST',
+                headers: {Authorization: bot.config.discordBotsOrgKey, 'Content-Type': 'application/json'},
+                body: JSON.stringify({server_count: bot.guilds.size})
+            }).then(() => {
+                logger.info('POSTed to DBots.org');
+            }).catch(err => logger.warn(`Unable to POST to DBots.org ${err}`));
         }
     };
 
@@ -248,7 +257,7 @@ module.exports = bot => {
             }
         });
     };
-    
+
     /**
      * POST something to Hastebin.
      * 
@@ -294,7 +303,7 @@ module.exports = bot => {
         let guildBot = channel.guild.members.get(bot.user.id);
 
         if (guildBot.permission.has(permission)) allowed = true;
-            
+
         // Channel overwrites
         if (!guildBot.permission.has('administrator')) {
             let everyone = channel.guild.roles.find(r => r.name === '@everyone');
@@ -341,7 +350,7 @@ module.exports = bot => {
             flattened += !f.name.match(/^`.*`$/) ? `**${f.name}**\n` : `${f.name}\n`;
             flattened += `${f.value}\n`;
         });
-    
+
         if (embed.footer && !embed.timestamp) {
             flattened += `${embed.footer.text}\n`;
         } else if (!embed.footer && embed.timestamp) {
