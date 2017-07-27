@@ -17,7 +17,9 @@ exports.commands = [
     'join',
     'np',
     'sources',
-    'skip'
+    'skip',
+    'clear',
+    'dump'
 ];
 
 exports.init = bot => {
@@ -182,7 +184,7 @@ exports.leave = {
             } else if (!ctx.member.voiceState.channelID) {
                 ctx.createMessage('music-userNotInChannel').then(resolve).catch(reject);
             } else if (ctx.member.voiceState.channelID !== cnc.channelID) {
-                ctx.createMessage('music-userNotCSameChannel').then(resolve).catch(reject);
+                ctx.createMessage('music-userNotSameChannel').then(resolve).catch(reject);
             } else if (cnc.summoner && cnc.summoner.id !== ctx.author.id && !ctx.hasPermission('manageGuild', 'author')) {
                 ctx.createMessage('music-userNotSummoner').then(resolve).catch(reject);
             } else {
@@ -262,6 +264,99 @@ exports.skip = {
                 bot.music.connections.get(ctx.guild.id).stopPlaying();
                 ctx.createMessage('music-skip', null, 'channel', {
                     item: track.title
+                }).then(resolve).catch(reject);
+            }
+        });
+    }
+};
+
+exports.clear = {
+    desc: 'Clears the music queue.',
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            let cnc = bot.music.connections.get(ctx.guild.id);
+            let q = bot.music.queues.get(ctx.guild.id);
+
+            if (!cnc) {
+                ctx.createMessage('music-botNotInChannel').then(resolve).catch(reject);
+            } else if (!ctx.member.voiceState.channelID) {
+                ctx.createMessage('music-userNotInChannel').then(resolve).catch(reject);
+            } else if (ctx.member.voiceState.channelID !== cnc.channelID) {
+                ctx.createMessage('music-userNotSameChannel').then(resolve).catch(reject);
+            } else if (cnc.summoner && cnc.summoner.id !== ctx.author.id && !ctx.hasPermission('manageGuild', 'author')) {
+                ctx.createMessage('music-userNotSummoner').then(resolve).catch(reject);
+            } else if (!q || q.queue.length === 0) {
+                ctx.createMessage('music-clearEmptyQueue').then(resolve).catch(reject);
+            } else {
+                ctx.createMessage('music-clearConfirm').then(() => {
+                    return bot.awaitMessage(ctx.channel.id, ctx.author.id);
+                }).then(m => {
+                    if (/^y(es)?$/i.test(m.content)) {
+                        return ctx.createMessage('music-clearConfirmYes');
+                    } else if (/^no?$/i.test(m.content)) {
+                        return ctx.createMessage('music-clearConfirmNo');
+                    } else {
+                        return ctx.createMessage('music-clearaConfirmInvalid');
+                    }
+                }).then(m => {
+                    if (m.content === localeManager.t('music-clearConfirmNo')) {
+                        q.queue = [q.queue[0]];
+
+                        return ctx.createMessage('music-cleared');
+                    } else {
+                        bot.music.connections.get(ctx.guild.id).stopPlaying();
+                        bot.music.queues.get(ctx.guild.id).queue = [];
+
+                        return ctx.createMessage('music-clearedStoppedPlaying');
+                    }
+                }).then(resolve).catch(reject);
+            }
+        });
+    }
+};
+
+exports.dump = {
+    desc: 'Dumps the contents of the current playlist to a text file.',
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            let cnc = bot.music.connections.get(ctx.guild.id);
+            let q = bot.music.queues.get(ctx.guild.id);
+
+            if (!cnc) {
+                ctx.createMessage('music-botNotInChannel').then(resolve).catch(reject);
+            } else if (!ctx.member.voiceState.channelID) {
+                ctx.createMessage('music-userNotInChannel').then(resolve).catch(reject);
+            } else if (ctx.member.voiceState.channelID !== cnc.channelID) {
+                ctx.createMessage('music-userNotSameChannel').then(resolve).catch(reject);
+            } else if (!q || q.queue.length === 0) {
+                ctx.createMessage('music-dumpEmptyQueue').then(resolve).catch(reject);
+            } else {
+                q = q.queue.map(i => {return {title: i.info.title, url: i.info.url};});
+
+                ctx.createMessage('music-dumpConfirm', null, 'channel', {
+                    amount: q.length
+                }).then(() => {
+                    return bot.awaitMessage(ctx.channel.id, ctx.author.id);
+                }).then(m => {
+                    if (/^y(es)?$/i.test(m.content)) {
+                        return ctx.createMessage('music-dumpConfirmYes');
+                    } else if (/^no?$/i.test(m.content)) {
+                        return ctx.createMessage('music-dumpConfirmNo');
+                    } else {
+                        return ctx.createMessage('music-dumpConfirmInvalid');
+                    }
+                }).then(m => {
+                    if (m.content === localeManager.t('music-dumpConfirmYes', ctx.settings.locale)) {
+                        return bot.hastePost(q.map(i => `${i.title} - ${i.url}`).join('\n'));
+                    } else {
+                        return null;
+                    }
+                }).then(res => {
+                    if (!res) return null;
+
+                    return ctx.createMessage('music-dumped', null, 'channel', {
+                        url: `https://hastebin.com/${res}.txt`
+                    });
                 }).then(resolve).catch(reject);
             }
         });
