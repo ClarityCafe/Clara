@@ -168,7 +168,14 @@ class MusicHandler {
             let bot = this._bot;
             let stream = res;
             let cnc = bot.music.connections.get(ctx.guild.id);
-            let info = bot.music.queues.get(ctx.guild.id).queue[0].info;
+            let info = bot.music.queues.get(ctx.guild.id).queue[0];
+
+            if (!info) {
+                resolve();
+            } else {
+                info = info.info;
+            }
+
             let streamInfo = {id: ctx.guild.id, stream, url: info.url};
 
             bot.music.streams.add(streamInfo);
