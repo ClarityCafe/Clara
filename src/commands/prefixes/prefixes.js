@@ -45,7 +45,7 @@ exports.main = {
 exports.add = {
     desc: 'Add a prefix.',
     usage: '<prefix>',
-    adminOnly: true,
+    owner: true,
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.args.length === 0) {
@@ -70,7 +70,7 @@ exports.add = {
 exports.remove = {
     desc: 'Remove a prefix.',
     usage: '<prefix>',
-    adminOnly: true,
+    owner: true,
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.args.length === 0) {
