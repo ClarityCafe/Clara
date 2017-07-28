@@ -6,7 +6,7 @@
      'leet'
  ];
 
- const leet = require('leet');
+ const leet = require('l33tsp34k');
  exports.leet = {
      desc: 'L33tify your message',
      usage: '<message>',
@@ -15,7 +15,7 @@
              if (!ctx.suffix) {
                  return ctx.createMessage('Provide me a Message to l33tify').then(resolve).catch(reject);
              } else {
-                 return ctx.createMessage(leet.convert(ctx.suffix));
+                 return ctx.createMessage(leet(ctx.suffix));
              }
          });
      }
