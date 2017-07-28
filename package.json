@@ -26,9 +26,9 @@
     "decache": "^4.1.0",
     "dominant-color": "0.0.1",
     "eris": "github:abalabahaha/eris",
-    "got": "^6.7.1",
+    "got": "^7.1.0",
     "redis": "^2.7.1",
-    "rethinkdbdash": "^2.3.28"
+    "rethinkdbdash": "^2.3.29"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
