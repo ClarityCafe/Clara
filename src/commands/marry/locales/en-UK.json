@@ -10,6 +10,6 @@
     "marry-timeout": "{{author}}, your partner did not respond in time.",
     "divorce-noSelfcest": "Hey! You can't divorce yourself.",
     "divorce-partnerPrompt": "{{mentioned}}, will you let go of {{author}}?\nRespond with yes or no. (30 seconds)",
-    "divorce-divorceSuccess": "{{author}} you're no longer married to {{mentioned}}}.",
+    "divorce-divorceSuccess": "{{author}} you're no longer married to {{mentioned}}.",
     "divorce-divorceFail": "{{author}}, your partner won't let go."
 }
