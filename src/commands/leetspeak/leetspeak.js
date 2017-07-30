@@ -9,7 +9,6 @@ exports.commands = [
     'leet'
 ];
 
-
 exports.leet = {
     desc: 'L33tify your message',
     usage: '<message>',
