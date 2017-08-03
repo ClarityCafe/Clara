@@ -124,7 +124,20 @@ module.exports = bot => {
             if (typeof guildID !== 'string') {
                 reject(new TypeError('guildID is not string.'));
             } else {
-                let settings = {id: guildID, locale: 'en-UK', greeting: {enabled: false, channelID: null, message: null}};
+                let settings = {
+                    id: guildID,
+                    locale: 'en-UK',
+                    greeting: {
+                        enabled: false,
+                        channelID: null,
+                        message: null
+                    },
+                    goodbye: {
+                        enabled: false,
+                        channelID: null,
+                        message: null
+                    }
+                };
                 bot.settings.guilds.add(settings);
                 bot.db.table('guild_settings').get(guildID).run().then(res => {
                     if (res) {
