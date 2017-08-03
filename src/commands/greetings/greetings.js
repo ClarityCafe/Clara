@@ -109,7 +109,7 @@ exports.text = {
 function greetingBlock(settings) {
     return {
         title: 'Greeting Management',
-        description: `**${localeManager.t('greetings-enabled', settings.locale)}:** ${settings.guild.greeting.enabled ? localeManager.t('yes', settings.locale) : localeManager.t('no', settings.locale)}\n`
+        description: `**${localeManager.t('enabled', settings.locale)}:** ${settings.guild.greeting.enabled ? localeManager.t('yes', settings.locale) : localeManager.t('no', settings.locale)}\n`
         + `**${localeManager.t('greetings-channel')}:** ${settings.guild.greeting.channelID ? `<#${settings.guild.greeting.channelID}>` : localeManager.t('none', settings.locale)}\n`
         + `**${localeManager.t('greetings-message')}:** ${settings.guild.greeting.message || localeManager.t('none', settings.locale)}`,
         fields: [{

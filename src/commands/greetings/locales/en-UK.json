@@ -6,7 +6,6 @@
     "greetings-noChanArgs": "Please give me a channel to use for greetings.",
     "greetings-setMsg": "Successfully set greeting message. Sending test message.",
     "greetings-noMsgArgs": "Please give me something to use as a greeting.",
-    "greetings-enabled": "Enabled",
     "greetings-channel": "Channel",
     "greetings-message": "Message",
     "greetings-example1": "Enable greetings for the server.\n\n",

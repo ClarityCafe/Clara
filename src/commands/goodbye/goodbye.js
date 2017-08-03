@@ -3,139 +3,121 @@
  * @author Capuccino
  */
 
-const Eris = require('eris');
-
 exports.loadAsSubcommands = true;
 
 exports.commands = [
-    'goodbye',
     'enable',
     'disable',
     'text',
     'channel'
 ];
 
+exports.main = {
+    desc: 'Manage server goodbyes.',
+    permissions: {author: 'manageGuild'},
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            ctx.createMessage({embed: goodbyeBlock(ctx.settings)}).then(resolve).catch(reject);
+        });
+    }
+};
+
+exports.enable = {
+    desc: 'Enable goodbyes.',
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            ctx.settings.guild.goodbye.enabled = true;
+
+            bot.setGuildSettings(ctx.guild.id, ctx.settings.guild).then(() => {
+                return ctx.createMessage('goodbye-enable');
+            }).then(resolve).catch(reject);
+        });
+    }
+};
+
+exports.disable = {
+    desc: 'Disable goodbyes.',
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            ctx.settings.guild.goodbye.enabled = false;
+
+            return bot.setGuildSettings(ctx.guild.id, ctx.settings.guild).then(() => {
+                return ctx.createMessage('goodbye-disable');
+            }).then(resolve).catch(reject);
+        });
+    }
+};
+
+exports.channel = {
+    desc: 'Set the channel for goodbyes.',
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            if (!ctx.suffix) {
+                ctx.createMessage('goodbye-noChanArgs').then(resolve).catch(reject);
+            } else {
+                if (ctx.channelMentions.length > 0) {
+                    ctx.settings.guild.goodbye.channelID = ctx.channelMentions[0];
+
+                    bot.setGuildSettings(ctx.guild.id, ctx.settings.guild).then(() => {
+                        return ctx.createMessage('goodbye-setChan', null, 'channel', {
+                            id: ctx.settings.guild.goodbye.channelID
+                        });
+                    }).then(resolve).catch(reject);
+                } else {
+                    let chans = ctx.guild.channels.filter(c => c.name.toLowerCase().includes(ctx.suffix.toLowerCase()));
+
+                    if (chans.length === 0) {
+                        ctx.createMessage('goodbye-noChan', null, 'channel', {
+                            name: ctx.suffix
+                        }).then(resolve).catch(reject);
+                    } else {
+                        ctx.settings.guild.goodbye.channelID = chans[0].id;
+
+                        bot.setGuildSettings(ctx.guild.id, ctx.settings.guild).then(() => {
+                            return ctx.createMessage('goodbye-setChan', null, 'channel', {
+                                id: ctx.settings.guild.goodbye.channelID
+                            });
+                        }).then(resolve).catch(reject);
+                    }
+                }
+            }
+        });
+    }
+};
+
+exports.text = {
+    desc: 'Set the goodbye text.',
+    main(bot, ctx) {
+        return new Promise((resolve, reject) => {
+            if (!ctx.suffix) {
+                ctx.createMessage('goodbye-noMsgArgs').then(resolve).catch(reject);
+            } else {
+                ctx.settings.guild.goodbye.message = ctx.suffix;
+
+                bot.setGuildSettings(ctx.guild.id, ctx.settings.guild).then(() => {
+                    return ctx.createMessage('goodbye-setMsg');
+                }).then(() => {
+                    return ctx.createMessage(ctx.suffix.replace(/{{user}}/gi, utils.formatUsername(ctx.author)).replace(/{{name}}/gi, ctx.author.username));
+                }).then(resolve).catch(reject);
+            }
+        });
+    }
+};
+
 function goodbyeBlock(settings) {
     return {
-        title: 'Goodbye Message Management',
-        description: `**${localeManager.t('goodbyes-enabled', settings.locale)}:** ${settings.guild.greeting.enabled ? localeManager.t('yes', settings.locale) : localeManager.t('no', settings.locale)}\n**${localeManager.t('greetings-channel')}:** ${settings.guild.greeting.channelID ? `<#${settings.guild.greeting.channelID}>` : localeManager.t('none', settings.locale)}\n**${localeManager.t('goodbye-message')}:** ${settings.guild.greeting.message || localeManager.t('none', settings.locale)}`,
+        title: 'Goodbye Management',
+        description: `**${localeManager.t('enabled', settings.locale)}:** ${settings.guild.goodbye.enabled ? localeManager.t('yes', settings.locale) : localeManager.t('no', settings.locale)}\n`
+        + `**${localeManager.t('greetings-channel')}:** ${settings.guild.goodbye.channelID ? `<#${settings.guild.goodbye.channelID}>` : localeManager.t('none', settings.locale)}\n`
+        + `**${localeManager.t('greetings-message')}:** ${settings.guild.goodbye.message || localeManager.t('none', settings.locale)}`,
         fields: [{
             name: 'Example Usage',
             value: '`goodbye enable`\n'
             + localeManager.t('goodbye-example1', settings.locale)
             + '`goodbye channel general`\n'
             + localeManager.t('goodbye-example2', settings.locale)
-            + `goodbye text Goodbye, {{user}}\n`
+            + '`goodbye text something {{user}}`\n'
             + localeManager.t('goodbye-example3', settings.locale)
         }]
     };
 }
-
-exports.main = {
-    desc: 'Show current settings for goodbye messages, and manage them if you have the correct permissions',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            ctx.createMessage({embed: goodbyeBlock}).then(resolve).catch(reject);
-        });
-    }
-};
-
-exports.enable = {
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (!ctx.member.permission.has('manageGuild')) {
-                return ctx.createMessage("you have no permissions to edit this server's settings for this command.");
-            } else {
-                bot.getGuildSettings(ctx.guild.id).then(res => {
-                    let settings = res;
-                    settings.goodbyes.enabled = true;
-                    return bot.setGuildSettings(res.id, settings);
-                }).then(() => {
-                    return ctx.createMessage('Goodbye messages are now enabled!');
-                }).then(resolve).catch(reject);
-            }
-        });
-    }
-};
-
-exports.disable = {
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (!ctx.member.permission.has('manageGuild')) {
-                return ctx.createMessage("you have no permissions to edit this server's settings for this command.");
-            } else {
-                bot.getGuildSettings(ctx.guild.id).then(res => {
-                    let settings = res;
-                    settings.goodbyes.enabled = false;
-                    return bot.setGuildSettings(res.id, settings);
-                }).then(() => {
-                    return ctx.createMessage('Goodbye messages are now disabled.');
-                }).then(resolve).catch(reject);
-            }
-        });
-    }
-};
-
-exports.channel = {
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            bot.getGuildSettings(ctx.guild.id).then(res => {
-                let settings = res;
-                if (ctx.channelMentions.length > 0) {
-                    settings.goodbyes.channelID = ctx.channelMentions[0];
-                    return bot.setGuildSettings(res.id, settings);
-                } else {
-                    let nya = ctx.suffix.split(' ');
-                    nya.shift();
-                    let chans = ctx.guild.channels.filter(c => c.name.toLowerCase().includes(nya.join(' ')));
-                    
-                    if (chans.length === 0) {
-                        return ctx.createMessage('This channel cannot be found.');
-                    } else {
-                        settings.goodbyes.channelID = chans[0].id;
-                        return bot.setGuildSettings(res.id, settings);
-                    }
-                }
-            }).then(res => {
-                if (res instanceof Eris.Message) {
-                    return null;
-                } else {
-                    return bot.getGuildSettings(ctx.guild.id);
-                }
-            }).then(res => {
-                if (!res) {
-                    return null;
-                } else {
-                    logger.info(res);
-                    return ctx.createMessage(`Successfuly set to send all goodbye messages to ${res.goodbye.channelID}`).then(resolve).catch(reject);
-                }
-            });
-        });
-    }
-};
-
-exports.text = {
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (!ctx.suffix) {
-                ctx.createMessage({embed: goodbyeBlock(ctx.settings)}).then(resolve).catch(reject);
-            } else {
-                bot.getGuildSettings(ctx.guild.id).then(res => {
-                    let settings = res;
-                    let message = ctx.suffix.split(' ');
-                    message.shift();
-                    message = message.join(' ');
-
-                    settings.goodbyes.message = message;
-                    return bot.setGuildSettings(res.id, settings);
-                }).then(() => {
-                    return ctx.createMessage('Successfully set guild message.').then(resolve).catch(reject);
-                });
-            }
-        });
-    }
-};
-
-
-
-
