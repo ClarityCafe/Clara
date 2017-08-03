@@ -1,53 +1,87 @@
 /**
- * @file sauceQueryHandler.js
- * @description Sagiri thin client for Clara
+ * @file Sagiri thin client for Clara
  * @author Capuccino
- * @license MIT
- * 
+ * @author Ovyerus
  */
 
-const got = require('got');
-const urlRegex = str => /(http(s)?:\/\/)?(www\.)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi.test(str);
+const FormData = require('form-data');
+const fs = require('fs');
 
 /** 
- * Query Handler for SauceNao-related requests.
+ * Query handler for SauceNAO.
+ * 
+ * @prop {String} key API key
+ * @prop {Number} numRes Amount of responses returned from the API.
  */
-
 class SauceHandler {
     /**
-     * @param {String} key your API Key for Saucenao
-     * @param {Number} outputType type of output you want the API to show. Default is value 2 (JSON Response)
+     * @param {String} key API Key for SauceNAO
      * @param {Number} numRes amount of responses you want returned from the API. Default is 5 Responses.
      * @see {link} https://saucenao.com/user.php?page=search-api
      */
-    constructor({key, numRes, outputType}) {
-        if (!key) throw new TypeError('NO API Key provided!');
+    constructor(key, numRes) {
+        if (!key) throw new TypeError('No API key provided!');
         this.key = key,
-        this.outputType = outputType || 2,
         this.numRes = numRes || 5;
     }
+
     /**
      * Gets the source and outputs it in your preferred output type
-     * @param {String} path filepath for the image you want to get the source from (Deprecated).
-     * @param {String} link web address for the source, must be a valid HTTP/HTTPS address.
-     * @returns {Promise} JSON that contains the closest match.
-     * @example client.getSauce(path/link).then(res => { console.log(res); });
+     * 
+     * @param {String} file Either a file or URL that you want to find the source of.
+     * @returns {Promise<Object>} JSON that contains the closest match.
+     * @example client.getSauce(path/link).then(console.log);
      */
-    getSauce(path, link) {
+    getSauce(file) {
         return new Promise((resolve, reject) => {
-            if (path) {
-                /** @deprecated Since there is no native MIMEtype support that isn't ugly
-                 *  this is deprecated
-                 */
-                throw new Error('This function is deprecated.');
-            } else if (link) {
-                if (!urlRegex) {
-                    throw new TypeError('Link is not valid HTTP/HTTPS Address.');
+            if (typeof file !== 'string') {
+                reject(new Error('file is not a string.'));
+            } else {
+                let form = new FormData();
+
+                form.append('api_key', this.key);
+                form.append('output_type', 2);
+                form.append('numres', this.numRes);
+
+                if (fs.existsSync(file)) {
+                    form.append('file', fs.createReadStream(file));
                 } else {
-                    got(`http://saucenao.com/search.php?output_type=${this.outputType}&numres=${this.numRes}&api_key=${this.key}&url=${encodeURIComponent(link)}`).then(res => {
-                        resolve(res.body);
-                    }).catch(reject);
+                    form.append('url', file);
                 }
+
+                form.submit('https://saucenao.com/search.php', (err, res) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        let chunked = '';
+
+                        res.setEncoding('utf-8');
+                        res.on('data', chunk => chunked += chunk);
+
+                        res.on('end', () => {
+                            let allResults = JSON.parse(chunked).results;
+                            let result;
+
+                            if (allResults.length > 1) {
+                                result = allResults.sort((a, b) => Number(b.header.similarity) - Number(a.header.similarity))[0];
+                            } else if (allResults.length === 1) {
+                                result = allResults[0];
+                            } else {
+                                reject(new Error('No results.'));
+                            }
+
+                            // TODO: go through the various results and find out how to reliably construct a url
+                            if (result) {
+                                let returner = {
+                                    similarity: Number(result.header.similarity),
+                                    original: result
+                                };
+
+                                resolve(returner);
+                            }
+                        });
+                    }
+                });
             }
         });
     }
