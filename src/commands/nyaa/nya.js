@@ -8,11 +8,11 @@
 const cats  = require('cat-ascii-faces');
 
 exports.commands = [
-    'cat'
+    'nyaa'
 ];
 
-exports.cat = {
-    desc: 'Prints out a random cat.',
+exports.nyaa = {
+    desc: 'Nyaa~!',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             ctx.createMessage(cats()).then(resolve).catch(reject);
