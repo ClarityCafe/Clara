@@ -59,6 +59,11 @@ class SauceHandler {
                         res.on('data', chunk => chunked += chunk);
 
                         res.on('end', () => {
+                            // TODO: actually check if the error is client or server.
+                            if (JSON.parse(chunked).header.status !== 0) {
+                                reject(new Error("An error occurred (We don't know because SauceNAO is shit)."));
+                            }
+
                             let allResults = JSON.parse(chunked).results;
                             let result;
 
@@ -74,6 +79,7 @@ class SauceHandler {
                             if (result) {
                                 let returner = {
                                     similarity: Number(result.header.similarity),
+                                    url: resolveSauceURL(result),
                                     original: result
                                 };
 
@@ -85,6 +91,89 @@ class SauceHandler {
             }
         });
     }
+}
+
+// My god SauceNAO is shit
+// I could shorten this to hell and back but it'll do for now.
+function resolveSauceURL(data) {
+    let url;
+
+    switch (data.header.index_name.match(/^Index #(\d+):? /)[1]) {
+        case '5':
+            // Pixiv
+            url = `https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${data.data.pixiv_id}`;
+            break;
+        case '8':
+            // Nico Nico Seiga
+            url = `http://seiga.nicovideo.jp/seiga/im${data.data.seiga_id}`;
+            break;
+        case '9':
+            // Danbooru
+            url = `https://danbooru.donmai/us/posts/${data.data.danbooru_id}`;
+            break;
+        case '10':
+            // drawr
+            url = `http://drawr.net/show.php?id=${data.data.drawr_id}`;
+            break;
+        case '11':
+            // Nijie
+            break;
+        case '12':
+            // Yande.re
+            url = `https://yande.re/post/show/${data.data.yandere_id}`;
+            break;
+        case '16':
+            // FAKKU
+            break;
+        case '19':
+            // 2D-Market
+            break;
+        case '20':
+            // MediBang
+            url = data.data.url; // WHY THE FUCK ARE YOU SO BLOODY INCONSISTENT
+            break;
+        case '21':
+            // Anime
+            url = `https://anidb.net/perl-bin/animedb.pl?show=anime&aid=${data.data.anidb_aid}`
+            break;
+        case '25':
+            // Gelbooru
+            url = `https://gelbooru.com/index.php?page=post&s=view&id=${data.data.gelbooru_id}`;
+            break;
+        case '26':
+            // Konachan
+            url = `https://konachan.com/post/show/${data.data.konachan_id}`;
+            break;
+        case '27':
+            // Sankaku Channel
+            break;
+        case '28':
+            // Anime-Pictures
+            url = `https://anime-pictures.net/pictures/view_post/${data.data['anime-pictures_id']}`;
+            break;
+        case '29':
+            // e621
+            break;
+        case '30':
+            // Idol Complex
+            break;
+        case '31':
+            // bcy.net Illust
+            break;
+        case '32':
+            // bcy.net Cosplay
+            break;
+        case '33':
+            // PortalGraphics
+            break;
+        case '35':
+            // Pawoo
+            break;
+        default:
+            throw new Error(`Unsupported site index: ${data.header.index_name.match(/^Index #(\d+):? /)[1]}`);
+    }
+
+    return url;
 }
 
 module.exports = SauceHandler;
