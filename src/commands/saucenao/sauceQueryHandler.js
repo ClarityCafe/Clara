@@ -48,7 +48,7 @@ class SauceHandler {
                 } else {
                     form.append('url', file);
                 }
-
+                //TODO : Promisify any callbacks
                 form.submit('https://saucenao.com/search.php', (err, res) => {
                     if (err) {
                         reject(err);
