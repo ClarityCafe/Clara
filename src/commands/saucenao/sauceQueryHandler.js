@@ -48,50 +48,51 @@ class SauceHandler {
                 } else {
                     form.append('url', file);
                 }
-                //TODO : Promisify any callbacks
-                form.submit('https://saucenao.com/search.php', (err, res) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        let chunked = '';
 
-                        res.setEncoding('utf-8');
-                        res.on('data', chunk => chunked += chunk);
-
-                        res.on('end', () => {
-                            // TODO: actually check if the error is client or server.
-                            if (JSON.parse(chunked).header.status !== 0) {
-                                reject(new Error("An error occurred (We don't know because SauceNAO is shit)."));
-                            }
-
-                            let allResults = JSON.parse(chunked).results;
-                            let result;
-
-                            if (allResults.length > 1) {
-                                result = allResults.sort((a, b) => Number(b.header.similarity) - Number(a.header.similarity))[0];
-                            } else if (allResults.length === 1) {
-                                result = allResults[0];
-                            } else {
-                                reject(new Error('No results.'));
-                            }
-
-                            // TODO: go through the various results and find out how to reliably construct a url
-                            if (result) {
-                                let returner = {
-                                    similarity: Number(result.header.similarity),
-                                    url: resolveSauceURL(result),
-                                    original: result
-                                };
-
-                                resolve(returner);
-                            }
-                        });
+                form.submitPromise('https://saucenao.com/search.php').then(res => {
+                    if (JSON.parse(res).header.status !== 0) {
+                        throw new Error("An error occurred (We don't know because SauceNAO is shit).");
                     }
-                });
+                    
+                    let allResults = JSON.parse(res).results;
+                    let result;
+
+                    if (allResults.length > 1) {
+                        result = allResults.sort((a, b) => Number(b.header.similarity) - Number(a.header.similarity))[0];
+                    } else if (allResults.length === 1) {
+                        result = allResults[0];
+                    } else {
+                        throw new Error('No results.');
+                    }
+
+                    return {
+                        similarity: Number(result.header.similarity),
+                        url: resolveSauceURL(result),
+                        original: result
+                    };
+                }).then(resolve).catch(reject);
             }
         });
     }
 }
+
+FormData.prototype.submitPromise = function(url) {
+    return new Promise((resolve, reject) => {
+        this.submit(url, (err, res) => {
+            if (err) {
+                reject(err);
+            } else {
+                let chunked = '';
+
+                res.setEncoding('utf-8');
+                res.on('data', chunk => chunked += chunk);
+                res.on('error', reject);
+
+                res.on('finish', () => resolve(chunked));
+            }
+        });
+    });
+};
 
 // My god SauceNAO is shit
 // I could shorten this to hell and back but it'll do for now.
@@ -134,7 +135,7 @@ function resolveSauceURL(data) {
             break;
         case '21':
             // Anime
-            url = `https://anidb.net/perl-bin/animedb.pl?show=anime&aid=${data.data.anidb_aid}`
+            url = `https://anidb.net/perl-bin/animedb.pl?show=anime&aid=${data.data.anidb_aid}`;
             break;
         case '25':
             // Gelbooru
