@@ -11,17 +11,6 @@
      'meow'
  ];
 
- function randomBlock() {
-     return {
-         title: 'Random animal image spewer',
-         description: 'Sends out a random birb, dog or cat image.',
-         fields: [
-             {name: 'woof', value: 'Sends out a random doggo picture', inline: true},
-             {name: 'chirp', value: 'Sends out a random birb picture', inline: true},
-             {name: 'meow', value: 'Sends out a random cat picture', inline: true}
-         ]
-     };
- }
  exports.main = {
      desc: 'Spews out a random image of a birb, a dog or a cat',
      usage: 'random <woof | meow | chirp>',
@@ -74,3 +63,15 @@
          });
      }
  };
+ 
+  function randomBlock() {
+     return {
+         title: 'Random animal image spewer',
+         description: 'Sends out a random birb, dog or cat image.',
+         fields: [
+             {name: 'woof', value: 'Sends out a random doggo picture', inline: true},
+             {name: 'chirp', value: 'Sends out a random birb picture', inline: true},
+             {name: 'meow', value: 'Sends out a random cat picture', inline: true}
+         ]
+     };
+ }
