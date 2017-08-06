@@ -1,5 +1,4 @@
 {
     "saucenao-noImage": "Aw, no image here.",
-    "sauce-embedTitle": "Saucenao query results",
-    "suace-embedDescription": "this is what we can find"
+    "saucenao-found": "Found possible match.\n**Similarity**: {{similarity}}\n{{url}}"
 }
