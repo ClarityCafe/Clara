@@ -2,6 +2,7 @@
  * @file Sagiri thin client for Clara
  * @author Capuccino
  * @author Ovyerus
+ * @todo Finish off url list and make lib return as many results as wanted
  */
 
 const FormData = require('form-data');
@@ -46,7 +47,7 @@ class SauceHandler {
                 if (fs.existsSync(file)) {
                     form.append('file', fs.createReadStream(file));
                 } else {
-                    form.append('url', file);
+                    form.append('url', encodeURIComponent(file));
                 }
 
                 form.submitPromise('https://saucenao.com/search.php').then(res => {
