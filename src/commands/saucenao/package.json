@@ -1,6 +1,6 @@
 {
     "main": "saucenao.js",
     "dependencies": {
-        "form-data": "^2.2.0"
+        "multi-part": "2.0.0"
     }
 }
