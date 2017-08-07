@@ -11,7 +11,7 @@ const SauceNAO = require('./sauceQueryHandler');
 let sourcer;
 
 exports.init = bot => {
-    sourcer = new SauceNAO({key: bot.config.sauceKey});
+    sourcer = new SauceNAO(bot.config.sauceKey);
 };
 
 exports.commands = [
@@ -25,14 +25,22 @@ exports.saucenao = {
             if (!ctx.attachments[0] && !ctx.suffix) {
                 ctx.createMessage('saucenao-noImage').then(resolve).catch(reject);
             } else if (ctx.attachments[0]) {
-                sourcer.getSauce(ctx.attachments[0].url).then(res => {
+                ctx.createMessage('Finding source, this may take some time...').then(() => {
+                    return ctx.channel.sendTyping();
+                }).then(() => {
+                    return sourcer.getSauce(ctx.attachments[0].url);
+                }).then(res => {
                     return ctx.createMessage('saucenao-found', null, 'channel', {
                         similarity: res.similarity,
                         url: res.url
                     });
                 }).then(resolve).catch(reject);
             } else if (ctx.suffix) {
-                sourcer.getSauce(ctx.suffix).then(res => {
+                ctx.createMessage('Finding source, this may take some time...').then(() => {
+                    return ctx.channel.sendTyping();
+                }).then(() => {
+                    return sourcer.getSauce(ctx.suffix);
+                }).then(res => {
                     return ctx.createMessage('saucenao-found', null, 'channel', {
                         similarity: res.similarity,
                         url: res.url
