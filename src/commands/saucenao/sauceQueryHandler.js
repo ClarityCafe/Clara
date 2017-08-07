@@ -5,8 +5,9 @@
  * @todo Finish off url list and make lib return as many results as wanted
  */
 
-const FormData = require('form-data');
+const Multipart = require('multi-part');
 const fs = require('fs');
+const https = require('https');
 
 /** 
  * Query handler for SauceNAO.
@@ -38,7 +39,7 @@ class SauceHandler {
             if (typeof file !== 'string') {
                 reject(new Error('file is not a string.'));
             } else {
-                let form = new FormData();
+                let form = new Multipart();
 
                 form.append('api_key', this.key);
                 form.append('output_type', 2);
@@ -50,7 +51,7 @@ class SauceHandler {
                     form.append('url', encodeURIComponent(file));
                 }
 
-                form.submitPromise('https://saucenao.com/search.php').then(res => {
+                sendForm(form).then(res => {
                     if (JSON.parse(res).header.status !== 0) {
                         throw new Error("An error occurred (We don't know because SauceNAO is shit).");
                     }
@@ -66,34 +67,41 @@ class SauceHandler {
                         throw new Error('No results.');
                     }
 
-                    return {
+                    /*return {
                         similarity: Number(result.header.similarity),
                         url: resolveSauceURL(result),
                         original: result
-                    };
+                    };*/
+
+                    return {
+                        similarity: 'aaa',
+                        url: 'aaa'
+                    }
                 }).then(resolve).catch(reject);
             }
         });
     }
 }
 
-FormData.prototype.submitPromise = function(url) {
+function sendForm(form) {
     return new Promise((resolve, reject) => {
-        this.submit(url, (err, res) => {
-            if (err) {
-                reject(err);
-            } else {
-                let chunked = '';
+        let req = https.request({
+            headers: form.getHeaders(),
+            hostname: 'saucenao.com',
+            path: '/search.php',
+            method: 'POST'
+        }, res => {
+            let chunked = '';
 
-                res.setEncoding('utf-8');
-                res.on('data', chunk => chunked += chunk);
-                res.on('error', reject);
-
-                res.on('finish', () => resolve(chunked));
-            }
+            res.on('data', chunk => chunked += chunk);
+            res.on('error', reject);
+            res.on('finish', () => resolve(chunked));
         });
+
+        req.on('error', reject);
+        form.stream().pipe(req);
     });
-};
+}
 
 // My god SauceNAO is shit
 // I could shorten this to hell and back but it'll do for now.
