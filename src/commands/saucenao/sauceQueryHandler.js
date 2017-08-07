@@ -67,16 +67,11 @@ class SauceHandler {
                         throw new Error('No results.');
                     }
 
-                    /*return {
+                    return {
                         similarity: Number(result.header.similarity),
                         url: resolveSauceURL(result),
                         original: result
-                    };*/
-
-                    return {
-                        similarity: 'aaa',
-                        url: 'aaa'
-                    }
+                    };
                 }).then(resolve).catch(reject);
             }
         });
