@@ -1,5 +1,6 @@
 /**
- * @file It's joke! Like me.
+ * @file It's joke!
+ * 
  * @author Capuccino 
  * @author Ovyerus
  */
