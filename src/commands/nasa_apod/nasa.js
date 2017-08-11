@@ -22,10 +22,10 @@ exports.apod = {
                 ctx.createMessage('nasa-noKey').then(resolve).catch(reject);
             } else {
                 ctx.channel.sendTyping();
-                if ( Jake.uses === Jake.totalUses) {
+                if (Jake.uses === Jake.totalUses) {
                     ctx.createMessage('You have exceeded the maximum alotted usage for this command (you are allowed to only use it 10 times');
                 } else {
-                got(`https://api.nasa.gov/planetary/apod?api_key=${bot.config.nasaKey}`).then(res => {
+                    got(`https://api.nasa.gov/planetary/apod?api_key=${bot.config.nasaKey}`).then(res => {
                     let data = JSON.parse(res.body);
 
                     return ctx.createMessage({embed: {
@@ -36,10 +36,10 @@ exports.apod = {
                         footer: {text: 'nasa-date'}
                     }}, null, 'channel', {
                         copyright: data.copyright,
-                        date: data.date
-                    });
-                }).then(resolve).catch(reject);
-            }
+                          date: data.date
+                      });
+                   }).then(resolve).catch(reject);
+                }
           }
        });
     }
