@@ -7,8 +7,8 @@
 /* eslint-env node */
 
 const got = require('got');
-const ratelimiter = require(`${__baseDir}/modules/Ratelimiter`);
-const Jake = new ratelimiter(10, 60000);
+const Ratelimiter = require(`${__baseDir}/modules/Ratelimiter`);
+const Jake = new Ratelimiter(20, 6000); //20 uses for 60 seconds
 
 exports.commands = [
     'apod'
