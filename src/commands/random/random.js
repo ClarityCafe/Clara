@@ -22,7 +22,7 @@ exports.chirp = {
         return new Promise((resolve, reject) => {
             ctx.channel.sendTyping();
             got('https://random.birb.pw/tweet').then(res => {
-                return ctx.createMessage({embed: {
+                ctx.createMessage({embed: {
                     title: 'What a cute little birby!',
                     image: {url: `https://random.birb.pw/img/${res.body}`},
                     footer: {text: 'powered by random.birb.pw'}
@@ -39,7 +39,7 @@ exports.meow = {
         return new Promise((resolve, reject) => {
             got('http://random.cat/meow').then(res => {
                 let kitty = JSON.parse(res.body).file;
-                return ctx.createMessage({embed: {
+                ctx.createMessage({embed: {
                     title: 'Nyaaa~',
                     image: {url: kitty},
                     footer: {text: 'Powered by random.cat'}
@@ -55,7 +55,7 @@ exports.woof = {
         return new Promise((resolve, reject) => {
             ctx.channel.sendTyping();
             got('http://random.dog/woof').then(res => {
-                return ctx.createMessage({embed: {
+                ctx.createMessage({embed: {
                     title: 'Have a random doggo!',
                     image: {url: `http://random.dog/${res.body}`},
                     footer: {text: 'Powered by random.dog'}
