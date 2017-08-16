@@ -31,7 +31,7 @@ exports.info = {
 
             ctx.createMessage({embed: {
                 title: `${bot.user.username}'s Info`,
-                description: `[${'info-source'}](https://github.com/awau/Clara) | [${'info-supportServer'}](https://discord.gg/ZgQkCkm)`,
+                description: `[${localeManager.t('info-source')}](https://github.com/ClaraIO/Clara) | [${localeManager.t('info-supportServer')}](https://discord.gg/rmMTZue)`,
                 thumbnail: {url: bot.user.avatarURL},
                 color: roleColour,
                 fields: [
