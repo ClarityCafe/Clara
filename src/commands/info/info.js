@@ -11,9 +11,9 @@ const path = require('path');
 var version;
 
 try {
-    version = JSON.parse(fs.readFileSync(path.normalize(`${__baseDir}/../package.json`))).version;
+    version = JSON.parse(fs.readFile(path.normalize(`${__baseDir}/../package.json`))).version;
 } catch(_) {
-    version = JSON.parse(fs.readFileSync(`${__baseDir}/package.json`)).version;
+    version = JSON.parse(fs.readFile(`${__baseDir}/package.json`)).version;
 }
 
 exports.commands = [
