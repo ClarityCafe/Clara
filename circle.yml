@@ -11,5 +11,8 @@ jobs:
           name: Resolve Dependencies
           command: npm i --save
       - run:
+          name: ESLint Global Install
+          command: npm i -g eslint 
+      - run:
           name: ESLint
           command: eslint
