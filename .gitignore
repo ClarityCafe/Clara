@@ -64,7 +64,7 @@ obj
 bin
 
 # Bot files    
-src/config.json
+config.json
 rethink_data
 /data
 prefixes.json
