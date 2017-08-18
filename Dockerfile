@@ -55,13 +55,14 @@ EXPOSE 22 8080
 
 ENTRYPOINT ["node", "~/src/bot.js"]
 
+# It's advisable to add your config files so if we run docker run, it wouldn't error out.
+
+RUN git clone https://github.com/ClaraIO/Clara.git --bare --depth=50
+
 # Install deps
 
 RUN cd Clara && npm i --silent
 
-# It's advisable to add your config files so if we run docker run, it wouldn't error out.
-
-RUN git clone https://github.com/ClaraIO/Clara.git --bare --depth=50
 
 CMD ["/usr/sbin/sshd", "-p 22", "-D"]
 
