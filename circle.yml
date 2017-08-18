@@ -9,8 +9,7 @@ jobs:
       - checkout
       - run:
           name: Resolve Dependencies
-          command: |
-          npm i --save
+          command: npm i --save
       - run:
           name: ESLint
           command: eslint
