@@ -61,7 +61,7 @@ RUN sudo git clone https://github.com/ClaraIO/Clara.git --bare --depth=50
 
 # Install deps
 
-RUN cd Clara && npm i --silent
+RUN sudo cd Clara && npm i --silent
 
 
 CMD ["/usr/sbin/sshd", "-p 22", "-D"]
