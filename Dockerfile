@@ -57,7 +57,7 @@ ENTRYPOINT ["node", "~/src/bot.js"]
 
 # It's advisable to add your config files so if we run docker run, it wouldn't error out.
 
-RUN git clone https://github.com/ClaraIO/Clara.git --bare --depth=50
+RUN sudo git clone https://github.com/ClaraIO/Clara.git --bare --depth=50
 
 # Install deps
 
