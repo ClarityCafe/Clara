@@ -59,11 +59,6 @@ ENTRYPOINT ["node", "/Clara/src/bot.js"]
 
 RUN sudo git clone https://github.com/ClaraIO/Clara.git --bare --depth=50
 
-# Install deps
-
-RUN sudo cd Clara && npm i --silent
-
-
 CMD ["/usr/sbin/sshd", "-p 22", "-D", "&&", "node", "/Clara/src/bot --harmony"]
 
 # finally echo this in a fancy way
