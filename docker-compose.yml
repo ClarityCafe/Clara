@@ -1,9 +1,10 @@
 version: '3'
 services:
-  web:
+  bot:
     build: .
     ports:
-     - "5000:5000"
+     - "8080:8080"
+     - "22:22"
     volumes:
      - .:/Clara
   rethinkdb:
