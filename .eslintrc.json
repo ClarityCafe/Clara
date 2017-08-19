@@ -19,7 +19,8 @@
         "localeManager": false,
         "got": false,
         "config": false,
-        "utils": false
+        "utils": false,
+        "pythonIPC": false
     },
 
         "rules": {
