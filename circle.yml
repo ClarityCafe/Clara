@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: chinodesuuu/ci-amethyst
+      - image: library/node:8.4.0-wheezy
     working_directory: src
     steps:
       - setup_remote_docker
@@ -14,7 +14,19 @@ jobs:
             VER="17.05.0-ce"
             curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-            mv /tmp/docker/* /usr/bin
+            mv /tmp/docker/* /usr/bin      
+      - run:
+          name: Resolve Dependencies
+          command: npm i --save
+      - run:
+          name: ESLint Global Install
+          command: npm i -g eslint 
+      - run:
+          name: ESLint
+          command: eslint
       - run:
           name: Docker Build
-          command: docker build -f Dockerfile -t clara:ci .
+          command: docker build -f Dockerfile -t clara:test .
+      - run:
+          name: Docker Compose Test
+          command: docker-compose up
