@@ -34,3 +34,16 @@ We use CodeClimate for code coverage. If your code falls below A, it won't be me
 # Docker CI
 
 We use CircleCI to test if the Dockerfile can build. If you edited the Dockerfile and it fails, your PR would not be merged.
+
+# Versioning
+
+Reminder our versioning follows the Eclipse Che style of versioning.
+
+- Pre-release versions - x.y.z-SNAPSHOT
+- Release versions - x.y.z
+
+semver layout is as follows:
+
+- x : Major revision, not moved until y has reached above 9 (0.10.0 would be 1.0.0)
+- y : Minor revision, although we usually only increment this every major release.
+- z : Patch
