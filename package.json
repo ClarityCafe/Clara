@@ -27,6 +27,7 @@
     "dominant-color": "0.0.1",
     "eris": "github:abalabahaha/eris",
     "got": "^7.1.0",
+    "python.node": "^1.0.4",
     "redis": "^2.7.1",
     "rethinkdbdash": "^2.3.29"
   },
