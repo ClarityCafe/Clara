@@ -16,7 +16,7 @@ See readme.md for instruction on how to run the starter code.
 """
 
 # parameters for processing the dataset
-DATA_PATH = '/Users/Chip/data/cornell movie-dialogs corpus'
+DATA_PATH = 'cornell_movie-dialogs corpus'
 CONVO_FILE = 'movie_conversations.txt'
 LINE_FILE = 'movie_lines.txt'
 OUTPUT_FILE = 'output_convo.txt'
