@@ -239,14 +239,14 @@ class CommandHolder {
             let subcommand = ctx.args[0];
             cmd = cmd.subcommands[subcommand];
             ctx.args = ctx.args.slice(1);
-            ctx.raw = ctx.raw.split(subcommand).slice(1).join(subcommand).trim();
-            ctx.cleanRaw = ctx.cleanRaw.split(subcommand).slice(1).join(subcommand).trim();
+            ctx.suffix = ctx.suffix.split(subcommand).slice(1).join(subcommand).trim();
+            ctx.cleanSuffix = ctx.cleanSuffix.split(subcommand).slice(1).join(subcommand).trim();
         }
 
-        if (cmd.owner && this[_bot].isOwner(ctx.author.id)) {
+        if (cmd.owner && this[_bot].checkBotPerms(ctx.author.id)) {
             await cmd.main(this[_bot], ctx);
             logger.cmd(`${loggerPrefix(this[_bot], ctx)}Ran owner command '${ctx.cmd}'`);
-        } else if (cmd.owner && !this[_bot].isOwner(ctx.author.id)) {
+        } else if (cmd.owner && !this[_bot].checkBotPerms(ctx.author.id)) {
             logger.cmd(`${loggerPrefix(this[_bot], ctx)}Tried to run owner command '${ctx.cmd}'`);
             return; // eslint-disable-line
         } else {
