@@ -4,69 +4,71 @@
  * @author Ovyerus
  */
 
-const chalk = require('chalk');
-
 /**
- * Class for logging with custom colours.
+ * Class for various logging methods.
  */
 class Logger {
-
     /**
-     * Generic information logger
-     * @param {String} message Message to print.
+     * Generic information logger.
+     * 
      * @static
+     * @param {String} msg Message to log.
      */
-    static info(message) {
-        console.log(`${chalk.bgGreen('info')} ${chalk.green(message)}`);
+    static info(msg) {
+        console.log(`\x1b[37;42minfo\x1b[32;49m ${msg}\x1b[0m`);
     }
 
     /**
-     * Generic warnings. Used for non-fatal errors.
-     * @param {String} message Message to print.
+     * Internal command logger.
+     * 
      * @static
+     * @param {String} msg Message to log.
      */
-    static warn(message) {
-        console.log(`${chalk.bgYellow('warn')} ${chalk.yellow(message)}`);
+    static cmd(msg) {
+        console.log(`\x1b[37;45mcmd\x1b[35;49m ${msg}\x1b[0m`);
     }
 
     /**
-     * Generic error logging.
-     * @param {String} message Message to print.
+     * Warning logger.
+     * Intended for not-100%-breaking errors, but you should still know about it.
+     * 
      * @static
+     * @param {String} msg Message to log.
      */
-    static error(message) {
-        console.log(`${chalk.bgRed('err')} ${chalk.red(message)}`);
+    static warn(msg) {
+        console.log(`\x1b[37;43mwarn\x1b[33;49m ${msg}\x1b[0m`);
     }
 
     /**
-     * Command logging.
-     * @param {String} message Message to print.
+     * Error logger.
+     * 
+     * @static
+     * @param {String} msg Message to log.
      */
-    static cmd(message) {
-        console.log(`${chalk.bgMagenta('cmd')} ${chalk.magenta(message)}`);
+    static error(msg) {
+        console.error(`\x1b[37;41merror\x1b[31;49m ${msg}\x1b[0m`);
     }
 
     /**
-     * Custom logging using custom colours (within chalk range)
-     * @param {String} colour Colour to use. Must be a valid chalk colour.
-     * @param {String} name Text to display before the message.
-     * @param {String} message Message to print.
+     * Generic information logger with custom tag, and blue colour.
+     * 
      * @static
+     * @param {String} tag Tag for the logged message.
+     * @param {String} msg Message to log.
      */
-    static custom(colour, name, message) {
-        if (!chalk[colour]) throw new Error('colour is not a valid chalk colour.');
-        console.log(`${chalk['bg' + colour.toLowerCase().charAt(0).toUpperCase() + colour.toLowerCase().slice(1)](name)} ${chalk[colour](message)}`);
+    static custom(tag, msg) {
+        console.log(`\x1b[37;44m${tag}\x1b[34;49m ${msg}\x1b[0m`);
     }
 
-
     /**
-     * Custom error logging
-     * @param {String} name Text to display before the message.
-     * @param {String} message Message to print.
+     * Error logger with custom tag.
+     * 
      * @static
+     * @param {String} tag Tag for the logged message.
+     * @param {String} msg Message to log.
      */
-    static customError(name, message) {
-        console.error(`${chalk.bgRed(name)} ${chalk.red(message)}`);
+    static customError(tag, msg) {
+        console.log(`\x1b[37;41m${tag}\x1b[31;49m ${msg}\x1b[0m`);
     }
 }
 

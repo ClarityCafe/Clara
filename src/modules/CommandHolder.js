@@ -4,8 +4,8 @@
  */
 
 const Eris = require('eris');
-const decache = require('decache');
 const logger = require(`${__dirname}/Logger`);
+const {parseArgs, parsePrefix} = require(`${__dirname}/messageParser`);
 
 const PermissionsPrettyPrinted = {
     createInstantInvite: 'Create Instant Invite',
@@ -42,26 +42,32 @@ const PermissionsPrettyPrinted = {
 };
 
 let _bot = Symbol();
+let _handlePermissions = Symbol();
 
 /**
  * Holds lots of commands and other shit.
  * 
  * @prop {Object} aliases Object mapping aliases to the name of their command.
  * @prop {Number} aliasesLength Amount of aliases currently registered.
+ * @prop {String[]} allAliases Sorted list of all names of aliases.
+ * @prop {String[]} allCommands Sorted list of all names of commands.
+ * @prop {String[]} allModules Sorted list of all names of modules.
  * @prop {Object} commands Object mapping command objects to their name.
  * @prop {Number} length Amount of commands currently loaded.
  * @prop {Object} modules Object mapping module names to and array of their commands.
- * @prop {String[]} usedArrayOptions Array of options used by the command handler and loader.
+ * @prop {String[]} usedCommandOptions Array of options used by the command handler and loader.
  */
+
 class CommandHolder {
 
     /**
-     * Create a command holder object.
+     * Create a command holder.
      * 
      * @param {Eris.Client} bot An instance of an Eris client to use in module handling.
+     * @throws {TypeError} Argument must be correct type.
      */
     constructor(bot) {
-        if (!(bot instanceof Eris.Client)) throw new Error('bot is not an Eris client.');
+        if (!(bot instanceof Eris.Client)) throw new TypeError('bot is not an Eris client.');
 
         this.commands = {};
         this.aliases = {};
@@ -70,254 +76,218 @@ class CommandHolder {
     }
 
     /**
-     * Handle adding a module.
+     * Loads a module.
      * 
-     * @param {String} moduleName Name to register as in the modules array
-     * @param {Object} module Module to add.
-     * @param {Boolean} [module.loadAsSubcommands] If true, loads all commands defined in module.commands as subcommands.
-     * @param {String[]} module.commands Array of command names to load.
-     * @param {Function} [module.init] Function to run when module is loaded and before commands are loaded. Gets passed the main bot object as the only arg.
-     * @param {Command} [module.main] If `module.loadAsSubcommands` is true, this is required and is used to give information on the module. `module.main.main` is optional, and by default will list all subcommands, but you can override this.
-     * @param {Command} module.* Commands for the module. If their name is in `module.commands`, the command with will loaded. If `module.loadAsSubcommands` is true, these will be loaded as subcommands.
-     * @returns {Number} Number of commands loaded.
+     * @param {String} moduleName Name of the module.
+     * @throws {TypeError} Argument must be correct type
+     * @throws {Error} Module must not be loaded already.
      */
-    addModule(moduleName, module) {
-        // Type checking
+    loadModule(moduleName) {
         if (typeof moduleName !== 'string') throw new TypeError('moduleName is not a string.');
-        if (!module || typeof module !== 'object') throw new TypeError('module is not an object.');
-        if (!Array.isArray(module.commands)) throw new TypeError('module.commands is not an array');
-        if (this.modules[moduleName]) throw new TypeError(`'${moduleName}' is already loaded.`);
-        if (module.loadAsSubcommands && (typeof module.main !== 'object' || !~Object.keys(module.main).length)) throw new TypeError('module.main is not an object or is empty.');
 
-        this.modules[moduleName] = [];
+        let name = moduleName.split(/\\|\//).slice(-1)[0].slice(0, -3);
+
+        if (this.modules[name]) throw new Error(`Module '${name}' is already loaded.`);
+
+        let module = require(moduleName);
+
+        if (!module.commands) {
+            delete require.cache[moduleName];
+            throw new Error(`Module '${name}' does not have a commands array.`);
+        } else if (!Array.isArray(module.commands)) {
+            delete require.cache[moduleName];
+            throw new Error(`Command array for '${name}' is not an array.`);
+        }
 
         if (typeof module.init === 'function') module.init(this[_bot]);
+        let loadedCommands = [];
+        let loadedAliases = [];
 
         if (module.loadAsSubcommands) {
             let command = Object.assign({owner: false, fixed: false}, module.main, {subcommands: {}});
 
             for (let cmd of module.commands) {
                 if (typeof module[cmd] === 'object') {
+                    module[cmd].permissions = command.permissions;
                     command.subcommands[cmd] = module[cmd];
                 }
             }
 
             if (!module.main.main) {
-                command.main = (bot, ctx) => {
-                    return new Promise((resolve, reject) => {
-                        let collect = [];
-                        let embed = {
-                            title: moduleName,
-                            color: utils.randomColour()
-                        };
+                command.main = async (bot, ctx) => {
+                    let collect = [];
+                    let embed = {title: name};
 
-                        for (let name in command.subcommands) {
-                            let cmd = command.subcommands[name];
-                            collect.push(`${moduleName} ${name}${cmd.usage ? ` ${cmd.usage}` : ''}\n\u200b - ${cmd.desc}`);
-                        }
+                    for (let name in command.subcommands) {
+                        let cmd = command.subcommands[name];
+                        if ((cmd.owner || cmd.hidden) && !bot.checkBotPerms(ctx.author.id)) continue;
+                        collect.push(`${name} ${name}${cmd.usage ? ` ${cmd.usage}` : ''}\n\u200b - ${cmd.desc}`);
+                    }
 
-                        embed.description = `\`${collect.join('\n\n')}\``;
+                    embed.description = `\`${collect.join('\n\n')}\``;
 
-                        ctx.createMessage({embed}).then(resolve).catch(reject);
-                    });
+                    await ctx.createMessage({embed});
                 };
             }
 
-            try {
-                this.addCommand(moduleName, command);
-                this.modules[moduleName].push(moduleName);
-                this.modules[`${moduleName}-fixed`] = command.fixed;
-                logger.custom('blue', 'CommandHolder/addModule', `Successfully loaded module '${moduleName}'`);
-            } catch(err) {
-                logger.customError('CommandHolder/addMoule', `Error when attempting to load module '${moduleName}':\n${err}`);
-            }
+            this.commands[name] = command;
+            this.modules[name] = [name];
         } else {
-            for (let cmd of module.commands) {
-                if (typeof module[cmd] === 'object') {
-                    try {
-                        this.addCommand(cmd, module[cmd]);
-                        this.modules[moduleName].push(cmd);
-                        logger.custom('blue', 'CommandHolder/addModule', `Successfully loaded command '${cmd}'`);
-                    } catch(err) {
-                        logger.customError('CommandHolder/addMoule', `Error when attempting to load command '${cmd}':\n${err}`);
+            for (let command of module.commands) {
+                let cmd = module[command];
+
+                if (!cmd.desc) {
+                    logger.warn(`Command '${command}' does not have a description. Skipping.`);
+                    continue;
+                } else if (typeof cmd.main !== 'function') {
+                    logger.warn(`Command '${command}' does not have main as a function. Skipping.`);
+                    continue;
+                } else {
+                    this.commands[command] = cmd;
+
+                    if (Array.isArray(cmd.aliases)) {
+                        for (let alias of cmd.aliases) {
+                            this.aliases[alias] = this.commands[command];
+                            loadedAliases.push(alias);
+                        }
                     }
+
+                    loadedCommands.push(command);
                 }
+            }
+
+            this.modules[name] = loadedCommands.concat(loadedAliases);
+        }
+
+        if (!this.modules[name]) {
+            delete this.modules[name];
+            delete require.cache[name];
+            return;
+        }
+
+        logger.custom('CommandHolder/loadModule', `Loaded module '${name}'`);
+    }
+
+    /**
+     * Unloads a module.
+     * 
+     * @param {String} moduleName Name of the module to unload.
+     * @throws {TypeError} Argument must be correct type.
+     * @throws {Error} Module must be loaded already.
+     */
+    unloadModule(moduleName) {
+        if (typeof moduleName !== 'string') throw new TypeError('moduleName is not a string.');
+
+        let name = moduleName.split(/\\|\//).slice(-1)[0].slice(0, -3);
+
+        if (!this.modules[name]) throw new Error(`Module '${name}' is not loaded.`);
+
+        for (let cmd of this.modules[name]) {
+            if (this.aliases[cmd]) {
+                delete this.aliases[cmd];
+            } else if (this.commands[cmd]) {
+                delete this.commands[cmd];
             }
         }
 
-        return this.commands[moduleName] && this.commands[moduleName].subcommands ? Object.keys(this.commands[moduleName].subcommands).length : this.modules[moduleName].length;
+        delete this.modules[name];
+        delete require.cache[moduleName];
+        logger.custom('CommandHolder/removeModule', `Removed module '${name}'`);
     }
 
     /**
-     * Unloads a module and all its commands
+     * Reload a module.
      * 
-     * @param {String} moduleName Name of the module to remove.
-     * @param {String} path Path of the module. Used to decache the required module.
-     * @param {Boolean} reloading If true, bypasses the fixed error.
-     * @returns {Number} Amount of commands unloaded.
+     * @param {String} moduleName Name of the module to reload.
+     * @throws {TypeError} Argument must be correct type.
+     * @throws {Error} Module must already be loaded.
      */
-    removeModule(moduleName, path, reloading = false) {
+    reloadModule(moduleName) {
         if (typeof moduleName !== 'string') throw new TypeError('moduleName is not a string.');
-        if (typeof path !== 'string') throw new TypeError('path is not a string.');
-        if (!this.modules[moduleName]) throw new TypeError(`'${moduleName}' is not loaded.`);
-        if (!reloading && this.modules[`${moduleName}-fixed`]) throw new TypeError(`'${moduleName}' cannot be removed.`);
+        if (!this.modules[moduleName.split(/\/|\\/).slice(-1)[0].slice(0, -3)]) {
+            this.loadModule(moduleName);
+            return;
+        }
 
-        let amt = 0;
-        this.modules[moduleName].forEach(cmd => {
-            try {
-                this.removeCommand(cmd, true);
-                logger.custom('blue', 'CommandHolder/addModule', `Successfully removed command '${cmd}'`);
-                amt++;
-            } catch(err) {
-                logger.customError('CommandHolder/removeMoule', `Error when attempting to remove command '${cmd}':\n${err}`);
-            }
-        });
-
-        decache(path);
-        delete this.modules[moduleName];
-        delete this.modules[`${moduleName}-fixed`];
-        return amt;
-    }
-
-    /**
-     * Reload a module and its commands.
-     * 
-     * @param {String} moduleName Name of the module to reload
-     * @param {Object} module Module to replace the old one
-     * @param {String} path Path of the module. Used to decache the required module.
-     * @returns {Number} Amount of commands reloaded.
-     */
-    reloadModule(moduleName, module, path) {
-        this.removeModule(moduleName, path, true);
-        return this.addModule(moduleName, module);
-    }
-
-    /**
-     * Register a command into the command object.
-     * 
-     * @param {String} cmdName Name to register the command under.
-     * @param {Command} cmdObject Object of the command to register.
-     */
-    addCommand(cmdName, cmdObject) {
-        if (typeof cmdName !== 'string') throw new TypeError('cmdName is not a string');
-        if (typeof cmdObject !== 'object') new TypeError('cmdObject is not an object');
-        if (this.commands[cmdName] == null && !(cmdObject.desc && cmdObject.main)) throw new TypeError(`Not loading '${cmdName}' due to missing one or both required properties, desc and main.`);
-        if (this.commands[cmdName]) throw new TypeError(`'${cmdName}' already exists in the command holder.`);
-
-        this.commands[cmdName] = cmdObject;
-    }
-
-    /**
-     * Remove a command from the command object.
-     * 
-     * @param {String} cmdName The name of the command to remove.
-     * @param {Boolean} reloading Internal variable used for reloading.
-     */
-    removeCommand(cmdName, reloading) {
-        if (typeof cmdName !== 'string') throw new TypeError('cmdName is not a string.');
-        if (!this.commands[cmdName]) throw new TypeError(`'${cmdName}' does not exist in the command holder.`);
-        if (this.commands[cmdName].fixed && !reloading) throw new TypeError(`'${cmdName}' cannot be removed.`);
-
-        delete this.commands[cmdName];
-    }
-
-    /**
-     * Reload a command in the command object.
-     * 
-     * @param {String} cmdName The name of the command to reload.
-     * @param {Command} cmdObject Object of the command to register.
-     */
-    reloadCommand(cmdName, cmdObject) {
-        this.removeCommand(cmdName, true);
-        this.addCommand(cmdName, cmdObject);
+        this.unloadModule(moduleName);
+        this.loadModule(moduleName);
     }
 
     /**
      * Get a command from the command object.
      * 
      * @param {String} cmdName The name of the command to get.
-     * @returns {Object|Null} Returns command object if it exists.
+     * @returns {?Object} Returns command object if it exists.
      */
     getCommand(cmdName) {
-        return this.commands[cmdName] || null;
-    }
-
-    /**
-     * Check if a command is in the command object.
-     * 
-     * @param {String} cmdName The name of the command to check.
-     * @returns {Boolean} If the command exists.
-     */
-    checkCommand(cmdName) {
-        return this.commands[cmdName] ? true : false;
+        return this.aliases[cmdName] || this.commands[cmdName] || null;
     }
 
     /**
      * Run a command from the command object.
      * 
-     * @param {String} cmdName The name of the command to run.
      * @param {Context} ctx Context object to be passed to the command.
-     * @returns {Promise} Resolves if command is run successfully, or rejects if there is an error.
      */
-    runCommand(cmdName, ctx) {
-        return new Promise((resolve, reject) => {
-            if (typeof cmdName !== 'string') throw new TypeError('cmdName is not a string.');
-            if (!(ctx instanceof Context)) throw new TypeError('ctx is not an instanceof Context.');
-            if (!this.checkCommand(cmdName)) throw new Error(`'${cmdName}' is not a valid command.`);
+    async runCommand(ctx) {
+        if (!(ctx instanceof Context)) throw new TypeError('ctx is not a Context object.');
 
-            let cmd = this.getCommand(cmdName);
+        let cmd = this.getCommand(ctx.cmd);
 
-            // Subcommand checking
-            if (cmd.subcommands && cmd.subcommands[ctx.args[0]]) {
-                // Remove subcommand from suffix and args.
-                let subcommand = ctx.args.shift();
-                ctx.suffix = ctx.suffix.substring(subcommand.length).trim();
-                ctx.cleanSuffix = ctx.cleanSuffix.substring(subcommand.length).trim();
+        if (!cmd) return;
 
-                // Check if the subcommand is owner only
-                if ((cmd.owner || cmd.subcommands[subcommand].owner) && this[_bot].checkBotPerms(ctx.author.id)) {
-                    cmd.subcommands[subcommand].main(this[_bot], ctx).then(resolve).catch(reject);
-                } else if (cmd.subcommands[subcommand].owner) {
-                    resolve('non-owner ran owner command');
-                } else {
-                    if (!cmd.permissions || typeof cmd.permissions !== 'object') {
-                        // If permissions aren't defined, run the command
-                        cmd.subcommands[subcommand].main(this[_bot], ctx).then(resolve).catch(reject);
-                    } else {
-                        // Handle permissions
-                        this._handlePermissions(cmd, ctx, subcommand).then(resolve).catch(reject);
-                    }
-                }
+        if (cmd.subcommands && cmd.subcommands[ctx.args[0]]) {
+            let subcommand = ctx.args[0];
+            cmd = cmd.subcommands[subcommand];
+            ctx.args = ctx.args.slice(1);
+            ctx.raw = ctx.raw.split(subcommand).slice(1).join(subcommand).trim();
+            ctx.cleanRaw = ctx.cleanRaw.split(subcommand).slice(1).join(subcommand).trim();
+        }
+
+        if (cmd.owner && this[_bot].isOwner(ctx.author.id)) {
+            await cmd.main(this[_bot], ctx);
+            logger.cmd(`${loggerPrefix(this[_bot], ctx)}Ran owner command '${ctx.cmd}'`);
+        } else if (cmd.owner && !this[_bot].isOwner(ctx.author.id)) {
+            logger.cmd(`${loggerPrefix(this[_bot], ctx)}Tried to run owner command '${ctx.cmd}'`);
+            return; // eslint-disable-line
+        } else {
+            if (!cmd.permissions || typeof cmd.permissions !== 'object') {
+                await cmd.main(this[_bot], ctx);
+                logger.cmd(`${loggerPrefix(this[_bot], ctx)}Ran command '${ctx.cmd}'`);
             } else {
-                // Check if the command is owner only
-                if (cmd.owner && this[_bot].checkBotPerms(ctx.author.id)) {
-                    cmd.main(this[_bot], ctx).then(resolve).catch(reject);
-                } else if (cmd.owner) {
-                    resolve('non-owner ran owner command');
-                } else {
-                    if (!cmd.permissions || typeof cmd.permissions !== 'object') {
-                        // If permissions aren't defined, run the command
-                        cmd.main(this[_bot], ctx).then(resolve).catch(reject);
-                    } else {
-                        // Handle permissions
-                        this._handlePermissions(cmd, ctx).then(resolve).catch(reject);
-                    }
-                }
+                await this[_handlePermissions](cmd, ctx);
             }
-        });
+        }
     }
 
     /**
-     * Loop through the commands.
+     * Runs a supplied callback for each command.
      * 
-     * @param {Function} callback Function to run on each iteration.
+     * @param {Function} callback Function to run on each iteration. Gets two arguments: command object and command name.
      */
     forEach(callback) {
-        if (!callback || typeof callback !== 'function') throw new Error('callback is not a function');
+        if (typeof callback !== 'function') throw new Error('callback is not a function');
 
         for (let cmd in this.commands) {
             callback(this.commands[cmd], cmd);
         }
+    }
+
+    /**
+     * Returns all the commands which meet the conditions in the callback.
+     * 
+     * @param {Function} callback Function to use to filter. Gets two arguments: command object and command name.
+     * @returns {Command[]} Filtered commands.
+     */
+    filter(callback) {
+        if (typeof callback !== 'function') throw new Error('callback is not a function');
+
+        let filtered = [];
+
+        this.forEach((cmd, name) => {
+            if (callback(cmd, name)) filtered.push(Object.assign({}, cmd, {name}));
+        });
+
+        return filtered;
     }
 
     /**
@@ -330,7 +300,7 @@ class CommandHolder {
         return this.modules[modName] ? true : false;
     }
 
-    _handlePermissions(cmd, ctx, subcommand) {
+    async [_handlePermissions](cmd, ctx, subcommand) {
         return new Promise((resolve, reject) => {
             // Permission checking
             let permChecks = {both: [], author: [], self: []};
@@ -431,6 +401,30 @@ class CommandHolder {
     get usedCommandOptions() {
         return ['desc', 'usage', 'owner', 'fixed', 'main', 'permissions'];
     }
+
+    get allCommands() {
+        return Object.keys(this.commands).sort();
+    }
+
+    get allAliases() {
+        return Object.keys(this.aliases).sort();
+    }
+
+    get allModules() {
+        return Object.keys(this.modules).sort();
+    }
+
+    /**
+     * Array of options used by the command handler and loader.
+     * @returns {String[]} .
+     */
+    static get usedCommandOptions() {
+        return ['desc', 'usage', 'owner', 'fixed', 'main', 'permissions'];
+    }
+}
+
+function loggerPrefix(bot, msg) {
+    return `${msg.channel.guild.id} > ${msg.author.id}: `;
 }
 
 /**
@@ -448,7 +442,6 @@ class Command { // eslint-disable-line
 }
 
 let _msg = Symbol();
-const UsedOptions = ['args', 'cleanSuffix', 'cmd', 'guildBot', 'suffix', 'settings'];
 /**
  * Context to pass to a command.
  * 
@@ -468,40 +461,35 @@ class Context {
     /**
      * Create a context object.
      * 
-     * @param {Object} options Options for the context.
-     * @param {String[]} options.args Array of arguments.
-     * @param {String} options.cleanSuffix All arguments joined together with resolved content.
-     * @param {String} options.cmd The command name.
-     * @param {Eris.Member} options.guildBot The member object of the bot.
-     * @param {Eris.Message} options.msg Message to inherit from.
-     * @param {String} options.suffix All arguments joined together.
-     * @param {Object} options.settings Settings for the guild or user.
+     * @param {Eris.Message} msg Message to inherit from.
+     * @param {Eris.Client} bot Bot instance to help with some parsing.
+     * @param {Object} settings Settings to assign to context.
     */
-    constructor(options) {
+    constructor(msg, bot, settings) {
         // Validate all objects are the types we want.
-        if (typeof options !== 'object') throw new TypeError('options is not an object.');
-        if (Object.keys(options).length === 0) throw new Error('options is empty.');
-        if (!(options.msg instanceof Eris.Message)) throw new TypeError('options.msg is not an instance of Eris.Message.');
-        if (!(options.guildBot instanceof Eris.Member)) throw new TypeError('options.guildBot is not an instance of Eris.Member.');
-        if (!Array.isArray(options.args)) throw new TypeError('options.args is not an array.');
-        if (typeof options.cmd !== 'string') throw new TypeError('options.cmd is not a string.');
-        if (typeof options.suffix !== 'string') throw new TypeError('options.suffix is not a string.');
-        if (typeof options.cleanSuffix !== 'string') throw new TypeError('options.cleanSuffix is not a string.');
-        if (typeof options.settings !== 'object') throw new TypeError('options.settings is not an object.');
+        if (!(msg instanceof Eris.Message)) throw new TypeError('msg is not a message.');
+        if (!(bot instanceof Eris.Client)) throw new TypeError('bot is not a client.');
+        if (!settings || typeof settings !== 'object') throw new TypeError('settings is not an object.');
 
         // Inherit properties from the message and assign it a private value.
-        Object.assign(this, options.msg);
-        this[_msg] = options.msg;
+        Object.assign(this, msg);
+        this[_msg] = msg;
 
-        // Assign used options into this.
-        Object.keys(options).filter(k => ~UsedOptions.indexOf(k)).forEach(k => {
-            this[k] = options[k];
-        });
+        let cleaned = parsePrefix(msg.content, bot.config.prefixes);
+
+        let tmp = parseArgs(cleaned);
+        this.args = tmp.args;
+        this.cmd = tmp.cmd;
+        this.suffix = tmp.suffix;
+        this.cleanSuffix = msg.content.split(this.cmd).slice(1).join(this.cmd).trim();
+
+        this.guildBot = msg.channel.guild.members.get(bot.user.id);
+        this.settings = settings;
 
         // Get mention strings.
-        this.mentionStrings = this[_msg].content.match(/<@!?\d+>/g) || [];
+        this.mentionStrings = msg.content.match(/<@!?\d+>/g) || [];
         if (this.mentionStrings.length > 0) this.mentionStrings = this.mentionStrings.map(mntn => mntn.replace(/<@!?/, '').replace('>', ''));
-        if (this[_msg].content.startsWith(`<@${this._client.user.id}>`) || this[_msg].content.startsWith(`<@!${this._client.user.id}>`)) this.mentionStrings.shift();
+        if (msg.content.startsWith(`<@${this._client.user.id}>`) || msg.content.startsWith(`<@!${this._client.user.id}>`)) this.mentionStrings.shift();
 
         // Rename _client.
         this.client = this._client;
@@ -548,58 +536,58 @@ class Context {
      * 
      * @param {(String|Object)} content Content to send. If object, same as Eris options.
      * @param {Object} [file] File to send. Same as Eris file.
-     * @param {String} [where='channel'] Where to send the message. Either 'channel' or 'author'.
-     * @param {Object} [replacers] Object of keys to replace with items for translation.
-     * @returns {Promise<Eris.Message>} The sent message.
+     * @param {String} [where=channel] Where to send the message. Either 'channel' or 'author'.
+     * @param {Object} [replacers={}] Options to use for replacing in translations.
+     * @returns {Eris.Message} The sent message.
      * @see http://eris.tachibana.erendale.abal.moe/Eris/docs/Channel#function-createMessage
      */
-    createMessage(content, file, where='channel', replacers={}) {
-        return new Promise((resolve, reject) => {
-            if (typeof where !== 'string') throw new TypeError('where is not a string.');
-            if (!~['channel', 'author'].indexOf(where)) throw new Error('where is an invalid value. Must either be `channel` or `author`');
+    async createMessage(content, file, where='channel', replacers={}) {
+        if (typeof where !== 'string') throw new TypeError('where is not a string.');
+        if (!['channel', 'author'].includes(where)) throw new Error('where is an invalid place. Must either by `channel` or `author`');
+            
+        if (content.embed && typeof content.embed.color !== 'number') content.embed.color = utils.randomColour();
+        let locale = this.settings.locale;
 
-            if (content.embed && typeof content.embed.color !== 'number') content.embed.color = utils.randomColour();
-            let locale = this.settings.locale;
+        if (typeof content === 'string') {
+            content = localeManager.t(content, locale, replacers);
+        } else if (content.content || content.embed) {
+            if (content.content) content.content = localeManager.t(content, locale, replacers);
 
-            if (typeof content === 'string') {
-                content = localeManager.t(content, locale, replacers);
-            } else if (content.content || content.embed) {
-                if (content.content) content.content = localeManager.t(content, locale, replacers);
+            if (content.embed) {
+                for (let key in content.embed) {
+                    if (['url', 'type', 'timestamp', 'color', 'fields', 'thumbnail', 'image', 'video', 'provider'].includes(key)) continue;
 
-                if (content.embed) {
-                    for (let key in content.embed) {
-                        if (['url', 'type', 'timestamp', 'color', 'fields', 'thumbnail', 'image', 'video', 'provider'].includes(key)) continue;
+                    let item = content.embed[key];
 
-                        let item = content.embed[key];
-
-                        if (['title', 'description'].includes(key)) {
-                            content.embed[key] = localeManager.t(item, locale, replacers);
-                        } else if (key === 'author' && item.name) {
-                            content.embed[key].name = localeManager.t(item.name, locale, replacers);
-                        } else if (key === 'footer' && item.text) {
-                            content.embed[key].text = localeManager.t(item.text, locale, replacers);
-                        }
-                    }
-
-                    if (content.embed.fields) {
-                        content.embed.fields.forEach((v, i, a) => {
-                            if (typeof v.name === 'string') a[i].name = localeManager.t(v.name, locale, replacers);
-                            if (typeof v.value === 'string') a[i].value = localeManager.t(v.value, locale, replacers);
-                        });
+                    if (['title', 'description'].includes(key)) {
+                        content.embed[key] = localeManager.t(item, locale, replacers);
+                    } else if (key === 'author' && item.name) {
+                        content.embed[key].name = localeManager.t(item.name, locale, replacers);
+                    } else if (key === 'footer' && item.text) {
+                        content.embed[key].text = localeManager.t(item.text, locale, replacers);
                     }
                 }
-            }
 
-            if (where === 'channel') {
-                this.channel.createMessage(content, file).then(resolve).catch(reject);
-            } else if (where === 'author') {
-                this.author.getDMChannel().then(dm => dm.createMessage(content, file)).then(resolve).catch(reject);
+                if (content.embed.fields) {
+                    content.embed.fields.forEach((v, i, a) => {
+                        if (typeof v.name === 'string') a[i].name = localeManager.t(v.name, locale, replacers);
+                        if (typeof v.value === 'string') a[i].value = localeManager.t(v.value, locale, replacers);
+                    });
+                }
             }
-        });
+        }
+
+        if (!this.hasPermission('embedLinks') && content && content.embed) content = Context.flattenEmbed(content.embed);
+
+        if (where === 'channel') {
+            return await this.channel.createMessage(content, file);
+        } else if (where === 'author') {
+            return await this.author.getDMChannel().then(dm => dm.createMessage(content, file));
+        }
     }
 
     /**
-     * Check if a user has permission to run a command. Obeys channel permission overwrites for allowing.
+     * Check if a user has permission to run a command. Obeys channel permission overwrites.
      * 
      * @param {String} permission The permission to check.
      * @param {String} [who=self] The user to check. Either 'self', 'author' or 'both'.
@@ -637,12 +625,43 @@ class Context {
     }
 
     /**
-     * Context#Message. Legacy Message handler.
-     * @deprecated since 0.3.0
-     * @throws undefined
+     * Flattens an embed into plain text.
+     * 
+     * @static
+     * @param {Object} embed Embed to flatten.
+     * @returns {String} Flattened embed.
      */
-    get msg() {
-        throw undefined;
+    static flattenEmbed(embed) {
+        let flattened = '';
+
+        if (embed.author) {
+            flattened += `**${embed.author.name}`;
+            flattened += embed.author.url ? ` <${embed.author.url}>**\n` : '**\n';
+        }
+
+        if (embed.title) {
+            flattened += `**${embed.title}`;
+            flattened += embed.url ? ` <${embed.url}>**\n\n` : '**\n\n';
+        }
+
+        if (embed.description) flattened += `${embed.description}\n`;
+        if (embed.fields) embed.fields.forEach(f => {
+            flattened += !f.name.match(/^`.*`$/) ? `**${f.name}**\n` : `${f.name}\n`;
+            flattened += `${f.value}\n`;
+        });
+    
+        if (embed.footer && !embed.timestamp) {
+            flattened += `${embed.footer.text}\n`;
+        } else if (!embed.footer && embed.timestamp) {
+            flattened += `${embed.timestamp}\n`;
+        } else if (embed.footer && embed.timestamp) {
+            flattened += `\n${embed.footer.text} | ${embed.timestamp}\n`;
+        }
+
+        if (embed.thumbnail) flattened += `${embed.thumbnail.url}\n`;
+        if (embed.image) flattened += `${embed.image.url}\n`;
+
+        return flattened;
     }
 }
 
