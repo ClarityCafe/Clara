@@ -24,7 +24,7 @@ try {
     unloadedCommands = JSON.parse(fs.readFileSync(`${__baseDir}/unloadedCommands.json`).toString());
 } catch(err) {
     unloadedCommands = [];
-    fs.writeFile(`${__baseDir}/unloadedCommands.json`, '[]');
+    fs.writeFile(`${__baseDir}/data/unloadedCommands.json`, '[]');
 }
 
 function getDirectories(dir) {
