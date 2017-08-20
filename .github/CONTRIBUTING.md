@@ -23,6 +23,8 @@ with older Node versions.
 
 If you can, use ESLint to make sure that your code complies to the standards for the repository, otherwise, have fun reading the .eslintrc
 
+As of August 08, 2017, we now use async/await
+
 # Pull Requests
 
 PRs are only accepted in the `development` branch. if you PR to `master`, it will be closed.
