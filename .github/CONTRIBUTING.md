@@ -18,7 +18,7 @@ Information on properly creating commands for the bot can be found [here](https:
 To fit in with the 'theme' of the bot, please use any ES6 features where possible/needed, e.g. arrow functions, template strings, promises, etc.
 Remember, arrow functions don't change `this`, so if for some reason you need `this` changed, eg. using a library which does so, then you'll need to use the regular `function() {}`.
 
-Although we would like you to follow Harmony, we use strictly **Promises**  for async to be backwards-compatible
+Although we would like you to follow Harmony, we use strictly **Promises** for async to be backwards-compatible
 with older Node versions.
 
 If you can, use ESLint to make sure that your code complies to the standards for the repository, otherwise, have fun reading the .eslintrc
