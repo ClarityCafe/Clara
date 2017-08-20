@@ -6,20 +6,38 @@
 
 /* eslint-env node */
 
-const {parseArgs, parsePrefix} = require(`${__baseDir}/modules/messageParser`);
+const {parsePrefix} = require(`${__baseDir}/modules/messageParser`);
 const {Context} = require(`${__baseDir}/modules/CommandHolder`);
 const {formatUsername} = require(`${__baseDir}/modules/utils`);
 
 module.exports = bot => {
-    bot.on('messageCreate', msg => {
+    bot.on('messageCreate', async msg => {
         if (!msg.author) console.log(msg);
-        if (!bot.allowCommandUse || !msg.author || msg.author.id === bot.user.id || msg.author.bot || bot.isBlacklisted(msg.author.id)) return;
-        if (!msg.channel.guild) {
-            logger.custom('cyan', 'dm', loggerPrefix(msg) + msg.cleanContent);
-            return;
+        if (!bot.allowCommandUse || !msg.author || msg.author.id === bot.user.id || msg.author.bot || bot.isBlacklisted(msg.author.id) || !msg.channel.guild) return;
+
+        let cleaned = parsePrefix(msg.content, bot.prefixes);
+
+        if (cleaned === msg.content) return;
+
+        let cmd = cleaned.split(' ')[0];
+
+        if (!bot.commands.getCommand(cmd) && !(RegExp(`^<@!?${bot.user.id}>\s?.+$`) && bot.commands.getCommand('chat'))) return;
+
+        let settings = {};
+        settings.guild = await bot.getGuildSettings(msg.channel.guild.id);
+        settings.user = await bot.getUserSettings(msg.author.id);
+        settings.locale = settings.user.locale !== localeManager.defaultLocale ? settings.user.locale : settings.guild.locale;
+
+        let ctx = new Context(msg, bot, settings);
+        ctx.cmd = cmd;
+
+        try {
+            await bot.commands.runCommand(ctx);
+        } catch(err) {
+            await handleCmdErr(msg, cmd, err);
         }
 
-        let outer = {msg};
+        /*let outer = {msg};
         parsePrefix(msg.content, bot.prefixes).then(content => {
             if (!content) return null;
             return parseArgs(content);
@@ -57,7 +75,7 @@ module.exports = bot => {
         }).then(res => {
             if (!res) return null;
             logger.cmd(`${loggerPrefix(msg)}${outer.cmd}`);
-        }).catch(err => handleCmdErr(msg, outer.cmd, err));
+        }).catch(err => handleCmdErr(msg, outer.cmd, err));*/
     });
 
     /**
