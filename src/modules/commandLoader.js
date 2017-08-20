@@ -104,8 +104,8 @@ function loadCommands(bot) {
             }
         }
 
-        if (!unloadedCommands.equals(JSON.parse(fs.readFileSync(`${__baseDir}/unloadedCommands.json`).toString()))) {
-            fs.writeFile(`${__baseDir}/unloadedCommands.json`, JSON.stringify(unloadedCommands), err => {
+        if (!unloadedCommands.equals(JSON.parse(fs.readFileSync(`${__baseDir}/data/unloadedCommands.json`).toString()))) {
+            fs.writeFile(`${__baseDir}/data/unloadedCommands.json`, JSON.stringify(unloadedCommands), err => {
                 if (err) {
                     reject(err);
                 } else {
