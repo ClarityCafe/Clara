@@ -475,7 +475,7 @@ class Context {
         Object.assign(this, msg);
         this[_msg] = msg;
 
-        let cleaned = parsePrefix(msg.content, bot.config.prefixes);
+        let cleaned = parsePrefix(msg.content, bot.prefixes);
 
         let tmp = parseArgs(cleaned);
         this.args = tmp.args;
