@@ -13,7 +13,6 @@ const Eris = require('eris');
 const fs = require('fs');
 
 //global stuff
-
 global.utils = require(`${__dirname}/modules/utils`);
 global.got = require('got');
 global.__baseDir = __dirname;
