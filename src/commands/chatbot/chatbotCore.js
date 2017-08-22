@@ -4,6 +4,7 @@
  * @author Capuccino
  */
  const tf = require('tensorflow2');
+ const bucket = require('./Bucket');
 
  /**
   * A class the handles text-based neural intelligence
