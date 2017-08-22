@@ -27,6 +27,3 @@ jobs:
       - run:
           name: Docker Build
           command: docker build -f Dockerfile -t clara:test .
-      - run:
-          name: Docker Compose Test
-          command: docker-compose up
