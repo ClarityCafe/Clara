@@ -5,7 +5,6 @@
 FROM ubuntu:16.04
 
 #overrides for APT cache
-
 RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
 RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 
@@ -13,7 +12,9 @@ RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 
 RUN apt update && \
     apt -y install \
-    apt-utils \ 
+    apt-utils \
+    software-properties-common \
+    python-software-properties \
     wget \
     sudo \
     bash \
@@ -22,6 +23,7 @@ RUN apt update && \
     ssh \
     tar \
     gzip \
+    openssh-server \
     build-essential \
     ffmpeg \
     python3-pip \
@@ -31,33 +33,33 @@ RUN apt update && \
     libboost-all-dev \ 
     libncurses5-dev \
     libjemalloc-dev \
-    m4
+    m4 
     
-# node    
-
-RUN wget -qO- https://deb.nodesource.com/setup_8.x | sudo -E bash -
-RUN apt update && apt -y install nodejs
-
-    
-# now we create a dummy account 
-
-RUN adduser --disabled-password --gecos "" clara && adduser clara sudo && su clara
-WORKDIR /home/clara
-RUN git config --global user.name nyan && git config --global user.email nyan@pa.su
-
-#Expose Local port and SSH Port just because we can
-
+ # node    
+ 
+ RUN wget -qO- https://deb.nodesource.com/setup_8.x | sudo -E bash -
+ RUN apt update && apt -y install nodejs
+ 
+     
+ # now we create a dummy account 
+ RUN mkdir /var/run/sshd && \
+     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
+     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+     useradd -u 1000 -G users,sudo -d /home/clara --shell /bin/bash -m clara && \
+     usermod -p "*" clara
+ USER clara
+ 
+ #Expose Local port and SSH Port just because we can
+ 
 EXPOSE 22 8080
 
-ENTRYPOINT ["node", "~/src/bot.js"]
-
-# Install deps
-
-RUN npm i --silent
+ENTRYPOINT ["node", "/Clara/src/bot.js"]
 
 # It's advisable to add your config files so if we run docker run, it wouldn't error out.
 
-COPY . . 
+RUN sudo git clone https://github.com/ClaraIO/Clara.git --bare --depth=50
+
+CMD ["/usr/sbin/sshd", "-p 22", "-D", "&&", "node", "/Clara/src/bot --harmony"]
 
 # finally echo this in a fancy way
 

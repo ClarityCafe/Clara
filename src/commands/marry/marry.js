@@ -62,7 +62,7 @@ exports.divorce = {
                 }).then(m => {
                     if (/y(es)?/i.test(m.content)) {
                         return ctx.createMessage(`${ctx.author.mention} you're no longer married to <@${ctx.mentionStrings[0]}>.`);
-                    } else if (/no?/i.test(m.content)) {
+                    } else if (/(o)?/i.test(m.content)) {
                         return ctx.createMessage(`${ctx.author.mention}, your partner won't let go.`);
                     } else {
                         return ctx.createMessage(`<@${ctx.mentionStrings[0]}> that is not a valid answer.`);
