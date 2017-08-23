@@ -28,9 +28,9 @@ exports.marry = {
                 ctx.createMessage(`<@${ctx.mentionStrings[0]}> will you marry ${ctx.author.mention}?\nRespond with yes or no. (30 seconds)`).then(() => {
                     return bot.awaitMessage(ctx.channel.id, ctx.mentionStrings[0], () => true, 30000);
                 }).then(m => {
-                    if (/y(es)?/i.test(m.content)) {
+                    if (/^y(es)?$/i.test(m.content)) {
                         return ctx.createMessage(`I hereby pronounce <@${ctx.mentionStrings[0]}> and ${ctx.author.mention} as husband and wife. :sparkling_heart:`);
-                    } else if (/no?/i.test(m.content)) {
+                    } else if (/^no?$/i.test(m.content)) {
                         return ctx.createMessage(`${ctx.author.mention}, unfortunately, your partner declined.`);
                     } else {
                         return ctx.createMessage(`<@${ctx.mentionStrings[0]}> that is not a valid answer.`);
@@ -60,9 +60,9 @@ exports.divorce = {
                 ctx.createMessage(`<@${ctx.mentionStrings[0]}>, will you let go of ${ctx.author.mention}?\nRespond with yes or no. (30 seconds)`).then(() => {
                     return bot.awaitMessage(ctx.channel.id, ctx.mentionStrings[0], () => true, 30000);
                 }).then(m => {
-                    if (/y(es)?/i.test(m.content)) {
+                    if (/^y(es)?$/i.test(m.content)) {
                         return ctx.createMessage(`${ctx.author.mention} you're no longer married to <@${ctx.mentionStrings[0]}>.`);
-                    } else if (/no?/i.test(m.content)) {
+                    } else if (/^no?$/i.test(m.content)) {
                         return ctx.createMessage(`${ctx.author.mention}, your partner won't let go.`);
                     } else {
                         return ctx.createMessage(`<@${ctx.mentionStrings[0]}> that is not a valid answer.`);
