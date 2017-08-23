@@ -30,7 +30,7 @@ exports.marry = {
                 }).then(m => {
                     if (/y(es)?/i.test(m.content)) {
                         return ctx.createMessage(`I hereby pronounce <@${ctx.mentionStrings[0]}> and ${ctx.author.mention} as husband and wife. :sparkling_heart:`);
-                    } else if (/no?/i.test(m.content)) {
+                    } else if (/^no?$/i.test(m.content)) {
                         return ctx.createMessage(`${ctx.author.mention}, unfortunately, your partner declined.`);
                     } else {
                         return ctx.createMessage(`<@${ctx.mentionStrings[0]}> that is not a valid answer.`);
