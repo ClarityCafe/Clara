@@ -18,3 +18,6 @@ jobs:
       - run:
           name: Docker Build
           command: docker build -f Dockerfile -t clara:continous .
+notify:
+  webhooks:
+    - url: https://claraio-circledisc.herokuapp.com/hooks/circleci
