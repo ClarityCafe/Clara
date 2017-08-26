@@ -5,7 +5,7 @@
  */
  const tf = require('tensorflow2');
  const bucket = require('./Bucket');
-
+ const fs = require('fs');
  /**
   * A class the handles text-based neural intelligence
   */
@@ -39,6 +39,18 @@
          
          //typechecker for number-only properties
          if (isNaN(this.eodID, this.padID, this.treshold, this.unkID, this.startID, this.testSetSize)) return new TypeError('you have set a property that only allows number. Please amend.');
+         // some checks again
+         if (!fs.existsSync(this.dataPath)) throw new Error();
+         if (!fs.existsSync(this.convoFile)) throw new Error();
+         if (!fs.existsSync(this.outputFile)) fs.writeFileSync(this.outputFile);
+         if (!fs.existsSync(this.lineFile)) throw new Error();
+         if (!fs.existsSync(this.processedPath)) fs.mkdirSync(this.processedPath);
+         if (!fs.existsSync(this.checkpoints)) fs.mkdirSync(this.checkpoints);
+     }
+
+     async getRandomBucket(trainBucketScale) {
+         let rand = Math.random();
+
      }
  }
 
