@@ -49,8 +49,11 @@
      }
 
      async getRandomBucket(trainBucketScale) {
+         if (isNaN(trainBucketScale)) return new TypeError('trainBucketScale is not a number');
          let rand = Math.random();
-
+         for (let i in trainBucketScale = i++) {
+             return new bucket(trainBucketScale, 60000); // thonkang
+         }
      }
  }
 
