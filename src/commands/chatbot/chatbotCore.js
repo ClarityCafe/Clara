@@ -38,7 +38,7 @@
          this.testSetSize = testSetSize || 25000;
          
          //typechecker for number-only properties
-         if (!isNaN(this.eodID, this.padID, this.treshold, this.unkID, this.startID, this.testSetSize) === false) return new TypeError('you have set a property that only allows number. Please amend.');
+         if (isNaN(this.eodID, this.padID, this.treshold, this.unkID, this.startID, this.testSetSize)) return new TypeError('you have set a property that only allows number. Please amend.');
      }
  }
 
