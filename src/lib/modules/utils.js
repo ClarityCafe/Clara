@@ -5,6 +5,9 @@
  */
  const Eris = require('eris');
  
+ /**
+  * Class that handles miscellaneous utility functions
+  */
  class Utils {
      /**
       * Converts milliseconds to a more human-readable format
