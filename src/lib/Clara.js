@@ -324,13 +324,6 @@ class Clara extends Eris.Client {
 
         return res;
     }
-    /**
-     * set the bot's rich prescence (Needs app to be signed up for Gamebridge Alpha/doesn't work too.)
-     * @readonly
-     */
-    static async setRichPrescence() {
-        throw new TypeError('get prankd on uwu');
-    }
 }
 
 module.exports = Clara;
