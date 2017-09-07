@@ -42,7 +42,7 @@ As of August 08, 2017, we now use async/await
 
 # Pull Requests
 
-PRs are only accepted in the `development` branch. if you PR to `master`, it will be closed.
+PRs are only accepted in the `development` or ``lts`` branch. if you PR to `release`, it will be closed.
 
 # Code Verification
 
