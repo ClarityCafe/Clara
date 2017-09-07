@@ -7,7 +7,7 @@
  const bucket = require('./Bucket');
  const fs = require('fs');
  /**
-  * A class the handles text-based neural intelligence
+  * A class the handles neural-based text responses
   */
  class Chatbot {
      /**
