@@ -1,3 +1,6 @@
+# Development Branch
+ All of your PRs must be in sync with ``development``, not ``release``.
+
 # Directory Structure
 
 All commands go into the `cmd` folder in their own folder with a `package.json` and the command file.
