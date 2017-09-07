@@ -13,6 +13,14 @@ Any modules that are used by several commands/the main bot/whatever, go into the
 
 Information on properly creating commands for the bot can be found [here](https://github.com/awau/Clara/wiki).
 
+We group commands by the following:
+
+-``dev`` for Developer-Only/Bot Admin commands
+-``main`` for core commands
+-``misc`` for third-party, non-essential commands
+
+make sure to follow the categorization enforced or your PR will not be merged
+
 # Code Styling
 
 To fit in with the 'theme' of the bot, please use any ES6 features where possible/needed, e.g. arrow functions, template strings, promises, etc.
