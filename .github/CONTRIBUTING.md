@@ -1,5 +1,6 @@
 # Development Branch
  All of your PRs must be in sync with ``development``, not ``release``.
+ For maintenance PRs for LTS versions, PRs must be in sync with ``lts``.
 
 # Directory Structure
 
