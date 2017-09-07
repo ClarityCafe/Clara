@@ -15,7 +15,7 @@ const cp = require('child_process');
 const logger = require(`${__dirname}/Logger`);
 
 // Variables
-var commandsDirectory = `${__baseDir}/commands`;
+var commandsDirectory = `${__baseDir}/cmds`;
 var commandFolders;
 var noLoad = [];
 var unloadedCommands;
