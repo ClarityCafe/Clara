@@ -11,14 +11,14 @@ Any modules that are used by several commands/the main bot/whatever, go into the
 
 We group commands by the following:
 
--``dev`` for Developer-Only/Bot Admin commands
+- ``dev`` for Developer-Only/Bot Admin commands.
 
--``main`` for core commands
+- ``main`` for core commands.
 
--``misc`` for third-party, non-essential commands
+- ``misc`` for third-party, non-essential commands.
 
 
-make sure to follow the categorization enforced or your PR will not be merged
+make sure to follow the categorization enforced or your PR will not be merged.
 
 ## Creating Commands
 
