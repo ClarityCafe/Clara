@@ -1,6 +1,6 @@
 # Directory Structure
 
-All commands go into the `commands` folder in their own folder with a `package.json` and the command file.
+All commands go into the `cmd` folder in their own folder with a `package.json` and the command file.
 Look at the `package.json` for other commands to see the structure of them.
 
 Any modules that are used by several commands/the main bot/whatever, go into the `modules` folder.
@@ -9,17 +9,20 @@ Any modules that are used by several commands/the main bot/whatever, go into the
 
 `logs` is for the logs output by pm2.
 
-## Creating Commands
-
-Information on properly creating commands for the bot can be found [here](https://github.com/awau/Clara/wiki).
-
 We group commands by the following:
 
 -``dev`` for Developer-Only/Bot Admin commands
+
 -``main`` for core commands
+
 -``misc`` for third-party, non-essential commands
 
+
 make sure to follow the categorization enforced or your PR will not be merged
+
+## Creating Commands
+
+Information on properly creating commands for the bot can be found [here](https://github.com/awau/Clara/wiki).
 
 # Code Styling
 
