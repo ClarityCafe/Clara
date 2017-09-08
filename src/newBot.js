@@ -6,9 +6,13 @@
  */
 
  //module requires
- const Clara = require('../../lib/Clara');
+ const Clara = require('./lib/Clara');
  const fs = require('fs');
  const config = fs.readFile('./config.json');
+
+//globals
+
+global.Promise = require('bluebird');
 
  //bot stuff
  const bot = new Clara(config, {
