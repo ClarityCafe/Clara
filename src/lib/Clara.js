@@ -25,7 +25,7 @@ class Clara extends Eris.Client {
     constructor(config, options = {}) {
         if (!config || typeof config !== 'object') throw new TypeError('config is not an object.');
         
-        super(config.token, options.Eris.options);
+        super(config.token, options.Eris);
 
         let tmp = JSON.parse(fs.readFileSync('../data/data.json'));
 
