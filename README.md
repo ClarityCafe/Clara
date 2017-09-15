@@ -14,7 +14,7 @@ Go to the  [Getting Started Article in The Wiki](https://github.com/awau/Clara/w
 
 ### Deploying via Docker
 If you don't want to install node on your host, or you are having problems with native build tools, you can deploy this bot with the help of Docker.
-You'll need to mount `/home/clare/src/config.json` to some file on host, or make a virtual volume containing your token and service keys. Service port exposed is `8080`, though, it is not mandatory to forward it.
+You'll need to mount `/home/clara/src/config.json` to some file on host, or make a virtual volume containing your token and service keys. Service port exposed is `8080`, though, it is not mandatory to forward it.
 
 # Contributing
 
