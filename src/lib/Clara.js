@@ -20,18 +20,18 @@ class Clara extends Eris.Client {
      * @param {Object} options options for Eris
      */
     constructor(config, options = {}) {
-        if (!config || typeof config !== 'object') throw new TypeError('config is not an object.');
+        if (!config && typeof config !== 'object') throw new TypeError('config is not an object.');
         
         super(config.token, options);
-
-        if (!fs.existsSync('../.clara')) fs.mkdirSync('../.clara');
-        if (!fs.existsSync('../.clara/data/data.json')) fs.writeFileSync('../.clara/data/data.json'); 
-        if (!fs.existsSync('../.clara/data/prefixes.json')) fs.writeFileSync('../.clara/data/prefixes.json');
-        let tmp = JSON.parse(fs.readFileSync('../.clara/data/data.json'));
+        if (!fs.existsSync('./data')) fs.mkdirSync('./data');
+        if (!fs.existsSync('./data/data.json')) fs.writeFileSync('./data/data.json', '{}');
+        if (!fs.existsSync('./data/prefixes.json')) fs.writeFileSync('./data/prefixes.json', '[]');
+        
+        let tmp = JSON.parse(fs.readFileSync('./data/data.json'));
 
         this.config = config;
         // parsing for multi-prefix
-        this.prefixes = JSON.parse(fs.readFileSync('../data/prefixes.json')).concat([config.mainPrefix]);
+        this.prefixes = JSON.parse(fs.readFileSync('./data/prefixes.json')).concat([config.mainPrefix]);
         this.blacklist = tmp.blacklist;
         this.admins = tmp.admins;
 
