@@ -15,8 +15,9 @@
   	 * @param {String} usage how your command should be usage if your command requires an argument.
   	 */
   	 constructor(desc, shortDesc, usage=null) {
-  	 	desc = 'a sample command ot showcase the proposed 1.x command structure',
-  	 	shortDesc = 'meme';
+  	     super(this.desc, this.shortDesc, this.usage);
+  	     desc = 'A sample command to showcase the new class-based command structure for Clara 1.x',
+  	     shortDesc = 'a sample command, duh';
   	 }
   	 
   	 /**
