@@ -31,7 +31,7 @@ exports.marry = {
                 }).then(() => {
                     return bot.awaitMessage(ctx.channel.id, ctx.mentionStrings[0], () => true, 30000);
                 }).then(m => {
-                    if (/^y(es)?$/i.test(m.content) {
+                    if (/^y(es)?$/i.test(m.content)) {
                         return ctx.createMessage('marry-marriageSuccess', null, 'channel', {
                             author: ctx.author.mention,
                             mentioned: `<@${ctx.mentionStrings[0]}>`
@@ -75,7 +75,7 @@ exports.divorce = {
                 }).then(() => {
                     return bot.awaitMessage(ctx.channel.id, ctx.mentionStrings[0], () => true, 30000);
                 }).then(m => {
-                    if (/^y(es)?$/i.test(m.content) {
+                    if (/^y(es)?$/i.test(m.content)) {
                         return ctx.createMessage('divorce-divorceSuccess', null, 'channel', {
                             author: ctx.author.mention,
                             mentioned: `<@${ctx.mentionStrings[0]}>`
