@@ -22,9 +22,12 @@ class Clara extends Eris.Client {
     constructor(config, options = {}) {
         if (!config || typeof config !== 'object') throw new TypeError('config is not an object.');
         
-        super(config.token, options.Eris);
-
-        let tmp = JSON.parse(fs.readFileSync('../data/data.json'));
+        super(config.token, options);
+        
+        if (!fs.existsSync('../.clara')) fs.mkdirSync('../.clara');
+        if (!fs.existsSync('../.clara/data/data.json')) fs.writeFileSync('../.clara/data/data.json'); 
+        if (!fs.existsSync('../.clara/data/prefixes.json'))   fs.writeFileSync('../.clara/data/prefixes.json');
+        let tmp = JSON.parse(fs.readFileSync('../.clara/data/data.json'));
 
         this.config = config;
         // parsing for multi-prefix

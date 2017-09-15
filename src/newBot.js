@@ -10,7 +10,7 @@
 //module requires
 const Clara = require('./lib/Clara');
 const fs = require('fs');
-const config = fs.readFile('./config.json');
+const config = require('./config.json');
 
 //globals
 global.utils = require(`${__dirname}/lib/modules/utils`);
@@ -38,12 +38,7 @@ Promise.config({
 
 exports.bot = bot;
 
-// create files if they don't exist
-if (!fs.existsSync(`${__dirname}/data`)) fs.mkdirSync(`${__dirname}/data/`);
 if (!fs.existsSync(`${__dirname}/cache`)) fs.mkdirSync(`${__dirname}/cache/`);
-if (!fs.existsSync(`${__dirname}/data/data.json`)) fs.writeFileSync(`${__dirname}/data/data.json`); if (!fs.existsSync(`${__dirname}/data/data.json`)) fs.writeFileSync(`${__dirname}/data/data.json`); if (!fs.existsSync(`${__dirname}/data/data.json`)) fs.writeFileSync(`${__dirname}/data/data.json`);
-if (!fs.existsSync(`${__dirname}/data/prefixes.json`)) fs.writeFileSync(`${__dirname}/data/prefixes.json`);
-
 
 // call init events
 require(`${__dirname}/lib/events`)(bot);
