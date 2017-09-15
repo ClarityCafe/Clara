@@ -22,7 +22,7 @@ Check out CONTRIBUTING.md for guidelines.
 
 # Licensing
 
-The underlying source code is licensed under the [MIT License](https://en.wikipedia.org/wiki/MIT_License).
+The underlying source code is licensed under the [Eclipse Public License 1.0](https://en.wikipedia.org/wiki/Eclipse_Public_License).
 
 Copyright &copy; 2017 Capuccino, Ovyerus and the repository contributors.
 
