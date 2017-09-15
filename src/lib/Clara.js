@@ -4,9 +4,6 @@
  */
 
 
-//backwards compatibility for ES6 funcs
-require('babel-polyfill');
-
 //requires
 const Eris = require('eris');
 const got = require('got');
