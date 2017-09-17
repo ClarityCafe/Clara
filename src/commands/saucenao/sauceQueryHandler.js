@@ -24,7 +24,8 @@ class SauceHandler {
      */
     constructor(key, numRes) {
         if (!key && typeof key === 'string') { 
-          throw new TypeError('No API key provided!');
+            throw new TypeError('No API key provided!');
+        }
         this.key = key,
         this.numRes = numRes || 5;
     }
