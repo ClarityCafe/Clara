@@ -8,11 +8,22 @@
  */
  const zeropc = require('zeropc');
  const rpc = new zeropc.Client();
+ const res = new zerpc.Server({
+     // TODO: make it return JSON from the Pythonk server 
+ })
  
  // make sure we bind this to localhost, probably use a config file for chatbot RPC
  rpc.connect('http://localhost:3000');
+ // binding for server return
+ server.bind('http://localhost:4000');
  
  /**
   * @todo add function for reply and send (event based)
   */
+ 
+ rpc.invoke('outgoing', (error, reply) => {
+     if(!err) {
+         return 
+     }
+ })
  
