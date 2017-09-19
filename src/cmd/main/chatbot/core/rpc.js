@@ -8,7 +8,7 @@
  */
  const zeropc = require('zeropc');
  const rpc = new zeropc.Client();
- const res = new zerpc.Server({
+ const res = new zeropc.Server({
      // TODO: make it return JSON from the Pythonk server 
  })
  
@@ -21,9 +21,11 @@
   * @todo add function for reply and send (event based)
   */
  
- rpc.invoke('outgoing', (error, reply) => {
+ rpc.invoke('listenAndreply', (error, reply) => {
      if (!err) {
-         return 
+         return reply
+     } else {
+         return error;
      }
  })
  
