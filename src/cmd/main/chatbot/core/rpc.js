@@ -15,7 +15,7 @@
  // make sure we bind this to localhost, probably use a config file for chatbot RPC
  rpc.connect('http://localhost:3000');
  // binding for server return
- server.bind('http://localhost:4000');
+ res.bind('http://localhost:4000');
  
  /**
   * @todo add function for reply and send (event based)
