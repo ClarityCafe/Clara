@@ -8,7 +8,7 @@
  */
  const zeropc = require('zeropc');
  const rpc = new zeropc.Client();
- const res = new zerpc.Server({
+ const res = new zeropc.Server({
      // TODO: make it return JSON from the Pythonk server 
  })
  
