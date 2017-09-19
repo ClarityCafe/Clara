@@ -22,7 +22,7 @@
   */
  
  rpc.invoke('outgoing', (error, reply) => {
-     if(!err) {
+     if (!err) {
          return 
      }
  })
