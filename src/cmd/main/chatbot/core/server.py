@@ -27,7 +27,7 @@ class ChatterBotRPC(object):
    raise Exception("No Response recieved")
 
 def main():
-  s= zeropc.Server(ChatterBotRPC())
+  s = zeropc.Server(ChatterBotRPC())
   s.bind("http://localhost:3000")
   s.run()
   
