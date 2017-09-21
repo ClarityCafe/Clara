@@ -4,13 +4,13 @@
 # This uses Gunthercox's chatterbot. See https://github.com/gunthercox/ChatterBot
 
 from chatterbot import ChatBot
-import zeropc
+import zerorpc
 
 
 chatbot = ChatBot(
 # a gya af instance
-  "Clara",
-  trainer="chatterbot.trainers.ChatterBotCorpusTrainer"
+ "Clara",
+ trainer="chatterbot.trainers.ChatterBotCorpusTrainer"
 )
 
 # apparently, the initial author can"t Pythonk so we"ll use the sample Chatbot Engrish
@@ -21,8 +21,10 @@ chatbot.train("chatterbot.corpus.english")
 # TODO: make chatbot listen and return a statement later
 
 class ChatterBotRPC(object):
-  def listenAndReply(self, res):
-    return chatterbot.get_response(res)
+  async def outoging(self, res):
+       return chatbot.get_response(res)
+  if (res.length = 0)
+   raise Exception("No Response recieved")
 
 def main():
   s= zeropc.Server(ChatterBotRPC())
