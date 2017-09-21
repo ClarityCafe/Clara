@@ -1,6 +1,6 @@
 # Server instance for Chatbot
 # the RPC layout allows the chatbot to function outside of the botspace.
-# RPC Client is zeropc, see http://www.zerorpc.io/
+# RPC Client is zerorpc, see http://www.zerorpc.io/
 # This uses Gunthercox's chatterbot. See https://github.com/gunthercox/ChatterBot
 
 from chatterbot import ChatBot
