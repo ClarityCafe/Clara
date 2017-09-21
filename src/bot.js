@@ -13,7 +13,8 @@ const fs = require('fs');
 const config = require('./config.json');
 
 //globals
-global.utils = require(`${__dirname}/lib/modules/utils`);
+global.utils = require('./lib/modules/utils');
+global.logger = require('./lib/modules/Logger');
 global.Promise = require('bluebird');
 
 //bot stuff
