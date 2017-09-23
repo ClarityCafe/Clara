@@ -28,6 +28,7 @@
     "got": "^7.1.0",
     "redis": "^2.8.0",
     "rethinkdbdash": "^2.3.31",
+    "update": "^0.7.4",
     "zerorpc": "^0.9.7"
   },
   "devDependencies": {
