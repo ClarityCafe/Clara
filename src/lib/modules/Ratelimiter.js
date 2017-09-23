@@ -1,7 +1,7 @@
 /**
  * Custom ratelimitr because Eris buckets are meme.
  * 
- * @prop {Number} totalUses Amount of times the ratelimiter can be used before being ratelimited.
+ * @prop {Number} totalUses Amount of times a entity can be used before being ratelimited.
  * @prop {Number} interval Interval between resetting amount of uses.
  * @prop {Number} uses Number of current uses this interval has.
  */
