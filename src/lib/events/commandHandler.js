@@ -20,7 +20,8 @@ module.exports = bot => {
         if (cleaned === msg.content) return;
 
         let cmd = cleaned.split(' ')[0];
-
+         
+        //FIXME: Chatbot parsing in here is too slow!
         if (!bot.commands.getCommand(cmd) && !(RegExp(`^<@!?${bot.user.id}>\s?.+$`) && bot.commands.getCommand('chat'))) return;
 
         let settings = {};
