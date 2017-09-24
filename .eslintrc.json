@@ -21,11 +21,6 @@
         "config": false,
         "utils": false
     },
-
-    "ignore": [
-        "*.min.js"
-    ],
-
     "rules": {
         "no-console": 0,
         "global-require":"off",
