@@ -1,6 +1,6 @@
 {
   "name": "clara",
-  "version": "0.3.3",
+  "version": "0.3.3-2017-9-24",
   "description": "A general-purpose discord bot.",
   "main": "src/bot.js",
   "scripts": {
