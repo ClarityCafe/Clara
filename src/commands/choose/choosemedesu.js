@@ -21,7 +21,7 @@ exports.choose = {
                 ctx.createMessage('choose-insufficientArgs').then(resolve).catch(reject);
             } else {
                 var choice = choices[Math.floor(Math.random() * choices.length)];
-                ctx.createMessage(localeManager.t('choose', ctx.settings.locale, {name: ctx.msg.author.username, choice})).then(resolve).catch(reject);
+                ctx.createMessage(localeManager.t('choose', ctx.settings.locale, {name: ctx.author.username, choice})).then(resolve).catch(reject);
             }
         });
     }
