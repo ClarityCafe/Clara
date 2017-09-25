@@ -1,4 +1,4 @@
- /**
+/**
   * @file the main file the makes everything work
   * @author Capuccino
   * @author Ovyerus
@@ -6,23 +6,18 @@
   * @license MIT
   */
 
-/* eslint-env node */
 
-// Module requies
-const Eris = require('eris');
+//module requires
+const Clara = require('./lib/Clara');
 const fs = require('fs');
+const config = require('./config.json');
 
-//global stuff
-
-global.utils = require(`${__dirname}/modules/utils`);
-global.got = require('got');
-global.__baseDir = __dirname;
+//globals
+global.utils = require(`${__dirname}/lib/modules/utils`);
 global.Promise = require('bluebird');
-global.logger = require(`${__dirname}/modules/Logger`);
-global.localeManager = new (require(`${__dirname}/modules/LocaleManager`))();
 
-// Setup stuff
-const bot = new Eris(config, {
+//bot stuff
+const bot = new Clara(config, {
     autoreconnect: true,
     seedVoiceConnections: true,
     maxShards: config.maxShards || 1,
@@ -33,6 +28,7 @@ const bot = new Eris(config, {
     }
 });
 
+//Promise configuration
 Promise.config({
     warnings: {
         wForgottenReturn: config.promiseWarnings || false
@@ -42,13 +38,10 @@ Promise.config({
 
 exports.bot = bot;
 
-// Create data folder and files if they don't exist
-if (!fs.existsSync(`${__dirname}/data/`)) fs.mkdirSync(`${__dirname}/data/`);
-if (!fs.existsSync(`${__dirname}/cache/`)) fs.mkdirSync(`${__dirname}/cache/`);
-if (!fs.existsSync(`${__dirname}/data/data.json`)) fs.writeFileSync(`${__dirname}/data/data.json`, '{"admins": [], "blacklist": []}');
-if (!fs.existsSync(`${__dirname}/data/prefixes.json`)) fs.writeFileSync(`${__dirname}/data/prefixes.json`, '[]');
+if (!fs.existsSync(`${__dirname}/cache`)) fs.mkdirSync(`${__dirname}/cache/`);
 
-// Init events
-require(`${__dirname}/events`)(bot);
+// call init events
+require(`${__dirname}/lib/events`)(bot);
+
 
 bot.connect();
