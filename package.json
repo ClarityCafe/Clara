@@ -23,14 +23,12 @@
   "dependencies": {
     "bluebird": "^3.5.0",
     "chalk": "^2.1.0",
-    "dominant-color": "0.0.1",
     "eris": "github:abalabahaha/eris",
     "got": "^7.1.0",
     "pretty-bytes": "^4.0.2",
-    "request": "^2.82.0",
-    "rethinkdbdash": "^2.3.31",
-    "safe-regex": "^1.1.0",
-    "ytpl": "^0.1.8"
+    "decache": "4.1.0",
+    "rethinkdbdash":"2.3.31",
+    "safe-regex": "^1.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.0.0",
