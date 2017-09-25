@@ -16,7 +16,7 @@ exports.choose = {
     example: 'coke zero/coke',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            let choices = ctx.suffix.split('/');
+            let choices = ctx.suffix.split(' or ');
             if (choices.length < 2) {
                 ctx.createMessage('choose-insufficientArgs').then(resolve).catch(reject);
             } else {
