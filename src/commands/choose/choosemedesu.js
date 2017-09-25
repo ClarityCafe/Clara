@@ -14,9 +14,9 @@ exports.choose = {
     desc: 'Randomly chooses between 2 or more arguments.',
     usage: '<choice 1>/<choice 2>/...',
     example: 'coke zero/coke',
-    main(bot, ctx) {
+    main(ctx) {
         return new Promise((resolve, reject) => {
-            let choices = ctx.suffix.split('/');
+            let choices = ctx.args.split('/');
             if (choices.length < 2) {
                 ctx.createMessage('choose-insufficientArgs').then(resolve).catch(reject);
             } else {
