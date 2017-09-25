@@ -1,6 +1,10 @@
+# Development Branch
+ All of your PRs must be in sync with ``development``, not ``release``.
+ For maintenance PRs for LTS versions, PRs must be in sync with ``lts``.
+
 # Directory Structure
 
-All commands go into the `commands` folder in their own folder with a `package.json` and the command file.
+All commands go into the `cmd` folder in their own folder with a `package.json` and the command file.
 Look at the `package.json` for other commands to see the structure of them.
 
 Any modules that are used by several commands/the main bot/whatever, go into the `modules` folder.
@@ -8,6 +12,17 @@ Any modules that are used by several commands/the main bot/whatever, go into the
 `data` is used for any data files by various commands, bot, etc.
 
 `logs` is for the logs output by pm2.
+
+We group commands by the following:
+
+- ``dev`` for Developer-Only/Bot Admin commands.
+
+- ``main`` for core commands.
+
+- ``misc`` for third-party, non-essential commands.
+
+
+make sure to follow the categorization enforced or your PR will not be merged.
 
 ## Creating Commands
 
@@ -27,7 +42,7 @@ As of August 08, 2017, we now use async/await
 
 # Pull Requests
 
-PRs are only accepted in the `development` branch. if you PR to `master`, it will be closed.
+PRs are only accepted in the `development` or ``lts`` branch. if you PR to `release`, it will be closed.
 
 # Code Verification
 

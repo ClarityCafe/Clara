@@ -23,10 +23,10 @@ jobs:
           command: npm i -g eslint 
       - run:
           name: ESLint
-          command: eslint
+          command: eslint -c .eslintrc.json *.js ./src
       - run:
           name: Docker Build
           command: docker build -f Dockerfile -t clara:test .
-      - run:
-          name: Docker Compose Test
-          command: docker-compose up
+notify:
+  webhooks:
+    - url: https://claraio-circledisc.herokuapp.com/hooks/circleci

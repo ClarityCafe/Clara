@@ -66,9 +66,11 @@ data.json
 obj
 bin
 
-# Bot files    
-config.json
-rethink_data
+# Bot files  
+
+src/config.json
+rethinkdb_data
+
 /data
 prefixes.json
 /.idea/workspace.xml
