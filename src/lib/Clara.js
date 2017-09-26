@@ -4,6 +4,7 @@
  */
 
 const Eris = require('eris');
+const client = require('redis').createClient();
 const got = require('got');
 const fs = require('fs');
 const {CommandHolder} = require(`${__dirname}/modules/CommandHolder`);
@@ -45,7 +46,7 @@ class Clara extends Eris.Client {
         this.prefixes = JSON.parse(fs.readFileSync('./data/prefixes.json')).concat([config.mainPrefix]);
 
         this.commands = new CommandHolder(this);
-        this.db = require('rethinkdbdash')(config.rethinkOptions);
+        this.db = new(require('rebridge'))(client);
         this.settings = {
             guilds: new Eris.Collection(Object),
             users: new Eris.Collection(Object)
@@ -214,9 +215,9 @@ class Clara extends Eris.Client {
         this.settings.guilds.add(settings);
 
         let res = await this.db.table('guild_settings').get(guildID).run();
-        
         if (res) return res;
-
+        
+        await this.db.guild_settings.set({});
         await this.db.table('guild_settings').insert(settings).run();
         return await this.db.table('guild_settings').get(guildID).run();
     }
@@ -246,6 +247,7 @@ class Clara extends Eris.Client {
     * @param {String} guildID ID of guild to edit settings for.
     * @param {Object} settings Settings to change.
     * @returns {Promise<Object>} Updated settings for the guild.
+    * @deprecated do not use this method as we will get rid of this sooner.
     */
     async setGuildSettings(guildID, settings={}) {
         if (typeof guildID !== 'string') throw new TypeError('guildID is not a string.');
