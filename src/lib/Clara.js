@@ -214,12 +214,11 @@ class Clara extends Eris.Client {
 
         this.settings.guilds.add(settings);
 
-        let res = await this.db.table('guild_settings').get(guildID).run();
+        let res = await this.db.guild_settings[guildID]._promise();
         if (res) return res;
         
         await this.db.guild_settings.set({});
-        await this.db.table('guild_settings').insert(settings).run();
-        return await this.db.table('guild_settings').get(guildID).run();
+        return await this.db.guild_settings[guildID].set(settings);
     }
 
     /**
