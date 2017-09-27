@@ -8,11 +8,11 @@
 /* eslint-env node */
 
 //this handles the SauceNao handling
-const saucenao = require('./sauceQueryHandler');
+const Sagiri = require('sagiri');
 let ayaneru;
 
 exports.init = bot => {
-    ayaneru = new saucenao({key: bot.config.sauceKey});
+    ayaneru = new Sagiri({key: bot.config.sauceKey});
 };
 
 exports.commands = [
