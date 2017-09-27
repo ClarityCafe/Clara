@@ -12,7 +12,7 @@ const Sagiri = require('sagiri');
 let ayaneru;
 
 exports.init = bot => {
-    ayaneru = new Sagiri({key: bot.config.sauceKey});
+    ayaneru = new Sagiri(bot.config.sauceKey, 5);
 };
 
 exports.commands = [
