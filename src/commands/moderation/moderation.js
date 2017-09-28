@@ -124,7 +124,7 @@ exports.purge = {
             if (!ctx.msg.member.permission.has('manageMessages')) {
                 ctx.createMessage(localeManager.t('user-noPerms', ctx.settings.locale, {perm: 'Manage Messages'})).then(resolve).catch(reject);
             } else {
-                if (!ctx.guild.members.get(bot.user.id).permission.has('manageMessages')) {
+                if (!ctx.hasPermission('manageMessages')) {
                     ctx.createMessage(localeManager.t('bot-noPerms', ctx.settings.locale, {perm: 'Manage Messages'})).then(resolve).catch(reject);
                 } else {
                     if (ctx.args.length === 0) {
