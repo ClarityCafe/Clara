@@ -16,15 +16,6 @@ jobs:
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             mv /tmp/docker/* /usr/bin      
       - run:
-          name: Resolve Dependencies
-          command: npm i --save
-      - run:
-          name: ESLint Global Install
-          command: npm i -g eslint 
-      - run:
-          name: ESLint
-          command: eslint -c .eslintrc.json *.js ./src
-      - run:
           name: Docker Build
           command: docker build -f Dockerfile -t clara:test .
 notify:
