@@ -34,7 +34,7 @@ exports.main = {
 exports.add = {
     desc: 'Add admins.',
     usage: '<mention|id>',
-    adminOnly: true,
+    owner: true,
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.author.id !== bot.config.ownerID) {
@@ -69,7 +69,7 @@ exports.add = {
 exports.remove = {
     desc: 'Remove admins.',
     usage: '<mention|ID>',
-    adminOnly: true,
+    owner: true,
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.author.id !== bot.config.ownerID) {

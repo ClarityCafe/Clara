@@ -17,7 +17,7 @@ exports.commands = [
 exports.main = {
     desc: 'View the various prefixes used by the bot and edit them.',
     fullDesc: 'Prefixes command. If no arguments are supplied or are not the correct ones, it just displays the available prefixes. Adding and removing prefixes are only allowed by the bot owners(s)',
-    adminOnly: true,
+    owner: true,
     usage: '[<add|remove> <prefix>]',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
@@ -47,7 +47,7 @@ exports.main = {
 exports.add = {
     desc: 'Add a prefix.',
     usage: '<prefix>',
-    adminOnly: true,
+    owner: true,
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.args.length === 0) {
@@ -72,7 +72,7 @@ exports.add = {
 exports.remove = {
     desc: 'Remove a prefix.',
     usage: '<prefix>',
-    adminOnly: true,
+    owner: true,
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             if (ctx.args.length === 0) {

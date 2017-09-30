@@ -15,7 +15,7 @@ exports.commands = [
 exports.main = {
     desc: 'Add or remove people in the blacklist.',
     usage: '[<add|remove> <mention|id>]',
-    adminOnly: true,
+    owner: true,
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             let embed = {
