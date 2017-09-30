@@ -15,4 +15,3 @@ ratings:
 exclude_paths:
 - data/*
 - assets/*
-- src/cmd/main/chatbot/cornell_movie-dialogues/*
