@@ -6,9 +6,9 @@
 
 /* eslint-env node */
 
-const {parsePrefix} = require(`${__baseDir}/modules/messageParser`);
-const {Context} = require(`${__baseDir}/modules/CommandHolder`);
-const {formatUsername} = require(`${__baseDir}/modules/utils`);
+const {parsePrefix} = require(`./lib/modules/messageParser`);
+const {Context} = require(`./lib/modules/CommandHolder`);
+const {formatUsername} = require(`./lib/modules/utils`);
 
 module.exports = bot => {
     bot.on('messageCreate', async msg => {
