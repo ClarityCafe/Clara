@@ -1,29 +1,17 @@
-/*
- * Clara - Core file
- *
- * Contributed by Capuccino and Ovyerus
- *
- * Licensed under MIT. Copyright (c) 2017 Capuccino, Ovyerus and the repository contributors.
- */
+/**
+  * @file the main file the makes everything work
+  * @author Capuccino
+  * @author Ovyerus
+  * @copyright Copyright (c) 2017 Capuccino, Ovyerus and the repository contributors.
+  * @license MIT
+  */
 
-/* eslint-env node */
-
-// Module requies
-const Eris = require('eris');
+// Imports
+const Clara = require('./lib/Clara');
 const fs = require('fs');
+const config = require('./config.json');
 
-//global stuff
-
-global.utils = require(`${__dirname}/modules/utils`);
-global.got = require('got');
-global.config = require('./config.json');
-global.__baseDir = __dirname;
-global.Promise = require('bluebird');
-global.logger = require(`${__dirname}/modules/Logger`);
-global.localeManager = new (require(`${__dirname}/modules/LocaleManager`))();
-
-// Setup stuff
-const bot = new Eris(config.token, {
+const bot = new Clara(config, {
     autoreconnect: true,
     seedVoiceConnections: true,
     maxShards: config.maxShards || 1,
@@ -34,37 +22,21 @@ const bot = new Eris(config.token, {
     }
 });
 
+bot.commandsDir = `${__dirname}/cmd`;
+bot.unloadedPath = `${__dirname}/data/unloadedCommands.json`;
+
+global.utils = require(`${__dirname}/lib/modules/utils`);
+global.Promise = require('bluebird');
+
+//Promise configuration
 Promise.config({
     warnings: {wForgottenReturn: config.promiseWarnings || false},
     longStackTraces: config.promiseWarnings || false
 });
 
-exports.bot = bot;
+if (!fs.existsSync(`${__dirname}/cache`)) fs.mkdirSync(`${__dirname}/cache/`);
 
-// Create data folder and files if they don't exist
-if (!fs.existsSync(`${__dirname}/data/`)) fs.mkdirSync(`${__dirname}/data/`);
-if (!fs.existsSync(`${__dirname}/cache/`)) fs.mkdirSync(`${__dirname}/cache/`);
-if (!fs.existsSync(`${__dirname}/data/data.json`)) fs.writeFileSync(`${__dirname}/data/data.json`, '{"admins": [], "blacklist": []}');
-if (!fs.existsSync(`${__dirname}/data/prefixes.json`)) fs.writeFileSync(`${__dirname}/data/prefixes.json`, '[]');
-
-// Bot object modification
-let tmp = JSON.parse(fs.readFileSync(`${__dirname}/data/data.json`));
-bot.db = require('rethinkdbdash')(config.rethinkOptions);
-bot.commands = new (require(`${__dirname}/modules/CommandHolder`)).CommandHolder(bot);
-bot.blacklist = tmp.blacklist;
-bot.admins = tmp.admins;
-tmp = null;
-bot.prefixes = JSON.parse(fs.readFileSync(`${__dirname}/data/prefixes.json`)).concat([config.mainPrefix]);
-bot.config = config;
-bot.loadCommands = true;
-bot.allowCommandUse = false;
-bot.settings = {
-    guilds: new Eris.Collection(Object),
-    users: new Eris.Collection(Object)
-};
-
-// Init events
-require(`${__dirname}/events`)(bot);
-require(`${__dirname}/modules/botExtensions`)(bot);
-
+require(`${__dirname}/lib/events`)(bot);
 bot.connect();
+
+exports.bot = bot;

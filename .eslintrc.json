@@ -1,16 +1,18 @@
 {
     "env": {
+        "browser": false,
         "es6": true,
         "node": true
     },
 
     "extends": "eslint:recommended",
+
     "parserOptions": {
-        "sourceType": "module",
-        "ecmaVersion": 6,
         "ecmaFeatures": {
             "jsx": false
-        }
+        },
+        "sourceType": "module",
+        "ecmaVersion": 8
     },
 
     "globals": {
@@ -19,12 +21,9 @@
         "localeManager": false,
         "got": false,
         "config": false,
-        "utils": false
+        "utils": false,
+        "pythonIPC": false
     },
-
-    "ignore": [
-        "*.min.js"
-    ],
 
     "rules": {
         "no-console": 0,
@@ -32,7 +31,7 @@
         
         "quotes": ["warn", "single", {"avoidEscape": true, "allowTemplateLiterals": true}],
         "semi": "warn",
-        "indent": "error",
+        "indent": ["error", 4, {"SwitchCase": 1}],
         "no-unsafe-negation": "error",
         "eqeqeq": ["warn", "always", {"null": "ignore"}],
         "no-alert": "error",

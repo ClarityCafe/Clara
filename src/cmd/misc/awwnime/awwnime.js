@@ -1,0 +1,47 @@
+/**
+ * @file Generates a random anime picture.
+ * @author Capuccino
+ * @author Ovyerus
+ */
+
+/* eslint-env node */
+
+const got = require('got');
+
+exports.commands = [
+    'awwnime'
+];
+
+exports.awwnime = {
+    desc: 'Gets you a random anime picture outside of yorium.moe',
+    usage: '[query]',
+    main: (bot, ctx) => {
+        return new Promise((resolve, reject) => {
+            if (!ctx.suffix) {
+                ctx.channel.sendTyping();
+
+                got('https://raw-api.now.sh/').then(res => {
+                    let images = JSON.parse(res.body);
+                    let image = images[Math.floor(Math.random() * images.length)];
+
+                    if (!image) return ctx.createMessage('notFound');
+
+                    return ctx.createMessage(image.full);
+                }).then(resolve).catch(reject);
+            } else {
+                let query = encodeURIComponent(ctx.suffix).replace(/%20/g, '+');
+                ctx.channel.sendTyping();
+
+                got(`https://raw-api.now.sh/?q=${query}`).then(res => {
+                    let images = JSON.parse(res.body);
+                    let image = images[Math.floor(Math.random() * images.length)];
+
+                    if (!image) return ctx.createMessage('notFound');
+
+                    return ctx.createMessage(image.full);
+
+                }).then(resolve).catch(reject);
+            }
+        });
+    }
+};

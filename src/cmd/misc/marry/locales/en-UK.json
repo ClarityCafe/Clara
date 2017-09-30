@@ -1,0 +1,15 @@
+{
+    "marry-noPartner": "Please mention your partner.",
+    "marry-noSelfcest": "Hey! You're not allowed to marry yourself.",
+    "marry-botMentioned": "I-It's not like I'll say yes or anything >.<",
+    "marry-tooManyMentions": "One wife only!",
+    "marry-partnerPrompt": "{{mentioned}}, will you marry {{author}}?\nRespond yes or no within 30 seconds.",
+    "marry-marriageSuccess": "I hereby pronounce {{mentioned}} and {{author}} as husband and wife! :sparkling_heart:",
+    "marry-marriageFail": "{{author}}, unfortunately, your partner declined.",
+    "marry-invalidAnswer": "{{mentioned}}, that is not a valid answer!",
+    "marry-timeout": "{{author}}, your partner did not respond in time.",
+    "divorce-noSelfcest": "Hey! You can't divorce yourself.",
+    "divorce-partnerPrompt": "{{mentioned}}, will you let go of {{author}}?\nRespond with yes or no. (30 seconds)",
+    "divorce-divorceSuccess": "{{author}} you're no longer married to {{mentioned}}.",
+    "divorce-divorceFail": "{{author}}, your partner won't let go."
+}

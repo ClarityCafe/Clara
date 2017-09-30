@@ -7,6 +7,8 @@
     "yes": "Yes",
     "no": "No",
     "none": "None",
+    "enabled": "Enabled",
+    "notFound": "No results found.",
     "locales": {
         "en-UK": "English (UK)",
         "fr-CA": "French (Canada)",

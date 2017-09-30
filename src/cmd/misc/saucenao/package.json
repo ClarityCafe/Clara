@@ -1,0 +1,6 @@
+{
+    "main": "saucenao.js",
+    "dependencies": {
+        "multi-part": "2.0.0"
+    }
+}
