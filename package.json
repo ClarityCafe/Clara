@@ -26,7 +26,7 @@
     "eris": "github:abalabahaha/eris",
     "got": "^7.1.0",
     "rethinkdbdash": "^2.3.31",
-    "update": "^0.7.4",
+    "update": "^0.7.4"
   },
   "devDependencies": {
     "babel-eslint": "^8.0.0",
