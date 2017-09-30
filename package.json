@@ -22,7 +22,6 @@
   "homepage": "https://github.com/awau/Clara#readme",
   "dependencies": {
     "bluebird": "^3.5.0",
-    "chalk": "^2.1.0",
     "decache": "^4.1.0",
     "eris": "github:abalabahaha/eris",
     "got": "^7.1.0",
