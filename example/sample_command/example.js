@@ -16,7 +16,7 @@ exports.commands = [
 exports.ping = {
     desc: '',
     fullDesc: '',
-    adminOnly: true,
+    owner: true,
     usage: '',
     main: (bot, ctx) => {
         return new Promise((resolve, reject) => {
