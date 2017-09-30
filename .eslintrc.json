@@ -7,12 +7,11 @@
     "extends": "eslint:recommended",
     "parserOptions": {
         "sourceType": "module",
-        "ecmaVersion": 6,
+        "ecmaVersion": 7,
         "ecmaFeatures": {
             "jsx": false
         }
     },
-
     "globals": {
         "__baseDir": false,
         "logger" : false,
@@ -21,18 +20,13 @@
         "config": false,
         "utils": false
     },
-
-    "ignore": [
-        "*.min.js"
-    ],
-
     "rules": {
         "no-console": 0,
         "global-require":"off",
         
         "quotes": ["warn", "single", {"avoidEscape": true, "allowTemplateLiterals": true}],
         "semi": "warn",
-        "indent": "error",
+        "indent": ["error", 4, {"SwitchCase": 1}],
         "no-unsafe-negation": "error",
         "eqeqeq": ["warn", "always", {"null": "ignore"}],
         "no-alert": "error",

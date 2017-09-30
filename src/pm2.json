@@ -4,7 +4,8 @@
     "error_file": "../logs/err.log",
     "out_file": "../logs/out.log",
     "log_date_format": "YYYY-MM-DD HH:mm Z",
-    "watch": true,
+    "watch": ["./src/bot.js"],
     "ignore_watch": ["data", "logs", "commands", "cache", "node_modules"],
-    "args": ["--color"]
+    "args": ["--color"],
+    "max_memory_restart": "512M"
 }
