@@ -35,14 +35,14 @@ exports.kick = {
                 if (!ctx.guildBot.permission.has('kickMembers')) {
                     ctx.createMessage(localeManager.t('bot-noPerm', ctx.settings.locale, {perm: 'Kick Members'})).then(resolve).catch(reject);
                 } else {
-                    if (ctx.msg.mentions.length === 0) {
+                    if (ctx.mentions.length === 0) {
                         ctx.createMessage(localeManager.t('kick-noMention', ctx.settings.locale)).then(resolve).catch(reject);
                     } else {
                         var promises = [];
-                        for (let u of ctx.msg.mentions) {
+                        for (let u of ctx.mentions) {
                             if (u.id !== bot.user.id) {
                                 if (u.id !== ctx.msg.author.id) {
-                                    promises.push(bot.kickGuildMember(ctx.msg.channel.guild.id, u.id).catch(err => {
+                                    promises.push(bot.kickGuildMember(ctx.guild.id, u.id).catch(err => {
                                         if (err.resp.statusCode === 403) {
                                             ctx.createMessage(localeManager.t('kick-insufficientPerm', ctx.settings.locale, {e: utils.formatUsername(u)}));
                                         } else {
@@ -81,14 +81,14 @@ exports.ban = {
                 if (!ctx.guildBot.permission.has('banMembers')) {
                     ctx.createMessage(localeManager.t('bot-noPerms', ctx.settings.locale, {perm: 'Ban Members'})).then(resolve).catch(reject);
                 } else {
-                    if (ctx.msg.mentions.length === 0) {
+                    if (ctx.mentions.length === 0) {
                         ctx.createMessage(localeManager.t('ban-noMention', ctx.settings.locale)).then(resolve).catch(reject);
                     } else {
                         var promises = [];
-                        ctx.msg.mentions.forEach(u => {
+                        ctx.mentions.forEach(u => {
                             if (u.id !== bot.user.id) {
                                 if (u.id !== ctx.msg.author.id) {
-                                    promises.push(bot.banGuildMember(ctx.msg.channel.guild.id, u.id, 7).catch(err => {
+                                    promises.push(bot.banGuildMember(ctx.guild.id, u.id, 7).catch(err => {
                                         if (err.resp.statusCode === 403) {
                                             ctx.createMessage(localeManager.t('ban-insufficientPerm', ctx.settings.locale, {user: utils.formatUsername(u)}));
                                         } else {
@@ -124,7 +124,7 @@ exports.purge = {
             if (!ctx.msg.member.permission.has('manageMessages')) {
                 ctx.createMessage(localeManager.t('user-noPerms', ctx.settings.locale, {perm: 'Manage Messages'})).then(resolve).catch(reject);
             } else {
-                if (!ctx.msg.channel.guild.members.get(bot.user.id).permission.has('manageMessages')) {
+                if (!ctx.hasPermission('manageMessages')) {
                     ctx.createMessage(localeManager.t('bot-noPerms', ctx.settings.locale, {perm: 'Manage Messages'})).then(resolve).catch(reject);
                 } else {
                     if (ctx.args.length === 0) {
@@ -153,11 +153,11 @@ exports.purge = {
                     } else if (ctx.args.length > 0) {
                         if (ctx.args[0] === 'all') {
                             if (!ctx.args[1] || !/^\d+$/.test(ctx.args[1])) {
-                                ctx.msg.channel.purge(100).then(amt => {
+                                ctx.channel.purge(100).then(amt => {
                                     return ctx.createMessage(localeManager.t('purge-finish', ctx.settings.locale, {amt}));
                                 }).then(deleteDelay).then(() => resolve()).catch(reject);
                             } else if (/^\d+$/.test(ctx.args[1]) && Number(ctx.args[1]) <= 100 && Number(ctx.args[1]) >= 1) {
-                                ctx.msg.channel.purge(Number(ctx.args[1])).then(amt => {
+                                ctx.channel.purge(Number(ctx.args[1])).then(amt => {
                                     return ctx.createMessage(localeManager.t('purge-finish', ctx.settings.locale, {amt}));
                                 }).then(deleteDelay).then(() => resolve()).catch(reject);
                             } else {
@@ -183,17 +183,17 @@ exports.purge = {
                             } else {
                                 let user = ctx.args[1].match(/^(?:\d+|<@!?\d+>)$/)[0];
                                 user = /<@!?\d+>/.test(user) ? user.replace(/<@!?/, '').replace('>', '') : user;
-                                user = ctx.msg.channel.guild.members.get(user);
+                                user = ctx.guild.members.get(user);
                                 if (!user) {
                                     ctx.createMessage(localeManager.t('purge-userNotFound', ctx.settings.locale)).then(() => resolve()).catch(reject);
                                 } else {
                                     if (!ctx.args[2] || !/^\d+$/.test(ctx.args[2])) {
-                                        ctx.msg.channel.purge(100, m => m.author.id === user.id).then(amt => {
+                                        ctx.channel.purge(100, m => m.author.id === user.id).then(amt => {
                                             return ctx.createMessage(localeManager.t('purge-finishUser', ctx.settings.locale, {amt, user: utils.formatUsername(user)}));
                                         }).then(deleteDelay).then(() => resolve()).catch(reject);
                                     } else if (/^\d+$/.test(ctx.args[2]) && Number(ctx.args[2]) <= 100 && Number(ctx.args[2]) >= 1) {
                                         let i = 0;
-                                        ctx.msg.channel.purge(100, m => m.author.id === user.id && ++i <= Number(ctx.args[2])).then(amt => {
+                                        ctx.channel.purge(100, m => m.author.id === user.id && ++i <= Number(ctx.args[2])).then(amt => {
                                             return ctx.createMessage(localeManager.t('purge-finishUser', ctx.settings.locale, {amt, user: utils.formatUsername(user)}));
                                         }).then(deleteDelay).then(() => resolve()).catch(reject);
                                     } else {
@@ -203,12 +203,12 @@ exports.purge = {
                             }
                         } else if (ctx.args[0] === 'bots') {
                             if (!ctx.args[1] || !/^\d+$/.test(ctx.args[1])) {
-                                ctx.msg.channel.purge(100, m => m.author.bot).then(amt => {
+                                ctx.channel.purge(100, m => m.author.bot).then(amt => {
                                     return ctx.createMessage(localeManager.t('purge-finishBots', ctx.settings.locale, {amt}));
                                 }).then(deleteDelay).then(() => resolve()).catch(reject);
                             } else if (/^\d+$/.test(ctx.args[1]) && Number(ctx.args[1]) <= 100 && Number(ctx.args[1]) >= 1) {
                                 let i = 0;
-                                ctx.msg.channel.purge(100, m => m.author.bot && ++i <= Number(ctx.args[1])).then(amt => {
+                                ctx.channel.purge(100, m => m.author.bot && ++i <= Number(ctx.args[1])).then(amt => {
                                     return ctx.createMessage(localeManager.t('purge-finishBots', ctx.settings.locale, {amt}));
                                 }).then(deleteDelay).then(() => resolve()).catch(reject);
                             } else {
@@ -233,12 +233,12 @@ exports.purge = {
                                 });
                             } else {
                                 if (!ctx.args[2] || !/^\d+$/.test(ctx.args[2])) {
-                                    ctx.msg.channel.purge(100, m => m.content.includes(ctx.args[1])).then(amt => {
+                                    ctx.channel.purge(100, m => m.content.includes(ctx.args[1])).then(amt => {
                                         return ctx.createMessage(localeManager.t('purge-finish', ctx.settings.locale, {amt}));
                                     }).then(deleteDelay).then(() => resolve()).catch(reject);
                                 } else if (/^\d+$/.test(ctx.args[2]) && Number(ctx.args[2]) <= 100 && Number(ctx.args[2]) >= 1) {
                                     let i = 0;
-                                    ctx.msg.channel.purge(100, m => m.content.includes(ctx.args[1]) && ++i <= Number(ctx.args[2])).then(amt => {
+                                    ctx.channel.purge(100, m => m.content.includes(ctx.args[1]) && ++i <= Number(ctx.args[2])).then(amt => {
                                         return ctx.createMessage(localeManager.t('purge-finish', ctx.settings.locale, {amt}));
                                     }).then(deleteDelay).then(() => resolve()).catch(reject);
                                 } else {
@@ -247,12 +247,12 @@ exports.purge = {
                             }
                         } else if (ctx.args[0] === 'embeds') {
                             if (!ctx.args[1] || !/^\d+$/.test(ctx.args[1])) {
-                                ctx.msg.channel.purge(100, m => m.embeds.length > 0).then(amt => {
+                                ctx.channel.purge(100, m => m.embeds.length > 0).then(amt => {
                                     return ctx.createMessage(localeManager.t('purge-finishEmbeds', ctx.settings.locale, {amt}));
                                 }).then(deleteDelay).then(() => resolve()).catch(reject);
                             } else if (/^\d+$/.test(ctx.args[1]) && Number(ctx.args[1]) <= 100 && Number(ctx.args[1]) >= 1) {
                                 let i = 0;
-                                ctx.msg.channel.purge(100, m => m.embeds.length > 0 && ++i <= Number(ctx.args[1])).then(amt => {
+                                ctx.channel.purge(100, m => m.embeds.length > 0 && ++i <= Number(ctx.args[1])).then(amt => {
                                     return ctx.createMessage(localeManager.t('purge-finishEmbeds', ctx.settings.locale, {amt}));
                                 }).then(deleteDelay).then(() => resolve()).catch(reject);
                             } else {
@@ -260,12 +260,12 @@ exports.purge = {
                             }
                         } else if (ctx.args[0] === 'attachments') {
                             if (!ctx.args[1] || !/^\d+$/.test(ctx.args[1])) {
-                                ctx.msg.channel.purge(100, m => m.attachments.length > 0).then(amt => {
+                                ctx.channel.purge(100, m => m.attachments.length > 0).then(amt => {
                                     return ctx.createMessage(localeManager.t('purge-finishAttachments', ctx.settings.locale, {amt}));
                                 }).then(deleteDelay).then(() => resolve()).catch(reject);
                             } else if (/^\d+$/.test(ctx.args[1]) && Number(ctx.args[1]) <= 100 && Number(ctx.args[1]) >= 1) {
                                 let i = 0;
-                                ctx.msg.channel.purge(100, m => m.attachments.length > 0 && ++i <= Number(ctx.args[1])).then(amt => {
+                                ctx.channel.purge(100, m => m.attachments.length > 0 && ++i <= Number(ctx.args[1])).then(amt => {
                                     return ctx.createMessage(localeManager.t('purge-finishAttachments', ctx.settings.locale, {amt}));
                                 }).then(deleteDelay).then(() => resolve()).catch(reject);
                             } else {
@@ -273,7 +273,7 @@ exports.purge = {
                             }
                         } else if (ctx.args[0] === 'images') {
                             if (!ctx.args[1] || !/^\d+$/.test(ctx.args[1])) {
-                                ctx.msg.channel.purge(100, m => {
+                                ctx.channel.purge(100, m => {
                                     if (m.attachments.length > 0) {
                                         return m.attachments.filter(atch => /(?:([^:/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*\.(?:png|jpe?g|gifv?|webp|bmp|tiff|jfif))(?:\?([^#]*))?(?:#(.*))?/ig.test(atch.url)).length > 0;
                                     } else {
@@ -284,7 +284,7 @@ exports.purge = {
                                 }).then(deleteDelay).then(() => resolve()).catch(reject);
                             } else if (/^\d+$/.test(ctx.args[1]) && Number(ctx.args[1]) <= 100 && Number(ctx.args[1]) >= 1) {
                                 let i = 0;
-                                ctx.msg.channel.purge(100, m => {
+                                ctx.channel.purge(100, m => {
                                     if (m.attachments.length > 0) {
                                         return m.attachments.filter(atch => /(?:([^:/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*\.(?:png|jpe?g|gifv?|webp|bmp|tiff|jfif))(?:\?([^#]*))?(?:#(.*))?/ig.test(atch.url)).length > 0 && ++i <= Number(ctx.args[1]);
                                     } else {
@@ -324,12 +324,12 @@ exports.purge = {
 
                                 if (purgeRegex) {
                                     if (!ctx.args[2] || !/^\d+$/.test(ctx.args[2])) {
-                                        ctx.msg.channel.purge(100, m => purgeRegex.test(m.content)).then(amt => {
+                                        ctx.channel.purge(100, m => purgeRegex.test(m.content)).then(amt => {
                                             return ctx.createMessage(localeManager.t('purge-finish', ctx.settings.locale, {amt}));
                                         }).then(deleteDelay).then(() => resolve()).catch(reject);
                                     } else if (/^\d+$/.test(ctx.args[2]) && Number(ctx.args[2]) <= 100 && Number(ctx.args[2]) >= 1) {
                                         let i = 0;
-                                        ctx.msg.channel.purge(100, m => purgeRegex.test(m.content) && ++i <= Number(ctx.args[2])).then(amt => {
+                                        ctx.channel.purge(100, m => purgeRegex.test(m.content) && ++i <= Number(ctx.args[2])).then(amt => {
                                             ctx.createMessage(localeManager.t('purge-finish', ctx.settings.locale, {amt}));
                                         }).then(deleteDelay).then(() => resolve()).catch(reject);
                                     } else {
