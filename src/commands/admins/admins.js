@@ -15,7 +15,7 @@ exports.commands = [
 
 exports.main = {
     desc: 'Manage bot admins.',
-    owner: 'View, add or remove bot admins.',
+    longDesc: 'View, add or remove bot admins.',
     usage: '[<add|remove> <mention|id>]',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
