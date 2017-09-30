@@ -22,7 +22,7 @@ exports.main = {
     desc: 'Command for managing modules.',
     longDesc: 'Manages command modules for the bots. If no arguments, lists currently loaded modules, else runs the specified subcommand if possible.',
     usage: '[load|unload|reload]',
-    adminOnly: true,
+    owner: true,
     fixed: true,
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
