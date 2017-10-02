@@ -17,8 +17,6 @@ global.logger = require('./lib/modules/Logger');
 global.Promise = require('bluebird');
 
 //bot stuff
-=======
->>>>>>> 8e8d0d6c3331ff90d53c99b790a99d5800a57d8b
 const bot = new Clara(config, {
     autoreconnect: true,
     seedVoiceConnections: true,
