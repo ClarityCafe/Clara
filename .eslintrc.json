@@ -4,7 +4,9 @@
         "es6": true,
         "node": true
     },
+
     "extends": "eslint:recommended",
+
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": false
@@ -13,7 +15,7 @@
         "ecmaVersion": 8
     },
 
-        "globals": {
+    "globals": {
         "__baseDir": false,
         "logger" : false,
         "localeManager": false,
@@ -23,7 +25,7 @@
         "pythonIPC": false
     },
 
-        "rules": {
+    "rules": {
         "no-console": 0,
         "global-require":"off",
         
@@ -87,5 +89,4 @@
             }
         ]
     }
-
 }

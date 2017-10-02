@@ -18,10 +18,10 @@ exports.choose = {
         return new Promise((resolve, reject) => {
             let choices = ctx.suffix.split('/');
             if (choices.length < 2) {
-                ctx.msg.channel.createMessage('choose-insufficientArgs').then(resolve).catch(reject);
+                ctx.createMessage('choose-insufficientArgs').then(resolve).catch(reject);
             } else {
                 var choice = choices[Math.floor(Math.random() * choices.length)];
-                ctx.msg.channel.createMessage(localeManager.t('choose', ctx.settings.locale, {name: ctx.msg.author.username, choice})).then(resolve).catch(reject);
+                ctx.createMessage('choose', null, 'channel', {name: ctx.msg.author.username, choice}).then(resolve).catch(reject);
             }
         });
     }

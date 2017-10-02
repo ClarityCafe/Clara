@@ -68,6 +68,7 @@ class Utils {
             0xFF5722, // Deep Orange
             0x607D8B // Blue Grey
         ];
+
         return colours[Math.floor(Math.random() * colours.length)];
     }
 }

@@ -6,7 +6,7 @@
 /* eslint-env node */
 
 const fs = require('fs');
-const localeDir = `${__baseDir}/assets/locales`;
+const localeDir = `./assets/locales`;
 
 /**
  * Object for managing locales and translating strings
@@ -25,48 +25,46 @@ class LocaleManager {
         this.fallbackLocale = 'en-UK';
         this.locales = {};
         this.localeDir = localeDir;
+        this.loaded = false;
     }
 
-    /**
-     * Load all locales in the locale directory.
-     *
-     * @returns {Promise} .
-     */
-    loadLocales() {
-        return new Promise((resolve, reject) => {
-            fs.readdir(localeDir, (err, locales) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    for (let locale of locales) {
-                        if (!locale.endsWith('.json')) continue;
-                        let localeParsed = JSON.parse(fs.readFileSync(`${localeDir}/${locale}`));
-                        this.locales[locale.substring(0, locale.indexOf('.js'))] = localeParsed;
-                    }
+    loadLocales(bot) {
+        let locales = fs.readdirSync(this.localeDir);
 
-                    fs.readdir(`${__baseDir}/commands`, (err, fldrs) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            for (let fldr of fldrs) {
-                                let owo = fs.readdirSync(`${__baseDir}/commands/${fldr}`);
-                                if (owo.indexOf('locales') !== -1) {
-                                    let locales = fs.readdirSync(`${__baseDir}/commands/${fldr}/locales`);
-                                    for (let locale of locales) {
-                                        if (!locale.endsWith('.json')) continue;
-                                        let r = JSON.parse(fs.readFileSync(`${__baseDir}/commands/${fldr}/locales/${locale}`));
-                                        let l = locale.substring(0, locale.indexOf('.json'));
-                                        this.locales[l] = Object.assign({}, this.locales[l], r);
-                                    }
-                                }
-                            }
+        for (let locale of locales) {
+            if (!locale.endsWith('.json')) continue;
 
-                            resolve();
-                        }
-                    });
-                }
-            });
-        });
+            this.locales[locale.slice(0, -5)] = JSON.parse(fs.readFileSync(`${this.localesDir}/${locale}`));
+        }
+
+        // Get command folders (should make this a function).
+        let cmdDirs = fs.readdirSync(bot.commandsDir).map(d => ({[d]: fs.readdirSync(`${bot.commandsDir}/${d}`)}));
+        let allCmds = {};
+    
+        // Go from an array of objects to an object of arrays.
+        cmdDirs.forEach(d => Object.assign(allCmds, d));
+        cmdDirs = cmdDirs.map(e => Object.keys(e)[0]);
+    
+        // Turn folder names into proper paths for future ease (also make sure we only get folders).
+        allCmds = Object.entries(allCmds).map(x => x[1].filter(y => fs.statSync(`${bot.commandsDir}/${x[0]}/${y}`).isDirectory()));
+        allCmds = allCmds.map((v, i) => v.map(x => `./${bot.commandsDir}/${cmdDirs[i]}/${x}`));
+        allCmds = [].concat.apply([], allCmds);
+
+        for (let cmd of allCmds) {
+            let _locales;
+            try {
+                _locales = fs.readdirSync(`${cmd}/locales`);
+            } catch(err) {
+                continue;
+            }
+
+            for (let locale of _locales) {
+                if (!locale.endsWith('.json')) continue;
+                Object.assign(this.locales[locale.slice(0, -5)], JSON.parse(fs.readFileSync(`${cmd}/locales/${locale}`)));
+            }
+        }
+
+        this.loaded = true;
     }
 
     /**

@@ -3,21 +3,31 @@
  * @author Ovyerus
  */
 
-
-//requires
 const Eris = require('eris');
 const got = require('got');
-const {CommandHolder} = require('./modules/CommandHolder');
 const fs = require('fs');
+const {CommandHolder} = require(`${__dirname}/modules/CommandHolder`);
 
 /**
- * Creates a new Bot instance
+ * Main class for Clara.
+ * 
+ * @prop {String[]} admins Array of people who have owner-like permissions over the bot.
+ * @prop {Boolean} allowCommandUse If commands can be run.
+ * @prop {String[]} blacklist Array of people who cannot use the bot.
+ * @prop {CommandHolder} commands Command holder object.
+ * @prop {ClaraConfig} config Configuration passed during construction.
+ * @prop {RethinkDBDash} db Database connection manager.
+ * @prop {Boolean} loadCommands If the bot should load commands or not.
+ * @prop {String[]} prefixes Array of all the prefixes that are able to be used by the bot.
+ * @prop {Object} settings Settings cache for users and guilds.
  */
 class Clara extends Eris.Client {
     /**
+     * Creates a new Clara instance.
      * 
-     * @param {Object} config the configuration object.
-     * @param {Object} options options for Eris
+     * @param {ClaraConfig} config Configuration settings
+     * @param {Object} options Eris client options.
+     * @see https://abal.moe/Eris/docs/Client
      */
     constructor(config, options = {}) {
         if (!config && typeof config !== 'object') throw new TypeError('config is not an object.');
@@ -29,11 +39,10 @@ class Clara extends Eris.Client {
         
         let tmp = JSON.parse(fs.readFileSync('./data/data.json'));
 
-        this.config = config;
-        // parsing for multi-prefix
-        this.prefixes = JSON.parse(fs.readFileSync('./data/prefixes.json')).concat([config.mainPrefix]);
         this.blacklist = tmp.blacklist;
         this.admins = tmp.admins;
+        this.config = config;
+        this.prefixes = JSON.parse(fs.readFileSync('./data/prefixes.json')).concat([config.mainPrefix]);
 
         this.commands = new CommandHolder(this);
         this.db = require('rethinkdbdash')(config.rethinkOptions);
@@ -324,6 +333,32 @@ class Clara extends Eris.Client {
 
         return res;
     }
+}
+
+/**
+ * Configuration used for Clara instances.
+ * @see config.json.example
+ * 
+ * @prop {Boolean} [debug=false] Whether to output error stacks to console.
+ * @prop {String} discordBotsOrgKey API key to use for posting stats to discordbots.org.
+ * @prop {String} discordBotsPWKey API key to use for posting stats to bots.discord.pw.
+ * @prop {String} gameName Text to use for playing status.
+ * @prop {String} gameURL Stream url for playing status. Must be a twitch link.
+ * @prop {String} ibKey API key to use for ibsear.ch.
+ * @prop {String} mainPrefix Default prefix for the bot.
+ * @prop {Number} maxShards Maximum number of shards for the bot to use.
+ * @prop {String} nasaKey API key for the NASAS commands.
+ * @prop {String} osuApiKey API key to use for osu! commands.
+ * @prop {String} ownerID ID of the person who has the most permissions for the bot.
+ * @prop {Boolean} [promiseWarnings=false] Whether to get the shitty errors from the Promise library.
+ * @prop {Object} rethinkOptions Options to pass to the bot's rethinkdbdash instance.
+ * @prop {String} sauceKey API key to use for SauceNAO.
+ * @prop {String} token Token to use when connecting to Discord.
+ * @prop {String} twitchKey Key to use for Twitch.
+ * @prop {String} ytSearchKey Key to use for searching YouTube tracks.
+ */
+class ClaraConfig { // eslint-disable-line
+    // Only here for documentation purposes.
 }
 
 module.exports = Clara;

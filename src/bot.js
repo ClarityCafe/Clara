@@ -6,8 +6,7 @@
   * @license MIT
   */
 
-
-//module requires
+// Imports
 const Clara = require('./lib/Clara');
 const fs = require('fs');
 const config = require('./config.json');
@@ -18,6 +17,8 @@ global.logger = require('./lib/modules/Logger');
 global.Promise = require('bluebird');
 
 //bot stuff
+=======
+>>>>>>> 8e8d0d6c3331ff90d53c99b790a99d5800a57d8b
 const bot = new Clara(config, {
     autoreconnect: true,
     seedVoiceConnections: true,
@@ -29,20 +30,21 @@ const bot = new Clara(config, {
     }
 });
 
+bot.commandsDir = `${__dirname}/cmd`;
+bot.unloadedPath = `${__dirname}/data/unloadedCommands.json`;
+
+global.utils = require(`${__dirname}/lib/modules/utils`);
+global.Promise = require('bluebird');
+
 //Promise configuration
 Promise.config({
-    warnings: {
-        wForgottenReturn: config.promiseWarnings || false
-    },
+    warnings: {wForgottenReturn: config.promiseWarnings || false},
     longStackTraces: config.promiseWarnings || false
 });
 
-exports.bot = bot;
-
 if (!fs.existsSync(`${__dirname}/cache`)) fs.mkdirSync(`${__dirname}/cache/`);
 
-// call init events
 require(`${__dirname}/lib/events`)(bot);
-
-
 bot.connect();
+
+exports.bot = bot;
