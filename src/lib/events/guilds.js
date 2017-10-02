@@ -7,20 +7,20 @@
 /* eslint-env node */
 
 module.exports = bot => {
-    bot.on('guildCreate', g => {
+    bot.on('guildCreate', async g => {
         if (g.members.filter(m => m.bot).size / g.members.size >= 0.50) {
             logger.info(`Leaving bot collection '${g.name}' (${g.id})`);
-            g.leave();
+            await g.leave();
         } else {
-            bot.editStatus('online', {name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: bot.config.gameURL ? 1 : 0, url: `${bot.config.gameURL || null}`});
-            bot.postGuildCount();
+            await bot.editStatus('online', {name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: bot.config.gameURL ? 1 : 0, url: `${bot.config.gameURL || null}`});
+            await bot.postGuildCount();
         }
     });
 
-    bot.on('guildDelete', g => {
+    bot.on('guildDelete', async g => {
         if (!(g.members.filter(m => m.bot).size/g.members.size >= 0.50)) {
-            bot.editStatus('online', {name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: bot.config.gameURL ? 1 : 0, url: `${bot.config.gameURL || null}`});
-            bot.postGuildCount();
+            await bot.editStatus('online', {name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: bot.config.gameURL ? 1 : 0, url: `${bot.config.gameURL || null}`});
+            await bot.postGuildCount();
         }
     });
 

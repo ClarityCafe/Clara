@@ -1,41 +1,39 @@
 {
-  "name": "clara",
-  "version": "0.4.0-SNAPSHOT",
-  "description": "A general-purpose discord bot.",
-  "main": "src/bot.js",
-  "scripts": {
-    "start": "node src/bot.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/awau/Clara.git"
-  },
-  "keywords": [
-    "discord",
-    "bot"
-  ],
-  "author": "awau",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/awau/Clara/issues"
-  },
-  "homepage": "https://github.com/awau/Clara#readme",
-  "dependencies": {
-    "bluebird": "^3.5.0",
-    "chalk": "^2.1.0",
-    "decache": "^4.1.0",
-    "eris": "github:abalabahaha/eris",
-    "got": "^7.1.0",
-    "redis": "^2.8.0",
-    "rethinkdbdash": "^2.3.31",
-    "zerorpc": "^0.9.7"
-  },
-  "devDependencies": {
-    "babel-eslint": "^8.0.0",
-    "eslint": "^4.6.1",
-    "eslint-plugin-react": "7.3.0",
-    "eslint-config-defaults": "^9.0.0",
-    "tslint": "^5.7.0",
-    "typescript": "^2.5.2"
-  }
+    "name": "clara",
+    "version": "0.4.0-SNAPSHOT",
+    "description": "A general-purpose discord bot.",
+    "main": "src/bot.js",
+    "scripts": {
+        "start": "node src/bot.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ClarityMoe/Clara.git"
+    },
+    "keywords": [
+        "discord",
+        "bot"
+    ],
+    "author": "ClarityMoe",
+    "license": "EPL",
+    "bugs": {
+        "url": "https://github.com/ClarityMoe/Clara/issues"
+    },
+    "homepage": "https://github.com/ClarityMoe/Clara",
+    "dependencies": {
+        "bluebird": "^3.5.0",
+        "decache": "^4.1.0",
+        "eris": "github:abalabahaha/eris",
+        "got": "^7.1.0",
+        "rethinkdbdash": "^2.3.31",
+        "update": "^0.7.4"
+    },
+    "devDependencies": {
+        "babel-eslint": "^8.0.0",
+        "eslint": "^4.6.1",
+        "eslint-plugin-react": "7.3.0",
+        "eslint-config-defaults": "^9.0.0",
+        "tslint": "^5.7.0",
+        "typescript": "^2.5.2"
+    }
 }

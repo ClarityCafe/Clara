@@ -3,6 +3,7 @@
  * @author Capuccino
  * @author Ovyerus
  * @todo Finish off url list and make lib return as many results as wanted
+ * @todo asyncify
  */
 
 const Multipart = require('multi-part');
@@ -22,7 +23,9 @@ class SauceHandler {
      * @see {link} https://saucenao.com/user.php?page=search-api
      */
     constructor(key, numRes) {
-        if (!key) throw new TypeError('No API key provided!');
+        if (!key && typeof key === 'string') { 
+            throw new TypeError('No API key provided!');
+        }
         this.key = key,
         this.numRes = numRes || 5;
     }

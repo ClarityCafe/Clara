@@ -6,9 +6,9 @@
 
 /* eslint-env node */
 
-const {parsePrefix} = require(`${__baseDir}/modules/messageParser`);
-const {Context} = require(`${__baseDir}/modules/CommandHolder`);
-const {formatUsername} = require(`${__baseDir}/modules/utils`);
+const {parsePrefix} = require(`./lib/modules/messageParser`);
+const {Context} = require(`./lib/modules/CommandHolder`);
+const {formatUsername} = require(`./lib/modules/utils`);
 
 module.exports = bot => {
     bot.on('messageCreate', async msg => {
@@ -20,7 +20,8 @@ module.exports = bot => {
         if (cleaned === msg.content) return;
 
         let cmd = cleaned.split(' ')[0];
-
+         
+        //FIXME: Chatbot parsing in here is too slow!
         if (!bot.commands.getCommand(cmd) && !(RegExp(`^<@!?${bot.user.id}>\s?.+$`) && bot.commands.getCommand('chat'))) return;
 
         let settings = {};
