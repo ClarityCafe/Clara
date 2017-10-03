@@ -12,8 +12,8 @@ exports.commands = [
     'ball'
 ];
 
-exports.init = () => {
-    let filterKeys = Object.keys(localeManager.locales['en-UK']).filter(k => /^ball-response\d+$/.test(k));
+exports.init = bot => {
+    let filterKeys = Object.keys(bot.localeManager.locales['en-UK']).filter(k => /^ball-response\d+$/.test(k));
     for (let key of filterKeys) responses.push(key);
 };
 

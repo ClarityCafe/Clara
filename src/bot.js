@@ -11,7 +11,8 @@ const Clara = require(`${__dirname}/lib/Clara`);
 const fs = require('fs');
 const config = require(`${__dirname}/config.json`);
 
-//globals
+// Globals
+global.mainDir = __dirname;
 global.utils = require(`${__dirname}/lib/modules/utils`);
 global.logger = require(`${__dirname}/lib/modules/Logger`);
 global.Promise = require('bluebird');

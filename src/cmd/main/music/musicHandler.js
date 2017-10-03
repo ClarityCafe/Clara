@@ -3,7 +3,7 @@
  * @author Ovyerus
  */
 
-const {Context} = require(`${__baseDir}/modules/CommandHolder`);
+const {Context} = require(`${mainDir}/lib/modules/CommandHolder`);
 const ytSearch = require('youtube-simple-search');
 
 // Link regexs
