@@ -35,7 +35,7 @@ class Clara extends Eris.Client {
         
         super(config.token, options);
         if (!fs.existsSync('./data')) fs.mkdirSync('./data');
-        if (!fs.existsSync('./data/data.json')) fs.writeFileSync('./data/data.json', '{}');
+        if (!fs.existsSync('./data/data.json')) fs.writeFileSync('./data/data.json', '{"admins": [], "blacklist": []}');
         if (!fs.existsSync('./data/prefixes.json')) fs.writeFileSync('./data/prefixes.json', '[]');
         
         let tmp = JSON.parse(fs.readFileSync('./data/data.json'));
