@@ -17,7 +17,7 @@ class SampleCommand {
   	 */
  
     /* eslint-disable no-unused-vars */
-    constructor(metadata) {
+    constructor() {
         this.metadata = {
             desc: 'A sample command to showcase the new class-based command structure for Clara 1.x',
             shortDesc: 'a sample command, duh',
