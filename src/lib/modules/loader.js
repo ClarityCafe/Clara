@@ -30,7 +30,7 @@ module.exports = bot => {
     logger.custom('loader', 'Preloading commands...');
 
     for (let cmd of allCmds) {
-        let name = cmd.split('/')[-1];
+        let name = cmd.split('/').slice(-1)[0];
         let files = fs.readdirSync(cmd);
         let pkg;
 
@@ -71,7 +71,7 @@ module.exports = bot => {
 
         let pkg = JSON.parse(fs.readFileSync(`${cmd}/package.json`));
         let path = `${cmd}/${pkg.main}`;
-        let name = cmd.split('/')[-1];
+        let name = cmd.split('/').slice(-1)[0];
 
         try {
             bot.commands.loadModule(path);
