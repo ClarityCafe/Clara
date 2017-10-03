@@ -26,7 +26,7 @@ module.exports = bot => {
         let settings = {};
         settings.guild = await bot.getGuildSettings(msg.channel.guild.id);
         settings.user = await bot.getUserSettings(msg.author.id);
-        settings.locale = settings.user.locale !== localeManager.defaultLocale ? settings.user.locale : settings.guild.locale;
+        settings.locale = settings.user.locale !== bot.localeManager.defaultLocale ? settings.user.locale : settings.guild.locale;
 
         let ctx = new Context(msg, bot, settings);
         ctx.cmd = cmd;
