@@ -54,7 +54,7 @@ module.exports = bot => {
 
     if (allDeps.length !== 0) {
         logger.custom('loader', `Installing following dependencies for commands: \x1b[36m"${allDeps.join(', ')}"`);
-        cp.execSync(`npm i ${allDeps.join(' ')}`);
+        cp.execSync(`npm i ${allDeps.join(' ')} --no-save`);
     }
 
     try {
