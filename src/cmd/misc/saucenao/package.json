@@ -1,6 +1,6 @@
 {
     "main": "saucenao.js",
     "dependencies": {
-        "multi-part": "2.0.0"
+        "@sr229/sagiri": "^1.2.2"
     }
 }
