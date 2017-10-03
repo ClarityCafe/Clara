@@ -7,7 +7,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const localeDir = path.resolve('./assets/locales');
+const localeDir = path.resolve(`${__dirname}`, '../', '../assets/locales'); 
+
 
 /**
  * Object for managing locales and translating strings
