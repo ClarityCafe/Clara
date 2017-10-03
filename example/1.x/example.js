@@ -10,13 +10,7 @@
 class SampleCommand {
     /**
   	 * this is where the command metadata is set
-	 * @param {Object} metadata the Object to define your command's metadata (parsed by help)
-  	 * @prop {String} metadata.desc the description of the command
-  	 * @prop {String} metadata.shortDesc a summarized description of your command
-  	 * @prop {String} metadata.usage how your command should be used if your command requires an argument.
   	 */
- 
-    /* eslint-disable no-unused-vars */
     constructor() {
         this.metadata = {
             desc: 'A sample command to showcase the new class-based command structure for Clara 1.x',
@@ -37,7 +31,7 @@ class SampleCommand {
 	* a static declaration is always and foremost, rendered as a seperate command regardless being in the same command class as the subcommands.
 	* @param {Eris.Message} ctx the Context class parameter
   	*/  
-    static async anotherOne(ctx) {
+    async static anotherOne(ctx) {
         await ctx.createMessage('another one');
     }
 	
