@@ -15,7 +15,7 @@
         "bot"
     ],
     "author": "ClarityMoe",
-    "license": "EPL",
+    "license": "EPL-1.0",
     "bugs": {
         "url": "https://github.com/ClarityMoe/Clara/issues"
     },
@@ -25,8 +25,7 @@
         "decache": "^4.1.0",
         "eris": "github:abalabahaha/eris",
         "got": "^7.1.0",
-        "rethinkdbdash": "^2.3.31",
-        "update": "^0.7.4"
+        "rethinkdbdash": "^2.3.31"
     },
     "devDependencies": {
         "babel-eslint": "^8.0.0",
