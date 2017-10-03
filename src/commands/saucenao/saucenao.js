@@ -7,12 +7,13 @@
 
 /* eslint-env node */
 
-//this handles the SauceNao handling
-const Sagiri = require('sagiri');
-let ayaneru;
+const Sagiri = require('@sr229/sagiri');
+
+const urlRegex = /^(?:(?:https?:)?\/\/)?(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+let sourcer;
 
 exports.init = bot => {
-    ayaneru = new Sagiri(bot.config.sauceKey, 5);
+    sourcer = new Sagiri(bot.config.sauceKey);
 };
 
 exports.commands = [
@@ -20,37 +21,38 @@ exports.commands = [
 ];
 
 exports.saucenao = {
-    desc: 'Gets the image from the recent attachment or via a image link and looks for saucenao to check for the source of the image.',
+    desc: 'Tries to find the source for an image.',
+    usage: '<url or attachment>',
     main(bot, ctx) { 
         return new Promise((resolve, reject) => {
-            if (!ctx.attachments[0]) {
-                return ctx.createMessage('Aw, no image here.');
-            } else if (ctx.attachments[0]) {
-                ayaneru.getSauce(ctx.attachments[0].url).then(res => {
-                    let fields =[];
-                    let ovy = JSON.parse(res).results;
-                    for (res.results in res) {
-                        fields.push(`${{name: ovy.name, value: `(Link)[${ovy.url}]`}}`, 0);
-                    }
-                    ctx.createMessage({embed: {
-                        title: 'Saucenao query results',
-                        description: 'this is what we can find',
-                        fields
+            if (!ctx.attachments[0] && (!ctx.suffix || !urlRegex.test(ctx.suffix))) {
+                ctx.createMessage('Please provide an image.').then(resolve).catch(reject);
+            } else {
+                let url = ctx.attachments[0] ? ctx.attachments[0].url : ctx.suffix;
+
+                ctx.channel.sendTyping().then(() => sourcer.getSource(url)).then(res => {
+                    return ctx.createMessage({embed: {
+                        title: 'Source Found',
+                        description: `[**Source URL**](${res[0].url})`,
+                        thumbnail: {url: res[0].thumbnail},
+                        fields: [
+                            {
+                                name: 'Site',
+                                value: res[0].site,
+                                inline: true
+                            },
+                            {
+                                name: 'Similarity',
+                                value: res[0].similarity.toString(),
+                                inline: true
+                            },
+                            {
+                                name: 'Other Matches',
+                                value: res.slice(1).map(v => `**${v.similarity}** - [${v.site}](${v.url})`).join('\n')
+                            }
+                        ]
                     }});
-                }).catch(reject);
-            } else if (ctx.suffix) {
-                ayaneru.getSauce(ctx.suffix).then(res => {
-                    let ovy = JSON.parse(res.results);
-                    for (ovy.data of ovy) {
-                        const fields = [];
-                        fields.push(`${{name: ovy.title, value: `(Link)[${ovy.url}]`, inline: true}}`, 0);
-                        ctx.createMessage({embed: {
-                            title: 'saucenao query',
-                            description: 'this is what we can find from your image.',
-                            fields
-                        }});
-                    }
-                }).catch(reject);
+                }).then(resolve).catch(reject);
             }
         });
     }
