@@ -7,13 +7,13 @@
   */
 
 // Imports
-const Clara = require('./lib/Clara');
+const Clara = require(`${__dirname}/lib/Clara`);
 const fs = require('fs');
-const config = require('./config.json');
+const config = require(`${__dirname}/config.json`);
 
 //globals
-global.utils = require('./lib/modules/utils');
-global.logger = require('./lib/modules/Logger');
+global.utils = require(`${__dirname}/lib/modules/utils`);
+global.logger = require(`${__dirname}/lib/modules/Logger`);
 global.Promise = require('bluebird');
 
 //bot stuff
@@ -30,9 +30,6 @@ const bot = new Clara(config, {
 
 bot.commandsDir = `${__dirname}/cmd`;
 bot.unloadedPath = `${__dirname}/data/unloadedCommands.json`;
-
-global.utils = require(`${__dirname}/lib/modules/utils`);
-global.Promise = require('bluebird');
 
 //Promise configuration
 Promise.config({

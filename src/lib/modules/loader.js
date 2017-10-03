@@ -24,7 +24,7 @@ module.exports = bot => {
 
     // Turn folder names into proper paths for future ease (also make sure we only get folders).
     allCmds = Object.entries(allCmds).map(x => x[1].filter(y => fs.statSync(`${bot.commandsDir}/${x[0]}/${y}`).isDirectory()));
-    allCmds = allCmds.map((v, i) => v.map(x => `./${bot.commandsDir}/${cmdDirs[i]}/${x}`));
+    allCmds = allCmds.map((v, i) => v.map(x => `${bot.commandsDir}/${cmdDirs[i]}/${x}`));
     allCmds = [].concat.apply([], allCmds);
 
     logger.custom('loader', 'Preloading commands...');
@@ -53,7 +53,7 @@ module.exports = bot => {
     }
 
     if (allDeps.length !== 0) {
-        logger.custom('loader', `Installing following dependencies for commands: [36m"${allDeps.join(', ')}"`);
+        logger.custom('loader', `Installing following dependencies for commands: \x1b[36m"${allDeps.join(', ')}"`);
         cp.execSync(`npm i ${allDeps.join(' ')}`);
     }
 

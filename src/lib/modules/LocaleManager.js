@@ -34,7 +34,7 @@ class LocaleManager {
         for (let locale of locales) {
             if (!locale.endsWith('.json')) continue;
 
-            this.locales[locale.slice(0, -5)] = JSON.parse(fs.readFileSync(`${this.localesDir}/${locale}`));
+            this.locales[locale.slice(0, -5)] = JSON.parse(fs.readFileSync(`${this.localeDir}/${locale}`));
         }
 
         // Get command folders (should make this a function).
@@ -47,7 +47,7 @@ class LocaleManager {
     
         // Turn folder names into proper paths for future ease (also make sure we only get folders).
         allCmds = Object.entries(allCmds).map(x => x[1].filter(y => fs.statSync(`${bot.commandsDir}/${x[0]}/${y}`).isDirectory()));
-        allCmds = allCmds.map((v, i) => v.map(x => `./${bot.commandsDir}/${cmdDirs[i]}/${x}`));
+        allCmds = allCmds.map((v, i) => v.map(x => `${bot.commandsDir}/${cmdDirs[i]}/${x}`));
         allCmds = [].concat.apply([], allCmds);
 
         for (let cmd of allCmds) {

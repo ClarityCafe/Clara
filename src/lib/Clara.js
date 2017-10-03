@@ -7,6 +7,7 @@ const Eris = require('eris');
 const got = require('got');
 const fs = require('fs');
 const {CommandHolder} = require(`${__dirname}/modules/CommandHolder`);
+const LocaleManager = require(`${__dirname}/modules/LocaleManager`);
 
 /**
  * Main class for Clara.
@@ -44,6 +45,7 @@ class Clara extends Eris.Client {
         this.config = config;
         this.prefixes = JSON.parse(fs.readFileSync('./data/prefixes.json')).concat([config.mainPrefix]);
 
+        this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
         this.db = require('rethinkdbdash')(config.rethinkOptions);
         this.settings = {

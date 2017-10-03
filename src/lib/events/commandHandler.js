@@ -6,9 +6,9 @@
 
 /* eslint-env node */
 
-const {parsePrefix} = require(`./lib/modules/messageParser`);
-const {Context} = require(`./lib/modules/CommandHolder`);
-const {formatUsername} = require(`./lib/modules/utils`);
+const path = require('path');
+const {parsePrefix} = require(path.resolve(__dirname, '../modules', 'messageParser'));
+const {Context} = require(path.resolve(__dirname, '../modules', 'CommandHolder'));
 
 module.exports = bot => {
     bot.on('messageCreate', async msg => {
@@ -21,8 +21,7 @@ module.exports = bot => {
 
         let cmd = cleaned.split(' ')[0];
          
-        //FIXME: Chatbot parsing in here is too slow!
-        if (!bot.commands.getCommand(cmd) && !(RegExp(`^<@!?${bot.user.id}>\s?.+$`) && bot.commands.getCommand('chat'))) return;
+        if (!bot.commands.getCommand(cmd) && !(RegExp(`^<@!?${bot.user.id}>\s?.+$`) && bot.commands.getCommand('chat'))) return; // eslint-disable-line
 
         let settings = {};
         settings.guild = await bot.getGuildSettings(msg.channel.guild.id);
@@ -86,7 +85,7 @@ module.exports = bot => {
      * @returns {String} Formatted string.
      */
     function loggerPrefix(msg) {
-        return msg.channel.guild ? `${msg.channel.guild.name} | ${msg.channel.name} > ${formatUsername(msg.author)} (${msg.author.id}): ` : `Direct Message > ${formatUsername(msg.author)} (${msg.author.id}): `;
+        return `${msg.channel.guild.id} > ${msg.author.id}: `;
     }
 
     /**

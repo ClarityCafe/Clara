@@ -7,6 +7,7 @@
 /* eslint-env node */
 
 const fs = require('fs');
+const path = require('path');
 
 module.exports = bot => {
     bot.on('ready', async () => {
@@ -14,10 +15,10 @@ module.exports = bot => {
             try {
                 bot.prefixes = bot.prefixes.concat([`<@${bot.user.id}> `, `<@!${bot.user.id}> `]);
 
-                await localeManager.loadLocales();
-                logger.info(`Loaded ${Object.keys(localeManager.locales).length} locales.`);
+                await bot.localeManager.loadLocales(bot);
+                logger.info(`Loaded ${Object.keys(bot.localeManager.locales).length} locales.`);
 
-                require(`./lib/modules/loader`)(bot);
+                require(path.resolve(__dirname, '../modules', 'loader'))(bot);
                 logger.info(`Loaded ${bot.commands.length} ${bot.commands.length === 1 ? 'command' : 'commands'}.`);
 
                 let tableList = await bot.db.tableList().run();
@@ -41,7 +42,7 @@ module.exports = bot => {
                 logger.info(`Main prefix is '${bot.config.mainPrefix}', you can also use @mention.`);
                 logger.info(altPrefixes.length > 0 ? `Alternative prefixes: '${altPrefixes.join("', ")}'`: 'No alternative prefixes.');
             } catch(err) {
-                logger.error(`Error while starting up:\n${bot.config.debug ? err.stack : err}`);
+                logger.error(`Error while starting up:\n${err.stack}`);
             }
         } else {
             logger.info('Reconnected to Discord from disconnection.');

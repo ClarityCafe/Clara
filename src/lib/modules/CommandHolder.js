@@ -549,9 +549,9 @@ class Context {
         let locale = this.settings.locale;
 
         if (typeof content === 'string') {
-            content = localeManager.t(content, locale, replacers);
+            content = this.client.localeManager.t(content, locale, replacers);
         } else if (content.content || content.embed) {
-            if (content.content) content.content = localeManager.t(content, locale, replacers);
+            if (content.content) content.content = this.client.localeManager.t(content, locale, replacers);
 
             if (content.embed) {
                 for (let key in content.embed) {
@@ -560,18 +560,18 @@ class Context {
                     let item = content.embed[key];
 
                     if (['title', 'description'].includes(key)) {
-                        content.embed[key] = localeManager.t(item, locale, replacers);
+                        content.embed[key] = this.client.localeManager.t(item, locale, replacers);
                     } else if (key === 'author' && item.name) {
-                        content.embed[key].name = localeManager.t(item.name, locale, replacers);
+                        content.embed[key].name = this.client.localeManager.t(item.name, locale, replacers);
                     } else if (key === 'footer' && item.text) {
-                        content.embed[key].text = localeManager.t(item.text, locale, replacers);
+                        content.embed[key].text = this.client.localeManager.t(item.text, locale, replacers);
                     }
                 }
 
                 if (content.embed.fields) {
                     content.embed.fields.forEach((v, i, a) => {
-                        if (typeof v.name === 'string') a[i].name = localeManager.t(v.name, locale, replacers);
-                        if (typeof v.value === 'string') a[i].value = localeManager.t(v.value, locale, replacers);
+                        if (typeof v.name === 'string') a[i].name = this.client.localeManager.t(v.name, locale, replacers);
+                        if (typeof v.value === 'string') a[i].value = this.client.localeManager.t(v.value, locale, replacers);
                     });
                 }
             }
