@@ -7,7 +7,7 @@
 /* eslint-env node */
 
 const got = require('got');
-const Ratelimiter = require(`${__baseDir}/modules/Ratelimiter`);
+const Ratelimiter = require(`${mainDir}/lib/modules/Ratelimiter`);
 const Jake = new Ratelimiter(20, 6000); //20 uses for 60 seconds
 
 exports.commands = [

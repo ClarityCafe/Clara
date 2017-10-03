@@ -26,9 +26,13 @@ class Ratelimiter {
      * Add a use to the ratelimiter.
      */
     use() {
-        if (this.uses !== this.totalUses) {
+        if (this.uses < this.totalUses) {
             this.uses++;
         }
+    }
+
+    get ratelimited() {
+        return this.uses === this.totalUses;
     }
 }
 

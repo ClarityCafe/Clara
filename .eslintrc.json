@@ -16,9 +16,8 @@
     },
 
     "globals": {
-        "__baseDir": false,
+        "mainDir": false,
         "logger" : false,
-        "localeManager": false,
         "got": false,
         "config": false,
         "utils": false,
