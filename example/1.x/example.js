@@ -31,7 +31,7 @@ class SampleCommand {
 	* a static declaration is always and foremost, rendered as a seperate command regardless being in the same command class as the subcommands.
 	* @param {Eris.Message} ctx the Context class parameter
   	*/  
-    async static anotherOne(ctx) {
+    static async anotherOne(ctx) {
         await ctx.createMessage('another one');
     }
 	
