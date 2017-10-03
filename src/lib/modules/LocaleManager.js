@@ -6,7 +6,8 @@
 /* eslint-env node */
 
 const fs = require('fs');
-const localeDir = `./assets/locales`;
+const path = require('path');
+const localeDir = path.resolve('./assets/locales');
 
 /**
  * Object for managing locales and translating strings
