@@ -81,5 +81,5 @@ module.exports = bot => {
         }
     }
 
-    if (!fs.existsSync('./data/unloadedCommands.json')) fs.writeFileSync(bot.unloadedPath, JSON.stringify(unloaded));
+    fs.writeFileSync(bot.unloadedPath, JSON.stringify(unloaded));
 };
