@@ -13,7 +13,7 @@ var version;
 try {
     version = JSON.parse(fs.readFileSync('../package.json')).version;
 } catch(_) {
-    version = JSON.parse(fs.readFileSync(`${__baseDir}/package.json`)).version;
+    version = JSON.parse(fs.readFileSync(`${mainDir}/package.json`)).version;
 }
 
 exports.commands = [

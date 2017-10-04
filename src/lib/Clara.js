@@ -8,6 +8,7 @@ const got = require('got');
 const fs = require('fs');
 const {CommandHolder} = require(`${__dirname}/modules/CommandHolder`);
 const LocaleManager = require(`${__dirname}/modules/LocaleManager`);
+const path = require('path');
 
 /**
  * Main class for Clara.
@@ -34,16 +35,16 @@ class Clara extends Eris.Client {
         if (!config && typeof config !== 'object') throw new TypeError('config is not an object.');
         
         super(config.token, options);
-        if (!fs.existsSync('./data')) fs.mkdirSync('./data');
-        if (!fs.existsSync('./data/data.json')) fs.writeFileSync('./data/data.json', '{"admins": [], "blacklist": []}');
-        if (!fs.existsSync('./data/prefixes.json')) fs.writeFileSync('./data/prefixes.json', '[]');
+        if (!fs.existsSync(path.resolve(`${__dirname}`, '../', './data'))) fs.mkdirSync(path.resolve(`${__dirname}`, '../', './data'));
+        if (!fs.existsSync(path.resolve(`${__dirname}`, '../', './data/data.json'))) fs.writeFileSync(path.resolve(`${__dirname}`, '../', './data/data.json'), '{"admins": [], "blacklist": []}');
+        if (!fs.existsSync(path.resolve(`${__dirname}`, '../', './data/prefixes.json'))) fs.writeFileSync(path.resolve(`${__dirname}`, '../', './data/prefixes.json'), '[]');
         
-        let tmp = JSON.parse(fs.readFileSync('./data/data.json'));
+        let tmp = JSON.parse(fs.readFileSync(path.resolve(`${__dirname}`, '../', './data/data.json')));
 
         this.blacklist = tmp.blacklist;
         this.admins = tmp.admins;
         this.config = config;
-        this.prefixes = JSON.parse(fs.readFileSync('./data/prefixes.json')).concat([config.mainPrefix]);
+        this.prefixes = JSON.parse(fs.readFileSync(path.resolve(`${__dirname}`, '../', './data/prefixes.json'))).concat([config.mainPrefix]);
 
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
