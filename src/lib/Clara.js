@@ -336,6 +336,20 @@ class Clara extends Eris.Client {
 
         return res;
     }
+
+    /**
+     * Check if the bot has a permission in a channel.
+     * 
+     * @param {String} permission The permission to check.
+     * @param {Eris.Channel} channel The channel to check.
+     * @returns {Boolean} If the user has the permission.
+     */
+    hasPermission(permission, channel) {
+        // Check if permission actually exists.
+        if (!Object.keys(Eris.Constants.Permissions).includes(permission)) return false;
+
+        return channel.permissionsOf(this.user.id).has(permission);
+    }
 }
 
 /**
