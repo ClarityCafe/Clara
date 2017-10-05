@@ -3,8 +3,6 @@
  * @author Ovyerus
  */
 
-/* eslint-env node */
-
 exports.commands = [
     'clean'
 ];
@@ -19,14 +17,16 @@ function deleteDelay(msg) {
 
 exports.clean = {
     desc: 'Clean messages created by the bot.',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            ctx.channel.getMessages(100).then(msgs => {
-                let delet = [];
-                msgs = msgs.filter(m => m.author.id === bot.user.id);
-                msgs.forEach(m => delet.push(m.delete()));
-                return Promise.all(delet);
-            }).then(amt => ctx.createMessage('clean', null, 'channel', {amt: amt.length})).then(deleteDelay).then(resolve).catch(reject);
-        });
+    async main(bot, ctx) {
+        let msgs = await ctx.channel.getMessages(100);
+        let delet = [];
+        msgs = msgs.filter(m => m.author.id === bot.user.id);
+
+        msgs.forEach(m => delet.push(m.delete()));
+        
+        let amt = await Promise.all(delet);
+        let m = await ctx.createMessage('clean', null, 'channel', {amt: amt.length});
+
+        await deleteDelay(m);
     }
 };
