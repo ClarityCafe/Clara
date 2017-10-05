@@ -26,7 +26,7 @@ exports.main = {
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
             let cmdFolders = fs.readdirSync(path.join(__dirname, '../'));
-            let unloadedMods = JSON.parse(fs.readFileSync(`${__baseDir}/data/unloadedCommands.json`));
+            let unloadedMods = JSON.parse(fs.readFileSync(`${mainDir}/data/unloadedCommands.json`));
             let embed = {
                 title: 'Current Modules',
                 description: `Showing **${cmdFolders.length}** command modules.`,
@@ -62,7 +62,7 @@ exports.load = {
             } else if (bot.commands.checkModule(ctx.args[0])) {
                 ctx.createMessage(`Module **${ctx.args[0]}** is already loaded.`).then(resolve).catch(reject);
             } else {
-                readDir(`${__baseDir}/commands`).then(folders => {
+                readDir(`${mainDir}/cmd`).then(folders => {
                     if (folders.indexOf(ctx.args[0]) === -1) {
                         return ctx.createMessage(`Module **${ctx.args[0]}** does not exist.`);
                     } else {
@@ -73,10 +73,10 @@ exports.load = {
                         if (loadedAmt === 0) bot.commands.removeModule(ctx.args[0]);
 
                         if (loadedAmt !== 0) {
-                            let unloadedMods = JSON.parse(fs.readFileSync(`${__baseDir}/data/unloadedCommands.json`).toString());
+                            let unloadedMods = JSON.parse(fs.readFileSync(`${mainDir}/data/unloadedCommands.json`).toString());
                             if (unloadedMods.indexOf(ctx.args[0]) !== -1) {
                                 unloadedMods.splice(unloadedMods.indexOf(ctx.args[0]), 1);
-                                fs.writeFileSync(`${__baseDir}/data/unloadedCommands.json`, JSON.stringify(unloadedMods));
+                                fs.writeFileSync(`${mainDir}/data/unloadedCommands.json`, JSON.stringify(unloadedMods));
                             }
                         }
 
@@ -104,9 +104,9 @@ exports.unload = {
                 decache(path.join(__dirname, '../', ctx.args[0], 'package.json'));
 
                 if (unloadedAmt !== 0) {
-                    let unloadedMods = JSON.parse(fs.readFileSync(`${__baseDir}/data/unloadedCommands.json`).toString());
+                    let unloadedMods = JSON.parse(fs.readFileSync(`${mainDir}/data/unloadedCommands.json`).toString());
                     unloadedMods.push(ctx.args[0]);
-                    fs.writeFileSync(`${__baseDir}/data/unloadedCommands.json`, JSON.stringify(unloadedMods));
+                    fs.writeFileSync(`${mainDir}/data/unloadedCommands.json`, JSON.stringify(unloadedMods));
                 }
 
                 ctx.createMessage(`Unloaded **${unloadedAmt}/${mod.commands.length}** commands from module **${ctx.args[0]}**`).then(resolve).catch(reject);
