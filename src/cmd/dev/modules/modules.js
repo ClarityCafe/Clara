@@ -62,7 +62,7 @@ exports.load = {
             } else if (bot.commands.checkModule(ctx.args[0])) {
                 ctx.createMessage(`Module **${ctx.args[0]}** is already loaded.`).then(resolve).catch(reject);
             } else {
-                readDir(`${mainDir}/commands`).then(folders => {
+                readDir(`${mainDir}/cmd`).then(folders => {
                     if (folders.indexOf(ctx.args[0]) === -1) {
                         return ctx.createMessage(`Module **${ctx.args[0]}** does not exist.`);
                     } else {
