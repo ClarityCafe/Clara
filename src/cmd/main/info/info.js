@@ -7,12 +7,13 @@
 
 const prettyBytes = require('pretty-bytes');
 const fs = require('fs');
+const path = require('path');
 var version;
 
 try {
-    version = JSON.parse(fs.readFileSync('../package.json')).version;
+    version = JSON.parse(fs.readFileSync(path.resolve(`${__dirname}`, '../', '../', '../', './package.json'))).version;
 } catch(_) {
-    version = JSON.parse(fs.readFileSync(`./package.json`)).version;
+    version = JSON.parse(fs.readFileSync(`${mainDir}/package.json`)).version;
 }
 
 exports.commands = [

@@ -60,8 +60,8 @@ module.exports = bot => {
     try {
         unloaded = JSON.parse(fs.readFileSync(bot.unloadedPath));
     } catch(err) {
-        unloaded = [];
         fs.writeFileSync(bot.unloadedPath, '[]');
+        unloaded = [];
     }
 
     logger.custom('loader', 'Loading commands...');

@@ -36,7 +36,7 @@ module.exports = bot => {
                 bot.loadCommands = false;
                 bot.allowCommandUse = true;
 
-                let altPrefixes = JSON.parse(fs.readFileSync(`./data/prefixes.json`));
+                let altPrefixes = JSON.parse(fs.readFileSync(path.resolve(`${__dirname}`, '../', '../', './data/prefixes.json')));
 
                 logger.info(`${bot.user.username} is connected to Discord and is ready to use.`);
                 logger.info(`Main prefix is '${bot.config.mainPrefix}', you can also use @mention.`);

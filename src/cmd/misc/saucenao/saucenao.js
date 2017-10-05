@@ -15,15 +15,15 @@ exports.init = bot => {
 };
 
 exports.commands = [
-    'saucenao'
+    'source'
 ];
 
-exports.saucenao = {
+exports.source = {
     desc: 'Tries to find the source for an image.',
     usage: '<url or attachment>',
     main(bot, ctx) { 
         return new Promise((resolve, reject) => {
-            if (!ctx.attachments[0] && (!ctx.suffix || !urlRegex.test(ctx.suffix))) {
+            if (!ctx.attachments[0] || ctx.attachments[1] && (!ctx.suffix || !urlRegex.test(ctx.suffix))) {
                 ctx.createMessage('Please provide an image.').then(resolve).catch(reject);
             } else {
                 let url = ctx.attachments[0] ? ctx.attachments[0].url : ctx.suffix;
