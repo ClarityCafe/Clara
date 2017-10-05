@@ -375,14 +375,14 @@ class CommandHolder {
                 if (foundPerm) {
                     let {perm, who} = foundPerm;
                     if (who === 'author') {
-                        ctx.createMessage(localeManager.t('user-noPerm', ctx.locale, {perm: PermissionsPrettyPrinted[perm]})).then(resolve).catch(reject);
+                        ctx.createMessage(this[_bot].localeManager.t('user-noPerm', ctx.locale, {perm: PermissionsPrettyPrinted[perm]})).then(resolve).catch(reject);
                     } else if (who === 'self') {
-                        ctx.createMessage(localeManager.t('bot-noPerm', ctx.locale, {perm: PermissionsPrettyPrinted[perm]})).then(resolve).catch(reject);
+                        ctx.createMessage(this[_bot].localeManager.t('bot-noPerm', ctx.locale, {perm: PermissionsPrettyPrinted[perm]})).then(resolve).catch(reject);
                     } else if (who === 'both') {
                         if (!ctx.hasPermission(perm, 'author')) {
-                            ctx.createMessage(localeManager.t('user-noPerm', ctx.locale, {perm: PermissionsPrettyPrinted[perm]})).then(resolve).catch(reject);
+                            ctx.createMessage(this[_bot].localeManager.t('user-noPerm', ctx.locale, {perm: PermissionsPrettyPrinted[perm]})).then(resolve).catch(reject);
                         } else if (!ctx.hasPermission(perm)) {
-                            ctx.createMessage(localeManager.t('bot-noPerm', ctx.locale, {perm: PermissionsPrettyPrinted[perm]})).then(resolve).catch(reject);
+                            ctx.createMessage(this[_bot].localeManager.t('bot-noPerm', ctx.locale, {perm: PermissionsPrettyPrinted[perm]})).then(resolve).catch(reject);
                         }
                     }
                 }
