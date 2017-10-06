@@ -17,6 +17,7 @@ const path = require('path');
  * @prop {Boolean} allowCommandUse If commands can be run.
  * @prop {String[]} blacklist Array of people who cannot use the bot.
  * @prop {CommandHolder} commands Command holder object.
+ * @prop {String[]} commandFolders todo
  * @prop {ClaraConfig} config Configuration passed during construction.
  * @prop {RethinkDBDash} db Database connection manager.
  * @prop {Boolean} loadCommands If the bot should load commands or not.
@@ -167,7 +168,7 @@ class Clara extends Eris.Client {
      * @returns {Boolean} If the user has perms.
      */
     checkBotPerms(userID) {
-        return userID === this.config.userID || this.admins.includes(userID);
+        return userID === this.config.ownerID || this.admins.includes(userID);
     }
 
     /**
@@ -349,6 +350,22 @@ class Clara extends Eris.Client {
         if (!Object.keys(Eris.Constants.Permissions).includes(permission)) return false;
 
         return channel.permissionsOf(this.user.id).has(permission);
+    }
+
+    get commandFolders() {
+        let cmdDirs = fs.readdirSync(this.commandsDir).map(d => ({[d]: fs.readdirSync(`${this.commandsDir}/${d}`)}));
+        let allCmds = {};
+    
+        // Go from an array of objects to an object of arrays.
+        cmdDirs.forEach(d => Object.assign(allCmds, d));
+        cmdDirs = cmdDirs.map(e => Object.keys(e)[0]);
+    
+        // Turn folder names into proper paths for future ease (also make sure we only get folders).
+        allCmds = Object.entries(allCmds).map(x => x[1].filter(y => fs.statSync(`${this.commandsDir}/${x[0]}/${y}`).isDirectory()));
+        allCmds = allCmds.map((v, i) => v.map(x => `${this.commandsDir}/${cmdDirs[i]}/${x}`));
+        allCmds = [].concat.apply([], allCmds);
+
+        return allCmds;
     }
 }
 
