@@ -12,14 +12,22 @@ module.exports = bot => {
             logger.info(`Leaving bot collection '${g.name}' (${g.id})`);
             await g.leave();
         } else {
-            await bot.editStatus('online', {name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: bot.config.gameURL ? 1 : 0, url: `${bot.config.gameURL || null}`});
+            await bot.editStatus('online', {
+                name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
+                type: bot.config.gameURL ? 1 : 0,
+                url: `${bot.config.gameURL || null}`
+            });
             await bot.postGuildCount();
         }
     });
 
     bot.on('guildDelete', async g => {
         if (!(g.members.filter(m => m.bot).size/g.members.size >= 0.50)) {
-            await bot.editStatus('online', {name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`, type: bot.config.gameURL ? 1 : 0, url: `${bot.config.gameURL || null}`});
+            await bot.editStatus('online', {
+                name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
+                type: bot.config.gameURL ? 1 : 0, url:
+                `${bot.config.gameURL || null}`
+            });
             await bot.postGuildCount();
         }
     });
