@@ -14,22 +14,11 @@ function exists(module) {
 module.exports = bot => {
     let allDeps = [];
     let dontLoad = [];
-    let cmdDirs = fs.readdirSync(bot.commandsDir).map(d => ({[d]: fs.readdirSync(`${bot.commandsDir}/${d}`)}));
-    let allCmds = {};
     let unloaded;
-
-    // Go from an array of objects to an object of arrays.
-    cmdDirs.forEach(d => Object.assign(allCmds, d));
-    cmdDirs = cmdDirs.map(e => Object.keys(e)[0]);
-
-    // Turn folder names into proper paths for future ease (also make sure we only get folders).
-    allCmds = Object.entries(allCmds).map(x => x[1].filter(y => fs.statSync(`${bot.commandsDir}/${x[0]}/${y}`).isDirectory()));
-    allCmds = allCmds.map((v, i) => v.map(x => `${bot.commandsDir}/${cmdDirs[i]}/${x}`));
-    allCmds = [].concat.apply([], allCmds);
 
     logger.custom('loader', 'Preloading commands...');
 
-    for (let cmd of allCmds) {
+    for (let cmd of bot.commandFolders) {
         let name = cmd.split('/').slice(-1)[0];
         let files = fs.readdirSync(cmd);
         let pkg;
@@ -66,7 +55,7 @@ module.exports = bot => {
 
     logger.custom('loader', 'Loading commands...');
 
-    for (let cmd of allCmds) {
+    for (let cmd of bot.commandFolders) {
         if (dontLoad.includes(cmd) || unloaded.includes(cmd)) continue;
 
         let pkg = JSON.parse(fs.readFileSync(`${cmd}/package.json`));
