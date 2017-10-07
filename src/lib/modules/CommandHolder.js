@@ -161,7 +161,7 @@ class CommandHolder {
 
         if (!this.modules[name]) {
             delete this.modules[name];
-            delete require.cache[name];
+            delete require.cache[require.resolve(moduleName)];
             return;
         }
 
@@ -191,7 +191,8 @@ class CommandHolder {
         }
 
         delete this.modules[name];
-        delete require.cache[moduleName];
+        delete require.cache[require.resolve(moduleName)];
+
         logger.custom('CommandHolder/removeModule', `Removed module '${name}'`);
     }
 
@@ -204,7 +205,7 @@ class CommandHolder {
      */
     reloadModule(moduleName) {
         if (typeof moduleName !== 'string') throw new TypeError('moduleName is not a string.');
-        if (!this.modules[moduleName.split(/\/|\\/).slice(-1)[0].slice(0, -3)]) {
+        if (!this.modules[moduleName.split(/\/|\\/g).slice(-1)[0].slice(0, -3)]) {
             this.loadModule(moduleName);
             return;
         }

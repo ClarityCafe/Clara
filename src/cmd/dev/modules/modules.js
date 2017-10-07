@@ -6,8 +6,6 @@
 /* eslint-env node */
 
 const fs = require('fs');
-const path = require('path');
-const decache = require('decache');
 
 exports.loadAsSubcommands = true;
 
@@ -21,131 +19,108 @@ exports.main = {
     desc: 'Command for managing modules.',
     longDesc: 'Manages command modules for the bots. If no arguments, lists currently loaded modules, else runs the specified subcommand if possible.',
     usage: '[load|unload|reload]',
-    adminOnly: true,
-    fixed: true,
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            let cmdFolders = fs.readdirSync(path.join(__dirname, '../'));
-            let unloadedMods = JSON.parse(fs.readFileSync(`${mainDir}/data/unloadedCommands.json`));
-            let embed = {
-                title: 'Current Modules',
-                description: `Showing **${cmdFolders.length}** command modules.`,
-                fields: [
-                    {name: 'Loaded Modules', value: []},
-                    {name: 'Unloaded Modules', value: []}
-                ]
-            };
+    owner: true,
+    async main(bot, ctx) {
+        let unloadedMods = JSON.parse(fs.readFileSync('./data/unloadedCommands.json'));
+        let embed = {
+            title: 'Current Modules',
+            description: `Showing **${bot.commandFolders.length}** command modules.`,
+            fields: [
+                {name: 'Loaded Modules', value: []},
+                {name: 'Unloaded Modules', value: []}
+            ]
+        };
 
-            Object.keys(bot.commands.modules).filter(m => !m.endsWith('-fixed')).forEach(mod => {
-                embed.fields[0].value.push(`\`${mod}\``);
-            });
-
-            unloadedMods.forEach(mod =>  {
-                embed.fields[1].value.push(`\`${mod}\``);
-            });
-
-            embed.fields[0].value = embed.fields[0].value.join(', ');
-            embed.fields[1].value = embed.fields[1].value.join(', ');
-
-            ctx.createMessage({embed}).then(resolve).catch(reject);
+        Object.keys(bot.commands.modules).filter(m => !m.endsWith('-fixed')).forEach(mod => {
+            embed.fields[0].value.push(`\`${mod}\``);
         });
+
+        unloadedMods.forEach(mod =>  {
+            embed.fields[1].value.push(`\`${mod.split('/').slice(-1)[0]}\``);
+        });
+
+        embed.fields[0].value = embed.fields[0].value.join(', ');
+        embed.fields[1].value = embed.fields[1].value.join(', ');
+
+        await ctx.createMessage({embed});
     }
 };
 
 exports.load = {
     desc: 'Load a module.',
     usage: '<module>',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (!ctx.args[0]) {
-                ctx.createMessage('No module given to load.').then(resolve).catch(reject);
-            } else if (bot.commands.checkModule(ctx.args[0])) {
-                ctx.createMessage(`Module **${ctx.args[0]}** is already loaded.`).then(resolve).catch(reject);
+    async main(bot, ctx) {
+        if (!ctx.args[0]) {
+            await ctx.createMessage('No module given to load.');
+        } else if (bot.commands.checkModule(ctx.args[0])) {
+            await ctx.createMessage(`Module **${ctx.args[0]}** is already loaded.`);
+        } else {
+            let folders = bot.commandFolders.map(f => f.split('/').slice(-1)[0]);
+
+            if (!folders.includes(ctx.args[0])) {
+                await ctx.channel.createMessage(`Module **${ctx.args[0]}** does not exist.`);
             } else {
-                readDir(`${mainDir}/cmd`).then(folders => {
-                    if (folders.indexOf(ctx.args[0]) === -1) {
-                        return ctx.createMessage(`Module **${ctx.args[0]}** does not exist.`);
-                    } else {
-                        let pkg = require(path.join(__dirname,  '../', ctx.args[0], 'package.json'));
-                        let mod = require(path.join(__dirname, '../', ctx.args[0], pkg.main));
-                        let loadedAmt = bot.commands.addModule(ctx.args[0], mod);
+                let pkg = JSON.parse(fs.readFileSync(bot.commandFolders[folders.indexOf(ctx.args[0])] + '/package.json'));
+                let mod = `${bot.commandFolders[folders.indexOf(ctx.args[0])]}/${pkg.main}`;
 
-                        if (loadedAmt === 0) bot.commands.removeModule(ctx.args[0]);
+                bot.commands.loadModule(mod);
 
-                        if (loadedAmt !== 0) {
-                            let unloadedMods = JSON.parse(fs.readFileSync(`${mainDir}/data/unloadedCommands.json`).toString());
-                            if (unloadedMods.indexOf(ctx.args[0]) !== -1) {
-                                unloadedMods.splice(unloadedMods.indexOf(ctx.args[0]), 1);
-                                fs.writeFileSync(`${mainDir}/data/unloadedCommands.json`, JSON.stringify(unloadedMods));
-                            }
-                        }
+                let unloadedMods = JSON.parse(fs.readFileSync('./data/unloadedCommands.json'));
+                let sliced = unloadedMods.map(f => f.split('/').slice(-1)[0]);
 
-                        return ctx.createMessage(`Loaded **${loadedAmt}/${mod.commands.length}** commands from module **${ctx.args[0]}**`);
-                    }
-                }).then(resolve).catch(reject);
+                if (!sliced.includes(ctx.args[0])) {
+                    unloadedMods.splice(sliced.indexOf(ctx.args[0]), 1);
+                    fs.writeFileSync('./data/unloadedCommands.json', JSON.stringify(unloadedMods));
+                }
+
+                await ctx.createMessage(`Loaded module **${ctx.args[0]}**`);
             }
-        });
+        }
     }
 };
 
 exports.unload = {
     desc: 'Unload a module.',
     usage: '<module>',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (!ctx.args[0]) {
-                ctx.createMessage('No module given to unload.').then(resolve).catch(reject);
-            } else if (!bot.commands.checkModule(ctx.args[0])) {
-                ctx.createMessage(`Module **${ctx.args[0]}** is not loaded or does not exist.`).then(resolve).catch(reject);
-            } else {
-                let pkg = require(path.join(__dirname, '../', ctx.args[0], 'package.json'));
-                let mod = require(path.join(__dirname, '../', ctx.args[0], pkg.main));
-                let unloadedAmt = bot.commands.removeModule(ctx.args[0], path.join(__dirname, '../', ctx.args[0], pkg.main));
-                decache(path.join(__dirname, '../', ctx.args[0], 'package.json'));
+    async main(bot, ctx) {
+        if (!ctx.args[0]) {
+            await ctx.createMessage('No module given to unload.');
+        } else if (!bot.commands.checkModule(ctx.args[0])) {
+            await ctx.createMessage(`Module **${ctx.args[0]}** is not loaded or does not exist.`);
+        } else {
+            let folders = bot.commandFolders.map(f => f.split('/').slice(-1)[0]);
+            let pkg = JSON.parse(fs.readFileSync(bot.commandFolders[folders.indexOf(ctx.args[0])] + '/package.json'));
+            let mod = `${bot.commandFolders[folders.indexOf(ctx.args[0])]}/${pkg.main}`;
 
-                if (unloadedAmt !== 0) {
-                    let unloadedMods = JSON.parse(fs.readFileSync(`${mainDir}/data/unloadedCommands.json`).toString());
-                    unloadedMods.push(ctx.args[0]);
-                    fs.writeFileSync(`${mainDir}/data/unloadedCommands.json`, JSON.stringify(unloadedMods));
-                }
+            bot.commands.unloadModule(mod);
+            delete require.cache[require.resolve(mod)];
 
-                ctx.createMessage(`Unloaded **${unloadedAmt}/${mod.commands.length}** commands from module **${ctx.args[0]}**`).then(resolve).catch(reject);
-            }
-        });
+            let unloadedMods = JSON.parse(fs.readFileSync('./data/unloadedCommands.json'));
+
+            unloadedMods.push(mod.split('/').slice(0, -1).join('/'));
+            fs.writeFileSync('./data/unloadedCommands.json', JSON.stringify(unloadedMods));
+
+            await ctx.channel.createMessage(`Unloaded module **${ctx.args[0]}**`);
+        }
     }
 };
 
 exports.reload = {
     desc: 'Reload a module.',
     usage: '<module>',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (!ctx.args[0]) {
-                ctx.createMessage('No module given to reload.').then(resolve).catch(reject);
-            } else if (!bot.commands.checkModule(ctx.args[0])) {
-                ctx.createMessage(`Module **${ctx.args[0]}** is not loaded or does not exist.`).then(resolve).catch(reject);
-            } else {
-                decache(path.join(__dirname, '../', ctx.args[0], 'package.json'));
-                let pkg = require(path.join(__dirname,  '../', ctx.args[0], 'package.json'));
-                decache(path.join(__dirname, '../', ctx.args[0], pkg.main));
-                let mod = require(path.join(__dirname, '../', ctx.args[0], pkg.main));
+    async main(bot, ctx) {
+        if (!ctx.args[0]) {
+            await ctx.createMessage('No module given to reload.');
+        } else if (!bot.commands.checkModule(ctx.args[0])) {
+            await ctx.createMessage(`Module **${ctx.args[0]}** is not loaded or does not exist.`);
+        } else {
+            let folders = bot.commandFolders.map(f => f.split('/').slice(-1)[0]);
+            let pkg = JSON.parse(fs.readFileSync(bot.commandFolders[folders.indexOf(ctx.args[0])] + '/package.json'));
+            let mod = `${bot.commandFolders[folders.indexOf(ctx.args[0])]}/${pkg.main}`;
 
-                let reloadedAmt = bot.commands.reloadModule(ctx.args[0], mod, path.join(__dirname, '../', ctx.args[0], pkg.main)) || 0;
+            bot.commands.reloadModule(mod);
 
-                ctx.createMessage(`Reloaded **${reloadedAmt}/${mod.commands.length}** commands from module **${ctx.args[0]}**`).then(resolve).catch(reject);
-            }
-        });
+            await ctx.createMessage(`Reloaded module **${ctx.args[0]}**`);
+        }
     }
 };
-
-function readDir(dir) {
-    return new Promise((resolve, reject) => {
-        fs.readdir(dir, (err, files) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(files);
-            }
-        });
-    });
-}
