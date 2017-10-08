@@ -572,7 +572,10 @@ class Context {
                 if (content.embed.fields) {
                     content.embed.fields.forEach((v, i, a) => {
                         if (typeof v.name === 'string') a[i].name = this.client.localeManager.t(v.name, locale, replacers);
+                        else a[i].name = v.name.toString();
+
                         if (typeof v.value === 'string') a[i].value = this.client.localeManager.t(v.value, locale, replacers);
+                        else a[i].value = v.value.toString();
                     });
                 }
             }

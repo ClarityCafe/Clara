@@ -14,7 +14,7 @@ class Utils {
       * @param {Number} ms Milliseconds to convert
       * @returns {String} Formatted string with days, hours, minutes and seconds.
       */
-    static async msToTime(ms) {
+    static msToTime(ms) {
         var time = ms/1000;
         var seconds = time % 60;
         time /=60;
@@ -38,7 +38,7 @@ class Utils {
      * @param {Boolean} [noDiscrim=false] whether to not include or include the user's discriminator.
      * @returns {String} The users formatted name in the format 'user#0001' or likewise. Will use nickname if member is passed in as a user.
      */
-    static async formatUsername(user, noDiscrim = false) {
+    static formatUsername(user, noDiscrim = false) {
         return user instanceof Eris.Member ? `${user.nick ? user.nick : user.user.username}${noDiscrim ? '' : `#${user.user.discriminator}`}` : `${user.username}${noDiscrim ? '' : `#${user.discriminator}`}`;
     }
 
@@ -71,6 +71,17 @@ class Utils {
 
         return colours[Math.floor(Math.random() * colours.length)];
     }
+
+    static genBytes(amt) {    
+        for (let i in this.endings) {
+            if (amt / 1000 < 1 || this.endings[i] === this.endings.slice(-1)[0]) return amt.toFixed(2) + ` ${this.endings[i]}`;
+            else amt /= 1000;
+        }
+    }
+
+    static get endings() {
+        return ['B', 'KB', 'MB', 'GB', 'TB'];
+    }
 }
- 
+
 module.exports = Utils;
