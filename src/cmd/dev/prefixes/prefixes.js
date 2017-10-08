@@ -15,7 +15,6 @@ exports.commands = [
 
 exports.main = {
     desc: 'View the various prefixes used by the bot and edit them.',
-    fullDesc: 'Prefixes command. If no arguments are supplied or are not the correct ones, it just displays the available prefixes. Adding and removing prefixes are only allowed by the bot owners(s)',
     usage: '[<add|remove> <prefix>]',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
@@ -54,7 +53,7 @@ exports.add = {
                 let prefix = ctx.args.join(' ');
                 let newPrefixes = bot.prefixes.concat(prefix).filter(p => p !== bot.config.mainPrefix && !RegExp(`^<@!?${bot.user.id}> $`).test(p));
 
-                fs.writeFile(`${__baseDir}/data/prefixes.json`, JSON.stringify(newPrefixes), err => {
+                fs.writeFile('./data/prefixes.json', JSON.stringify(newPrefixes), err => {
                     if (err) {
                         reject(err);
                     } else {
@@ -84,7 +83,7 @@ exports.remove = {
                 } else {
                     newPrefixes = newPrefixes.filter(p => p !== bot.config.mainPrefix && !RegExp(`^<@!?${bot.user.id}> $`).test(p));
 
-                    fs.writeFile(`${__baseDir}/data/prefixes.json`, JSON.stringify(newPrefixes), err => {
+                    fs.writeFile('./data/prefixes.json', JSON.stringify(newPrefixes), err => {
                         if (err) {
                             reject(err);
                         } else {
