@@ -112,7 +112,7 @@ exports.reload = {
         if (!ctx.args[0]) {
             await ctx.createMessage('No module given to reload.');
         } else if (!bot.commands.checkModule(ctx.args[0])) {
-            await ctx.createMessage(`Module **${ctx.args[0]}** is not loaded or does not exist.`);
+            await exports.load.main(bot, ctx);
         } else {
             let folders = bot.commandFolders.map(f => f.split('/').slice(-1)[0]);
             let pkg = JSON.parse(fs.readFileSync(bot.commandFolders[folders.indexOf(ctx.args[0])] + '/package.json'));
