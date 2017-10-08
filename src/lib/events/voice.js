@@ -37,7 +37,7 @@ module.exports = bot => {
 
     bot.music = {
         skips: new Eris.Collection(Object),
-        queues: new Eris.Collection(Object),
+        queues: new Eris.Collection(Array),
         connections: bot.voiceConnections,
         streams: new Eris.Collection(Object),
         stopped: [],
