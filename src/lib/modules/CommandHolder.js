@@ -118,10 +118,10 @@ class CommandHolder {
                     let collect = [];
                     let embed = {title: name};
 
-                    for (let name in command.subcommands) {
-                        let cmd = command.subcommands[name];
+                    for (let nam in command.subcommands) {
+                        let cmd = command.subcommands[nam];
                         if ((cmd.owner || cmd.hidden) && !bot.checkBotPerms(ctx.author.id)) continue;
-                        collect.push(`${name} ${name}${cmd.usage ? ` ${cmd.usage}` : ''}\n\u200b - ${cmd.desc}`);
+                        collect.push(`${name} ${nam}${cmd.usage ? ` ${cmd.usage}` : ''}\n\u200b - ${cmd.desc}`);
                     }
 
                     embed.description = `\`${collect.join('\n\n')}\``;
