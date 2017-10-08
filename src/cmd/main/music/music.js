@@ -299,7 +299,7 @@ exports.clear = {
                         return ctx.createMessage('music-clearaConfirmInvalid');
                     }
                 }).then(m => {
-                    if (m.content === localeManager.t('music-clearConfirmNo')) {
+                    if (m.content === bot.localeManager.t('music-clearConfirmNo')) {
                         q.queue = [q.queue[0]];
 
                         return ctx.createMessage('music-cleared');
@@ -346,7 +346,7 @@ exports.dump = {
                         return ctx.createMessage('music-dumpConfirmInvalid');
                     }
                 }).then(m => {
-                    if (m.content === localeManager.t('music-dumpConfirmYes', ctx.settings.locale)) {
+                    if (m.content === bot.localeManager.t('music-dumpConfirmYes', ctx.settings.locale)) {
                         return bot.hastePost(q.map(i => `${i.title} - ${i.url}`).join('\n'));
                     } else {
                         return null;
