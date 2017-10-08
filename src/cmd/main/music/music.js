@@ -66,8 +66,8 @@ exports.play = {
                     } else {
                         handler.prePlay(ctx, ctx.suffix).then(resolve).catch(reject);
                     }
-                } else if (bot.music.queues.get(ctx.guild.id).queue.length > 0) {
-                    let item = bot.music.queues.get(ctx.guild.id).queue[0];
+                } else if (bot.music.queues.get(ctx.guild.id).length > 0) {
+                    let item = bot.music.queues.get(ctx.guild.id)[0];
                     handler.prePlay(item.ctx, item.url).then(resolve).catch(reject);
                 } else {
                     ctx.createMessage('music-playNoArgs').then(resolve).catch(reject);
@@ -86,11 +86,11 @@ exports.queue = {
                 title: 'music-queueTitle'
             };
 
-            if (!bot.music.queues.get(ctx.guild.id) || bot.music.queues.get(ctx.guild.id).queue.length === 0) {
+            if (!bot.music.queues.get(ctx.guild.id) || bot.music.queues.get(ctx.guild.id).length === 0) {
                 embed.description = 'music-queueEmpty';
                 ctx.createMessage({embed}).then(resolve).catch(reject);
             } else {
-                let q = bot.music.queues.get(ctx.guild.id).queue;
+                let q = bot.music.queues.get(ctx.guild.id);
 
                 let page = !Number(ctx.suffix) || Number(ctx.suffix) === 0 ? 0 : Number(ctx.suffix) - 1;
                 let pageAmt = 10;
@@ -126,10 +126,10 @@ exports.np = {
     desc: 'Show what song is now playing.',
     main(bot, ctx) {
         return new Promise((resolve, reject) => {
-            if ((bot.music.connections.get(ctx.guild.id) && !bot.music.connections.get(ctx.guild.id).playing) || !bot.music.queues.get(ctx.guild.id) || bot.music.queues.get(ctx.guild.id).queue.length === 0) {
+            if ((bot.music.connections.get(ctx.guild.id) && !bot.music.connections.get(ctx.guild.id).playing) || !bot.music.queues.get(ctx.guild.id) || bot.music.queues.get(ctx.guild.id).length === 0) {
                 ctx.createMessage('music-notPlaying').then(resolve).catch(reject);
             } else {
-                let {info: item, ctx: c} = bot.music.queues.get(ctx.guild.id).queue[0];
+                let {info: item, ctx: c} = bot.music.queues.get(ctx.guild.id)[0];
                 let embed = {
                     author: {name: 'music-nowPlayingTitle'},
                     title: item.title,
@@ -235,14 +235,14 @@ exports.skip = {
 
                     if (skips.users.length >= Math.floor(chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf && !m.voiceState.deaf && m.id !== bot.id).length)) {
                         skips.users = [];
-                        let track = bot.music.queues.get(ctx.guild.id).queue[0].info;
+                        let track = bot.music.queues.get(ctx.guild.id)[0].info;
 
                         bot.music.connections.get(ctx.guild.id).stopPlaying();
                         ctx.createMessage('music-skip', null, 'channel', {
                             item: track.title
                         }).then(resolve).catch(reject);
                     } else {
-                        let track = bot.music.queues.get(ctx.guild.id).queue[0].info;
+                        let track = bot.music.queues.get(ctx.guild.id)[0].info;
                         let chan = ctx.guild.channels.get(bot.music.connections.get(ctx.guild.id).channelID);
 
                         ctx.createMessage('music-skipVote', null, 'channel', {
@@ -258,7 +258,7 @@ exports.skip = {
             } else {
                 if (!bot.music.skips.get(ctx.guild.id)) bot.music.skips.add({id: ctx.guild.id, users: []});
                 let skips = bot.music.skips.get(ctx.guild.id);
-                let track = bot.music.queues.get(ctx.guild.id).queue[0].info;
+                let track = bot.music.queues.get(ctx.guild.id)[0].info;
                 skips.users = [];
 
                 bot.music.connections.get(ctx.guild.id).stopPlaying();
@@ -285,7 +285,7 @@ exports.clear = {
                 ctx.createMessage('music-userNotSameChannel').then(resolve).catch(reject);
             } else if (cnc.summoner && cnc.summoner.id !== ctx.author.id && !ctx.hasPermission('manageGuild', 'author')) {
                 ctx.createMessage('music-userNotSummoner').then(resolve).catch(reject);
-            } else if (!q || q.queue.length === 0) {
+            } else if (!q || q.length === 0) {
                 ctx.createMessage('music-clearEmptyQueue').then(resolve).catch(reject);
             } else {
                 ctx.createMessage('music-clearConfirm').then(() => {
@@ -300,12 +300,16 @@ exports.clear = {
                     }
                 }).then(m => {
                     if (m.content === bot.localeManager.t('music-clearConfirmNo')) {
-                        q.queue = [q.queue[0]];
+                        q = [q[0]];
 
                         return ctx.createMessage('music-cleared');
                     } else {
+                        let merger =  [];
+                        merger.id = ctx.guild.id;
+
                         bot.music.connections.get(ctx.guild.id).stopPlaying();
-                        bot.music.queues.get(ctx.guild.id).queue = [];
+                        bot.music.queues.delete(ctx.guild.id);
+                        bot.music.queues.add(merger);
 
                         return ctx.createMessage('music-clearedStoppedPlaying');
                     }
@@ -328,10 +332,10 @@ exports.dump = {
                 ctx.createMessage('music-userNotInChannel').then(resolve).catch(reject);
             } else if (ctx.member.voiceState.channelID !== cnc.channelID) {
                 ctx.createMessage('music-userNotSameChannel').then(resolve).catch(reject);
-            } else if (!q || q.queue.length === 0) {
+            } else if (!q || q.length === 0) {
                 ctx.createMessage('music-dumpEmptyQueue').then(resolve).catch(reject);
             } else {
-                q = q.queue.map(i => {return {title: i.info.title, url: i.info.url};});
+                q = q.map(i => {return {title: i.info.title, url: i.info.url};});
 
                 ctx.createMessage('music-dumpConfirm', null, 'channel', {
                     amount: q.length

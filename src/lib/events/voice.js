@@ -48,7 +48,7 @@ module.exports = bot => {
         for (let c of bot.music.inactives) {
             let chan = c[0];
             let timestamp = c[1];
-            if (((bot.music.connections.get(chan.guild.id) && !bot.music.connections.get(chan.guild.id).playing) || (bot.music.queues.get(chan.guild.id) && bot.music.queues.get(chan.guild.id).queue.length === 0)) && Date.now() - timestamp >= 300000) {
+            if (((bot.music.connections.get(chan.guild.id) && !bot.music.connections.get(chan.guild.id).playing) || (bot.music.queues.get(chan.guild.id) && bot.music.queues.get(chan.guild.id).length === 0)) && Date.now() - timestamp >= 300000) {
                 bot.leaveVoiceChannel(chan.id);
             }
         }
