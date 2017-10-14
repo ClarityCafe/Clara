@@ -29,6 +29,7 @@ const bot = new Eris(config.token, {
     maxShards: config.maxShards || 1,
     defaultImageFormat: 'webp',
     defaultImageSize: 512,
+    latencyThreshold: 42000000,
     disableEvents: {
         TYPING_START: true
     }
