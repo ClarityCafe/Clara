@@ -4,7 +4,7 @@
 
 module.exports = bot => {
     bot.on('guildCreate', g => {
-        if (g.members.filter(m => m.bot).size / g.members.size >= 0.50) {
+        if (g.members.filter(m => m.bot).size / g.members.size >= 0.30) {
             logger.info(`Leaving bot collection '${g.name}' (${g.id})`);
             g.leave();
         } else {
