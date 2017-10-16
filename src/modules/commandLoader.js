@@ -72,7 +72,7 @@ function preloadCommands() {
         if (deps.length > 0) {
             deps = deps.join(' ');
             logger.custom('blue', 'commandLoader/preloadCommands', `Installing dependencies for commands, this may take a while...\nDependencies: ${deps}`);
-            cp.exec(`npm i ${deps}`, (err, stdout, stderr) => {
+            cp.exec(`npm i ${deps} --no-save`, (err, stdout, stderr) => {
                 if (err) logger.customError('commandLoader/preloadCommands', `Error when trying to install dependencies: ${err}`);
                 if (stderr) logger.customError('commandLoader/preloadCommands', `Error when trying to install dependencies: ${stderr}`);
                 resolve();

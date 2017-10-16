@@ -21,13 +21,11 @@
   },
   "homepage": "https://github.com/awau/Clara#readme",
   "dependencies": {
-    "better-cleverbot-io": "^1.0.2",
+    "eris": "abalabahaha/eris",
     "bluebird": "^3.5.0",
-    "cat-ascii-faces": "^2.0.0",
     "chalk": "^2.1.0",
-    "cheerio": "^1.0.0-rc.2",
     "decache": "^4.1.0",
-    "dominant-color": "0.0.1"
+    "rethinkdbdash": "2.3.31"
   },
 
   "devDependencies": {

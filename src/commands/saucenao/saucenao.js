@@ -25,35 +25,55 @@ exports.saucenao = {
     usage: '<url or attachment>',
     main(bot, ctx) { 
         return new Promise((resolve, reject) => {
-            if (!ctx.attachments[0] && (!ctx.suffix || !urlRegex.test(ctx.suffix))) {
-                ctx.createMessage('Please provide an image.').then(resolve).catch(reject);
-            } else {
-                let url = ctx.attachments[0] ? ctx.attachments[0].url : ctx.suffix;
+            let url;
+            
+            new Promise(_resolve => {
+                if (!ctx.attachments[0] && (!ctx.suffix || !urlRegex.test(ctx.suffix))) {
+                    _resolve(ctx.channel.getMessages(100));
+                } else {
+                    _resolve(null);
+                }
+            }).then(res => {
+                if (!res) {
+                    url = ctx.attachments[0] ? ctx.attachments[0].url : ctx.suffix;
+                    return;
+                }
 
-                ctx.channel.sendTyping().then(() => sourcer.getSource(url)).then(res => {
-                    return ctx.createMessage({embed: {
-                        title: 'Source Found',
-                        description: `[**Source URL**](${res[0].url})`,
-                        thumbnail: {url: res[0].thumbnail},
-                        fields: [
-                            {
-                                name: 'Site',
-                                value: res[0].site,
-                                inline: true
-                            },
-                            {
-                                name: 'Similarity',
-                                value: res[0].similarity.toString(),
-                                inline: true
-                            },
-                            {
-                                name: 'Other Matches',
-                                value: res.slice(1).map(v => `**${v.similarity}** - [${v.site}](${v.url})`).join('\n')
-                            }
-                        ]
-                    }});
-                }).then(resolve).catch(reject);
-            }
+                let msgs = res.filter(m => m.embeds.filter(e => e.type === 'image')[0] || m.attachments.filter(a => a.width || a.height)[0]);
+
+                if (!msgs[0]) return;
+
+                url = msgs[0].embeds[0] ? msgs[0].embeds[0].url : msgs[0].attachments[0].url;
+            }).then(() => {
+                if (!url) {
+                    resolve(ctx.createMessage('Please provide an image.'));
+                    throw new Error('gotta break the loop somehow');
+                }
+
+                return ctx.channel.sendTyping();
+            }).then(() => sourcer.getSource(url)).then(res => {
+                return ctx.createMessage({embed: {
+                    title: 'Source Found',
+                    description: `[**Source URL**](${res[0].url})`,
+                    thumbnail: {url: res[0].thumbnail},
+                    fields: [
+                        {
+                            name: 'Site',
+                            value: res[0].site,
+                            inline: true
+                        },
+                        {
+                            name: 'Similarity',
+                            value: res[0].similarity.toString(),
+                            inline: true
+                        },
+                        {
+                            name: 'Other Matches',
+                            value: res.slice(1).map(v => `**${v.similarity}** - [${v.site}](${v.url})`).join('\n')
+                        }
+                    ]
+                }});
+            }).then(resolve).catch(reject);
         });
     }
 };
