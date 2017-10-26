@@ -9,7 +9,6 @@ const fs = require('fs');
 const Rebridge = require('rebridge');
 const redis = require('redis');
 const client = new redis.createClient();
-const db = new Rebridge(client);
 const {CommandHolder} = require(`${__dirname}/modules/CommandHolder`);
 const LocaleManager = require(`${__dirname}/modules/LocaleManager`);
 const path = require('path');
@@ -53,7 +52,7 @@ class Clara extends Eris.Client {
 
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
-        this.db = db;
+        this.db = new Rebridge(client);
         this.settings = {
             guilds: new Eris.Collection(Object),
             users: new Eris.Collection(Object)
