@@ -53,7 +53,7 @@ class Clara extends Eris.Client {
 
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
-        this.db = require('rethinkdbdash')(config.rethinkOptions);
+        this.db = db;
         this.settings = {
             guilds: new Eris.Collection(Object),
             users: new Eris.Collection(Object)
