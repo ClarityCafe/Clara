@@ -25,6 +25,8 @@
         "decache": "^4.1.0",
         "eris": "github:abalabahaha/eris",
         "got": "^7.1.0",
+        "rebridge": "^2.3.0",
+        "redis": "^2.8.0",
         "rethinkdbdash": "^2.3.31"
     },
     "devDependencies": {
@@ -32,7 +34,5 @@
         "eslint": "^4.6.1",
         "eslint-plugin-react": "7.3.0",
         "eslint-config-defaults": "^9.0.0",
-        "tslint": "^5.7.0",
-        "typescript": "^2.5.2"
     }
 }
