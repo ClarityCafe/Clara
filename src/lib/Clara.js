@@ -6,6 +6,10 @@
 const Eris = require('eris');
 const got = require('got');
 const fs = require('fs');
+const Rebridge = require('rebridge');
+const redis = require('redis');
+const client = new redis.createClient();
+const db = new Rebridge(client);
 const {CommandHolder} = require(`${__dirname}/modules/CommandHolder`);
 const LocaleManager = require(`${__dirname}/modules/LocaleManager`);
 const path = require('path');
@@ -215,14 +219,12 @@ class Clara extends Eris.Client {
             }
         };
 
-        this.settings.guilds.add(settings);
 
-        let res = await this.db.table('guild_settings').get(guildID).run();
+        let res = await this.db.guild_settings[guildID]._promise;
         
         if (res) return res;
-
-        await this.db.table('guild_settings').insert(settings).run();
-        return await this.db.table('guild_settings').get(guildID).run();
+        
+        await this.db.guild_settings[guildID].set(settings);
     }
 
     /**
@@ -236,7 +238,7 @@ class Clara extends Eris.Client {
 
         if (this.settings.guilds.get(guildID)) return this.settings.guilds.get(guildID);
 
-        let res = await this.db.table('guild_settings').get(guildID).run();
+        let res = await this.db.guild_settings[guildID]._promise;
 
         if (!res) return await this.initGuildSettings(guildID);
 
@@ -244,30 +246,6 @@ class Clara extends Eris.Client {
         return res;
     }
 
-    /**
-    * Edit a guild's settings.
-    *
-    * @param {String} guildID ID of guild to edit settings for.
-    * @param {Object} settings Settings to change.
-    * @returns {Promise<Object>} Updated settings for the guild.
-    */
-    async setGuildSettings(guildID, settings={}) {
-        if (typeof guildID !== 'string') throw new TypeError('guildID is not a string.');
-        if (Object.keys(settings).length === 0) throw new Error('Settings is empty.');
-
-        await this.db.table('guild_settings').get(guildID).update(settings).run();
-
-        let res = await this.db.table('guild_settings').get(guildID).run();
-
-        if (!this.settings.guilds.get(guildID)) {
-            this.settings.guilds.add(res);
-        } else {
-            this.settings.guilds.remove(res);
-            this.settings.guilds.add(res);
-        }
-
-        return res;
-    }
 
     /**
     * Initialize settings for a user.
@@ -284,14 +262,13 @@ class Clara extends Eris.Client {
             partner: null
         };
 
-        this.settings.users.add(settings);
 
-        let res = await this.db.table('user_settings').get(userID).run();
+        let res = await this.db.user_settings[userID]._promise;
 
         if (res) return res;
 
-        await this.db.table('user_settings').insert(settings).run();
-        return await this.db.table('user_settings').get(userID).run();
+        await this.db.user_settings[userID].set(settings);
+        return await this.db.user_settings[userID]._promise;
     }
 
     /**
@@ -305,38 +282,13 @@ class Clara extends Eris.Client {
 
         if (this.settings.users.get(userID)) return this.settings.users.get(userID);
 
-        let res = await this.db.table('user_settings').get(userID).run();
+        let res = await this.db.user_settings[userID]._promise;
 
         if (!res) return this.initUserSettings(userID);
 
-        this.settings.users.add(res);
         return res;
     }
 
-    /**
-    * Edit a user's settings.
-    *
-    * @param {String} userID ID of user to edit settings for.
-    * @param {Object} settings Settings to change.
-    * @returns {Promise<Object>} Updated settings for the user.
-    */
-    async setUserSettings(userID, settings={}) {
-        if (typeof userID !== 'string') throw new TypeError('userID is not a string.');
-        if (Object.keys(settings).length === 0) throw new Error('Settings is empty.');
-
-        await this.db.table('user_settings').get(userID).update(settings).run();
-
-        let res = await this.db.table('user_settings').get(userID).run();
-
-        if (!this.settings.users.get(userID)) {
-            this.settings.users.add(res);
-        } else {
-            this.settings.users.remove(res);
-            this.settings.users.add(res);
-        }
-
-        return res;
-    }
 
     /**
      * Check if the bot has a permission in a channel.
