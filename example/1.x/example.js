@@ -1,52 +1,39 @@
-/**
- * @file this is an example file of the proposed 1.x command system
- * @author Capuccino
- */
-  
-/**
-   * unlike the 0.x system, we use a class based approach to our commands, we parse the class name as the name of the commands
-   * due to the limitation of the 0.x command system of not being able to use declarations with numeric numbers
-   */
-class SampleCommand {
-    /**
-  	 * this is where the command metadata is set
-  	 */
-    constructor() {
-        this.metadata = {
-            desc: 'A sample command to showcase the new class-based command structure for Clara 1.x',
-            shortDesc: 'a sample command, duh',
-            usage: '<none>'
-        };
+/* eslint-disable */
+
+// `Command` and `SubCommand` are defined as children of `global`, so they are accessible without any imports.
+
+class MyCommand {
+    constructor(bot) {
+        this.bot = bot; // Sets the Clara instance onto the command so we don't need to pass it to commands.
+        this.description = 'The best command in the world!';
+        this.owner = true;
+        // ...
     }
-	
-    /**
-	* the main method declaration executes under the class's name, well becase it's the main entrypoint. You get the idea.
-	* @param {Eris.Message} ctx the Context class parameter
-  	*/
-    async main(ctx) {
-        await ctx.createMessage('Hello world'); //compulsory hello word :mmLol:
+
+    // Any methods called `init` will not be included in the command, and will instead be run on command setup.
+    // This is equivalent to the current `exports.init = bot => {}`
+    // Users can do any asynchronous setup they need in here.
+    async init() {
+        // ...
     }
- 
-    /**
-	* a static declaration is always and foremost, rendered as a seperate command regardless being in the same command class as the subcommands.
-	* @param {Eris.Message} ctx the Context class parameter
-  	*/  
-    static async anotherOne(ctx) {
-        await ctx.createMessage('another one');
+
+    async subcommand() {
+        return new SubCommand({
+            description: 'The best subcommand in the world!',
+            name: 'foo', // This is optional. By default, the name of the method will be used.
+            owner: false // Will override the owner setting of the parent command if its set.
+        }, async ctx => { // This is the actual function
+            await ctx.createMessage('I am a banana!');
+        });
     }
-	
-    /**
-	* this is a subcommand, anything that isn't named main is executed as a subcommand. so to execute this, you would do <commandName> <subCommandName>.
-	* @param {Eris.Message} ctx the Context class parameter
-	* @param {Eris.Client} bot the Bot class parameter
-  	*/
-    async subCommand(ctx, bot) {
-        await ctx.createMessage('this is a subcommand');
-        bot.nya();
+
+    static async separateCommand() {
+        return new Command({
+            // Same structure as SubCommand.
+        }, async ctx => {
+            // ...
+        });
     }
 }
-  
-/**
-* always export it using exports.commands NOT module.exports!
-*/
-exports.commands = SampleCommand;
+
+module.exports = [MyCommand]; // This will have its static's extracted, and be constructed in the command system.
