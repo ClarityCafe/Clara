@@ -21,16 +21,14 @@ module.exports = bot => {
                 require(path.resolve(__dirname, '../modules', 'loader'))(bot);
                 logger.info(`Loaded ${bot.commands.length} ${bot.commands.length === 1 ? 'command' : 'commands'}.`);
 
-                let tableList = await bot.db.tableList().run();
-
-                if (!tableList.includes('guild_settings')) {
+                if (!await bot.db.guild_settings._promise) {
                     logger.info('Setting up "guild_settings" table in database.');
-                    await bot.db.tableCreate('guild_settings').run();
+                    await bot.db.guild_settings.set({});
                 }
 
-                if (!tableList.includes('user_settings')) {
+                if (!await bot.db.user_settings._promise) {
                     logger.info('Setting up "user_settings" talbe in database.');
-                    await bot.db.tableCreate('user_settings').run();
+                    await bot.db.user_settings.set({});
                 }
 
                 bot.loadCommands = false;
