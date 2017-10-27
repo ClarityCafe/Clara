@@ -33,6 +33,6 @@
         "babel-eslint": "^8.0.0",
         "eslint": "^4.6.1",
         "eslint-plugin-react": "7.3.0",
-        "eslint-config-defaults": "^9.0.0",
+        "eslint-config-defaults": "^9.0.0"
     }
 }
