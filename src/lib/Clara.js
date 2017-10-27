@@ -8,7 +8,6 @@ const got = require('got');
 const fs = require('fs');
 const Rebridge = require('rebridge');
 const redis = require('redis');
-const client = new redis.createClient();
 const {CommandHolder} = require(`${__dirname}/modules/CommandHolder`);
 const LocaleManager = require(`${__dirname}/modules/LocaleManager`);
 const path = require('path');
@@ -52,11 +51,8 @@ class Clara extends Eris.Client {
 
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
-        this.db = new Rebridge(client);
-        this.settings = {
-            guilds: new Eris.Collection(Object),
-            users: new Eris.Collection(Object)
-        };
+        this.redis = new redis.createClient();
+        this.db = new Rebridge(this.redis);
 
         this.loadCommands = true;
         this.allowCommandUse = false;
@@ -218,7 +214,6 @@ class Clara extends Eris.Client {
             }
         };
 
-
         let res = await this.db.guild_settings[guildID]._promise;
         
         if (res) return res;
@@ -235,13 +230,10 @@ class Clara extends Eris.Client {
     async getGuildSettings(guildID) {
         if (typeof guildID !== 'string') throw new TypeError('guildID is not a string.');
 
-        if (this.settings.guilds.get(guildID)) return this.settings.guilds.get(guildID);
-
         let res = await this.db.guild_settings[guildID]._promise;
 
         if (!res) return await this.initGuildSettings(guildID);
 
-        this.settings.guilds.add(res);
         return res;
     }
 
@@ -261,7 +253,6 @@ class Clara extends Eris.Client {
             partner: null
         };
 
-
         let res = await this.db.user_settings[userID]._promise;
 
         if (res) return res;
@@ -279,15 +270,12 @@ class Clara extends Eris.Client {
     async getUserSettings(userID) {
         if (typeof userID !== 'string') throw new TypeError('userID is not a string.');
 
-        if (this.settings.users.get(userID)) return this.settings.users.get(userID);
-
         let res = await this.db.user_settings[userID]._promise;
 
         if (!res) return this.initUserSettings(userID);
 
         return res;
     }
-
 
     /**
      * Check if the bot has a permission in a channel.
