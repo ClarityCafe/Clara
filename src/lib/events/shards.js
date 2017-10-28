@@ -5,7 +5,7 @@
 
 module.exports = bot => {
     bot.on('shardResume', shard => {
-        logger.custom('blue', 'shard/shardInfo', `Shard ${shard} has resumed.`);
+        logger.custom('shard/shardInfo', `Shard ${shard} has resumed.`);
     });
 
     bot.on('shardDisconnect', (err, shard) => {
@@ -13,6 +13,6 @@ module.exports = bot => {
     });
 
     bot.on('shardReady', shard => {
-        logger.custom('blue', 'shard/shardInfo', `Shard ${shard} is ready!`);
+        logger.custom('shard/shardInfo', `Shard ${shard} is ready!`);
     });
 };
