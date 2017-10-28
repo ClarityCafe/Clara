@@ -60,12 +60,12 @@ exports.load = {
 
         bot.commands.loadModule(mod);
 
-        let unloadedMods = JSON.parse(fs.readFileSync('./data/unloadedCommands.json'));
+        let unloadedMods = JSON.parse(fs.readFileSync(`${mainDir}/data/unloadedCommands.json`));
         let sliced = unloadedMods.map(f => f.split('/').slice(-1)[0]);
 
         if (!sliced.includes(ctx.args[0])) {
             unloadedMods.splice(sliced.indexOf(ctx.args[0]), 1);
-            fs.writeFileSync('./data/unloadedCommands.json', JSON.stringify(unloadedMods));
+            fs.writeFileSync(`${mainDir}/data/unloadedCommands.json`, JSON.stringify(unloadedMods));
         }
 
         await ctx.createMessage(`Loaded module **${ctx.args[0]}**`);
@@ -86,10 +86,10 @@ exports.unload = {
         bot.commands.unloadModule(mod);
         delete require.cache[require.resolve(mod)];
 
-        let unloadedMods = JSON.parse(fs.readFileSync('./data/unloadedCommands.json'));
+        let unloadedMods = JSON.parse(fs.readFileSync(`${mainDir}/data/unloadedCommands.json`));
 
         unloadedMods.push(mod.split('/').slice(0, -1).join('/'));
-        fs.writeFileSync('./data/unloadedCommands.json', JSON.stringify(unloadedMods));
+        fs.writeFileSync(`${mainDir}/data/unloadedCommands.json`, JSON.stringify(unloadedMods));
 
         await ctx.channel.createMessage(`Unloaded module **${ctx.args[0]}**`);
     }
