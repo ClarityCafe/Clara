@@ -4,72 +4,71 @@
  * @author Ovyerus
  */
 
-/* eslint-env node */
-
-
 exports.commands = ['help'];
 
 exports.help = {
     desc: 'Show bot help.',
     usage: '[command]',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (!ctx.args[0]) {
-                let cmds = [];
-                
-                bot.commands.forEach((cmd, name) => {
-                    cmds.push(`${bot.config.mainPrefix}${name}${cmd.usage ? ` ${cmd.usage}` : ''}`);
-                });
+    async main(bot, ctx) {
+        if (!ctx.suffix) {
+            let cmds = [];
+            let cmdCollect = [];
 
-                ctx.createMessage('help-sending').then(() => {
-                    let cmdCollect = [];
-                    let msgs = [];
-                    let colour = utils.randomColour();
+            bot.commands.forEach((cmd, name) => {
+                if ((cmd.owner || cmd.hidden) && bot.checkBotPerms(ctx.author.id)) cmds.push(`${bot.config.mainPrefix}${name}${cmd.usage ? ` ${cmd.usage}` : ''}`);
+                else if (cmd.owner || cmd.hidden) return null;
+                else cmds.push(`${bot.config.mainPrefix}${name}${cmd.usage ? ` ${cmd.usage}` : ''}`);
+            });
 
-                    for (let i in cmds) {
-                        cmdCollect.push(cmds[i]);
-                        if (i === '29' || Number(i) === cmds.length - 1) {
-                            let embed = new embedTemplate(bot);
-                            embed.color = colour;
-                            if (cmdCollect.length > 15) {
-                                embed.fields[0].value = `\`${cmdCollect.slice(0, 15).join('\n')}\``;
-                                embed.fields[1] = {
-                                    name: '\u200b',
-                                    value: `\`${cmdCollect.slice(15, 30).join('\n')}\``,
-                                    inline: true
-                                };
-                            } else {
-                                embed.fields[0].value = `\`${cmdCollect.join('\n')}\``;
-                            }
+            await ctx.createMessage('help-sending');
 
-                            cmdCollect = [];
-                            msgs.push(ctx.createMessage({embed}, null, 'author'));
-                        }
+            for (let i in cmds) {
+                cmdCollect.push(cmds[i]);
+
+                if (i === '29' || Number(i) === cmds.length - 1) {
+                    let embed = new embedTemplate(bot);
+                    embed.title = 'help-commandsAmount';
+
+                    if (cmdCollect.length > 15) {
+                        embed.fields[0].value = `\`${cmdCollect.slice(0, 15).join('\n')}\``;
+                        embed.fields[1] = {
+                            name: '\u200b',
+                            value: `\`${cmdCollect.slice(15, 30).join('\n')}\``,
+                            inline: true
+                        };
+                    } else {
+                        embed.fields[0].value = `\`${cmdCollect.join('\n')}\``;
                     }
 
-                    return Promise.all(msgs);
-                }).then(resolve).catch(reject);
-            } else {
-                if (!bot.commands.getCommand(ctx.args[0])) {
-                    ctx.createMessage('help-noCmd');
-                } else {
-                    let cmd = bot.commands.getCommand(ctx.args[0]);
-                    let embed = {
-                        description: `\`${bot.config.mainPrefix}${ctx.args[0]}${cmd.usage ? ` ${cmd.usage}` : ''}\n\u200b - ${cmd.desc}\`\n\n`
-                    };
+                    cmdCollect = [];
 
-                    if (cmd.subcommands) {
-                        for (let name in cmd.subcommands) {
-                            let scmd = cmd.subcommands[name];
-
-                            embed.description += `\`${bot.config.mainPrefix}${ctx.args[0]} ${name}${scmd.usage ? ` ${scmd.usage}` : ''}\n\u200b - ${scmd.desc}\`\n\n`;
-                        }
+                    try {
+                        await ctx.createMessage({embed}, null, 'author', {
+                            amount: cmds.length
+                        });
+                    } catch(err) {
+                        return await ctx.createMessage('help-cantSend');
                     }
-
-                    ctx.createMessage({embed}).then(resolve).catch(reject);
                 }
             }
-        });
+        } else {
+            if (!bot.commands.getCommand(ctx.args[0])) return await ctx.createMessage('help-noCommand');
+
+            let cmd = bot.commands.getCommand(ctx.args[0]);
+            let embed = {
+                description: `\`${bot.config.mainPrefix}${ctx.args[0]}${cmd.usage ? ` ${cmd.usage}` : ''}\n\u200b - ${cmd.desc}\`\n\n`
+            };
+
+            if (cmd.subcommands) {
+                for (let name in cmd.subcommands) {
+                    let scmd = cmd.subcommands[name];
+
+                    embed.description += `\`${bot.config.mainPrefix}${ctx.args[0]} ${name}${scmd.usage ? ` ${scmd.usage}` : ''}\n\u200b - ${scmd.desc}\`\n\n`;
+                }
+            }
+
+            await ctx.createMessage({embed});
+        }
     }
 };
 

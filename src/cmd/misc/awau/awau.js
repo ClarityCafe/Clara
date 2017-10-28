@@ -4,8 +4,6 @@
  * @author Ovyerus
  */
 
-/* eslint-env node */
-
 const fs = require('fs');
 
 exports.commands = [
@@ -14,12 +12,11 @@ exports.commands = [
 
 exports.awau = {
     desc: 'Awaus at you.',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            ctx.channel.sendTyping();
-            let files = fs.readdirSync(`${__baseDir}/assets/awau`);
-            let file = fs.readFileSync(`${__baseDir}/assets/awau/${files[Math.floor(Math.random() * files.length)]}`);
-            ctx.createMessage('', {file, name: 'awau.png'}).then(resolve).catch(reject);
-        });
+    async main(bot, ctx) {
+        let files = fs.readdirSync('./assets/awau');
+        let file = fs.readFileSync(`./assets/awau/${files[Math.floor(Math.random() * files.length)]}`);
+        
+        await ctx.channel.sendTyping();
+        await ctx.createMessage('', {file, name: 'awau.png'});
     } 
 };

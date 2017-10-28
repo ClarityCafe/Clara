@@ -12,13 +12,8 @@ exports.commands = [
 exports.leet = {
     desc: 'L33tify your message',
     usage: '<message>',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (!ctx.suffix) {
-                return ctx.createMessage('Provide me a message to l33tify').then(resolve).catch(reject);
-            } else {
-                return ctx.createMessage(leet(ctx.suffix));
-            }
-        });
+    async main(bot, ctx) {
+        if (!ctx.suffix) await ctx.createMessage('Provide me a message to l33tify');
+        else await ctx.createMessage(leet(ctx.suffix));
     }
 };

@@ -3,8 +3,6 @@
  * @author Ovyerus
  */
 
-/* eslint-env node */
-
 exports.loadAsSubcommands = true;
 
 exports.commands = [
@@ -18,108 +16,74 @@ exports.main = {
     desc: 'Manage server greetings.',
     permissions: {author: 'manageGuild'},
     main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            ctx.createMessage({embed: greetingBlock(ctx.settings)}).then(resolve).catch(reject);
-        });
+        return ctx.createMessage({embed: {
+            title: 'Greeting Management',
+            description: `**${bot.localeManager.t('enabled', ctx.settings.locale)}:** ${ctx.settings.guild.greeting.enabled ? bot.localeManager.t('yes', ctx.settings.locale) : bot.localeManager.t('no', ctx.settings.locale)}\n`
+            + `**${bot.localeManager.t('greetings-channel')}:** ${ctx.settings.guild.greeting.channelID ? `<#${ctx.settings.guild.greeting.channelID}>` : bot.localeManager.t('none', ctx.settings.locale)}\n`
+            + `**${bot.localeManager.t('greetings-message')}:** ${ctx.settings.guild.greeting.message || bot.localeManager.t('none', ctx.settings.locale)}`,
+            fields: [{
+                name: 'Example Usage',
+                value: '`greetings enable`\n'
+                + bot.localeManager.t('greetings-example1', ctx.settings.locale)
+                + '`greetings channel general`\n'
+                + bot.localeManager.t('greetings-example2', ctx.settings.locale)
+                + '`greetings text Welcome to our server {{user}}`\n'
+                + bot.localeManager.t('greetings-example3', ctx.settings.locale)
+            }]
+        }});
     }
 };
 
 exports.enable = {
     desc: 'Enable greetings.',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            ctx.settings.guild.greeting.enabled = true;
-
-            bot.setGuildSettings(ctx.guild.id, ctx.settings.guild).then(() => {
-                return ctx.createMessage('greetings-enable');
-            }).then(resolve).catch(reject);
-        });
+    async main(bot, ctx) {
+        await bot.db.guild_settings[ctx.guild.id].greeting.enabled.set(true);
+        await ctx.createMessage('greetings-enable');
     }
 };
 
 exports.disable = {
     desc: 'Disable greetings.',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            ctx.settings.guild.greeting.enabled = false;
-
-            return bot.setGuildSettings(ctx.guild.id, ctx.settings.guild).then(() => {
-                return ctx.createMessage('greetings-disable');
-            }).then(resolve).catch(reject);
-        });
+    async main(bot, ctx) {
+        await bot.db.guild_settings[ctx.guild.id].greeting.enabled.set(false);
+        return ctx.createMessage('greetings-disable');
     }
 };
 
 exports.channel = {
     desc: 'Set the channel for greetings.',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (!ctx.suffix) {
-                ctx.createMessage('greetings-noChanArgs').then(resolve).catch(reject);
-            } else {
-                if (ctx.channelMentions.length > 0) {
-                    ctx.settings.guild.greeting.channelID = ctx.channelMentions[0];
+    async main(bot, ctx) {
+        if (!ctx.suffix) return await ctx.createMessage('greetings-noChanArgs');
 
-                    bot.setGuildSettings(ctx.guild.id, ctx.settings.guild).then(() => {
-                        return ctx.createMessage('greetings-setChan', null, 'channel', {
-                            id: ctx.settings.guild.greeting.channelID
-                        });
-                    }).then(resolve).catch(reject);
-                } else {
-                    let chans = ctx.guild.channels.filter(c => c.name.toLowerCase().includes(ctx.suffix.toLowerCase()));
+        if (ctx.channelMentions.length > 0) {
+            await bot.db.guild_settings[ctx.guild.id].greeting.channelID.set(ctx.channelMentions[0]);
+            return await ctx.createMessage('greetings-setChan', null, 'channel', {
+                id: ctx.settings.guild.greeting.channelID
+            });
+        }
 
-                    if (chans.length === 0) {
-                        ctx.createMessage('greetings-noChan', null, 'channel', {
-                            name: ctx.suffix
-                        }).then(resolve).catch(reject);
-                    } else {
-                        ctx.settings.guild.greeting.channelID = chans[0].id;
+        let chans = ctx.guild.channels.filter(c => c.name.toLowerCase().includes(ctx.suffix.toLowerCase()));
 
-                        bot.setGuildSettings(ctx.guild.id, ctx.settings.guild).then(() => {
-                            return ctx.createMessage('greetings-setChan', null, 'channel', {
-                                id: ctx.settings.guild.greeting.channelID
-                            });
-                        }).then(resolve).catch(reject);
-                    }
-                }
-            }
+        if (chans.length === 0) {
+            return await ctx.createMessage('greetings-noChan', null, 'channel', {
+                name: ctx.suffix
+            });
+        }
+
+        await bot.db.guild_settings[ctx.guild.id].greeting.channelID.set(chans[0]);
+        await ctx.createMessage('greetings-setChan', null, 'channel', {
+            id: ctx.settings.guild.greeting.channelID
         });
     }
 };
 
 exports.text = {
     desc: 'Set the greetings text.',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (!ctx.suffix) {
-                ctx.createMessage('greetings-noMsgArgs').then(resolve).catch(reject);
-            } else {
-                ctx.settings.guild.greeting.message = ctx.suffix;
+    async main(bot, ctx) {
+        if (!ctx.suffix) return await ctx.createMessage('greetings-noMsgArgs');
 
-                bot.setGuildSettings(ctx.guild.id, ctx.settings.guild).then(() => {
-                    return ctx.createMessage('greetings-setMsg');
-                }).then(() => {
-                    return ctx.createMessage(ctx.suffix.replace(/{{user}}/gi, ctx.author.mention).replace(/{{name}}/gi, ctx.author.username));
-                }).then(resolve).catch(reject);
-            }
-        });
+        await bot.db.guild_settings[ctx.guild.id].greeting.message.set(ctx.suffix);
+        await ctx.createMessage('greetings-setMsg');
+        await ctx.createMessage(ctx.suffix.replace(/{{user}}/gi, ctx.author.mention).replace(/{{name}}/gi, ctx.author.username));
     }
 };
-
-function greetingBlock(settings) {
-    return {
-        title: 'Greeting Management',
-        description: `**${localeManager.t('enabled', settings.locale)}:** ${settings.guild.greeting.enabled ? localeManager.t('yes', settings.locale) : localeManager.t('no', settings.locale)}\n`
-        + `**${localeManager.t('greetings-channel')}:** ${settings.guild.greeting.channelID ? `<#${settings.guild.greeting.channelID}>` : localeManager.t('none', settings.locale)}\n`
-        + `**${localeManager.t('greetings-message')}:** ${settings.guild.greeting.message || localeManager.t('none', settings.locale)}`,
-        fields: [{
-            name: 'Example Usage',
-            value: '`greetings enable`\n'
-            + localeManager.t('greetings-example1', settings.locale)
-            + '`greetings channel general`\n'
-            + localeManager.t('greetings-example2', settings.locale)
-            + '`greetings text Welcome to our server {{user}}`\n'
-            + localeManager.t('greetings-example3', settings.locale)
-        }]
-    };
-}

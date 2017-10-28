@@ -4,8 +4,6 @@
  * @author Ovyerus
  */
 
-/* eslint-env node */
-
 const mal = require('malapi').Anime;
 
 exports.commands = [
@@ -14,47 +12,21 @@ exports.commands = [
 
 exports.anime = {
     desc: 'Searches MyAnimeList for an anime.',
-    fullDesc: 'Searches MyAnimeList for an anime either by name, id or url, automatically detecting it.',
     usage: '<anime name|id|url>',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (!ctx.suffix) {
-                ctx.createMessage('anime-noArgs').then(resolve).catch(reject);
-            } else {
-                ctx.channel.sendTyping();
-                if (/^\d+$/.test(ctx.suffix)) {
-                    mal.fromId(Number(ctx.suffix)).then(animu => {
-                        return ctx.createMessage(animeBlock(animu));
-                    }).then(resolve).then(resolve).catch(err => {
-                        if (err.message === "Cannot read property 'id' of undefined") {
-                            return ctx.createMessage('notFound'); // valve pls fix
-                        } else {
-                            reject();
-                        }
-                    }).then(r => {if (r) resolve();}).catch(reject);
-                } else if (/^https?:\/\/myanimelist\.net\/anime\/\d+\/.+$/.test(ctx.suffix)) {
-                    mal.fromUrl(ctx.suffix).then(animu => {
-                        return ctx.createMessage(animeBlock(animu));
-                    }).then(resolve).then(resolve).catch(err => {
-                        if (err.message === "Cannot read property 'id' of undefined") {
-                            return ctx.createMessage('notFound'); // valve pls fix
-                        } else {
-                            reject();
-                        }
-                    }).then(r => {if (r) resolve();}).catch(reject);
-                } else {
-                    mal.fromName(ctx.suffix).then(animu => {
-                        return ctx.createMessage(animeBlock(animu));
-                    }).then(resolve).catch(err => {
-                        if (err.message === "Cannot read property 'id' of undefined") {
-                            return ctx.createMessage('notFound'); // valve pls fix
-                        } else {
-                            reject();
-                        }
-                    }).then(r => {if (r) resolve();}).catch(reject);
-                }
-            }
-        });
+    async main(bot, ctx) {
+        if (!ctx.suffix) return await ctx.createMessage('anime-noArgs');
+
+        await ctx.channel.sendTyping();
+
+        let animu;
+
+        if (/^\d+$/.test(ctx.suffix)) animu = await mal.fromId(Number(ctx.suffix));
+        else if (/^https?:\/\/myanimelist\.net\/anime\/\d+\/.+$/.test(ctx.suffix)) animu = await mal.fromUrl(ctx.suffix);
+        else animu = await mal.fromName(ctx.suffix);
+
+        if (!animu) return await ctx.createMessage('notFound');
+
+        await ctx.createMessage(animeBlock(animu));
     }
 };
 

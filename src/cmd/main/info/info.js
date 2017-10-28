@@ -3,8 +3,6 @@
  * @author Ovyerus
  */
 
-/* eslint-env node */
-
 const fs = require('fs');
 const path = require('path');
 var version;
@@ -12,7 +10,7 @@ var version;
 try {
     version = JSON.parse(fs.readFileSync(path.resolve(`${mainDir}`, '../', './package.json'))).version;
 } catch(_) {
-    version = JSON.parse(fs.readFileSync(path.resolve(`${mainDir}`, '../', './package.json')).version;
+    version = JSON.parse(fs.readFileSync(path.resolve(`${mainDir}`, '../', './package.json'))).version;
 }
 
 exports.commands = [
@@ -29,6 +27,7 @@ exports.info = {
             title: `${bot.user.username}'s Info`,
             description: `[${bot.localeManager.t('info-source')}](https://github.com/ClaraIO/Clara) | [${bot.localeManager.t('info-supportServer')}](https://discord.gg/rmMTZue)`,
             thumbnail: {url: bot.user.avatarURL},
+            footer: {text: 'info-footer'},
             color: roleColour,
             fields: [
                 {
@@ -61,8 +60,7 @@ exports.info = {
                     value: version, inline:
                     true
                 }
-            ],
-            footer: {text: 'info-footer'}
+            ]
         }}, null, 'channel', {name: bot.user.username});
     }
 };

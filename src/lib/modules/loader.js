@@ -1,3 +1,8 @@
+/**
+ * @file Clara 0.4.X command module loader.
+ * @author Ovyerus
+ */
+
 const fs = require('fs');
 const cp = require('child_process');
 const logger = require(`${__dirname}/Logger`);

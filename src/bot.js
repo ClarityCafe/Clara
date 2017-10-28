@@ -16,12 +16,13 @@ global.mainDir = __dirname;
 global.utils = require(`${__dirname}/lib/modules/utils`);
 global.logger = require(`${__dirname}/lib/modules/Logger`);
 global.Promise = require('bluebird');
+global.got = require('got');
 
 //bot stuff
 const bot = new Clara(config, {
-    autoreconnect: true,
     seedVoiceConnections: true,
     maxShards: config.maxShards || 1,
+    latencyThreshold: 420000000,
     defaultImageFormat: 'webp',
     defaultImageSize: 512,
     disableEvents: {

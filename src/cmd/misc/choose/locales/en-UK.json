@@ -1,5 +1,4 @@
 {
-    "choose-insufficientArgs": "Please give me two `(2)` choices.",
-    "choose": "**{{name}}**, I choose **{{choice}}**!",
-    "choose-exceededLimit" : "Hey! I can only choose from two choices."
+    "choose-insufficientArgs": "Please give me at least two `(2)` choices.",
+    "choose": "**{{name}}**, I choose **{{choice}}**!"
 }

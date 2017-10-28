@@ -3,60 +3,62 @@
  * @author Ovyerus
  */
 
-/* eslint-env node */
+const LOCALE_REGEX = /[a-z]{2}-[A-Z]{2}/i;
 
-var exposed;
-
+exports.loadAsSubcommands = true;
 exports.commands = [
-    'locales'
+    'set'
 ];
 
-exports.locales = {
-    desc: 'Manage locales.',
-    longDesc: '',
+exports.main = {
+    desc: 'Allows the setting of locales, either per-user or per-guild.',
     usage: '[set [guild] <locale>]',
     main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (ctx.args.length < 2) {
-                ctx.createMessage({embed: localeBlock(ctx.settings)}, null, 'channel', {
-                    userLocale: ctx.settings.user.locale,
-                    guildLocale: ctx.settings.guild.locale
-                }).then(resolve).catch(reject);
-            } else if (ctx.args.length === 2 && ctx.args[1] === 'guild') {
-                ctx.createMessage({embed: localeBlock(ctx.settings)}, null, 'channel', {
-                    userLocale: ctx.settings.user.locale,
-                    guildLocale: ctx.settings.guild.locale
-                }).then(resolve).catch(reject);
-            } else if (ctx.args.length === 2 && /[a-z]{2}-[A-Z]{2}/i.test(ctx.args[1])) {
-                exposed = bot;
-                changeLocale(ctx).then(resolve).catch(reject);
-            } else if (ctx.args.length === 3 && ctx.args[1] === 'guild' && /[a-z]{2}-[A-Z]{2}/i.test(ctx.args[2])) {
-                if (!ctx.member.permission.has('manageGuild')) {
-                    ctx.createMessage('user-noPerm', null, 'channel', {
-                        perm: 'Manage Guild'
-                    }).then(resolve).catch(reject);
-                } else {
-                    exposed = bot;
-                    changeLocale(ctx, true).then(resolve).catch(reject);
-                }
-            } else {
-                ctx.createMessage({embed: localeBlock(ctx.settings)}, null, 'channel', {
-                    userLocale: ctx.settings.user.locale,
-                    guildLocale: ctx.settings.guild.locale
-                }).then(resolve).catch(reject);
-            }
+        return ctx.createMessage({embed: localeBlock(bot, ctx.settings)}, null, 'channel', {
+            userLocale: ctx.settings.user.locale,
+            guildLocale: ctx.settings.guild.locale
         });
     }
 };
 
-function localeBlock(settings) {
+exports.set = {
+    desc: "Sets the guild's locale.",
+    usage: 'locale',
+    async main(bot, ctx) {
+        if (!ctx.args[0]) {
+            return await ctx.createMessage({embed: localeBlock(bot, ctx.settings)}, null, 'channel', {
+                userLocale: ctx.settings.user.locale,
+                guildLocale: ctx.settings.guild.locale
+            });
+        }
+
+        if (LOCALE_REGEX.test(ctx.args[0])) return await changeLocale(bot, ctx);
+
+        if (ctx.args[0].toLowerCase() === 'guild' && LOCALE_REGEX.test(ctx.args[1])) {
+            if (!ctx.member.permission.has('manageGuild')) {
+                return await ctx.createMessage('user-noPerm', null, 'channel', {
+                    perm: 'Manage Guild'
+                });
+            }
+
+            return await changeLocale(bot, ctx, true);
+        } else {
+            return await ctx.createMessage({embed: localeBlock(bot, ctx.settings)}, null, 'channel', {
+                userLocale: ctx.settings.user.locale,
+                guildLocale: ctx.settings.guild.locale
+            });
+        }
+    }
+};
+
+function localeBlock(bot, settings) {
     let embed = {
         title: 'locales-infoHeader',
         description: '',
         fields: []
     };
 
-    Object.keys(localeManager.locales).forEach(v => embed.description += `\n${v} - **${localeManager.locales[v].locales[v]} [${localeManager.locales[settings.locale].locales[v]}]**`);
+    Object.keys(bot.localeManager.locales).forEach(v => embed.description += `\n${v} - **${bot.localeManager.locales[v].locales[v]} [${bot.localeManager.locales[settings.locale].locales[v]}]**`);
     
     embed.description += '\n\u200b';
 
@@ -73,52 +75,48 @@ function localeBlock(settings) {
     return embed;
 }
 
-function changeLocale(ctx, guild) {
-    return new Promise((resolve, reject) => {
-        let real;
-        if (!guild) {
-            for (let locale in localeManager.locales) {
-                if (ctx.args[1].toLowerCase() === locale.toLowerCase()) {
-                    real = true;
-                    break;
-                }
-            }
+async function changeLocale(bot, ctx, guild) {
+    let real;
 
-            let userChoice = ctx.args[1].split('-')[0].toLowerCase() + '-' + ctx.args[1].split('-')[1].toUpperCase();
-            if (!real) {
-                ctx.createMessage('locales-invalidLocale', null, 'channel', {
-                    locale: userChoice
-                }).then(resolve).catch(reject);
-            } else {
-                let bot = exposed;
-
-                bot.setUserSettings(ctx.author.id, {locale: userChoice}).then(() => {
-                    return ctx.createMessage(localeManager.t('locales-userLocaleUpdated', userChoice, {
-                        locale: userChoice
-                    }));
-                }).then(resolve).catch(reject);
-            }
-        } else {
-            for (let locale in localeManager.locales) {
-                if (ctx.args[2].toLowerCase() === locale.toLowerCase()) {
-                    real = true;
-                    break;
-                }
-            }
-
-            let userChoice = ctx.args[2].split('-')[0].toLowerCase() + '-' + ctx.args[2].split('-')[1].toUpperCase();
-            if (!real) {
-                ctx.createMessage('locales-invalidLocale', null, 'channel', {
-                    locale: userChoice
-                }).then(resolve).catch(reject);
-            } else {
-                let bot = exposed;
-                bot.setGuildSettings(ctx.guild.id, {locale: userChoice}).then(() => {
-                    return ctx.createMessage(localeManager.t('locales-guildLocaleUpdated', userChoice, {
-                        locale: userChoice
-                    }));
-                }).then(resolve).catch(reject);
+    if (!guild) {
+        for (let locale in bot.localeManager.locales) {
+            if (ctx.args[0].toLowerCase() === locale.toLowerCase()) {
+                real = true;
+                break;
             }
         }
-    });
+
+        let userChoice = ctx.args[0].split('-')[0].toLowerCase() + '-' + ctx.args[0].split('-')[1].toUpperCase();
+
+        if (!real) {
+            return await ctx.createMessage('locales-invalidLocale', null, 'channel', {
+                locale: userChoice
+            });
+        }
+
+        await bot.db.user_settings[ctx.author.id].locale.set(userChoice);
+        return await ctx.createMessage(bot.localeManager.t('locales-userLocaleUpdated', userChoice, {
+            locale: userChoice
+        }));
+    }
+
+    for (let locale in bot.localeManager.locales) {
+        if (ctx.args[1].toLowerCase() === locale.toLowerCase()) {
+            real = true;
+            break;
+        }
+    }
+
+    let userChoice = ctx.args[1].split('-')[0].toLowerCase() + '-' + ctx.args[1].split('-')[1].toUpperCase();
+
+    if (!real) {
+        return await ctx.createMessage('locales-invalidLocale', null, 'channel', {
+            locale: userChoice
+        });
+    }
+
+    await bot.db.guild_settings[ctx.guild.id].locale.set(userChoice);
+    return await ctx.createMessage(bot.localeManager.t('locales-guildLocaleUpdated', userChoice, {
+        locale: userChoice
+    }));
 }

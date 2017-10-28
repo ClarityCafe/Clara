@@ -3,7 +3,6 @@
  * @author Capuccino
  * @author Ovyerus
  */
-/* eslint-env node */
 
 const Sagiri = require('sagiri');
 

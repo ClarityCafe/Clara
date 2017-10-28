@@ -14,19 +14,16 @@ exports.commands = [
 
 exports.main = {
     desc: 'Manage bot admins.',
-    longDesc: 'View, add or remove bot admins.',
     usage: '[<add|remove> <mention|id>]',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            let embed = {
-                title: 'Bot Admins',
-                description: `**${utils.formatUsername(bot.users.get(bot.config.ownerID))}** (Bot owner)`
-            };
+    async main(bot, ctx) {
+        let embed = {
+            title: 'Bot Admins',
+            description: `**${utils.formatUsername(bot.users.get(bot.config.ownerID))}** (Bot owner)`
+        };
 
-            bot.admins.forEach(a => embed.description += `\n**${utils.formatUsername(bot.users.get(a))}**`);
+        bot.admins.forEach(a => embed.description += `\n**${utils.formatUsername(bot.users.get(a))}**`);
 
-            ctx.createMessage({embed}).then(resolve).catch(reject);
-        });
+        await ctx.createMessage({embed});
     }
 };
 
@@ -34,34 +31,20 @@ exports.add = {
     desc: 'Add admins.',
     usage: '<mention|id>',
     owner: true,
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (ctx.author.id !== bot.config.ownerID) {
-                ctx.createMessage('This is restricted to the bot owner.').then(resolve).catch(reject);
-            } else {
-                if (!/^<@!?\d+>$/.test(ctx.args[0])) {
-                    ctx.createMessage('Please mention the user to add, or their id.').then(resolve).catch(reject);
-                } else {
-                    let id = /^(<@!?\d+>|\d+)$/.test(ctx.args[0]) ? ctx.args[0].replace(/^<@!?/, '').slice(0, -1) : ctx.args[0];
+    async main(bot, ctx) {
+        if (ctx.author.id !== bot.config.ownerID) return await ctx.createMessage('This is restricted to the bot owner.');
+        if (!/^<@!?\d+>$/.test(ctx.args[0])) return await ctx.createMessage('Please mention the user to add, or their id.');
 
-                    if (!bot.users.get(id)) {
-                        ctx.createMessage('That user does not exist or I cannot see them.').then(resolve).catch(reject);
-                    } else {
-                        let newAdmins = bot.admins.concat(id);
-                        let data = {admins: newAdmins, blacklist: bot.blacklist};
+        let id = /^(<@!?\d+>|\d+)$/.test(ctx.args[0]) ? ctx.args[0].replace(/^<@!?/, '').slice(0, -1) : ctx.args[0];
 
-                        fs.writeFile(`${__baseDir}/data/data.json`, JSON.stringify(data), err => {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                bot.admins.push(id);
-                                ctx.createMessage(`Added admin **${utils.formatUsername(bot.users.get(id))}**.`).then(resolve).catch(reject);
-                            }
-                        });
-                    }
-                }
-            }
-        });
+        if (!bot.users.get(id)) return await ctx.createMessage('That user does not exist or I cannot see them.');
+
+        let newAdmins = bot.admins.concat(id);
+        let data = {admins: newAdmins, blacklist: bot.blacklist};
+
+        fs.writeFileSync(`./data/data.json`, JSON.stringify(data));
+        bot.admins.push(id);
+        await ctx.createMessage(`Added admin **${utils.formatUsername(bot.users.get(id))}**.`);
     }
 };
 
@@ -69,33 +52,19 @@ exports.remove = {
     desc: 'Remove admins.',
     usage: '<mention|ID>',
     owner: true,
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (ctx.author.id !== bot.config.ownerID) {
-                ctx.createMessage('This is restricted to the bot owner.').then(resolve).catch(reject);
-            } else {
-                if (!/^(<@!?\d+>|\d+)$/.test(ctx.args[0])) {
-                    ctx.createMessage('Please mention the user to add, or their id.').then(resolve).catch(reject);
-                } else {
-                    let id = /^<@!?\d+>$/.test(ctx.args[0]) ? ctx.args[0].replace(/^<@!?/, '').slice(0, -1) : ctx.args[0];
+    async main(bot, ctx) {
+        if (ctx.author.id !== bot.config.ownerID) return await ctx.createMessage('This is restricted to the bot owner.');
+        if (!/^(<@!?\d+>|\d+)$/.test(ctx.args[0])) return await ctx.createMessage('Please mention the user to add, or their id.');
 
-                    if (!bot.admins.includes(id)) {
-                        ctx.createMessage('That user is not an admin.').then(resolve).catch(reject);
-                    } else {
-                        let newAdmins = bot.admins.filter(a => a !== id);
-                        let data = {admins: newAdmins, blacklist: bot.blacklist};
+        let id = /^<@!?\d+>$/.test(ctx.args[0]) ? ctx.args[0].replace(/^<@!?/, '').slice(0, -1) : ctx.args[0];
 
-                        fs.writeFile(`${__baseDir}/data/data.json`, JSON.stringify(data), err => {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                bot.admins.splice(bot.admins.indexOf(id), 1);
-                                ctx.createMessage(`Removed admin **${utils.formatUsername(bot.users.get(id))}**.`).then(resolve).catch(reject);
-                            }
-                        });
-                    }
-                }
-            }
-        });
+        if (!bot.admins.includes(id)) return await ctx.createMessage('That user is not an admin.');
+
+        let newAdmins = bot.admins.filter(a => a !== id);
+        let data = {admins: newAdmins, blacklist: bot.blacklist};
+
+        fs.writeFileSync(`./data/data.json`, JSON.stringify(data));
+        bot.admins.splice(bot.admins.indexOf(id), 1);
+        await ctx.createMessage(`Removed admin **${utils.formatUsername(bot.users.get(id))}**.`);
     }
 };
