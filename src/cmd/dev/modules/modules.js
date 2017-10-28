@@ -4,6 +4,7 @@
  */
 
 const fs = require('fs');
+const path = require('path');
 
 exports.loadAsSubcommands = true;
 
@@ -19,7 +20,7 @@ exports.main = {
     usage: '[load|unload|reload]',
     owner: true,
     async main(bot, ctx) {
-        let unloadedMods = JSON.parse(fs.readFileSync('./data/unloadedCommands.json'));
+        let unloadedMods = JSON.parse(fs.readFileSync(path.resolve('../', '../', 'data/', 'unloadedCommands.json')));
         let embed = {
             title: 'Current Modules',
             description: `Showing **${bot.commandFolders.length}** command modules.`,
