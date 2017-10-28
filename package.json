@@ -1,6 +1,6 @@
 {
     "name": "clara",
-    "version": "0.4.0-SNAPSHOT",
+    "version": "0.4.0",
     "description": "A general-purpose discord bot.",
     "main": "src/bot.js",
     "scripts": {
@@ -22,17 +22,13 @@
     "homepage": "https://github.com/ClarityMoe/Clara",
     "dependencies": {
         "bluebird": "^3.5.0",
-        "decache": "^4.1.0",
-        "eris": "github:abalabahaha/eris",
+        "eris": "abalabahaha/eris",
         "got": "^7.1.0",
         "rebridge": "^2.3.0",
-        "redis": "^2.8.0",
-        "rethinkdbdash": "^2.3.31"
+        "redis": "^2.8.0"
     },
     "devDependencies": {
-        "babel-eslint": "^8.0.0",
         "eslint": "^4.6.1",
-        "eslint-plugin-react": "7.3.0",
         "eslint-config-defaults": "^9.0.0"
     }
 }

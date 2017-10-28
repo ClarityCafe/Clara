@@ -13,7 +13,7 @@
     "ytSearchKey": "",
     "twitchKey": "",
     "nasaKey": "",
-    "rethinkOptions": {},
+    "redisUrl": "redis://127.0.0.1/0",
     "discordBotsPWKey": "",
     "discordBotsOrgKey": ""
 }

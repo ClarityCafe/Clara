@@ -17,11 +17,6 @@ package-lock.json
 # Yarn Integrity file
 .yarn-integrity
 
-# Configuration
-src/config.json
-src/data/data.json
-src/data/prefixes.json
-
 # Eclipse WS file
 .settings
 .project
@@ -33,13 +28,8 @@ bin
 
 # Bot files  
 src/config.json
-rethinkdb_data
-
-/data
-prefixes.json
-/.idea/workspace.xml
-src/data/
-data.json
+src/data
+.idea/workspace.xml
 lines.txt
 
 #Rethink Data
