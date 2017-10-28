@@ -1,12 +1,8 @@
 /**
- * @file Generates a random anime picture.
+ * @file Gets a random anime picture.
  * @author Capuccino
  * @author Ovyerus
  */
-
-/* eslint-env node */
-
-const got = require('got');
 
 exports.commands = [
     'awwnime'
@@ -15,33 +11,14 @@ exports.commands = [
 exports.awwnime = {
     desc: 'Gets you a random anime picture outside of yorium.moe',
     usage: '[query]',
-    main: (bot, ctx) => {
-        return new Promise((resolve, reject) => {
-            if (!ctx.suffix) {
-                ctx.channel.sendTyping();
+    async main(bot, ctx) {
+        await ctx.channel.sendTyping();
 
-                got('https://raw-api.now.sh/').then(res => {
-                    let images = JSON.parse(res.body);
-                    let image = images[Math.floor(Math.random() * images.length)];
-
-                    if (!image) return ctx.createMessage('notFound');
-
-                    return ctx.createMessage(image.full);
-                }).then(resolve).catch(reject);
-            } else {
-                let query = encodeURIComponent(ctx.suffix).replace(/%20/g, '+');
-                ctx.channel.sendTyping();
-
-                got(`https://raw-api.now.sh/?q=${query}`).then(res => {
-                    let images = JSON.parse(res.body);
-                    let image = images[Math.floor(Math.random() * images.length)];
-
-                    if (!image) return ctx.createMessage('notFound');
-
-                    return ctx.createMessage(image.full);
-
-                }).then(resolve).catch(reject);
-            }
-        });
+        let query = ctx.suffix ? `?q=${encodeURIComponent(ctx.suffix).replace(/%20/g, '+')}` : '';
+        let res = JSON.parse((await got(`https://raw-api.now.sh/${query}`)).body);
+        let image = res[Math.floor(Math.random() * res.length)];
+        
+        if (!image) await ctx.createMessage('notFound');
+        else await ctx.createMessage(image.full);
     }
 };

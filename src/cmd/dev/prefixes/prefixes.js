@@ -3,8 +3,6 @@
  * @author Ovyerus
  */
 
-/* eslint-env node */
-
 const fs = require('fs');
 
 exports.loadAsSubcommands = true;
@@ -16,28 +14,26 @@ exports.commands = [
 exports.main = {
     desc: 'View the various prefixes used by the bot and edit them.',
     usage: '[<add|remove> <prefix>]',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            let embed = {
-                title: `Displaying **${bot.prefixes.length - 1}** prefixes`,
-                description: [],
-                author: {
-                    name: 'Current Prefixes'
-                }
-            };
+    async main(bot, ctx) {
+        let embed = {
+            title: `Displaying **${bot.prefixes.length - 1}** prefixes`,
+            description: [],
+            author: {
+                name: 'Current Prefixes'
+            }
+        };
 
-            bot.prefixes.forEach(prefix => {
-                if (RegExp(`^<@!?${bot.user.id}> $`).test(prefix) && !~embed.description.indexOf('`@mention`')) {
-                    embed.description.push('`@mention`');
-                } else if (!RegExp(`^<@!?${bot.user.id}> $`).test(prefix)) {
-                    embed.description.push(`\`${prefix}\``);
-                }
-            });
-
-            embed.description = embed.description.join(', ');
-
-            ctx.createMessage({embed}).then(resolve).catch(reject);
+        bot.prefixes.forEach(prefix => {
+            if (RegExp(`^<@!?${bot.user.id}> $`).test(prefix) && !~embed.description.indexOf('`@mention`')) {
+                embed.description.push('`@mention`');
+            } else if (!RegExp(`^<@!?${bot.user.id}> $`).test(prefix)) {
+                embed.description.push(`\`${prefix}\``);
+            }
         });
+
+        embed.description = embed.description.join(', ');
+
+        await ctx.createMessage({embed});
     }
 };
 
@@ -45,24 +41,15 @@ exports.add = {
     desc: 'Add a prefix.',
     usage: '<prefix>',
     owner: true,
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (ctx.args.length === 0) {
-                ctx.createMessage('Please give me a prefix to add.').then(resolve).catch(reject);
-            } else {
-                let prefix = ctx.args.join(' ');
-                let newPrefixes = bot.prefixes.concat(prefix).filter(p => p !== bot.config.mainPrefix && !RegExp(`^<@!?${bot.user.id}> $`).test(p));
+    async main(bot, ctx) {
+        if (ctx.args.length === 0) return await ctx.createMessage('Please give me a prefix to add.');
 
-                fs.writeFile('./data/prefixes.json', JSON.stringify(newPrefixes), err => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        bot.prefixes.push(ctx.args.join(' '));
-                        ctx.createMessage(`Added prefix \`${prefix}\``).then(resolve).catch(reject);
-                    }
-                });
-            }
-        });
+        let prefix = ctx.args.join(' ');
+        let newPrefixes = bot.prefixes.concat(prefix).filter(p => p !== bot.config.mainPrefix && !RegExp(`^<@!?${bot.user.id}> $`).test(p));
+
+        fs.writeFileSync('./data/prefixes.json', JSON.stringify(newPrefixes));
+        bot.prefixes.push(ctx.args.join(' '));
+        await ctx.createMessage(`Added prefix \`${prefix}\``);
     }
 };
 
@@ -70,30 +57,19 @@ exports.remove = {
     desc: 'Remove a prefix.',
     usage: '<prefix>',
     owner: true,
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (ctx.args.length === 0) {
-                ctx.createMessage('Please give me a prefix to remove.').then(resolve).catch(reject);
-            } else {
-                let prefix = ctx.args.join(' ');
-                let newPrefixes = bot.prefixes.filter(p => p !== prefix);
+    async main(bot, ctx) {
+        if (ctx.args.length === 0) return await ctx.createMessage('Please give me a prefix to remove.');
 
-                if (RegExp(`^<@!?${bot.user.id}> ?$`).test(prefix) || prefix === bot.config.mainPrefix || newPrefixes.equals(bot.prefixes)) {
-                    ctx.createMessage("That prefix doesn't exist or can't be removed.").then(resolve).catch(reject);
-                } else {
-                    newPrefixes = newPrefixes.filter(p => p !== bot.config.mainPrefix && !RegExp(`^<@!?${bot.user.id}> $`).test(p));
+        let prefix = ctx.args.join(' ');
+        let newPrefixes = bot.prefixes.filter(p => p !== prefix);
 
-                    fs.writeFile('./data/prefixes.json', JSON.stringify(newPrefixes), err => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            bot.prefixes.splice(bot.prefixes.indexOf(prefix), 1);
-                            ctx.createMessage(`Removed prefix \`${prefix}\``).then(resolve).catch(reject);
-                        }
-                    });
-                }
-            }
-        });
+        if (RegExp(`^<@!?${bot.user.id}> ?$`).test(prefix) || prefix === bot.config.mainPrefix || newPrefixes.equals(bot.prefixes)) return await ctx.createMessage("That prefix doesn't exist or can't be removed.");
+
+        newPrefixes = newPrefixes.filter(p => p !== bot.config.mainPrefix && !RegExp(`^<@!?${bot.user.id}> $`).test(p));
+
+        fs.writeFileSync('./data/prefixes.json', JSON.stringify(newPrefixes));
+        bot.prefixes.splice(bot.prefixes.indexOf(prefix), 1);
+        await ctx.createMessage(`Removed prefix \`${prefix}\``);
     }
 };
 

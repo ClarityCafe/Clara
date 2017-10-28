@@ -4,14 +4,12 @@
  * @author Ovyerus
  */
 
-/* eslint-env node */
-
 const Osu = require('osu');
 const iso3166 = require('iso-3166-1-alpha-2');
 const Ratelimiter = require(`${mainDir}/lib/modules/Ratelimiter`);
 
 const CommaRegex = /\B(?=(\d{3})+(?!\d))/g; // Thank you Brayzure uwu
-const B1nzy = new Ratelimiter(240, 60000); // 240 uses per minute
+const LIMITER = new Ratelimiter(240, 60000); // 240 uses per minute
 
 let osu;
 
@@ -30,120 +28,76 @@ exports.init = bot => {
 exports.main = {
     desc: "Retrive stats for osu!'s standard mode for a user.",
     usage: '<osu! username/id>',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (ctx.suffix.length === 0) {
-                ctx.createMessage('osu-noName').then(resolve).catch(reject);
-            } else {
-                ctx.channel.sendTyping();
+    async main(bot, ctx) {
+        if (ctx.suffix.length === 0) return await ctx.createMessage('osu-noName');
+        if (LIMITER.ratelimited) return await ctx.createMessage('osu-ratelimited');
 
-                if (B1nzy.ratelimited) {
-                    ctx.createMessage('osu-ratelimited').then(resolve).catch(reject);
-                } else {
-                    osu.get_user({u: ctx.suffix}, res => {
-                        let user = res[0];
+        await ctx.channel.sendTyping();
 
-                        if (!user || !user.user_id) {
-                            ctx.createMessage('osu-noRes').then(resolve).catch(reject);
-                        } else {
-                            ctx.createMessage(osuBlock(bot, user)).then(() => {
-                                B1nzy.use();
-                            }).then(resolve).catch(reject);
-                        }
-                    });
-                }
-            }
-        });
+        let user = await osu.get_user({u: ctx.suffix});
+        user = user[0];
+
+        if (!user || !user.user_id) return await ctx.createMessage('osu-noRes');
+
+        await ctx.createMessage(osuBlock(bot, user));
+        LIMITER.use();
     }
 };
 
 exports.taiko = {
     desc: "Retrive stats for osu!'s Taiko mode for a user.",
     usage: '<osu! username/id>',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (ctx.suffix.length === 0) {
-                ctx.createMessage('osu-noName').then(resolve).catch(reject);
-            } else {
-                ctx.channel.sendTyping();
+    async main(bot, ctx) {
+        if (ctx.suffix.length === 0) return await ctx.createMessage('osu-noName');
+        if (LIMITER.ratelimited) return await ctx.createMessage('osu-ratelimited');
 
-                if (B1nzy.ratelimited) {
-                    ctx.createMessage('osu-ratelimited').then(resolve).catch(reject);
-                } else {                
-                    osu.get_user({u: ctx.suffix, m: 3}, res => {
-                        let user = res[0];
+        await ctx.channel.sendTyping();
 
-                        if (!user || !user.user_id) {
-                            ctx.createMessage('osu-noRes').then(resolve).catch(reject);
-                        } else {
-                            ctx.createMessage(osuBlock(bot, user)).then(() => {
-                                B1nzy.use();
-                            }).then(resolve).catch(reject);
-                        }
-                    });
-                }
-            }
-        });
+        let user = await osu.get_user({u: ctx.suffix, m: 1});
+        user = user[0];
+
+        if (!user || !user.user_id) return await ctx.createMessage('osu-noRes');
+
+        await ctx.createMessage(osuBlock(bot, user));
+        LIMITER.use();
     }
 };
 
 exports.ctb = {
     desc: "Retrive stats for osu!'s Catch The Beat mode for a user.",
     usage: '<osu! username/id>',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (ctx.suffix.length === 0) {
-                ctx.createMessage('osu-noName').then(resolve).catch(reject);
-            } else {
-                ctx.channel.sendTyping();
+    async main(bot, ctx) {
+        if (ctx.suffix.length === 0) return await ctx.createMessage('osu-noName');
+        if (LIMITER.ratelimited) return await ctx.createMessage('osu-ratelimited');
 
-                if (B1nzy.ratelimited) {
-                    ctx.createMessage('osu-ratelimited').then(resolve).catch(reject);
-                } else {                
-                    osu.get_user({u: ctx.suffix, m: 2}, res => {
-                        let user = res[0];
+        await ctx.channel.sendTyping();
 
-                        if (!user || !user.user_id) {
-                            ctx.createMessage('osu-noRes').then(resolve).catch(reject);
-                        } else {
-                            ctx.createMessage(osuBlock(bot, user)).then(() => {
-                                B1nzy.use();
-                            }).then(resolve).catch(reject);
-                        }
-                    });
-                }
-            }
-        });
+        let user = await osu.get_user({u: ctx.suffix, m: 2});
+        user = user[0];
+
+        if (!user || !user.user_id) return await ctx.createMessage('osu-noRes');
+
+        await ctx.createMessage(osuBlock(bot, user));
+        LIMITER.use();
     }
 };
 
 exports.mania = {
     desc: "Retrive stats for osu!'s osu!mania mode for a user.",
     usage: '<osu! username/id>',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (ctx.suffix.length === 0) {
-                ctx.createMessage('osu-noName').then(resolve).catch(reject);
-            } else {
-                ctx.channel.sendTyping();
+    async main(bot, ctx) {
+        if (ctx.suffix.length === 0) return await ctx.createMessage('osu-noName');
+        if (LIMITER.ratelimited) return await ctx.createMessage('osu-ratelimited');
 
-                if (B1nzy.ratelimited) {
-                    ctx.createMessage('osu-ratelimited').then(resolve).catch(reject);
-                } else {                
-                    osu.get_user({u: ctx.suffix, m: 3}, res => {
-                        let user = res[0];
+        await ctx.channel.sendTyping();
 
-                        if (!user || !user.user_id) {
-                            ctx.createMessage('osu-noRes').then(resolve).catch(reject);
-                        } else {
-                            ctx.createMessage(osuBlock(bot, user)).then(() => {
-                                B1nzy.use();
-                            }).then(resolve).catch(reject);
-                        }
-                    });
-                }
-            }
-        });
+        let user = await osu.get_user({u: ctx.suffix, m: 3});
+        user = user[0];
+
+        if (!user || !user.user_id) return await ctx.createMessage('osu-noRes');
+
+        await ctx.createMessage(osuBlock(bot, user));
+        LIMITER.use();
     }
 };
 

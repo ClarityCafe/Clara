@@ -61,7 +61,7 @@ function parseArgs(str) {
  * Parse a string and check if it starts with a valid prefixes
  * 
  * @param {String} str String to parse
- * @param {(String|Regex)[]} prefixes Array of prefixes
+ * @param {String[]} prefixes Array of prefixes
  * @returns {String?} String potentially with prefixes parsed.
  */
 function parsePrefix(str, prefixes) {
@@ -73,18 +73,8 @@ function parsePrefix(str, prefixes) {
     let oldStr = str;
 
     for (let prfx of prefixes) {
-        if (typeof prfx === 'string') {
-            // Handle string prefixes
-            str = str.startsWith(prfx) ? str.slice(prfx.length) : str;
-            if (str !== oldStr) break;
-        } else if (prfx instanceof RegExp) {
-            // Stringify regex prefixes and match
-            let tmp = prfx.toString().replace(/^\//, '').replace(/\/$/, '');
-            tmp = tmp.startsWith('^') ? tmp : `^${tmp}`;
-            tmp = new RegExp(tmp);
-            str = str.replace(tmp, '');
-            if (str !== oldStr) break;
-        }
+        str = str.startsWith(prfx) ? str.slice(prfx.length) : str;
+        if (str !== oldStr) break;
     }
 
     return str;

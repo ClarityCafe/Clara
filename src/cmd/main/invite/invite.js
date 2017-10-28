@@ -3,8 +3,6 @@
  * @author Ovyerus
  */
 
-/* eslint-env node */
-
 exports.commands = [
     'invite'
 ];

@@ -51,7 +51,7 @@ class Clara extends Eris.Client {
 
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
-        this.redis = new redis.createClient();
+        this.redis = new redis.createClient({url: config.redisUrl || 'redis://127.0.0.1/0'});
         this.db = new Rebridge(this.redis);
 
         this.loadCommands = true;
@@ -219,6 +219,7 @@ class Clara extends Eris.Client {
         if (res) return res;
         
         await this.db.guild_settings[guildID].set(settings);
+        return this.db.guild_settings[guildID]._promise;
     }
 
     /**
@@ -323,8 +324,8 @@ class Clara extends Eris.Client {
  * @prop {String} nasaKey API key for the NASAS commands.
  * @prop {String} osuApiKey API key to use for osu! commands.
  * @prop {String} ownerID ID of the person who has the most permissions for the bot.
- * @prop {Boolean} [promiseWarnings=false] Whether to get the shitty errors from the Promise library.
- * @prop {Object} rethinkOptions Options to pass to the bot's rethinkdbdash instance.
+ * @prop {Boolean} promiseWarnings Whether to get the shitty errors from the Promise library.
+ * @prop {Object} redisUrl `redis://` url to connect to. Defaults to `redis://127.0.0.1/0`
  * @prop {String} sauceKey API key to use for SauceNAO.
  * @prop {String} token Token to use when connecting to Discord.
  * @prop {String} twitchKey Key to use for Twitch.

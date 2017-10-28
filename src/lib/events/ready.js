@@ -1,10 +1,8 @@
 /**
- * @file Giant ass ready event.
+ * @file Ready event that handles loading commands, locales, and the database tables if need be.
  * @author Capuccino
  * @author Ovyerus
  */
-
-/* eslint-env node */
 
 const fs = require('fs');
 const path = require('path');

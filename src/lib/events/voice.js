@@ -3,15 +3,14 @@
  * @author Ovyerus
  */
 
-/* eslint-env node */
-
 const Eris = require('eris');
 
 module.exports = bot => {
     bot.on('voiceChannelLeave', (mem, chan) => {
         if (!bot.music.connections.get(chan.guild.id)) return;
 
-        if (mem.id !== bot.user.id && chan.voiceMembers.get(bot.user.id) && chan.voiceMembers.filter(m => m.id !== bot.user.id && !m.bot).length === 0) {
+        if (mem.id !== bot.user.id && chan.voiceMembers.get(bot.user.id)
+            && chan.voiceMembers.filter(m => m.id !== bot.user.id && !m.bot).length === 0) {
             setTimeout(() => {
                 if (chan.voiceMembers.filter(m => m.id !== bot.user.id && !m.bot).length === 0) {
                     let cnc = bot.music.connections.get(chan.guild.id);
@@ -48,7 +47,9 @@ module.exports = bot => {
         for (let c of bot.music.inactives) {
             let chan = c[0];
             let timestamp = c[1];
-            if (((bot.music.connections.get(chan.guild.id) && !bot.music.connections.get(chan.guild.id).playing) || (bot.music.queues.get(chan.guild.id) && bot.music.queues.get(chan.guild.id).length === 0)) && Date.now() - timestamp >= 300000) {
+            if (((bot.music.connections.get(chan.guild.id) && !bot.music.connections.get(chan.guild.id).playing)
+                || (bot.music.queues.get(chan.guild.id) && bot.music.queues.get(chan.guild.id).length === 0))
+                && Date.now() - timestamp >= 300000) {
                 bot.leaveVoiceChannel(chan.id);
             }
         }

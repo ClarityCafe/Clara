@@ -4,9 +4,8 @@
  * @author Ovyerus
  */
 
-/* eslint-env node */
-
-const responses = ['yes', 'no'];
+const RESPONSES = ['yes', 'no'];
+const QUESTION_REGEX = /^(?:is|are|does|do|will|was|has|what|which|whose|who|where|how|when|why)|(?:\?|\uff1f)$/i;
 
 exports.commands = [
     'ball'
@@ -14,21 +13,15 @@ exports.commands = [
 
 exports.init = bot => {
     let filterKeys = Object.keys(bot.localeManager.locales['en-UK']).filter(k => /^ball-response\d+$/.test(k));
-    for (let key of filterKeys) responses.push(key);
+    for (let key of filterKeys) RESPONSES.push(key);
 };
 
 exports.ball = {
     desc: 'Make the bot decide for you or do some things.',
-    longDesc: 'Uses a random number generator to select a random response. Not 100% reliable.',
-    usage: '<question>',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            if (!ctx.suffix || !/(?:\?|\uff1f)$/.test(ctx.suffix)) {
-                ctx.createMessage('ball-noQuestion').then(resolve).catch(reject);
-            } else {
-                let response = responses[Math.floor(Math.random() * responses.length)];
-                ctx.createMessage(response).then(resolve).catch(reject);
-            }
-        });
+    usage: '<question>?',
+    async main(bot, ctx) {
+        if (!ctx.suffix || !QUESTION_REGEX.test(ctx.suffix)) return await ctx.createMessage('ball-noQuestion');
+
+        await ctx.createMessage(RESPONSES[Math.floor(Math.random() * RESPONSES.length)]);
     }
 };

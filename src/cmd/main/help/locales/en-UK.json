@@ -1,4 +1,6 @@
 {
     "help-sending": "Sending the help message to your DMs.",
-    "help-noCmd": "That command does not exist. Make sure to check your spelling."
+    "help-noCommand": "That command does not exist. Make sure to check your spelling.",
+    "help-commandsAmount": "{{amount}} commands",
+    "help-cantSend": "It seems I cannot send you a DM. Perhaps you have me blocked, or have DMs disabled?"
 }

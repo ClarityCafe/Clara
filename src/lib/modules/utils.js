@@ -15,9 +15,9 @@ class Utils {
       * @returns {String} Formatted string with days, hours, minutes and seconds.
       */
     static msToTime(ms) {
-        var time = ms/1000;
+        var time = ms / 1000;
         var seconds = time % 60;
-        time /=60;
+        time /= 60;
         var minutes = time % 60;
         time /= 60;
         var hours = time % 24;

@@ -1,9 +1,7 @@
 /**
- * @file Main locale manager.
+ * @file Locale manager.
  * @author Ovyerus
  */
-
-/* eslint-env node */
 
 const fs = require('fs');
 const path = require('path');

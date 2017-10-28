@@ -4,13 +4,11 @@
  * @author Ovyerus
  */
 
-/* eslint-env node */
-
 module.exports = bot => {
-    bot.on('guildCreate', async g => {
-        if (g.members.filter(m => m.bot).size / g.members.size >= 0.50) {
-            logger.info(`Leaving bot collection '${g.name}' (${g.id})`);
-            await g.leave();
+    bot.on('guildCreate', async guild => {
+        if (guild.members.filter(m => m.bot).filter / guild.members.size >= 0.50) {
+            logger.info(`Leaving bot collection '${guild.name}' (${guild.id})`);
+            await guild.leave();
         } else {
             await bot.editStatus('online', {
                 name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
@@ -21,8 +19,8 @@ module.exports = bot => {
         }
     });
 
-    bot.on('guildDelete', async g => {
-        if (!(g.members.filter(m => m.bot).size/g.members.size >= 0.50)) {
+    bot.on('guildDelete', async guild => {
+        if (!(guild.members.filter(m => m.bot).filter / guild.members.size >= 0.50)) {
             await bot.editStatus('online', {
                 name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
                 type: bot.config.gameURL ? 1 : 0, url:
@@ -32,23 +30,23 @@ module.exports = bot => {
         }
     });
 
-    bot.on('guildMemberAdd', (g, m) => {
-        bot.getGuildSettings(g.id).then(res => {
-            if (!res || !res.greeting || !res.greeting.enabled || !res.greeting.channelID || !res.greeting.message) {
-                return null;
-            }
-            let msg = res.greeting.message.replace(/\{\{user\}\}/g, m.mention).replace(/\{\{name\}\}/g, utils.formatUsername(m));
-            return g.channels.get(res.greeting.channelID).createMessage(msg);
-        });
+    bot.on('guildMemberAdd', async (guild, member) => {
+        let res = await bot.getGuildSettings(guild.id);
+
+        if (!res || !res.greeting || !res.greeting.enabled || !res.greeting.channelID || !res.greeting.message) return;
+
+        let msg = res.greeting.message.replace(/{{user}}/g, member.mention).replace(/{{name}}/g, utils.formatUsername(member));
+
+        return guild.channels.get(res.greeting.channelID).createMessage(msg);
     });
 
-    bot.on('guildMemberDelete', (g, m) => {
-        bot.guildSettings(g.id).then(res => {
-            if (!res || !res.goodbyes || !res.goodbyes.enabled || !res.goodbyes.channelID || !res.goodbyes.message) {
-                return null;
-            }
-            let msg = res.goodbyes.message.replace(/\{\user\}\}/g, m.mention).replace(/\{name\}\}/g, utils.formatUsername(m));
-            return g.channels.get(res.goodbyes.channelID).createMessage(msg);
-        });
+    bot.on('guildMemberDelete', async (guild, member) => {
+        let res = await bot.guildSettings(guild.id);
+
+        if (!res || !res.goodbye || !res.goodbye.enabled || !res.goodbye.channelID || !res.goodbye.message) return;
+
+        let msg = res.goodbye.message.replace(/{{user}}/g, utils.formatUsername(member)).replace(/{{name}/gi, member.username);
+
+        await guild.channels.get(res.goodbye.channelID).createMessage(msg);
     });
 };

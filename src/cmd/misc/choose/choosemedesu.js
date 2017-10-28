@@ -4,25 +4,21 @@
  * @author Ovyerus
  */
 
-/* eslint-env node */
-
 exports.commands = [
     'choose'
 ];
 
 exports.choose = {
     desc: 'Randomly chooses between 2 or more arguments.',
-    usage: '<choice 1>/<choice 2>/...',
+    usage: '<choice 1>/<choice 2>/[choice .../choice N]',
     example: 'coke zero/coke',
-    main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            let choices = ctx.suffix.split('/');
-            if (choices.length < 2) {
-                ctx.createMessage('choose-insufficientArgs').then(resolve).catch(reject);
-            } else {
-                var choice = choices[Math.floor(Math.random() * choices.length)];
-                ctx.createMessage('choose', null, 'channel', {name: ctx.msg.author.username, choice}).then(resolve).catch(reject);
-            }
-        });
+    async main(bot, ctx) {
+        let choices = ctx.suffix.split('/');
+
+        if (choices.length < 2) return await ctx.createMessage('choose-insufficientArgs');
+
+        let choice = choices[Math.floor(Math.random() * choices.length)];
+
+        await ctx.createMessage('choose', null, 'channel', {name: ctx.author.username, choice});
     }
 };

@@ -1,5 +1,5 @@
 /**
- * @file Command system files.
+ * @file Command system for Clara.
  * @author Ovyerus
  */
 

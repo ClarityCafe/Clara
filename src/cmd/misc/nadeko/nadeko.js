@@ -3,8 +3,6 @@
  * @author Capuccino.
  */
 
-/* eslint-env node */
-
 const emotes = [
     ':joy:',
     ':unamused:'
@@ -15,14 +13,11 @@ exports.commands = [
 ];
 
 exports.e = {
-    desc: 'who did it?',
-    longDesc: 'owo whats this?',
+    desc: 'Who did it?',
     main(bot, ctx) {
-        return new Promise((resolve, reject) => {
-            ctx.createMessage('nadeko', null, 'channel', {
-                user: ctx.author.mention,
-                emote: emotes[Math.floor(Math.random() * emotes.length)]
-            }).then(resolve).catch(reject);
+        return ctx.createMessage('nadeko', null, 'channel', {
+            user: ctx.author.mention,
+            emote: emotes[Math.floor(Math.random() * emotes.length)]
         });
     }
 };
