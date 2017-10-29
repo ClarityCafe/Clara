@@ -10,6 +10,7 @@ const Rebridge = require('rebridge');
 const redis = require('redis');
 const {CommandHolder} = require(`${__dirname}/modules/CommandHolder`);
 const LocaleManager = require(`${__dirname}/modules/LocaleManager`);
+const Lookups = require(`${__dirname}/modules/Lookups`);
 const path = require('path');
 
 /**
@@ -49,6 +50,7 @@ class Clara extends Eris.Client {
         this.config = config;
         this.prefixes = JSON.parse(fs.readFileSync(path.resolve(`${__dirname}`, '../', './data/prefixes.json'))).concat([config.mainPrefix]);
 
+        this.lookups = new Lookups(this);
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
         this.redis = new redis.createClient({url: config.redisUrl || 'redis://127.0.0.1/0'});
