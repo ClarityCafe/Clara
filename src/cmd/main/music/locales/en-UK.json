@@ -31,12 +31,8 @@
     "music-clearConfirmYes": "Ok, clearing playing song and queue.",
     "music-clearConfirmNo": "Ok, only clearing the queue.",
     "music-clearConfirmInvalid": "That is not a valid response, I will clear the current song and queue.",
-    "music-clearedStoppedPlaying": "Cleared queue and stopped playing.",
+    "music-clearStoppedPlaying": "Cleared queue and stopped playing.",
     "music-cleared": "Cleared queue.",
     "music-dumpEmptyQueue": "You cannot dump an empty queue.",
-    "music-dumpConfirm": "Are you sure you would like to dump the queue?",
-    "music-dumpConfirmYes": "Ok, dumping queue.",
-    "music-dumpConfirmNo": "Ok, I will not dump the queue.",
-    "music-dumpConfirmInvalid": "That is not a valid response, I will not dump the queue.",
     "music-dumped": "Dumped current music queue to text file at {{url}}"
 }
