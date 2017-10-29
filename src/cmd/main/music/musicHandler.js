@@ -110,9 +110,7 @@ class MusicHandler {
             }
 
             msg = await ctx.createMessage({embed});
-        } else {
-            throw new Error('No search results.');
-        }
+        } else throw new Error('No search results.');
 
         let m = await this._bot.awaitMessage(ctx.channel.id, ctx.author.id);
         
@@ -121,9 +119,7 @@ class MusicHandler {
         if (/^[1-5]$/.test(m.content.split(' ')[0])) {
             let choice = res[m.content.split(' ')[0] - 1];
             return `https://youtube.com/watch?v=${choice.id.videoId}`;
-        } else {
-            throw new Error('Invalid selection (Number too high, too low, or not a number).');
-        }
+        } else throw new Error('Invalid selection (Number too high, too low, or not a number).');
     }
 
     async prePlay(ctx, url) {
@@ -204,26 +200,14 @@ function checkURL(url) {
 function matchURL(url) {
     if (!checkURL(url)) throw new Error('Unsupported music source.');
 
-    if (YTRegex.test(url)) {
-        // Sanitize URL so we don't get any wonky errors.
-        let id = url.match(YTRegex)[1];
-        return [`https://youtube.com/watch?v=${id}`, 'YouTubeVideo'];
-    } else if (YTPlaylistRegex.test(url)) {
-        let id = url.match(YTPlaylistRegex)[1];
-        return [`https://youtube.com/playlist?list=${id}`, 'YouTubePlaylist'];
-    } else if (SCPlaylistRegex.test(url)) {
-        let id = url.match(SCPlaylistRegex)[1];
-        return [`https://soundcloud.com/${id}`, 'SoundCloudPlaylist'];
-    } else if (SCRegex.test(url)) {
-        let id = url.match(SCRegex)[1];
-        return [`https://soundcloud.com/${id}`, 'SoundCloudTrack'];
-    } else if (ClypRegex.test(url)) {
-        let id = url.match(ClypRegex)[1];
-        return [`https://clyp.it/${id}`, 'ClypAudio'];
-    } else if (TwitchRegex.test(url)) {
-        let id = url.match(TwitchRegex)[1];
-        return [`https://twitch.tv/${id}`, 'TwitchStream'];
-    } else {
+    // Sanitize URL so we don't get any wonky errors.
+    if (YTRegex.test(url)) return [`https://youtube.com/watch?v=${url.match(YTRegex)[1]}`, 'YouTubeVideo'];
+    else if (YTPlaylistRegex.test(url)) return [`https://youtube.com/playlist?list=${url.match(YTPlaylistRegex)[1]}`, 'YouTubePlaylist'];
+    else if (SCPlaylistRegex.test(url)) return [`https://soundcloud.com/${url.match(SCPlaylistRegex)[1]}`, 'SoundCloudPlaylist'];
+    else if (SCRegex.test(url)) return [`https://soundcloud.com/${url.match(SCRegex)[1]}`, 'SoundCloudTrack'];
+    else if (ClypRegex.test(url)) return [`https://clyp.it/${url.match(ClypRegex)[1]}`, 'ClypAudio'];
+    else if (TwitchRegex.test(url)) return [`https://twitch.tv/${url.match(TwitchRegex)[1]}`, 'TwitchStream'];
+    else {
         // How the fuck did u get here fam?
         throw new Error(`Somehow didn't match URL. URL: ${url}`);
     }
@@ -239,9 +223,9 @@ function searchP(query, options) {
 function timeFormat(secs) {
     let all = [secs / 60 / 60, secs / 60 % 60, secs % 60];
 
-    for (let i in all) {
-        all[i] = Math.floor(all[i]);
-        all[i] = all[i].toString().length === 1 ? `0${all[i]}` : all[i];
+    for (let i of all) {
+        i = Math.floor(i);
+        i = i.toString().length === 1 ? `0${i}` : i;
     }
 
     return all[0] === '00' ? all.slice(1).join(':') : all.join(':');

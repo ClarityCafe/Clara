@@ -9,6 +9,7 @@
     "none": "None",
     "enabled": "Enabled",
     "notFound": "No results found.",
+    "userNotFound": "User not found.",
     "locales": {
         "en-UK": "English (UK)",
         "fr-CA": "French (Canada)",
