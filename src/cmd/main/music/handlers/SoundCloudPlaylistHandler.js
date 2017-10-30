@@ -3,7 +3,7 @@
  * @author Ovyerus
  */
 
-const scr = require('soundcloud-resolve');
+const got = require('got');
 
 class SoundCloudPlaylistHandler {
     constructor(bot) {
@@ -11,39 +11,42 @@ class SoundCloudPlaylistHandler {
         this.clientID = bot.config.soundCloudKey;
     }
 
-    getPlaylist(url) {
-        return new Promise((resolve, reject) => {
-            if (typeof url !== 'string') throw new TypeError('url is not a string.');
+    async getPlaylist(url) {
+        if (typeof url !== 'string') throw new TypeError('url is not a string.');
 
-            scr(this.clientID, url, (err, pl) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    if (pl.tracks.filter(t => t.kind === 'track').length === 0) throw new Error('Playlist is empty.');
+        let pl = await infoGetter(this.clientID, url);
 
-                    let returnMe = {
-                        title: pl.title,
-                        items: []
-                    };
+        if (pl.tracks.filter(t => t.kind === 'track').length === 0) throw new Error('Playlist is empty.');
 
-                    for (let item of pl.tracks.filter(t => t.kind === 'track')) {
-                        if (pl.tracks.indexOf(item) >= this.maxGet) break;
+        let ret = {
+            title: pl.title,
+            items: []
+        };
 
-                        returnMe.items.push({
-                            url: item.permalink_url,
-                            title: item.title,
-                            uploader: item.user.username,
-                            thumbnail: item.artwork_url,
-                            length: item.duration / 1000,
-                            type: 'SoundCloudTrack'
-                        });
-                    }
+        for (let item of pl.tracks.filter(t => t.kind === 'track')) {
+            if (ret.items.length >= this.maxGet) break;
 
-                    resolve(returnMe);
-                }
+            ret.items.push({
+                url: item.permalink_url,
+                title: item.title,
+                uploader: item.user.username,
+                thumbnail: item.artwork_url || item.user.avatar_url,
+                length: item.duration / 1000,
+                type: 'SoundCloudTrack'
             });
-        });
+        }
+
+        return ret;
     }
+}
+
+async function infoGetter(clientID, url) {
+    let res = await got(`https://api.soundcloud.com/resolve?client_id=${clientID}&url=${url}`);
+    res = JSON.parse(res.body);
+
+    if (res.errors) throw res.errors[0].error_message;
+
+    return res;
 }
 
 module.exports = SoundCloudPlaylistHandler;

@@ -3,7 +3,6 @@
  * @author Ovyerus
  */
 
-const scr = require('soundcloud-resolve');
 const got = require('got');
 
 class SoundCloudHandler {
@@ -11,42 +10,36 @@ class SoundCloudHandler {
         this.clientID = bot.config.soundCloudKey;
     }
 
-    getInfo(url) {
-        return new Promise((resolve, reject) => {
-            if (typeof url !== 'string') throw new TypeError('url is not a string.');
+    async getInfo(url) {
+        if (typeof url !== 'string') throw new TypeError('url is not a string.');
 
-            scr(this.clientID, url, (err, json) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    let res = {
-                        url: json.permalink_url,
-                        title: json.title,
-                        uploader: json.user.username,
-                        thumbnail: json.artwork_url,
-                        length: json.duration / 1000,
-                        type: 'SoundCloudTrack'
-                    };
-
-                    resolve(res);
-                }
-            });
-        });
+        return await infoGetter(this.clientID, url);
     }
 
-    getStream(url) {
-        return new Promise((resolve, reject) => {
-            if (typeof url !== 'string') throw new TypeError('url is not a string.');
+    async getStream(url) {
+        if (typeof url !== 'string') throw new TypeError('url is not a string.');
 
-            scr(this.clientID, url, (err, _, stream) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(got.stream(stream));
-                }
-            });
-        });
+        let res = await infoGetter(this.clientID, url, true);
+        return await got.stream(res);
     }
+}
+
+async function infoGetter(clientID, url, stream) {
+    let res = await got(`https://api.soundcloud.com/resolve?client_id=${clientID}&url=${url}`);
+    res = JSON.parse(res.body);
+
+    if (res.errors) throw res.errors[0].error_message;
+
+    if (!stream) {
+        return {
+            url: res.permalink_url,
+            title: res.title,
+            uploader: res.user.user_name,
+            thumbnail: res.artwork_url || res.user.avatar_url,
+            length: res.duration / 1000,
+            type: 'SoundCloudTrack'
+        };
+    } else return `${res.stream_url}?client_id=${clientID}`;
 }
 
 module.exports = SoundCloudHandler;
