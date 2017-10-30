@@ -1,7 +1,6 @@
 {
   "main": "chatbot.js",
   "dependencies": {
-    "better-cleverbot-io": "1.0.2",
     "markov-strings": "^1.3.2"
   }
 }
