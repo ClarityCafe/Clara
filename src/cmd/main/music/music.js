@@ -296,9 +296,9 @@ function queuePaginate(q, page, pageAmt, collect) {
 function timeFormat(secs) {
     let all = [secs / 60 / 60, secs / 60 % 60, secs % 60];
 
-    for (let i of all) {
-        i = Math.floor(i);
-        i = i.toString().length === 1 ? `0${i}` : i;
+    for (let v of all.entries()) {
+        v[1] = Math.floor(v[1]);
+        all[v[0]] = v[1].toString().length === 1 ? `0${v[1]}` : v[1];
     }
 
     return all[0] === '00' ? all.slice(1).join(':') : all.join(':');
