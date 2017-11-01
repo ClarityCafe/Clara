@@ -1,6 +1,6 @@
 {
   "main": "chatbot.js",
   "dependencies": {
-    "aiml": "0.0.2"
+    "aiml-high": "^0.0.8"
   }
 }

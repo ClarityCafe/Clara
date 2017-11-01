@@ -4,18 +4,18 @@
  * @author Ovyerus
  */
 
-const aiml = require('aiml');
+const aiml = require('aiml-high');
+const fs = require('fs');
 let natsuki;
 
-const parseDir = Promise.promisify(aiml.parseDir);
-Promise.promisifyAll(aiml.AiEngine);
+Promise.promisify(aiml.findAnswer);
 
 exports.commands = ['chat'];
 
 exports.init = () => {
-    parseDir(`${mainDir}/assets/chatbot`).then(topics => {
-        natsuki = new aiml.AiEngine('Natsuki', topics, {name: 'Protag-chan'});
-    });
+    let files = fs.readdirSync(`${mainDir}/assets/chatbot/`).map(v => `${mainDir}/assets/chatbot/${v}`);
+    natsuki = new aiml({name:"Clara"});
+    natsuki.loadFiles(files);
 }
 
 exports.chat = {
@@ -24,8 +24,8 @@ exports.chat = {
     async main(bot, ctx) {
         await ctx.channel.sendTyping();
 
-        let res = await natsuki.reply({name: ctx.author}, ctx.cleanSuffix);
-
-        await ctx.createMessage(res);
+        await natsuki.findAnswer(ctx.cleanSuffix).then(res => {
+            await ctx.createMessage(res);
+        });
     }
 };
