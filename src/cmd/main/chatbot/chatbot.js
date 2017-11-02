@@ -8,7 +8,7 @@ const aiml = require('aiml-high');
 const fs = require('fs');
 let natsuki;
 
-Promise.promisify(aiml.findAnswer);
+aiml.prototype.findAnswerAsync = Promise.promisify(aiml.prototype.findAnswer);
 
 exports.commands = ['chat'];
 
@@ -24,8 +24,7 @@ exports.chat = {
     async main(bot, ctx) {
         await ctx.channel.sendTyping();
 
-        await natsuki.findAnswer(ctx.cleanSuffix).then(res => {
-            await ctx.createMessage(res);
-        });
+        let res = await natsuki.findAnswerAsync(ctx.cleanSuffix);
+        await ctx.createMesage(res);
     }
 };
