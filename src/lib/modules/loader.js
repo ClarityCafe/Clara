@@ -70,7 +70,7 @@ module.exports = bot => {
         try {
             bot.commands.loadModule(path);
         } catch(err) {
-            logger.customError('loader', `Error while loading "${name}"\n${err}`);
+            logger.customError('loader', `Error while loading "${name}"\n${err}${err.stack ? `\n${err.stack.split('\n')[1]}` : ''}`);
             unloaded.push(cmd);
         }
     }
