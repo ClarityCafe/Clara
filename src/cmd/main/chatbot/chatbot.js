@@ -14,9 +14,9 @@ exports.commands = ['chat'];
 
 exports.init = () => {
     let files = fs.readdirSync(`${mainDir}/assets/chatbot/`).map(v => `${mainDir}/assets/chatbot/${v}`);
-    natsuki = new aiml({name:"Clara"});
+    natsuki = new aiml({name: 'Clara'});
     natsuki.loadFiles(files);
-}
+};
 
 exports.chat = {
     desc: 'Talk to the bot',
@@ -25,6 +25,7 @@ exports.chat = {
         await ctx.channel.sendTyping();
 
         let res = await natsuki.findAnswerAsync(ctx.cleanSuffix);
+
         await ctx.createMesage(res);
     }
 };
