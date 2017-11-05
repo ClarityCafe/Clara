@@ -108,7 +108,7 @@ module.exports = bot => {
                     description: `An error occurred while trying to execute command \`${cmd}\``,
                     color: 0xF44336,
                     timestamp: new Date(),
-                    footer: {text: 'Powered by Clara'},
+                    footer: {text: 'Clara Version ${version}'},
                     fields: [
                         {
                             name: '\u200b',
