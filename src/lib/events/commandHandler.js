@@ -106,7 +106,7 @@ module.exports = bot => {
                             name: '\u200b',
                             value: '```js\n'
                             + `${err}\n`
-                            +  `\n${err.stack.split('\n')[1]}`
+                            +  `\n${err.stack.split('\n')[1].trim()}`
                             + '```\n'
                             + 'This has been logged, but if you wish to report this now so it can get fixed faster, you can join my [**support server**](https://discord.gg/rmMTZue).'
                         }
