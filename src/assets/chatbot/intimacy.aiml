@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aiml>
-<category>Intimacy</category>
 <cateory><pattern>KISS</pattern>
 <template>
 <random>
