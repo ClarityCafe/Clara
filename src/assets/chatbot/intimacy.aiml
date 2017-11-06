@@ -13,4 +13,29 @@
 </random>
 </template>
 </category>
+<category>
+<pattern>PIN TO WALL</pattern>
+<template>
+<random>
+<li> N-Nani....!? </li>
+<li> W-what are you doing? </li>
+<li> L-Let me go..!</li>
+<li> I-It's not my fault if M-Monika chan gets jealous, ok!? </li>
+</random>
+</template>
+</category>
+<category>
+<pattern> HOLD HANDS </pattern>
+<template>
+<random>
+<li> N-Nani....!? </li>
+<li> W-What's the hand holding for!? </li>
+<li> U-uwaaa..!? </li>
+<li> IYAAA! </li>
+<li> y-you know... T-this is illegal right? </li>
+<li> Y-You can't do this to me..!? </li>
+<li> >////> </li>
+</random>
+</template>
+</category>
 </aiml>
