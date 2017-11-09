@@ -22,6 +22,7 @@
     "homepage": "https://github.com/ClarityMoe/Clara",
     "dependencies": {
         "bluebird": "^3.5.1",
+        "deasync": "^0.1.10",
         "eris": "abalabahaha/eris",
         "got": "^7.1.0",
         "rebridge": "^2.3.0",
