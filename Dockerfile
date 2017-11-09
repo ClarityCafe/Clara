@@ -26,6 +26,8 @@ RUN apt update && \
     openssh-server \
     build-essential \
     ffmpeg \
+    redis-server \
+    imagemagick \
     python3-pip \
     protobuf-compiler python \
     libprotobuf-dev \ 
