@@ -50,11 +50,6 @@ class Logger {
      */
     static error(msg) {
         console.error(`\x1b[37;41merror\x1b[31;49m ${msg}\x1b[0m`);
-        
-        //small file to log everything just in case PM2 logs didn't catch the errors
-        if (!fs.existsSync(path.resolve(__dirname, '../', '../', 'logs/errors.log'))) fs.createFileSync(path.resolve(__dirname, '../', '../') + 'logs/error.log');
-        fs.createWriteStream(path.resolve(__dirname, '../', '../', 'logs') + 'errors.log', `[${new Date()}] [err] ${msg} \n`);
-        
     }
 
     /**
