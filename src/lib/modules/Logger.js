@@ -4,9 +4,6 @@
  * @author Ovyerus
  */
 
-const fs = require('fs');
-const path = require('path');
-
 /**
  * Class for various logging methods.
  */
