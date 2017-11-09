@@ -57,7 +57,8 @@ ENTRYPOINT ["node", "/Clara/src/bot.js"]
 
 # It's advisable to add your config files so if we run docker run, it wouldn't error out.
 
-RUN sudo git clone https://github.com/ClaraIO/Clara.git --bare --depth=50
+RUN sudo git clone https://github.com/ClaraIO/Clara.git --bare --depth=3
+RUN cd /Clara && sudo npm i --save && sudo npm i -g pm2 
 
 CMD ["/usr/sbin/sshd", "-p 22", "-D", "&&", "node", "/Clara/src/bot --harmony"]
 
