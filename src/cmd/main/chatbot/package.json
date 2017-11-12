@@ -1,6 +1,6 @@
 {
   "main": "chatbot.js",
   "dependencies": {
-    "aiml-high": "^0.0.8"
+    "burlyy": "github:Ovyerus/burly"
   }
 }

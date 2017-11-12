@@ -4,18 +4,19 @@
  * @author Ovyerus
  */
 
-const aiml = require('aiml-high');
+const burly = require('burlyy');
 const fs = require('fs');
 let natsuki;
-
-aiml.prototype.findAnswerAsync = Promise.promisify(aiml.prototype.findAnswer);
 
 exports.commands = ['chat'];
 
 exports.init = () => {
     let files = fs.readdirSync(`${mainDir}/assets/chatbot/`).map(v => `${mainDir}/assets/chatbot/${v}`);
-    natsuki = new aiml({name: 'Clara'});
-    natsuki.loadFiles(files);
+    natsuki = new burly({
+       defaultResponse: null,
+       name:'Natsuki'
+    });
+    natsuki.loadDir(`${mainDir}/assets/chatbot`);
 };
 
 exports.chat = {
@@ -24,7 +25,7 @@ exports.chat = {
     async main(bot, ctx) {
         await ctx.channel.sendTyping();
 
-        let res = await natsuki.findAnswerAsync(ctx.cleanSuffix);
+        let res = await natsuki.talk(ctx.cleanSuffix);
 
         await ctx.createMesage(res);
     }
