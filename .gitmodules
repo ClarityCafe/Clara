@@ -1,3 +1,0 @@
-[submodule "core"]
-	path = src/cmd/main/chatbot/core
-	url = https://github.com/Ovyerus/surly2
