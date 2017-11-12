@@ -11,7 +11,6 @@ let natsuki;
 exports.commands = ['chat'];
 
 exports.init = () => {
-    let files = fs.readdirSync(`${mainDir}/assets/chatbot/`).map(v => `${mainDir}/assets/chatbot/${v}`);
     natsuki = new burly({
        defaultResponse: null,
        name:'Natsuki'
