@@ -32,5 +32,5 @@ src/data
 .idea/workspace.xml
 lines.txt
 
-#Rethink Data
-rethinkdb_data
+#Redis dunps
+dump .rdb
