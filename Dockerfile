@@ -63,7 +63,7 @@ ENTRYPOINT ["node", "/Clara/src/bot.js"]
 RUN cd /home/clara && git clone https://github.com/ClarityMoe/Clara --depth=10 
 RUN sudo npm i -g pm2 && cd /home/clara/Clara && npm i --save
 
-CMD ["/usr/sbin/sshd", "-p 2203", "-D", "&&", "node", "/Clara/src/bot --harmony"]
+CMD ["/usr/sbin/sshd", "-p 2203", "-D"]
 
 # finally echo this in a fancy way
 
