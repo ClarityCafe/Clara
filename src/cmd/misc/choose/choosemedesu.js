@@ -13,7 +13,7 @@ exports.choose = {
     usage: '<choice 1>/<choice 2>/[choice .../choice N]',
     example: 'coke zero/coke',
     async main(bot, ctx) {
-        let choices = ctx.suffix.split('/');
+        let choices = ctx.suffix.split(' or ');
 
         if (choices.length < 2) return await ctx.createMessage('choose-insufficientArgs');
 
