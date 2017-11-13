@@ -5,7 +5,6 @@
  */
 
 const burly = require('burlyy');
-const fs = require('fs');
 let natsuki;
 
 exports.commands = ['chat'];
