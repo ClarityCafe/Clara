@@ -23,11 +23,11 @@ module.exports = bot => {
         if (!(guild.members.filter(m => m.bot).filter / guild.members.size >= 0.50)) {
             await bot.editStatus('online', {
                 name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
-                type: bot.config.gameURL ? 1 : 0, url:
-                `${bot.config.gameURL || null}`
+                type: bot.config.gameURL ? 1 : 0,
+                url: `${bot.config.gameURL || null}`
             });
             await bot.postGuildCount();
-        }
+        } else if (await bot.db.guild_settings[guild.id]._promise) await bot.db.guild_settings.delete(guild.id);
     });
 
     bot.on('guildMemberAdd', async (guild, member) => {
