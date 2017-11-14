@@ -26,6 +26,8 @@ RUN apt update && \
     openssh-server \
     build-essential \
     ffmpeg \
+    redis-server \
+    imagemagick \
     python3-pip \
     protobuf-compiler python \
     libprotobuf-dev \ 
@@ -41,25 +43,27 @@ RUN apt update && \
  RUN apt update && apt -y install nodejs
  
      
- # now we create a dummy account 
+ # now we create the account
  RUN mkdir /var/run/sshd && \
      sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
      echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
      useradd -u 1000 -G users,sudo -d /home/clara --shell /bin/bash -m clara && \
      usermod -p "*" clara
+     
  USER clara
  
  #Expose Local port and SSH Port just because we can
  
-EXPOSE 22 8080
+EXPOSE 2203 8080
 
 ENTRYPOINT ["node", "/Clara/src/bot.js"]
 
 # It's advisable to add your config files so if we run docker run, it wouldn't error out.
 
-RUN sudo git clone https://github.com/ClaraIO/Clara.git --bare --depth=50
+RUN cd /home/clara && git clone https://github.com/ClarityMoe/Clara --depth=10 
+RUN sudo npm i -g pm2 && cd /home/clara/Clara && npm i --save
 
-CMD ["/usr/sbin/sshd", "-p 22", "-D", "&&", "node", "/Clara/src/bot --harmony"]
+CMD ["/usr/sbin/sshd", "-p 2203", "-D"]
 
 # finally echo this in a fancy way
 

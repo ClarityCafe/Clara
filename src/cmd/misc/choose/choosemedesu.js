@@ -10,10 +10,10 @@ exports.commands = [
 
 exports.choose = {
     desc: 'Randomly chooses between 2 or more arguments.',
-    usage: '<choice 1>/<choice 2>/[choice .../choice N]',
+    usage: '<choice 1> or <choice 2> or [choice .../choice N]',
     example: 'coke zero/coke',
     async main(bot, ctx) {
-        let choices = ctx.suffix.split('/');
+        let choices = ctx.suffix.split(' or ');
 
         if (choices.length < 2) return await ctx.createMessage('choose-insufficientArgs');
 

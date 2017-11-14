@@ -1,5 +1,5 @@
 {
-    "main": "modules.js",
+    "main": "command.js",
     "dependencies": {
     }
 }

@@ -82,7 +82,7 @@ class CommandHolder {
      * @throws {TypeError} Argument must be correct type
      * @throws {Error} Module must not be loaded already.
      */
-    loadModule(moduleName) {
+    loadCommand(moduleName) {
         if (typeof moduleName !== 'string') throw new TypeError('moduleName is not a string.');
 
         let name = moduleName.split(/\\|\//).slice(-1)[0].slice(0, -3);
@@ -165,7 +165,7 @@ class CommandHolder {
             return;
         }
 
-        logger.custom('CommandHolder/loadModule', `Loaded module '${name}'`);
+        logger.custom('CommandHolder/loadCommand', `Loaded module '${name}'`);
     }
 
     /**
@@ -175,7 +175,7 @@ class CommandHolder {
      * @throws {TypeError} Argument must be correct type.
      * @throws {Error} Module must be loaded already.
      */
-    unloadModule(moduleName) {
+    unloadCommand(moduleName) {
         if (typeof moduleName !== 'string') throw new TypeError('moduleName is not a string.');
 
         let name = moduleName.split(/\\|\//).slice(-1)[0].slice(0, -3);
@@ -193,7 +193,7 @@ class CommandHolder {
         delete this.modules[name];
         delete require.cache[require.resolve(moduleName)];
 
-        logger.custom('CommandHolder/removeModule', `Removed module '${name}'`);
+        logger.custom('CommandHolder/removeCommand', `Removed module '${name}'`);
     }
 
     /**
@@ -203,15 +203,15 @@ class CommandHolder {
      * @throws {TypeError} Argument must be correct type.
      * @throws {Error} Module must already be loaded.
      */
-    reloadModule(moduleName) {
+    reloadCommand(moduleName) {
         if (typeof moduleName !== 'string') throw new TypeError('moduleName is not a string.');
         if (!this.modules[moduleName.split(/\/|\\/g).slice(-1)[0].slice(0, -3)]) {
-            this.loadModule(moduleName);
+            this.loadCommand(moduleName);
             return;
         }
 
-        this.unloadModule(moduleName);
-        this.loadModule(moduleName);
+        this.unloadCommand(moduleName);
+        this.loadCommand(moduleName);
     }
 
     /**

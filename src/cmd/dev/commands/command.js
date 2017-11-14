@@ -1,5 +1,5 @@
 /**
- * @file Dynamic command module loading, unloading and reloading.
+ * @file Dynamic command loading, unloading and reloading.
  * @author Ovyerus
  */
 
@@ -8,20 +8,20 @@ const fs = require('fs');
 exports.loadAsSubcommands = true;
 
 exports.commands = [
-    'load',
-    'unload',
+    'enable',
+    'disable',
     'reload'
 ];
 
 exports.main = {
-    desc: 'Command for managing modules.',
+    desc: 'Command for managing command modules.',
     longDesc: 'Manages command modules for the bots. If no arguments, lists currently loaded modules, else runs the specified subcommand if possible.',
-    usage: '[load|unload|reload]',
+    usage: '[enable|disable|reload]',
     owner: true,
     async main(bot, ctx) {
         let unloadedMods = JSON.parse(fs.readFileSync(`${mainDir}/data/unloadedCommands.json`));
         let embed = {
-            title: 'Current Modules',
+            title: 'Currently enabled command modules',
             description: `Showing **${bot.commandFolders.length}** command modules.`,
             fields: [
                 {name: 'Loaded Modules', value: []},
@@ -44,8 +44,8 @@ exports.main = {
     }
 };
 
-exports.load = {
-    desc: 'Load a module.',
+exports.enable = {
+    desc: 'enable a command.',
     usage: '<module>',
     async main(bot, ctx) {
         if (!ctx.args[0]) return await ctx.createMessage('No module given to load.');
@@ -72,8 +72,8 @@ exports.load = {
     }
 };
 
-exports.unload = {
-    desc: 'Unload a module.',
+exports.disable = {
+    desc: 'Disable a command.',
     usage: '<module>',
     async main(bot, ctx) {
         if (!ctx.args[0]) return await ctx.createMessage('No module given to unload.');
@@ -96,7 +96,7 @@ exports.unload = {
 };
 
 exports.reload = {
-    desc: 'Reload a module.',
+    desc: 'Reload a command.',
     usage: '<module>',
     async main(bot, ctx) {
         if (!ctx.args[0]) return await ctx.createMessage('No module given to reload.');
