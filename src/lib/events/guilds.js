@@ -42,7 +42,6 @@ module.exports = bot => {
         	});
         }
          await bot.postGuildCount();
-        };
     });
 
     bot.on('guildMemberAdd', async (guild, member) => {
