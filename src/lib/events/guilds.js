@@ -7,27 +7,42 @@
 module.exports = bot => {
     bot.on('guildCreate', async guild => {
         if (guild.members.filter(m => m.bot).filter / guild.members.size >= 0.50) {
-            logger.info(`Leaving bot collection '${guild.name}' (${guild.id})`);
+            logger.info(`Detected bot collection guild '${guild.name}' (${guild.id}). Autoleaving...`);
             await guild.leave();
         } else {
-            await bot.editStatus('online', {
-                name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
-                type: bot.config.gameURL ? 1 : 0,
-                url: `${bot.config.gameURL || ''}`
-            });
+        	if (!bot.config.url && bot.config.gameURL) {
+        		await bot.editStatus('online', {
+        			 name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
+        			 type : 0,
+        			 url: null
+        		});
+        	} else {
+        		await bot.editStatus('online', {
+        			 name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
+        			 type : 1,
+        			 url: bot.config.gameURL
+        		});
+        	}
             await bot.postGuildCount();
         }
     });
 
     bot.on('guildDelete', async guild => {
-        if (!(guild.members.filter(m => m.bot).filter / guild.members.size >= 0.50)) {
-            await bot.editStatus('online', {
-                name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
-                type: bot.config.gameURL ? 0 : 1, url:
-                `${bot.config.gameURL || ''}`
-            });
-            await bot.postGuildCount();
+       if (!bot.config.url && bot.config.gameURL) {
+        	await bot.editStatus('online', {
+        	  name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
+        	  type : 0,
+        	  url: null
+        		});
+        } else {
+           await bot.editStatus('online', {
+        		name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
+        		type : 1,
+        		url: bot.config.gameURL
+        	});
         }
+         await bot.postGuildCount();
+        };
     });
 
     bot.on('guildMemberAdd', async (guild, member) => {
