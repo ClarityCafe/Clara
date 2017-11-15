@@ -25,7 +25,7 @@ exports.info = {
 
         await ctx.createMessage({embed: {
             title: `${bot.user.username}'s Info`,
-            description: `[${bot.localeManager.t('info-source')}](https://github.com/ClaraIO/Clara) | [${bot.localeManager.t('info-supportServer')}](https://discord.gg/rmMTZue)`,
+            description: `[${bot.localeManager.t('info-source')}](https://github.com/ClarityMoe/Clara) | [${bot.localeManager.t('info-supportServer')}](https://discord.gg/rmMTZue)`,
             thumbnail: {url: bot.user.avatarURL},
             footer: {text: 'info-footer'},
             color: roleColour,
