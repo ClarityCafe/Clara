@@ -213,6 +213,11 @@ class Clara extends Eris.Client {
                 enabled: false,
                 channelID: null,
                 message: null
+            },
+            ranks: {
+                limit: 0,
+                roles: [],
+                users: {}
             }
         };
 

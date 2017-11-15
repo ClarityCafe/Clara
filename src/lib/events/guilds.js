@@ -23,11 +23,11 @@ module.exports = bot => {
         			 url: bot.config.gameURL
         		});
         	}
-            await bot.postGuildCount();
         }
     });
 
     bot.on('guildDelete', async guild => {
+<<<<<<< HEAD
        if (!bot.config.url && bot.config.gameURL) {
         	await bot.editStatus('online', {
         	  name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
@@ -41,7 +41,8 @@ module.exports = bot => {
         		url: bot.config.gameURL
         	});
         }
-         await bot.postGuildCount();
+         await bot.postGuildCount(); 
+         if (await bot.db.guild_settings[guild.id]._promise) await bot.db.guild_settings.delete(guild.id);
     });
 
     bot.on('guildMemberAdd', async (guild, member) => {
