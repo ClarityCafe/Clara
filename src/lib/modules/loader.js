@@ -68,7 +68,7 @@ module.exports = bot => {
         let name = cmd.split('/').slice(-1)[0];
 
         try {
-            bot.commands.loadModule(path);
+            bot.commands.loadCommand(path);
         } catch(err) {
             logger.customError('loader', `Error while loading "${name}"\n${err}${err.stack ? `\n${err.stack.split('\n')[1]}` : ''}`);
             unloaded.push(cmd);
