@@ -27,7 +27,6 @@ module.exports = bot => {
     });
 
     bot.on('guildDelete', async guild => {
-<<<<<<< HEAD
        if (!bot.config.url && bot.config.gameURL) {
         	await bot.editStatus('online', {
         	  name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
