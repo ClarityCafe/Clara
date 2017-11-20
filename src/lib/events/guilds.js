@@ -42,8 +42,6 @@ module.exports = bot => {
         }
 
         await bot.postGuildCount(); 
-
-        if (await bot.db.guild_settings[guild.id]._promise) await bot.db.guild_settings.delete(guild.id);
     });
 
     bot.on('guildMemberAdd', async (guild, member) => {
