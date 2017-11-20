@@ -38,7 +38,7 @@ exports.main = {
 exports.enable = {
     desc: 'Enable goodbyes.',
     async main(bot, ctx) {
-        await bot.db.guild_settings[ctx.guild.id].goodbye.enabled.set(true);
+        await bot.db[ctx.guild.id].goodbye.enabled.set(true);
         await ctx.createMessage('goodbye-enable');
     }
 };
@@ -46,7 +46,7 @@ exports.enable = {
 exports.disable = {
     desc: 'Disable goodbyes.',
     async main(bot, ctx) {
-        await bot.db.guild_settings[ctx.guild.id].goodbye.enabled.set(false);
+        await bot.db[ctx.guild.id].goodbye.enabled.set(false);
         await ctx.createMessage('goodbye-disable');
     }
 };
@@ -57,7 +57,7 @@ exports.channel = {
         if (!ctx.suffix) return await ctx.createMessage('greetings-noChan');
 
         if (ctx.channelMentions.length > 0) {
-            await bot.db.guild_settings[ctx.guild.id].goodbye.channelID.set(ctx.channelMentions[0]);
+            await bot.db[ctx.guild.id].goodbye.channelID.set(ctx.channelMentions[0]);
             return await ctx.createMessage('goodbye-setChan', null, 'channel', {
                 id: ctx.settings.guild.goodbye.channelID
             });
@@ -71,7 +71,7 @@ exports.channel = {
             });
         }
 
-        await bot.db.guild_settings[ctx.guild.id].goodbye.channelID.set(chans[0].id);
+        await bot.db[ctx.guild.id].goodbye.channelID.set(chans[0].id);
         return await ctx.createMessage('goodbye-setChan', null, 'channel', {
             id: ctx.settings.guild.goodbye.channelID
         });
@@ -83,7 +83,7 @@ exports.text = {
     async main(bot, ctx) {
         if (!ctx.suffix) return await ctx.createMessage('goodbye-noMsgArgs');
 
-        await bot.db.guild_settings[ctx.guild.id].goodbye.message.set(ctx.suffix);
+        await bot.db[ctx.guild.id].goodbye.message.set(ctx.suffix);
         await ctx.createMessage('goodbye-setMsg');
         await ctx.createMessage(ctx.suffix.replace(/{{user}}/gi, utils.formatUsername(ctx.author)).replace(/{{name}}/gi, ctx.author.username));
     }

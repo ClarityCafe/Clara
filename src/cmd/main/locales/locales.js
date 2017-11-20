@@ -94,7 +94,7 @@ async function changeLocale(bot, ctx, guild) {
             });
         }
 
-        await bot.db.user_settings[ctx.author.id].locale.set(userChoice);
+        await bot.db[ctx.author.id].locale.set(userChoice);
         return await ctx.createMessage(bot.localeManager.t('locales-userLocaleUpdated', userChoice, {
             locale: userChoice
         }));
@@ -115,7 +115,7 @@ async function changeLocale(bot, ctx, guild) {
         });
     }
 
-    await bot.db.guild_settings[ctx.guild.id].locale.set(userChoice);
+    await bot.db[ctx.guild.id].locale.set(userChoice);
     return await ctx.createMessage(bot.localeManager.t('locales-guildLocaleUpdated', userChoice, {
         locale: userChoice
     }));
