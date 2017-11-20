@@ -23,9 +23,8 @@
     "dependencies": {
         "bluebird": "^3.5.1",
         "eris": "abalabahaha/eris",
-        "got": "^7.1.0",
-        "rebridge": "^2.3.0",
-        "redis": "^2.8.0"
+        "got": "^8.0.0",
+        "redite": "^1.0.0"
     },
     "devDependencies": {
         "eslint": "^4.10.0",

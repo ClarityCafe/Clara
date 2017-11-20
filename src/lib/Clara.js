@@ -6,8 +6,7 @@
 const Eris = require('eris');
 const got = require('got');
 const fs = require('fs');
-const Rebridge = require('rebridge');
-const redis = require('redis');
+const Redite = require('redite');
 const {CommandHolder} = require(`${__dirname}/modules/CommandHolder`);
 const LocaleManager = require(`${__dirname}/modules/LocaleManager`);
 const Lookups = require(`${__dirname}/modules/Lookups`);
@@ -22,7 +21,7 @@ const path = require('path');
  * @prop {CommandHolder} commands Command holder object.
  * @prop {String[]} commandFolders todo
  * @prop {ClaraConfig} config Configuration passed during construction.
- * @prop {RethinkDBDash} db Database connection manager.
+ * @prop {Redite} db Database connection manager.
  * @prop {Boolean} loadCommands If the bot should load commands or not.
  * @prop {String[]} prefixes Array of all the prefixes that are able to be used by the bot.
  * @prop {Object} settings Settings cache for users and guilds.
@@ -53,8 +52,7 @@ class Clara extends Eris.Client {
         this.lookups = new Lookups(this);
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
-        this.redis = new redis.createClient({url: config.redisUrl || 'redis://127.0.0.1/0'});
-        this.db = new Rebridge(this.redis);
+        this.db = new Redite({url: config.redisURL || 'redis://127.0.0.1/0'});
 
         this.loadCommands = true;
         this.allowCommandUse = false;
@@ -200,6 +198,7 @@ class Clara extends Eris.Client {
     */
     async initGuildSettings(guildID) {
         if (typeof guildID !== 'string') throw new TypeError('guildID is not a string.');
+        if (await this.db.has(guildID)) return await this.db.guildID.get;
 
         let settings = {
             id: guildID,
@@ -220,31 +219,23 @@ class Clara extends Eris.Client {
                 users: {}
             }
         };
-
-        let res = await this.db.guild_settings[guildID]._promise;
         
-        if (res) return res;
-        
-        await this.db.guild_settings[guildID].set(settings);
-        return this.db.guild_settings[guildID]._promise;
+        await this.db[guildID].set(settings);
+        return settings;
     }
 
     /**
     * Get the settings for a guild.
     *
-    * @param {String} guildID ID of guild to get settings for.
+    * @param {String} guildID ID of guild to get settings for
     * @returns {Promise<Object>} Settings for the guild.
     */
     async getGuildSettings(guildID) {
         if (typeof guildID !== 'string') throw new TypeError('guildID is not a string.');
+        if (!await this.db.has(guildID)) return await this.initGuildSettings(guildID);
 
-        let res = await this.db.guild_settings[guildID]._promise;
-
-        if (!res) return await this.initGuildSettings(guildID);
-
-        return res;
+        return await this.db[guildID].get;
     }
-
 
     /**
     * Initialize settings for a user.
@@ -254,6 +245,7 @@ class Clara extends Eris.Client {
     */
     async initUserSettings(userID) {
         if (typeof userID !== 'string') throw new TypeError('userID is not a string.');
+        if (await this.db.has(userID)) return await this.db[userID].get;
 
         let settings = {
             id: userID,
@@ -261,12 +253,8 @@ class Clara extends Eris.Client {
             partner: null
         };
 
-        let res = await this.db.user_settings[userID]._promise;
-
-        if (res) return res;
-
-        await this.db.user_settings[userID].set(settings);
-        return await this.db.user_settings[userID]._promise;
+        await this.db[userID].set(settings);
+        return settings;
     }
 
     /**
@@ -277,12 +265,9 @@ class Clara extends Eris.Client {
     */
     async getUserSettings(userID) {
         if (typeof userID !== 'string') throw new TypeError('userID is not a string.');
-
-        let res = await this.db.user_settings[userID]._promise;
-
-        if (!res) return this.initUserSettings(userID);
-
-        return res;
+        if (!await this.db.has(userID)) return await this.initUserSettings(userID);
+        
+        return await this.db[userID].get;
     }
 
     /**
@@ -324,7 +309,7 @@ class Clara extends Eris.Client {
  * @prop {String} discordBotsOrgKey API key to use for posting stats to discordbots.org.
  * @prop {String} discordBotsPWKey API key to use for posting stats to bots.discord.pw.
  * @prop {String} gameName Text to use for playing status.
- * @prop {String} gameURL Stream url for playing status. Must be a twitch link.
+ * @prop {String} gameURL Stream url for playing status. Must be a Twitch link.
  * @prop {String} ibKey API key to use for ibsear.ch.
  * @prop {String} mainPrefix Default prefix for the bot.
  * @prop {Number} maxShards Maximum number of shards for the bot to use.

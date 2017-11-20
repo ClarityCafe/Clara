@@ -19,16 +19,6 @@ module.exports = bot => {
                 require(path.resolve(__dirname, '../modules', 'loader'))(bot);
                 logger.info(`Loaded ${bot.commands.length} ${bot.commands.length === 1 ? 'command' : 'commands'}.`);
 
-                if (!await bot.db.guild_settings._promise) {
-                    logger.info('Setting up "guild_settings" table in database.');
-                    await bot.db.guild_settings.set({});
-                }
-
-                if (!await bot.db.user_settings._promise) {
-                    logger.info('Setting up "user_settings" talbe in database.');
-                    await bot.db.user_settings.set({});
-                }
-
                 bot.loadCommands = false;
                 bot.allowCommandUse = true;
 
