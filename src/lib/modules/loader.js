@@ -43,7 +43,9 @@ module.exports = bot => {
 
         if (!pkg.dependencies || !Object.keys(pkg.dependencies)[0]) continue;
 
-        for (let dep in pkg.dependencies) if (!exists(dep) && !allDeps.includes(dep)) allDeps.push(dep);
+        for (let dep of Object.keys(pkg.dependencies)) {
+            if (!exists(dep) && !allDeps.includes(dep)) allDeps.push(`${dep}@${pkg.dependencies[dep]}`);
+        }
     }
 
     if (allDeps.length !== 0) {
