@@ -194,7 +194,7 @@ class Clara extends Eris.Client {
     * Initialize settings for a guild.
     *
     * @param {String} guildID ID of guild to init settings for.
-    * @returns {Promise<Object>} Settings for the guild.
+    * @returns {Object} Settings for the guild.
     */
     async initGuildSettings(guildID) {
         if (typeof guildID !== 'string') throw new TypeError('guildID is not a string.');
@@ -228,7 +228,7 @@ class Clara extends Eris.Client {
     * Get the settings for a guild.
     *
     * @param {String} guildID ID of guild to get settings for
-    * @returns {Promise<Object>} Settings for the guild.
+    * @returns {Object} Settings for the guild.
     */
     async getGuildSettings(guildID) {
         if (typeof guildID !== 'string') throw new TypeError('guildID is not a string.');
@@ -241,7 +241,7 @@ class Clara extends Eris.Client {
     * Initialize settings for a user.
     *
     * @param {String} userID ID of user to init settings for.
-    * @returns {Promise<Object>} Settings for the user.
+    * @returns {Object} Settings for the user.
     */
     async initUserSettings(userID) {
         if (typeof userID !== 'string') throw new TypeError('userID is not a string.');
@@ -261,7 +261,7 @@ class Clara extends Eris.Client {
     * Get the settings for a user.
     *
     * @param {String} userID ID of user to get settings for.
-    * @returns {Promise<Object>} Settings for the user.
+    * @returns {Object} Settings for the user.
     */
     async getUserSettings(userID) {
         if (typeof userID !== 'string') throw new TypeError('userID is not a string.');
