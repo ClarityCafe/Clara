@@ -67,7 +67,7 @@ ENTRYPOINT ["node", "/Clara/src/bot.js"]
 
 # It's advisable to add your config files so if we run docker run, it wouldn't error out.
 
-RUN git clone https://github.com/ClarityMoe/Clara --depth=10 
+RUN cd $WORKDIR git clone https://github.com/ClarityMoe/Clara --depth=10 
 RUN cd $WORKDIR && \
     mkdir bot && \
     cd $BOTDIR && \
