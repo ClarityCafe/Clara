@@ -4,6 +4,11 @@
 
 FROM ubuntu:16.04
 
+
+#Environment Variables
+WORKDIR /home/clara
+ENV BOTDIR /home/clara/Clara
+
 #overrides for APT cache
 RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
 RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
@@ -60,8 +65,9 @@ ENTRYPOINT ["node", "/Clara/src/bot.js"]
 
 # It's advisable to add your config files so if we run docker run, it wouldn't error out.
 
-RUN cd /home/clara && git clone https://github.com/ClarityMoe/Clara --depth=10 
+RUN git clone https://github.com/ClarityMoe/Clara --depth=10 
 RUN sudo npm i -g pm2 && cd /home/clara/Clara && npm i --save
+
 
 CMD ["/usr/sbin/sshd", "-p 2203", "-D"]
 
