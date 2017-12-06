@@ -8,6 +8,7 @@ FROM ubuntu:16.04
 #Environment Variables
 WORKDIR /home/clara
 ENV BOTDIR /home/clara/Clara
+USER clara
 
 #overrides for APT cache
 RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
@@ -55,7 +56,6 @@ RUN apt update && \
      useradd -u 1000 -G users,sudo -d /home/clara --shell /bin/bash -m clara && \
      usermod -p "*" clara
      
- USER clara
  
  #Expose Local port and SSH Port just because we can
  
@@ -66,9 +66,7 @@ ENTRYPOINT ["node", "/Clara/src/bot.js"]
 # It's advisable to add your config files so if we run docker run, it wouldn't error out.
 
 RUN git clone https://github.com/ClarityMoe/Clara --depth=10 
-RUN sudo npm i -g pm2 && cd /home/clara/Clara && npm i --save
-
-
+RUN sudo npm i -g pm2 && cd BOTDIR && npm i --save
 CMD ["/usr/sbin/sshd", "-p 2203", "-D"]
 
 # finally echo this in a fancy way
