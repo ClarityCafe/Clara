@@ -1,6 +1,6 @@
 {
   "main": "chatbot.js",
   "dependencies": {
-    "burlyy": "github:Ovyerus/burly"
+    "markov-strings": "^1.3.5"
   }
 }
