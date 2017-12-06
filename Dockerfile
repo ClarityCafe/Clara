@@ -4,11 +4,12 @@
 
 FROM ubuntu:16.04
 
+ 
 
 #Environment Variables
 WORKDIR /home/clara
 ENV BOTDIR /home/clara/Clara
-USER clara
+ENV WORKDIR /home/clara
 
 #overrides for APT cache
 RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
@@ -43,18 +44,19 @@ RUN apt update && \
     libjemalloc-dev \
     m4 
     
+# Pre-create the account
+RUN mkdir /var/run/sshd && \
+    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
+    echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    useradd -u 1000 -G users,sudo -d /home/clara --shell /bin/bash -m clara && \
+    usermod -p "*" clara
+    
+USER clara 
+
  # node    
  
  RUN wget -qO- https://deb.nodesource.com/setup_8.x | sudo -E bash -
  RUN apt update && apt -y install nodejs
- 
-     
- # now we create the account
- RUN mkdir /var/run/sshd && \
-     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
-     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-     useradd -u 1000 -G users,sudo -d /home/clara --shell /bin/bash -m clara && \
-     usermod -p "*" clara
      
  
  #Expose Local port and SSH Port just because we can
@@ -66,6 +68,15 @@ ENTRYPOINT ["node", "/Clara/src/bot.js"]
 # It's advisable to add your config files so if we run docker run, it wouldn't error out.
 
 RUN git clone https://github.com/ClarityMoe/Clara --depth=10 
+RUN cd $WORKDIR && \
+    mkdir bot && \
+    cd $BOTDIR && \
+    cd src && \
+    mv * $WORKDIR/bot && \
+    cd $BOTDIR && \
+    mv package.json $WORKDIR/bot && \
+    rm -rf $WORKDIR/Clara
+   
 RUN sudo npm i -g pm2 && cd BOTDIR && npm i --save
 CMD ["/usr/sbin/sshd", "-p 2203", "-D"]
 
