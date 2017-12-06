@@ -56,7 +56,7 @@ USER clara
  # node    
  
  RUN wget -qO- https://deb.nodesource.com/setup_8.x | sudo -E bash -
- RUN sudo apt update && apt -y install nodejs
+ RUN sudo apt update && sudo apt -y install nodejs
      
  
  #Expose Local port and SSH Port just because we can
