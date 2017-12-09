@@ -1,0 +1,29 @@
+{
+    "ranks-received": "Received",
+    "ranks-deletedRole": "Deleted Role",
+    "ranks-listHeader": "Available Roles",
+    "ranks-nonExistant": "There are no ranks that exist with that name.",
+
+    "ranks-addNoArgs": "Please tell me what role to add as a rank.",
+    "ranks-addAlreadySet": "That role is already set as a rank.",
+    "ranks-addDone": "Added role **{{role}}** as a rank.",
+
+    "ranks-deleteNoRanks": "There are no ranks to delete.",
+    "ranks-deleteNoArgs": "Please say a rank to delete.",
+    "ranks-deleteDeletedRole": "Removed **Deleted role** ({{id}}) as a rank.",
+    "ranks-deleteDone": "Removed **{{role}}** ({{id}}) as a rank.",
+
+    "ranks-limitUnlimited": "Users can have unlimited ranks.",
+    "ranks-limitShowLimit": "Users can have up to `{{limit}}` ranks.",
+    "ranks-limitNotNumber": "Please give me a number to set as the limit. If you want to disable it, give me `0`.",
+    "ranks-limitDone": "Set rank limit to `{{limit}}`.",
+
+    "ranks-removeNoRanks": "You do not have any ranks.",
+    "ranks-removeNoArgs": "Please say what rank you wish to remove.",
+    "ranks-removeDone": "You no longer have the rank **{{role}}**.",
+
+    "ranks-getNoRanks": "There are no ranks you can receive.",
+    "ranks-getNoArgs": "Please say what rank you want.",
+    "ranks-getReachedLimit": "You have reached the maximum of **{{limit}}** ranks for this server.",
+    "ranks-getDone": "You now have the rank **{{role}}**"
+}

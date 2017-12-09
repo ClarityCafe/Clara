@@ -26,7 +26,7 @@ exports.list = {
         }).join('\n') || 'None';
 
         await ctx.createMessage({embed: {
-            title: 'Available Ranks',
+            title: 'ranks-listHeader',
             description: roles
         }});
     }
@@ -37,7 +37,7 @@ exports.add = {
     usage: '<name> [colour [hoist]]',
     permissions: {both: 'manageRoles'},
     async main(bot, ctx) {
-        if (!ctx.suffix) return await ctx.createMessage('Please tell me what role to add as a rank.');
+        if (!ctx.suffix) return await ctx.createMessage('ranks-addNoArgs');
 
         let name;
         let color = 0;
@@ -73,10 +73,12 @@ exports.add = {
                 color,
                 hoist
             });
-        } else if (ctx.settings.guild.ranks.roles.includes(role.id)) return await ctx.createMessage('That role is already set as a rank.');
+        } else if (ctx.settings.guild.ranks.roles.includes(role.id)) return await ctx.createMessage('ranks-addAlreadySet');
 
         await bot.db[ctx.guild.id].ranks.roles.push(role.id);
-        await ctx.createMessage(`Added role **${role.name}** as a rank.`);
+        await ctx.createMessage('ranks-addDone', null, 'channel', {
+            role: role.name
+        });
     }
 };
 
@@ -84,26 +86,31 @@ exports.delete = {
     desc: 'Stops a role from being able to be used as a rank.',
     usage: '<rank name>',
     async main(bot, ctx) {
-        if (!ctx.settings.guild.ranks.roles.length) return await ctx.createMessage('There are no ranks to delete.');
-        if (!ctx.suffix) return await ctx.createMessage('Please say a rank to delete.');
+        if (!ctx.settings.guild.ranks.roles.length) return await ctx.createMessage('ranks-deleteNoRanks');
+        if (!ctx.suffix) return await ctx.createMessage('ranks-deleteNoArgs');
 
         if (!isNaN(ctx.suffix) && ctx.setting.guild.ranks.roles.includes(ctx.suffix)) {
             await bot.db[ctx.guild.id].ranks.roles.remove(role.id);
-            return await ctx.createMessage(`Removed **Deleted role** (${ctx.suffix}) as a rank.`);
+            return await ctx.createMessage('ranks-deleteDeletedRole', null, 'channel', {
+                id: ctx.suffix
+            });
         }
 
         let roles = ctx.guild.roles.filter(r => ctx.settings.guild.ranks.roles.includes(r.id));
         roles = roles.filter(r => r.name.toLowerCase().includes(ctx.suffix.toLowerCase()) || r.id.includes(ctx.suffix));
         let role;
 
-        if (!roles.length) return await ctx.createMessage('There are no ranks that exist with that name.');
+        if (!roles.length) return await ctx.createMessage('ranks-nonExistant');
         else if (roles.length === 1) role = roles[0];
         else role = await bot.lookups._prompt(ctx, ctx.suffix, roles, 'roles');
 
         if (!role) return;
 
         await bot.db[ctx.guild.id].ranks.roles.remove(role.id);
-        await ctx.createMessage(`Removed **${role.name}** (${role.id}) as a rank.`);
+        await ctx.createMessage('ranks-deleteDone', null, 'channel', {
+            role: role.name,
+            id: role.id
+        });
     }
 };
 
@@ -112,14 +119,18 @@ exports.limit = {
     usage: '[limit]',
     async main(bot, ctx) {
         if (!ctx.suffix) {
-            if (!ctx.settings.guild.ranks.limit) return await ctx.createMessage('Users can have unlimited ranks.');
-            else return await ctx.createMessage(`Users can have up to \`${ctx.settings.guild.ranks.limit}\` ranks.`);
+            if (!ctx.settings.guild.ranks.limit) return await ctx.createMessage('ranks-limitUnlimited');
+            else return await ctx.createMessage('ranks-limitShowLimit', null, 'channel', {
+                limit: ctx.settings.guild.ranks.limit
+            });
         }
 
-        if (isNaN(ctx.args[0])) return await ctx.createMessage('Please give me a number to set as the limit. If you want to disable it, give me `0`.');
+        if (isNaN(ctx.args[0])) return await ctx.createMessage('ranks-limitNotNumber');
 
         await bot.db[ctx.guild.id].ranks.limit.set(Math.abs(Number(ctx.args[0])));
-        await ctx.createMessage(`Set rank limit to \`${ctx.args[0]}\`.`);
+        await ctx.createMessage('ranks-limitDone', null, 'channel', {
+            limit: ctx.args[0]
+        });
     }
 };
 
@@ -129,14 +140,14 @@ exports.remove = {
     async main(bot, ctx) {
         let {guild} = ctx.settings;
 
-        if (!guild.ranks.users[ctx.author.id] || !guild.ranks.users[ctx.author.id].length) return await ctx.createMessage('You do not have any ranks.');
-        if (!ctx.suffix) return await ctx.createMessage('Please say what rank you wish to remove.');
+        if (!guild.ranks.users[ctx.author.id] || !guild.ranks.users[ctx.author.id].length) return await ctx.createMessage('ranks-removeNoRanks');
+        if (!ctx.suffix) return await ctx.createMessage('ranks-removeNoArgs');
 
         let roles = ctx.guild.roles.filter(r => guild.ranks.roles.includes(r.id));
         roles = roles.filter(r => r.name.toLowerCase().includes(ctx.suffix.toLowerCase()) || r.id.includes(ctx.suffix));
         let role;
 
-        if (!roles.length) return await ctx.createMessage('There are no ranks that exist with that name.');
+        if (!roles.length) return await ctx.createMessage('ranks-nonExistant');
         else if (roles.length === 1) role = roles[0];
         else role = await bot.lookups._prompt(ctx, ctx.suffix, roles, 'roles');
 
@@ -146,7 +157,9 @@ exports.remove = {
 
         if (guild.ranks.users[ctx.author.id]) await bot.db[ctx.guild.id].ranks.users[ctx.author.id].remove(role.id);
 
-        await ctx.createMessage(`You no longer have the rank **${role.name}**.`);
+        await ctx.createMessage('ranks-removeDone', null, 'channel', {
+            role: role.name
+        });
     }
 };
 
@@ -156,16 +169,18 @@ exports.get = {
     async main(bot, ctx) {
         let {guild} = ctx.settings;
 
-        if (!guild.ranks.roles.length) return await ctx.createMessage('There are no ranks you can receive.');
-        if (!ctx.suffix) return await ctx.createMessage('Please say what rank you want.');
+        if (!guild.ranks.roles.length) return await ctx.createMessage('ranks-getNoRanks');
+        if (!ctx.suffix) return await ctx.createMessage('ranks-getNoArgs');
         if (guild.ranks.limit !== 0 && guild.ranks.users[ctx.author.id] &&
-            guild.ranks.users[ctx.author.id].length >= guild.ranks.limit) return await ctx.createMessage(`You have reached the maximum limit of **${guild.ranks.limit}** ranks for this server.`);
+            guild.ranks.users[ctx.author.id].length >= guild.ranks.limit) return await ctx.createMessage('ranks-getReachedLimit', null, 'channel', {
+            limit: guild.ranks.limit
+        });
 
         let roles = ctx.guild.roles.filter(r => guild.ranks.roles.includes(r.id));
         roles = roles.filter(r => r.name.toLowerCase().includes(ctx.suffix.toLowerCase()) || r.id.includes(ctx.suffix));
         let role;
 
-        if (!roles.length) return await ctx.createMessage('There are no ranks that exist with that name.');
+        if (!roles.length) return await ctx.createMessage('ranks-nonExistant');
         else if (roles.length === 1) role = roles[0];
         else role = await bot.lookups._prompt(ctx, ctx.suffix, roles, 'roles');
 
@@ -176,7 +191,9 @@ exports.get = {
         if (!guild.ranks.users[ctx.author.id]) await bot.db[ctx.guild.id].ranks.users[ctx.author.id].set([role.id]);
         else await bot.db[ctx.guild.id].ranks.users[ctx.author.id].push(role.id);
 
-        await ctx.createMessage(`You now have the rank **${role.name}**`);
+        await ctx.createMessage('ranks-getDone', null, 'channel', {
+            role: role.name
+        });
     }
 };
 
