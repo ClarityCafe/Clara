@@ -24,8 +24,8 @@ exports.clean = {
 
         msgs.forEach(m => delet.push(m.delete()));
         
-        let amt = await Promise.all(delet);
-        let m = await ctx.createMessage('clean', null, 'channel', {amt: amt.length});
+        let amt = (await Promise.all(delet)).length;
+        let m = await ctx.createMessage('clean', null, 'channel', {amt});
 
         await deleteDelay(m);
     }
