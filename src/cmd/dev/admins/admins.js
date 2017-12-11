@@ -15,6 +15,7 @@ exports.commands = [
 exports.main = {
     desc: 'Manage bot admins.',
     usage: '[<add|remove> <mention|id>]',
+    owner: true,
     async main(bot, ctx) {
         let embed = {
             title: 'Bot Admins',
@@ -30,7 +31,6 @@ exports.main = {
 exports.add = {
     desc: 'Add admins.',
     usage: '<mention|id>',
-    owner: true,
     async main(bot, ctx) {
         if (ctx.author.id !== bot.config.ownerID) return await ctx.createMessage('This is restricted to the bot owner.');
         if (!/^<@!?\d+>$/.test(ctx.args[0])) return await ctx.createMessage('Please mention the user to add, or their id.');
@@ -51,7 +51,6 @@ exports.add = {
 exports.remove = {
     desc: 'Remove admins.',
     usage: '<mention|ID>',
-    owner: true,
     async main(bot, ctx) {
         if (ctx.author.id !== bot.config.ownerID) return await ctx.createMessage('This is restricted to the bot owner.');
         if (!/^(<@!?\d+>|\d+)$/.test(ctx.args[0])) return await ctx.createMessage('Please mention the user to add, or their id.');
