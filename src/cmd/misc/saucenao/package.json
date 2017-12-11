@@ -1,6 +1,6 @@
 {
     "main": "saucenao.js",
     "dependencies": {
-        "sagiri": "^1.4.0"
+        "sagiri": "^1.4.1"
     }
 }
