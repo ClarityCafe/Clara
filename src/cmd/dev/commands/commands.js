@@ -106,7 +106,7 @@ exports.reload = {
         let pkg = JSON.parse(fs.readFileSync(bot.commandFolders[folders.indexOf(ctx.args[0])] + '/package.json'));
         let mod = `${bot.commandFolders[folders.indexOf(ctx.args[0])]}/${pkg.main}`;
 
-        bot.commands.reloadModule(mod);
+        bot.commands.reloadCommand(mod);
 
         await ctx.createMessage(`Reloaded module **${ctx.args[0]}**`);
     }
