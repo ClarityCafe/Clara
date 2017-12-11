@@ -82,7 +82,7 @@ class CommandHolder {
      * @throws {TypeError} Argument must be correct type
      * @throws {Error} Module must not be loaded already.
      */
-    loadCommand(moduleName) {
+    loadModule(moduleName) {
         if (typeof moduleName !== 'string') throw new TypeError('moduleName is not a string.');
 
         let name = moduleName.split(/\\|\//).slice(-1)[0].slice(0, -3);
@@ -175,7 +175,7 @@ class CommandHolder {
      * @throws {TypeError} Argument must be correct type.
      * @throws {Error} Module must be loaded already.
      */
-    unloadCommand(moduleName) {
+    unloadModule(moduleName) {
         if (typeof moduleName !== 'string') throw new TypeError('moduleName is not a string.');
 
         let name = moduleName.split(/\\|\//).slice(-1)[0].slice(0, -3);
@@ -203,15 +203,15 @@ class CommandHolder {
      * @throws {TypeError} Argument must be correct type.
      * @throws {Error} Module must already be loaded.
      */
-    reloadCommand(moduleName) {
+    reloadModule(moduleName) {
         if (typeof moduleName !== 'string') throw new TypeError('moduleName is not a string.');
         if (!this.modules[moduleName.split(/\/|\\/g).slice(-1)[0].slice(0, -3)]) {
-            this.loadCommand(moduleName);
+            this.loadModule(moduleName);
             return;
         }
 
-        this.unloadCommand(moduleName);
-        this.loadCommand(moduleName);
+        this.unloadModule(moduleName);
+        this.reloadModule(moduleName);
     }
 
     /**

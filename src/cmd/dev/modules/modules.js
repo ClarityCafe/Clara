@@ -8,15 +8,15 @@ const fs = require('fs');
 exports.loadAsSubcommands = true;
 
 exports.commands = [
-    'enable',
-    'disable',
+    'load',
+    'unload',
     'reload'
 ];
 
 exports.main = {
     desc: 'Command for managing command modules.',
     longDesc: 'Manages command modules for the bots. If no arguments, lists currently loaded modules, else runs the specified subcommand if possible.',
-    usage: '[enable|disable|reload]',
+    usage: '[load|unload|reload]',
     owner: true,
     async main(bot, ctx) {
         let unloadedMods = JSON.parse(fs.readFileSync(`${mainDir}/data/unloadedCommands.json`));
@@ -44,8 +44,8 @@ exports.main = {
     }
 };
 
-exports.enable = {
-    desc: 'enable a command.',
+exports.load = {
+    desc: 'Loads a command module.',
     usage: '<module>',
     async main(bot, ctx) {
         if (!ctx.args[0]) return await ctx.createMessage('No module given to load.');
@@ -72,8 +72,8 @@ exports.enable = {
     }
 };
 
-exports.disable = {
-    desc: 'Disable a command.',
+exports.unload = {
+    desc: 'Unloads a command module.',
     usage: '<module>',
     async main(bot, ctx) {
         if (!ctx.args[0]) return await ctx.createMessage('No module given to unload.');
@@ -96,7 +96,7 @@ exports.disable = {
 };
 
 exports.reload = {
-    desc: 'Reload a command.',
+    desc: 'Reloads a command module.',
     usage: '<module>',
     async main(bot, ctx) {
         if (!ctx.args[0]) return await ctx.createMessage('No module given to reload.');
@@ -106,7 +106,7 @@ exports.reload = {
         let pkg = JSON.parse(fs.readFileSync(bot.commandFolders[folders.indexOf(ctx.args[0])] + '/package.json'));
         let mod = `${bot.commandFolders[folders.indexOf(ctx.args[0])]}/${pkg.main}`;
 
-        bot.commands.reloadCommand(mod);
+        bot.commands.reloadModule(mod);
 
         await ctx.createMessage(`Reloaded module **${ctx.args[0]}**`);
     }
