@@ -48,7 +48,8 @@ exports.add = {
         let id = /^<@!?\d+>$/.test(ctx.args[0]) ? ctx.args[0].replace(/^<@!?/, '').slice(0, -1) : ctx.args[0];
 
         if (!bot.users.get(id)) return await ctx.createMessage('That user does not exist or I cannot see them.');
-    
+        if (bot.checkBotPerms(id)) return await ctx.createMessage('You cannot blacklist a bot admin.');
+
         let newBlacklist = bot.blacklist.concat(id);
         let data = {admins: bot.blacklist, blacklist: newBlacklist};
 
