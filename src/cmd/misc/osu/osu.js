@@ -4,7 +4,6 @@
  * @author Ovyerus
  */
 
-const Osu = require('osu');
 const iso3166 = require('iso-3166-1-alpha-2');
 const Ratelimiter = require(`${mainDir}/lib/modules/Ratelimiter`);
 
@@ -22,7 +21,7 @@ exports.commands = [
 ];
 
 exports.init = bot => {
-    osu = Osu(bot.config.osuApiKey);
+    osu = require('osu').api(bot.config.osuApiKey);
 };
 
 exports.main = {
@@ -34,7 +33,7 @@ exports.main = {
 
         await ctx.channel.sendTyping();
 
-        let user = await osu.get_user({u: ctx.suffix});
+        let user = await osu.getUser({u: ctx.suffix});
         user = user[0];
 
         if (!user || !user.user_id) return await ctx.createMessage('osu-noRes');
@@ -53,7 +52,7 @@ exports.taiko = {
 
         await ctx.channel.sendTyping();
 
-        let user = await osu.get_user({u: ctx.suffix, m: 1});
+        let user = await osu.getUser({u: ctx.suffix, m: 1});
         user = user[0];
 
         if (!user || !user.user_id) return await ctx.createMessage('osu-noRes');
@@ -72,7 +71,7 @@ exports.ctb = {
 
         await ctx.channel.sendTyping();
 
-        let user = await osu.get_user({u: ctx.suffix, m: 2});
+        let user = await osu.getUser({u: ctx.suffix, m: 2});
         user = user[0];
 
         if (!user || !user.user_id) return await ctx.createMessage('osu-noRes');
@@ -91,7 +90,7 @@ exports.mania = {
 
         await ctx.channel.sendTyping();
 
-        let user = await osu.get_user({u: ctx.suffix, m: 3});
+        let user = await osu.getUser({u: ctx.suffix, m: 3});
         user = user[0];
 
         if (!user || !user.user_id) return await ctx.createMessage('osu-noRes');
