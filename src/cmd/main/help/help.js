@@ -27,7 +27,6 @@ exports.help = {
 
                 if (i === '29' || Number(i) === cmds.length - 1) {
                     let embed = new embedTemplate(bot);
-                    embed.title = 'help-commandsAmount';
 
                     if (cmdCollect.length > 15) {
                         embed.fields[0].value = `\`${cmdCollect.slice(0, 15).join('\n')}\``;
@@ -75,7 +74,7 @@ exports.help = {
 // TFW cant force JS to gimme a new object when referring to others
 function embedTemplate(bot) {
     this.title = `${bot.user.username} Help`;
-    this.description =`${bot.commands.length} Commands`;
+    this.description ='help-commandsAmount';
     this.fields = [
         {name: '\u200b', inline: true}
     ];
