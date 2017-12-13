@@ -1,4 +1,4 @@
 {
-    "main" : "nasa.js",
+    "main" : "apod.js",
     "dependencies": {}
 }
