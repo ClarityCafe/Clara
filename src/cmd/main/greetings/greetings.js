@@ -62,17 +62,17 @@ exports.channel = {
             });
         }
 
-        let chans = ctx.guild.channels.filter(c => c.name.toLowerCase().includes(ctx.suffix.toLowerCase()));
+        let chan = await bot.lookups.textChannelLookup(ctx, ctx.suffix, false);
 
-        if (chans.length === 0) {
+        if (!chan) {
             return await ctx.createMessage('greetings-noChan', null, 'channel', {
                 name: ctx.suffix
             });
         }
 
-        await bot.db[ctx.guild.id].greeting.channelID.set(chans[0]);
+        await bot.db[ctx.guild.id].greeting.channelID.set(chan.id);
         await ctx.createMessage('greetings-setChan', null, 'channel', {
-            id: ctx.settings.guild.greeting.channelID
+            id: chan.id
         });
     }
 };
