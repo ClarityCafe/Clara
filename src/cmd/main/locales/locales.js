@@ -42,12 +42,12 @@ exports.set = {
             }
 
             return await changeLocale(bot, ctx, true);
-        } else {
-            return await ctx.createMessage({embed: localeBlock(bot, ctx.settings)}, null, 'channel', {
-                userLocale: ctx.settings.user.locale,
-                guildLocale: ctx.settings.guild.locale
-            });
         }
+
+        return await ctx.createMessage({embed: localeBlock(bot, ctx.settings)}, null, 'channel', {
+            userLocale: ctx.settings.user.locale,
+            guildLocale: ctx.settings.guild.locale
+        });
     }
 };
 
