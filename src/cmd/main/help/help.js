@@ -74,7 +74,7 @@ exports.help = {
 // TFW cant force JS to gimme a new object when referring to others
 function embedTemplate(bot) {
     this.title = `${bot.user.username} Help`;
-    this.description ='help-commandsAmount';
+    this.description = 'help-commandsAmount';
     this.fields = [
         {name: '\u200b', inline: true}
     ];
