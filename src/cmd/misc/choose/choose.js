@@ -11,7 +11,7 @@ exports.commands = [
 exports.choose = {
     desc: 'Randomly chooses between 2 or more arguments.',
     usage: '<choice 1> or <choice 2> or [choice .../choice N]',
-    example: 'coke zero/coke',
+    example: 'coke zero or coke',
     async main(bot, ctx) {
         let choices = ctx.suffix.split(' or ');
 

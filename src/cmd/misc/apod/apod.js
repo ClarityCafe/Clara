@@ -2,6 +2,7 @@
  * @file Show NASA's Astronomy Picture of the Day
  * @author Capuccino
  * @author Ovyerus
+ * @todo implement some form of caching so that the daily limit doesnt get hit
  */
 
 const got = require('got');
@@ -17,7 +18,7 @@ exports.apod = {
 
         await ctx.channel.sendTyping();
 
-        let data = JSON.parse(await got(`https://api.nasa.gov/planetary/apod?api_key=${bot.config.nasaKey}`));
+        let data = JSON.parse((await got(`https://api.nasa.gov/planetary/apod?api_key=${bot.config.nasaKey}`)).body);
 
         await ctx.createMessage({embed: {
             title: data.title,
