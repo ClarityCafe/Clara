@@ -17,7 +17,7 @@ class Lookups {
         if (type === 'members') {
             whatArr = whatArr.map(x => [x.username, x.discriminator, x.id]).slice(0, 10);
             formatArr = whatArr.map(x => `${whatArr.indexOf(x) + 1}. ${x[0]}#${x[1]}`);
-        } else if (['channels', 'roles', 'guilds'].includes(type)) {
+        } else if (['categories', 'channels', 'roles', 'guilds'].includes(type)) {
             whatArr = whatArr.map(x => [x.name, x.id]).slice(0, 10);
             formatArr = whatArr.map(x => `${whatArr.indexOf(x) + 1}. ${x[0]}`);
         } else throw new Error(`Type '${type}' is not supported.`);
@@ -53,7 +53,7 @@ class Lookups {
         }
 
         if (type === 'members') choice = ctx.guild.members.get(whatArr[choice - 1][2]);
-        else if (type === 'channels') choice = ctx.guild.channels.get(whatArr[choice - 1][1]);
+        else if (type === 'channels' || type === 'categories') choice = ctx.guild.channels.get(whatArr[choice - 1][1]);
         else if (type === 'roles') choice = ctx.guild.roles.get(whatArr[choice - 1][1]);
         else choice = this.bot.guilds.get(whatArr[choice - 1][1]);
 
@@ -65,7 +65,7 @@ class Lookups {
      * Find a member by part of their name.
      * 
      * @param {Context} ctx Context to use.
-     * @param {String} who User to try and find. Can be partial name.
+     * @param {String} who Member to try and find. Can be partial name, full ID or partial ID.
      * @param {Boolean} [notFoundMsg=true] If `false`, suppresses the default not found message.
      * @returns {?Eris.Member} Found member. `null` if none found.
      */
@@ -101,7 +101,7 @@ class Lookups {
      * Find a channel by part of its name.
      * 
      * @param {Context} ctx Context to use.
-     * @param {String} what Channel to try and find. Can be partial name.
+     * @param {String} what Channel to try and find. Can be partial name, full ID or partial ID.
      * @param {Boolean} [notFoundMsg=true] If `false`, suppresses the default not found message.
      * @returns {?Eris.GuildChannel} Found channel. `null` if none found.
      */
@@ -130,6 +130,114 @@ class Lookups {
         }
 
         return channel;
+    }
+
+    /**
+     * Find a text channel by part of its name.
+     * 
+     * @param {Context} ctx Context to use.
+     * @param {String} what Channel to try and find. Can be partial name, full ID or partial ID.
+     * @param {Boolean} [notFoundMsg=true] If `false`, suppresses the default not found message.
+     * @returns {?Eris.TextChannel} Found channel. `null` if none found.
+     */
+    async textChannelLookup(ctx, what, notFoundMsg=true) {
+        if (!(ctx instanceof Context)) throw new TypeError('ctx is not a Context object.');
+        if (typeof what !== 'string') throw new TypeError('what is not a string.');
+        if (typeof notFoundMsg !== 'boolean') throw new TypeError('notFoundMsg is not a boolean.');
+        
+        let channel;
+        let channels = ctx.guild.channels.filter(c => c instanceof Eris.TextChannel);
+
+        if (/^<#\d+>$/.test(what)) {
+            let id = what.match(/^<#(\d+)>$/)[1];
+            channel = channels.get(id);
+
+            if (!channel && notFoundMsg) await ctx.createMessage('Channel not found.'); 
+        } else {
+            if (!isNaN(what)) channels = channels.filter(c => c.id.includes(what) || c.name.includes(what));
+            else channels = channels.filter(c => c.name.toLowerCase().includes(what.toLowerCase()));
+
+            if (channels.length > 1) channel = await this._prompt(ctx, what, channels, 'channels');
+            else if (channels.length === 1) channel = channels[0];
+            else {
+                if (notFoundMsg) await ctx.createMessage('Channel not found.');
+                channel = null;
+            }
+        }
+
+        return channel;
+    }
+
+    /**
+     * Find a voice channel by part of its name.
+     * 
+     * @param {Context} ctx Context to use.
+     * @param {String} what Channel to try and find. Can be partial name, full ID or partial ID.
+     * @param {Boolean} [notFoundMsg=true] If `false`, suppresses the default not found message.
+     * @returns {?Eris.VoiceChannel} Found channel. `null` if none found.
+     */
+    async voiceChannelLookup(ctx, what, notFoundMsg=true) {
+        if (!(ctx instanceof Context)) throw new TypeError('ctx is not a Context object.');
+        if (typeof what !== 'string') throw new TypeError('what is not a string.');
+        if (typeof notFoundMsg !== 'boolean') throw new TypeError('notFoundMsg is not a boolean.');
+        
+        let channel;
+        let channels = ctx.guild.channels.filter(c => c instanceof Eris.VoiceChannel);
+
+        if (/^<#\d+>$/.test(what)) {
+            let id = what.match(/^<#(\d+)>$/)[1];
+            channel = channels.get(id);
+
+            if (!channel && notFoundMsg) await ctx.createMessage('Channel not found.'); 
+        } else {
+            if (!isNaN(what)) channels = channels.filter(c => c.id.includes(what) || c.name.includes(what));
+            else channels = channels.filter(c => c.name.toLowerCase().includes(what.toLowerCase()));
+
+            if (channels.length > 1) channel = await this._prompt(ctx, what, channels, 'channels');
+            else if (channels.length === 1) channel = channels[0];
+            else {
+                if (notFoundMsg) await ctx.createMessage('Channel not found.');
+                channel = null;
+            }
+        }
+
+        return channel;
+    }
+
+    /**
+     * Find a channel category by part of its name.
+     * 
+     * @param {Context} ctx Context to use.
+     * @param {String} what Category to try and find. Can be partial name, full ID or partial ID.
+     * @param {Boolean} [notFoundMsg=true] If `false`, suppresses the default not found message.
+     * @returns {?Eris.CategoryChannel} Found category. `null` if none found.
+     */
+    async categoryLookup(ctx, what, notFoundMsg=true) {
+        if (!(ctx instanceof Context)) throw new TypeError('ctx is not a Context object.');
+        if (typeof what !== 'string') throw new TypeError('what is not a string.');
+        if (typeof notFoundMsg !== 'boolean') throw new TypeError('notFoundMsg is not a boolean.');
+        
+        let category;
+        let categories = ctx.guild.channels.filter(c => c instanceof Eris.CategoryChannel);
+
+        if (/^<#\d+>$/.test(what)) {
+            let id = what.match(/^<#(\d+)>$/)[1];
+            category = categories.get(id);
+
+            if (!category && notFoundMsg) await ctx.createMessage('Category not found.'); 
+        } else {
+            if (!isNaN(what)) categories = categories.filter(c => c.id.includes(what) || c.name.includes(what));
+            else categories = categories.filter(c => c.name.toLowerCase().includes(what.toLowerCase()));
+
+            if (categories.length > 1) category = await this._prompt(ctx, what, categories, 'categories');
+            else if (categories.length === 1) category = categories[0];
+            else {
+                if (notFoundMsg) await ctx.createMessage('Channel not found.');
+                category = null;
+            }
+        }
+
+        return category;
     }
 
     /**
