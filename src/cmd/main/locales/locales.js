@@ -23,7 +23,7 @@ exports.main = {
 
 exports.set = {
     desc: "Sets the guild's locale.",
-    usage: 'locale',
+    usage: '<locale>',
     async main(bot, ctx) {
         if (!ctx.args[0]) {
             return await ctx.createMessage({embed: localeBlock(bot, ctx.settings)}, null, 'channel', {
