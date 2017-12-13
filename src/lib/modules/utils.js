@@ -10,7 +10,8 @@ const Eris = require('eris');
   */
 class Utils {
     /**
-      * Converts milliseconds to a more human-readable format
+      * Converts milliseconds to a more human-readable format.
+
       * @param {Number} ms Milliseconds to convert
       * @returns {String} Formatted string with days, hours, minutes and seconds.
       */
@@ -33,7 +34,8 @@ class Utils {
     }
      
     /**
-     * Easily format user names and discriminators
+     * Easily format user names and discriminators.
+     * 
      * @param { Eris.User | Eris.Member} user the target user to format.
      * @param {Boolean} [noDiscrim=false] whether to not include or include the user's discriminator.
      * @returns {String} The users formatted name in the format 'user#0001' or likewise. Will use nickname if member is passed in as a user.
@@ -43,8 +45,9 @@ class Utils {
     }
 
     /**
-      * Output a random color (usually for embeds)
-      * @returns {Number} a colour.
+      * Output a random color (usually for embeds).
+
+      * @returns {Number} A colour.
       */
     static randomColour() {
         let colours = [
@@ -72,6 +75,12 @@ class Utils {
         return colours[Math.floor(Math.random() * colours.length)];
     }
 
+    /**
+     * Generate's a human-readable byte count, scaled accordingly to the appropriate amount.
+     * 
+     * @param {Number} amt Amount to generate string from.
+     * @returns {String} Formatted string.
+     */
     static genBytes(amt) {    
         for (let i in this.endings) {
             if (amt / 1000 < 1 || this.endings[i] === this.endings.slice(-1)[0]) return amt.toFixed(2) + ` ${this.endings[i]}`;
