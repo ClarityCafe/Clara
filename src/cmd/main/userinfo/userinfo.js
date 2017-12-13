@@ -16,20 +16,23 @@ exports.userinfo = {
     usage: '[mention]',
     example: '@b1nzy#1337',
     async main(bot, ctx) {
-        if (ctx.mentions.length === 0) {
-            let roleColour = ctx.member.roles.sort((a, b) => ctx.guild.roles.get(b).position - ctx.guild.roles.get(a).position)[0];
-            let roles = ctx.member.roles.map(r => ctx.guild.roles.get(r).name);
+        if (ctx.suffix) {
+            let member = await bot.lookups.memberLookup(ctx, ctx.suffix);
+
+            if (!member) return;
+
+            let roleColour = member.roles.sort((a, b) => ctx.guild.roles.get(b).position - ctx.guild.roles.get(a).position)[0];
+            let roles = member.roles.map(r => ctx.guild.roles.get(r).name);
             roleColour = roleColour ? ctx.guild.roles.get(roleColour).color : 0;
 
-            return await ctx.createMessage(infoBlock(ctx.member, roles, roleColour));
+            return await ctx.createMessage(infoBlock(member, roles, roleColour));
         }
 
-        let member = ctx.channel.guild.members.get(ctx.mentions[0].id);
-        let roleColour = member.roles.sort((a, b) => ctx.guild.roles.get(b).position - ctx.guild.roles.get(a).position)[0];
-        let roles = member.roles.map(r => ctx.guild.roles.get(r).name);
+        let roleColour = ctx.member.roles.sort((a, b) => ctx.guild.roles.get(b).position - ctx.guild.roles.get(a).position)[0];
+        let roles = ctx.member.roles.map(r => ctx.guild.roles.get(r).name);
         roleColour = roleColour ? ctx.guild.roles.get(roleColour).color : 0;
 
-        await ctx.createMessage(infoBlock(member, roles, roleColour));
+        await ctx.createMessage(infoBlock(ctx.member, roles, roleColour));
     }
 };
 
@@ -45,7 +48,7 @@ function infoBlock(member, roles, color) {
             {name: 'Status', value: member.status.replace(member.status[0], member.status[0].toUpperCase()), inline: true},
             {name: 'Game', value: !member.game ? 'None' : member.game.type === 0 ? member.game.name : `[${member.game.name}](${member.game.url})`, inline: true},
             {name: 'Joined At', value: `${moment(member.joinedAt).format('dddd Do MMMM Y')}\n${moment(member.joinedAt).format('HH:mm:ss A')}`, inline: true},
-            {name: 'Roles', value: roles === undefined || null ? 'None' : roles.join(', '), inline: true}
+            {name: 'Roles', value: roles.join(', ') || 'None', inline: true}
         ],
         footer: {text: `Account Created on ${moment(member.createdAt).format('dddd Do MMMM Y')} at ${moment(member.createdAt).format('HH:mm:ss A')}`}
     }};
