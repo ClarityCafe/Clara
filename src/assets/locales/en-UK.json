@@ -13,6 +13,9 @@
     "locales": {
         "en-UK": "English (UK)",
         "fr-CA": "French (Canada)",
-        "es-SPA": "Spanish"
+        "es": "Spanish",
+        "nl": "Dutch",
+        "jp": "Japanese",
+        "ru": "Russian"
     }
 }

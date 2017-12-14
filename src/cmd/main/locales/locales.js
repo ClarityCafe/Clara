@@ -3,7 +3,7 @@
  * @author Ovyerus
  */
 
-const LOCALE_REGEX = /[a-z]{2}-[A-Z]{2}/i;
+const LOCALE_REGEX = /[a-z]{2}(-[A-Z]{2})?/i;
 
 exports.loadAsSubcommands = true;
 exports.commands = [
@@ -86,7 +86,10 @@ async function changeLocale(bot, ctx, guild) {
             }
         }
 
-        let userChoice = ctx.args[0].split('-')[0].toLowerCase() + '-' + ctx.args[0].split('-')[1].toUpperCase();
+        let userChoice;
+
+        if (ctx.args[0].includes('-')) userChoice = ctx.args[0].split('-')[0].toLowerCase() + '-' + ctx.args[0].split('-')[1].toUpperCase();
+        else userChoice = ctx.args[0].toLowerCase();
 
         if (!real) {
             return await ctx.createMessage('locales-invalidLocale', null, 'channel', {
@@ -107,7 +110,10 @@ async function changeLocale(bot, ctx, guild) {
         }
     }
 
-    let userChoice = ctx.args[1].split('-')[0].toLowerCase() + '-' + ctx.args[1].split('-')[1].toUpperCase();
+    let userChoice;
+
+    if (ctx.args[0].includes('-')) userChoice = ctx.args[0].split('-')[0].toLowerCase() + '-' + ctx.args[0].split('-')[1].toUpperCase();
+    else userChoice = ctx.args[0].toLowerCase();
 
     if (!real) {
         return await ctx.createMessage('locales-invalidLocale', null, 'channel', {
