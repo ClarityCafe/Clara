@@ -43,13 +43,13 @@ function infoBlock(member, roles, color) {
         thumbnail: {url: member.avatarURL},
         color: color,
         fields: [
-            {name: 'Nickname', value: member.nick || 'None', inline: true},
+            {name: 'Nickname', value: member.nick || 'none', inline: true},
             {name: 'ID', value: member.id, inline: true},
             {name: 'Status', value: member.status.replace(member.status[0], member.status[0].toUpperCase()), inline: true},
-            {name: 'Game', value: !member.game ? 'None' : member.game.type === 0 ? member.game.name : `[${member.game.name}](${member.game.url})`, inline: true},
+            {name: 'Game', value: !member.game ? 'none' : member.game.type === 0 ? member.game.name : `[${member.game.name}](${member.game.url})`, inline: true},
             {name: 'Joined At', value: `${moment(member.joinedAt).format('dddd Do MMMM Y')}\n${moment(member.joinedAt).format('HH:mm:ss A')}`, inline: true},
-            {name: 'Roles', value: roles.join(', ') || 'None', inline: true}
+            {name: 'Roles', value: roles.join(', ') || 'none', inline: true}
         ],
-        footer: {text: `Account Created on ${moment(member.createdAt).format('dddd Do MMMM Y')} at ${moment(member.createdAt).format('HH:mm:ss A')}`}
+        footer: {text: `Account created on ${moment(member.createdAt).format('dddd Do MMMM Y')} at ${moment(member.createdAt).format('HH:mm:ss A')}`}
     }};
 }
