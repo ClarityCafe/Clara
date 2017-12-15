@@ -19,6 +19,7 @@
     "music-sourcesTitle": "Music Sources",
     "music-skip": "Skipped **{{item}}**.",
     "music-skipVote": "**{{user}}** voted to skip **{{item}}**.\n{{votes}}/{{total}} votes.",
+    "music-skipVotedAlready": "{{mention}}, you've already voted to skip **{{item}}**.\nCurrently at {{votes}}/{{total}} votes.",
     "music-skipCantForce": "You do not have permissions to force skip.\n(Manage Server permission required)",
     "music-queueSong": "Queued **{{item}}** to position **{{position}}**.",
     "music-queuePlaylist": "Queued **{{amount}}** items from playlist `{{playlist}}`.\n**Duration**: {{duration}}",

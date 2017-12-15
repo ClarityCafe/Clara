@@ -208,7 +208,7 @@ exports.skip = {
             if (!skips.includes(ctx.author.id)) {
                 skips.push(ctx.author.id);
 
-                if (skips.length >= chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf && !m.voiceState.state.deaf && m.id !== bot.user.id).length) {
+                if (skips.length >= chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf && !m.voiceState.deaf && m.id !== bot.user.id).length) {
                     clear(skips);
                     conn.stopPlaying();
 
@@ -221,7 +221,14 @@ exports.skip = {
                     user: utils.formatUsername(ctx.member),
                     item: track.title,
                     votes: skips.length,
-                    total: chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf && !m.voiceState.state.deaf && m.id !== bot.user.id).length
+                    total: chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf && !m.voiceState.deaf && m.id !== bot.user.id).length
+                });
+            } else {
+                return await ctx.createMesage('music-skipVotedAlready', null, 'channel', {
+                    mention: ctx.author.mention,
+                    item: track.title,
+                    votes: skips.length,
+                    total: chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf && !m.voiceState.deaf && m.id !== bot.user.id).length
                 });
             }
         }
