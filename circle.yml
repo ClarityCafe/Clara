@@ -3,7 +3,6 @@ jobs:
   build:
     working_directory: src
     steps:
-      - checkout
       - run:
           name: "Update npm"
           command: "sudo npm install -g npm@latest"
@@ -16,7 +15,6 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
   lint:
     steps:
-      - checkout
       - run:
           name: "Run ESLint"
           command: npm run lint
