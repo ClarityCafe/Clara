@@ -25,7 +25,6 @@ const bot = new Clara(config, {
     latencyThreshold: 420000000,
     defaultImageFormat: 'webp',
     defaultImageSize: 512,
-    latencyThreshold: 42000000,
     disableEvents: {
         TYPING_START: true
     }
