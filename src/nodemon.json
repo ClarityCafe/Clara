@@ -1,7 +1,7 @@
 {
   "verbose": true,
   "execMap": {
-    "js": "node --harmony"
+    "js": "node --harmony --trace-warnings"
   },
     "ignore" : [
   "/commands/*",
