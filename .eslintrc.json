@@ -1,21 +1,22 @@
 {
     "env": {
+        "browser": false,
         "es6": true,
         "node": true
     },
 
     "extends": "eslint:recommended",
+
     "parserOptions": {
         "sourceType": "module",
-        "ecmaVersion": 7,
+        "ecmaVersion": 8,
         "ecmaFeatures": {
             "jsx": false
         }
     },
     "globals": {
-        "__baseDir": false,
+        "mainDir": false,
         "logger" : false,
-        "localeManager": false,
         "got": false,
         "config": false,
         "utils": false
@@ -49,7 +50,14 @@
         "quote-props": ["error", "as-needed"],
         "semi-spacing": "error",
         "space-before-blocks": ["error", "always"],
-        "space-before-function-paren": ["error", "never"],
+        "space-before-function-paren": [
+            "error",
+            {
+                "anonymous": "never",
+                "named": "never",
+                "asyncArrow": "always"
+            }
+        ],
         "space-in-parens": "error",
         "space-unary-ops": ["error", {"words": true, "nonwords": false}],
         "arrow-parens": ["warn", "as-needed"],

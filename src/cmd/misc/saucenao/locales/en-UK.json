@@ -1,0 +1,4 @@
+{
+    "saucenao-noImage": "Aw, no image here.",
+    "saucenao-found": "Found possible match.\n**Similarity**: {{similarity}}\n{{url}}"
+}
