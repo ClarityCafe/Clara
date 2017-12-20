@@ -9,6 +9,17 @@ engines:
       - javascript
   fixme:
       enabled: true
+checks:
+  return-statements:
+    enabled: false
+  method-complexity:
+    enabled: false
+  method-lines:
+    enabled: false
+  file-lines:
+    enabled: false
+  similar-code:
+    enabled: false
 ratings:
   paths:
   - "**.js"
