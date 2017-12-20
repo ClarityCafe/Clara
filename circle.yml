@@ -10,14 +10,17 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: "Install deps"
-          command: npm install
+          command: "npm i --save"
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
   lint:
     steps:
+      - run :
+          name: "Install ESLint"
+          command: "npm i -g eslint@latest"
       - run:
           name: "Run ESLint"
-          command: npm run lint
+          command: "npm run lint"
 
 workflows:
   version: 2
