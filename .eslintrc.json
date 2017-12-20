@@ -14,7 +14,6 @@
             "jsx": false
         }
     },
-    
     "globals": {
         "mainDir": false,
         "logger" : false,
@@ -22,7 +21,6 @@
         "config": false,
         "utils": false
     },
-
     "rules": {
         "no-console": 0,
         "global-require":"off",
