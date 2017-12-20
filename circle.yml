@@ -5,7 +5,6 @@ jobs:
       - image: node:7.4.0
     working_directory: src
     steps:
-      - setup_remote_docker
       - checkout
       - run:
           name: Install dependencies
