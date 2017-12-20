@@ -1,0 +1,4 @@
+{
+    "chatbot-noArgs": "What?",
+    "chatbot-knowledge": "I currently know **{{amt}}** things."
+}

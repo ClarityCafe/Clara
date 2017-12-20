@@ -1,11 +1,10 @@
 {
     "name": "Clara",
-    "script": "./src/bot.js",
+    "script": "./bot.js",
     "error_file": "../logs/err.log",
     "out_file": "../logs/out.log",
     "log_date_format": "YYYY-MM-DD HH:mm Z",
-    "watch": ["./src/bot.js"],
-    "ignore_watch": ["data", "logs", "commands", "cache", "node_modules"],
-    "args": ["--color"],
-    "max_memory_restart": "512M"
+    "watch": ["./bot.js"],
+    "ignore_watch": ["data", "logs", "cmd", "cache", "node_modules"],
+    "args": ["--color"]
 }

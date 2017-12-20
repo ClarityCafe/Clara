@@ -1,0 +1,11 @@
+{
+    "info-guilds": "Guilds",
+    "info-users": "Users Seen",
+    "info-uptime": "Uptime",
+    "info-shards": "Shards Active",
+    "info-mem": "Memory Usage",
+    "info-version": "Version",
+    "info-footer": "{{name}} is powered by Clara. Click \"Source Code\" to check out the repository!",
+    "info-source": "Source Code",
+    "info-supportServer": "Clara Support Server"
+}
