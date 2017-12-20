@@ -1,0 +1,10 @@
+{
+    "goodbye-enable": "Goodbyes have been enabled. Set message and channel if you haven't already to get me to say goodbye to people.",
+    "goodbye-disable": "Goodbyes have been disabled.",
+    "goodbye-setChan": "Successfully set goodbyes channel to <#{{id}}>.",
+    "goodbye-noMsgArgs": "Please give me something to use as a goodbye.",
+    "goodbye-setMsg": "Successfully set goodbye message. Sending test message.",
+    "goodbye-example1": "Enable goodbyes for the server.\n\n",
+    "goodbye-example2": "Set the channel for goodbyes.\nYou can also mention the channel to set it.\n\n",
+    "goodbye-example3": "Set the text for the goodbye.\nWill replace `{{user}}` with the full name of the user (like `Username#0001`), and\n`{{name}}` will be just the username."
+}

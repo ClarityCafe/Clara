@@ -7,9 +7,15 @@
     "yes": "Yes",
     "no": "No",
     "none": "None",
+    "enabled": "Enabled",
+    "notFound": "No results found.",
+    "userNotFound": "User not found.",
     "locales": {
         "en-UK": "English (UK)",
         "fr-CA": "French (Canada)",
-        "es-SPA": "Spanish"
+        "es": "Spanish",
+        "nl": "Dutch",
+        "jp": "Japanese",
+        "ru": "Russian"
     }
 }

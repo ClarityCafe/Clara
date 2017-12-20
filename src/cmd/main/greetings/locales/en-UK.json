@@ -1,0 +1,14 @@
+{
+    "greetings-enable": "Greetings have been enabled. Set message and channel if you haven't already to get me to greet people.",
+    "greetings-disable": "Greetings have been disabled.",
+    "greetings-noChan": "No channel was found with the name `{{name}}`",
+    "greetings-setChan": "Successfully set greetings channel to <#{{id}}>.",
+    "greetings-noChanArgs": "Please give me a channel to use for greetings.",
+    "greetings-setMsg": "Successfully set greeting message. Sending test message.",
+    "greetings-noMsgArgs": "Please give me something to use as a greeting.",
+    "greetings-channel": "Channel",
+    "greetings-message": "Message",
+    "greetings-example1": "Enable greetings for the server.\n\n",
+    "greetings-example2": "Set the channel for greetings.\nYou can also mention the channel to set it.\n\n",
+    "greetings-example3": "Set the text for the greeting.\nWill replace `{{user}}` with a mention of the user and\n`{{name}}` with just the username and discriminator like `Username#0001`"
+}

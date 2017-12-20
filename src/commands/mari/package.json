@@ -1,6 +1,0 @@
-{
-    "main": "itsjoke.js",
-    "dependencies": {
-        "bluebird": "3.4.6"
-    }
-}

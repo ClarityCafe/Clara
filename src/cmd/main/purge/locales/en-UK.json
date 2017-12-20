@@ -1,0 +1,14 @@
+{
+    "purge-footnote": "Note: This cannot delete any messages that are older than two weeks.",
+    "purge-messages": "Purged **{{amt}}** message(s).",
+    "purge-bots": "Purged **{{amt}}** message(s) from bots.",
+    "purge-embeds": "Purged **{{amt}}** embed(s).",
+    "purge-codeblocks": "Purged **{{amt}}** code block(s).",
+    "purge-attachments": "Purged **{{amt}}** attachment(s).",
+    "purge-images": "Purged **{{amt}}** image(s).",
+    "purge-badRegex": "Invalid or unsafe regex.",
+    "purge-reactions": "Removed all reactions from **{{amt}}** messsage(s).",
+    "purge-notInLimit": "You can only purge from `1` to `100` messages.",
+    "purge-notInLimit250": "You can only purge from `1` to `250` messages.",
+    "purge-olderThan2Weeks": "I cannot purge any messages that are older than 2 weeks."
+}
