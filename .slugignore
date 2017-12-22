@@ -1,0 +1,16 @@
+/example
+/.github
+/.vscode
+nodemon.json
+config.json.example
+.nodemonignore
+.gitlab-ci.yml
+.tern-project
+circle.yml
+*.komodoproject
+jsconfig.json
+README.md
+nodebot_logo.png
+.jshintrc
+.codeclimate.yml
+
