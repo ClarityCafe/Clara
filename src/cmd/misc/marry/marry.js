@@ -6,7 +6,8 @@
 
 exports.commands = [
     'marry',
-    'divorce'
+    'divorce',
+    'marrycheck'
 ];
 
 exports.marry = {
@@ -21,6 +22,12 @@ exports.marry = {
         if (!user) return;
         if (user.id === ctx.author.id) return await ctx.createMessage('marry-noSelfcest');
         if (user.id === bot.user.id) return await ctx.createMessage('marry-selfMentioned');
+        if (await bot.db.has(user.id) && await bot.db[user.id].partner.get) {
+            return await ctx.createMessage('marry-partnerIsMarried', null, 'channel', {
+                author: ctx.author.mention,
+                partner: utils.formatUsername(user)
+            });
+        }
 
         await ctx.createMessage('marry-prompt', null, 'channel', {
             author: ctx.author.mention,
@@ -112,5 +119,38 @@ exports.divorce = {
             partner: user.mention
         });
 
+    }
+};
+
+exports.marrycheck = {
+    desc: "Checks your, or someone else's, partner.",
+    usage: '[user]',
+    async main(bot, ctx) {
+        if (ctx.suffix) {
+            let user = await bot.lookups.memberLookup(ctx, ctx.suffix);
+
+            if (!user) return;
+
+            if (await bot.db.has(user.id) && await bot.db[user.id].partner.get) {
+                let partner = bot.users.get(await bot.db[user.id].partner.get);
+
+                return await ctx.createMessage('marrycheck-otherUser-hasPartner', null, 'channel', {
+                    user: utils.formatUsername(user),
+                    partner: utils.formatUsername(partner)
+                });
+            } else {
+                return await ctx.createMessage('marrycheck-otherUser-noPartner', null, 'channel', {
+                    user: utils.formatUsername(user)
+                });
+            }
+        }
+
+        if (ctx.settings.user.partner) {
+            let partner = bot.users.get(ctx.settings.user.partner);
+
+            return await ctx.createMessage('marrycheck-hasPartner', null, 'channel', {
+                partner: utils.formatUsername(partner)
+            });
+        } else return await ctx.createMessage('marrycheck-noPartner');
     }
 };
