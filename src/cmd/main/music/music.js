@@ -140,7 +140,7 @@ exports.join = {
         if (bot.music.connections.get(ctx.guild.id)) return await ctx.createMessage('music-botInChannel');
         if (!ctx.member.voiceState.channelID) return await ctx.createMessage('music-userNotInChannel');
 
-        let conn = await bot.joinVoicechannel(ctx.member.voiceState.channelID);
+        let conn = await bot.joinVoiceChannel(ctx.member.voiceState.channelID);
 
         bot.music.inactives.push([bot.guilds.get(conn.id).channels.get(conn.channelID), Date.now()]);
         bot.music.connections.get(ctx.guild.id).summoner = ctx.member;

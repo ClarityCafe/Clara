@@ -1,6 +1,6 @@
 {
     "name": "clara",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "description": "A general-purpose discord bot.",
     "main": "src/bot.js",
     "scripts": {
@@ -16,7 +16,7 @@
         "bot"
     ],
     "author": "ClarityMoe",
-    "license": "BSD",
+    "license": "BSD-3-Clause",
     "bugs": {
         "url": "https://github.com/ClarityMoe/Clara/issues"
     },
