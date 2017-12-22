@@ -4,6 +4,7 @@
     "description": "A general-purpose discord bot.",
     "main": "src/bot.js",
     "scripts": {
+        "heroku-postinstall": "npm i -g pm2",
         "start": "node src/bot.js",
         "lint": "eslint ./src"
     },
