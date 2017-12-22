@@ -1,1 +1,1 @@
-web: npm run
+web: pm2 start src/pm2.json
