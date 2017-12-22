@@ -27,7 +27,6 @@ obj
 bin
 
 # Bot files  
-src/config.json
 src/data
 .idea/workspace.xml
 lines.txt
