@@ -1,1 +1,1 @@
-web: pm2 start src/pm2.json
+web: cd src && pm2 start ./pm2.json
