@@ -1,0 +1,30 @@
+{
+  "name": "Clara",
+  "description": "A General-purpose Node.JS Discord Bot",
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "Free"
+    }
+  },
+  "stack": "heroku-16",
+  "scripts": {
+      "postdeploy": "npm i -g pm2"
+  },
+  "addons": [
+      {
+       "plan": "heroku-redis:hobby-dev",
+        "as": "REDIS"
+      }
+  ],
+  "image": "heroku/nodejs",
+  "buildpacks": [
+    {
+      "url" : "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+    }
+  ]
+}
