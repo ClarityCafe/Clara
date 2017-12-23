@@ -6,6 +6,7 @@
 const Eris = require('eris');
 const got = require('got');
 const fs = require('fs');
+const process = require('process');
 const Redite = require('redite');
 const {CommandHolder} = require(`${__dirname}/modules/CommandHolder`);
 const LocaleManager = require(`${__dirname}/modules/LocaleManager`);
@@ -52,7 +53,7 @@ class Clara extends Eris.Client {
         this.lookups = new Lookups(this);
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
-        this.db = new Redite({url: config.redisURL || config.redisUrl || 'redis://127.0.0.1/0'});
+        this.db = new Redite({url: config.redisURL || config.redisUrl || `${process.env.REDIS_URL}`|| 'redis://127.0.0.1/0'});
 
         this.loadCommands = true;
         this.allowCommandUse = false;
