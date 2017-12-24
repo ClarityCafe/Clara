@@ -24,12 +24,14 @@ try {
         mainPrefix: process.env.DEFAULT_PREFIX,
         osuApiKey: process.env.OSU_API_TOKEN,
         sauceKey: process.env.SAUCENAO_TOKEN,
-        soundCloudKey: process.env.SOUNDCLOUD_TOKEN
+        soundCloudKey: process.env.SOUNDCLOUD_TOKEN,
         gameName: process.env.GAME_NAME,
         gameURL: process.env.GAME_URL,
         ownerID: process.env.BOT_OWNER_ID,
         maxShards: process.env.INSTANCES,
         ytSearchKey: process.env.YOUTUBE_TOKEN,
+        discordBotsPWKey: process.env.DISCORD_PW_TOKEN,
+        discordBotsOrgKey: process.env.DISCORD_ORG_TOKEN,
         twitchKey: process.env.TWITCH_TOKEN,
         nasaKey: process.env.NASA_KEY,
         redisURL: process.env.REDIS_URL || 'redis://127.0.0.1/0'

@@ -6,7 +6,6 @@
 const Eris = require('eris');
 const got = require('got');
 const fs = require('fs');
-const process = require('process');
 const Redite = require('redite');
 const {CommandHolder} = require(`${__dirname}/modules/CommandHolder`);
 const LocaleManager = require(`${__dirname}/modules/LocaleManager`);
