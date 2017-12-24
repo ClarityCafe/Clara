@@ -1,0 +1,76 @@
+{
+  "name": "Clara",
+  "description": "A General-Purpose Node.js Discord Bot",
+  "scripts": {
+  },
+  "env": {
+    "DEBUG": {
+      "required": true
+    },
+    "DEFAULT_PREFIX": {
+      "required": true
+    },
+    "DISCORD_ORG_TOKEN": {
+      "required": true
+    },
+    "DISCORD_PW_TOKEN": {
+      "required": true
+    },
+    "DISCORD_TOKEN": {
+      "required": true
+    },
+    "ENABLE_PROMISE_WARNS": {
+      "required": true
+    },
+    "GAME_NAME": {
+      "required": true
+    },
+    "GAME_URL": {
+      "required": true
+    },
+    "IB_TOKEN": {
+      "required": true
+    },
+    "INSTANCES": {
+      "required": true
+    },
+    "NASA_KEY": {
+      "required": true
+    },
+    "OSU_API_TOKEN": {
+      "required": true
+    },
+    "OWNER_ID": {
+      "required": true
+    },
+    "PAPERTRAIL_API_TOKEN": {
+      "required": true
+    },
+    "REDIS_URL": {
+      "required": true
+    },
+    "SAUCENAO_TOKEN": {
+      "required": true
+    },
+    "YOUTUBE_TOKEN": {
+      "required": true
+    }
+  },
+  "formation": {
+    "worker": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+    "papertrail",
+    "heroku-redis"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+    }
+  ]
+}
