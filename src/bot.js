@@ -9,7 +9,34 @@
 // Imports
 const Clara = require(`${__dirname}/lib/Clara`);
 const fs = require('fs');
-const config = require(`${__dirname}/config.json`);
+let config; // = require(`${__dirname}/config.json`);
+
+try {
+    config = require(`${__dirname}/config.json`);
+} catch(_) {
+    config = {
+        /** @see {Link} https://github.com/ClarityMoe/Clara/issues/133 */
+       
+        token: process.env.DISCORD_TOKEN,
+        debug: process.env.DEBUG,
+        promiseWarnings: process.env.ENABLE_PROMISE_WARNS || false,
+        ibKey: process.env.IB_TOKEN,
+        mainPrefix: process.env.DEFAULT_PREFIX,
+        osuApiKey: process.env.OSU_API_TOKEN,
+        sauceKey: process.env.SAUCENAO_TOKEN,
+        soundCloudKey: process.env.SOUNDCLOUD_TOKEN,
+        gameName: process.env.GAME_NAME,
+        gameURL: process.env.GAME_URL,
+        ownerID: process.env.BOT_OWNER_ID,
+        maxShards: process.env.INSTANCES,
+        ytSearchKey: process.env.YOUTUBE_TOKEN,
+        discordBotsPWKey: process.env.DISCORD_PW_TOKEN,
+        discordBotsOrgKey: process.env.DISCORD_ORG_TOKEN,
+        twitchKey: process.env.TWITCH_TOKEN,
+        nasaKey: process.env.NASA_KEY,
+        redisURL: process.env.REDIS_URL || 'redis://127.0.0.1/0'
+    };
+}
 
 // Globals
 global.mainDir = __dirname;
