@@ -203,7 +203,7 @@ exports.skip = {
 
             let skips = bot.music.skips.get(ctx.guild.id);
             let chan = ctx.guild.channels.get(conn.channelID);
-            let track = bot.music.queues.get(ctx.guild.id)[0].info;
+            let track = bot.music.queues.get(ctx.guild.id).current.info;
 
             if (!skips.includes(ctx.author.id)) {
                 skips.push(ctx.author.id);
@@ -258,11 +258,11 @@ exports.clear = {
         if (conn.summoner && conn.summoner.id !== ctx.author.id && !ctx.hasPermission('manageGuild', 'author')) return await ctx.createMessage('music-userNotSummoner');
         if (!q || !q.length) return await ctx.createMessage('music-clearEmptyQueue');
 
-        await bot.createMessage('music-clearConfirm');
+        await ctx.createMessage('music-clearConfirm');
 
         let msg = await bot.awaitMessage(ctx.channel.id, ctx.author.id);
 
-        if (/^y(es)?$/i.test(msg.content)) await ctx.createMessage('music.clearConfirmYes');
+        if (/^y(es)?$/i.test(msg.content)) await ctx.createMessage('music-clearConfirmYes');
         else if (/^no?$/i.test(msg.content)) {
             await ctx.createMessage('music-clearConfirmNo');
             clear(q);
