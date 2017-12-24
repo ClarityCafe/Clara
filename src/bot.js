@@ -12,9 +12,9 @@ const fs = require('fs');
 const process = require('process');
 let config; // = require(`${__dirname}/config.json`);
 
-try {
+try{
     config = require (`${__dirname}/config.json`);
-} catch(_) {
+}catch(_){
     config = {
       /** @see {Link} https://github.com/ClarityMoe/Clara/issues/133 */
        
@@ -32,7 +32,7 @@ try {
         ytSearchKey: process.env.YOUTUBE_KEY,
         twitchKey: process.env.TWITCH_KEY,
         nasaKey: process.env.NASA_KEY,
-      redisURL: process.env.REDIS_URL || 'redis://127.0.0.1/0'
+        redisURL: process.env.REDIS_URL || 'redis://127.0.0.1/0'
     };
 }
 
