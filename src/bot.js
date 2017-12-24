@@ -15,7 +15,7 @@ try {
     config = require(`${__dirname}/config.json`);
 } catch(_) {
     config = {
-      /** @see {Link} https://github.com/ClarityMoe/Clara/issues/133 */
+        /** @see {Link} https://github.com/ClarityMoe/Clara/issues/133 */
        
         token: process.env.DISCORD_TOKEN,
         debug: process.env.DEBUG,
