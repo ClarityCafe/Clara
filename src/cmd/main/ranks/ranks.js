@@ -129,7 +129,7 @@ exports.limit = {
 
         await bot.db[ctx.guild.id].ranks.limit.set(Math.abs(Number(ctx.args[0])));
         await ctx.createMessage('ranks-limitDone', null, 'channel', {
-            limit: ctx.args[0]
+            limit: Math.abs(Number(ctx.args[0]))
         });
     }
 };
@@ -140,7 +140,7 @@ exports.remove = {
     async main(bot, ctx) {
         let {guild} = ctx.settings;
 
-        if (!guild.ranks.users[ctx.author.id] || !guild.ranks.users[ctx.author.id].length) return await ctx.createMessage('ranks-removeNoRanks');
+        if (!ctx.member.roles.filter(r => guild.ranks.roles.includes(r)).length) return await ctx.createMessage('ranks-removeNoRanks');
         if (!ctx.suffix) return await ctx.createMessage('ranks-removeNoArgs');
 
         let roles = ctx.guild.roles.filter(r => guild.ranks.roles.includes(r.id));
@@ -154,9 +154,6 @@ exports.remove = {
         if (!role) return;
 
         await ctx.member.removeRole(role.id, 'Self-serve rank system');
-
-        if (guild.ranks.users[ctx.author.id]) await bot.db[ctx.guild.id].ranks.users[ctx.author.id].remove(role.id);
-
         await ctx.createMessage('ranks-removeDone', null, 'channel', {
             role: role.name
         });
@@ -171,10 +168,11 @@ exports.get = {
 
         if (!guild.ranks.roles.length) return await ctx.createMessage('ranks-getNoRanks');
         if (!ctx.suffix) return await ctx.createMessage('ranks-getNoArgs');
-        if (guild.ranks.limit !== 0 && guild.ranks.users[ctx.author.id] &&
-            guild.ranks.users[ctx.author.id].length >= guild.ranks.limit) return await ctx.createMessage('ranks-getReachedLimit', null, 'channel', {
-            limit: guild.ranks.limit
-        });
+        if (guild.ranks.limit !== 0 && ctx.member.roles.filter(r => guild.ranks.includes(r)) >= guild.ranks.limit) {
+            return await ctx.createMessage('ranks-getReachedLimit', null, 'channel', {
+                limit: guild.ranks.limit
+            });
+        }
 
         let roles = ctx.guild.roles.filter(r => guild.ranks.roles.includes(r.id));
         roles = roles.filter(r => r.name.toLowerCase().includes(ctx.suffix.toLowerCase()) || r.id.includes(ctx.suffix));
@@ -187,9 +185,6 @@ exports.get = {
         if (!role) return;
 
         await ctx.member.addRole(role.id, 'Self-serve rank system');
-
-        if (!guild.ranks.users[ctx.author.id]) await bot.db[ctx.guild.id].ranks.users[ctx.author.id].set([role.id]);
-        else await bot.db[ctx.guild.id].ranks.users[ctx.author.id].push(role.id);
 
         await ctx.createMessage('ranks-getDone', null, 'channel', {
             role: role.name
