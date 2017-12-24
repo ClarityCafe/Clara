@@ -9,13 +9,12 @@
 // Imports
 const Clara = require(`${__dirname}/lib/Clara`);
 const fs = require('fs');
-const process = require('process');
 let config; // = require(`${__dirname}/config.json`);
 
-try{
+try {
     config = require (`${__dirname}/config.json`);
-}catch(_){
-    config = {
+}catch(_) {
+      config = {
       /** @see {Link} https://github.com/ClarityMoe/Clara/issues/133 */
        
         token: process.env.DISCORD_TOKEN,
