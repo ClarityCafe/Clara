@@ -1,9 +1,11 @@
 {
     "name": "clara",
-    "version": "0.4.0",
+    "version": "0.4.2",
     "description": "A general-purpose discord bot.",
     "main": "src/bot.js",
     "scripts": {
+        "heroku-prebuild": "npm i -g pm2",
+        "postinstall": "npm i -g pm2",
         "start": "node src/bot.js",
         "lint": "eslint ./src"
     },
@@ -16,7 +18,7 @@
         "bot"
     ],
     "author": "ClarityMoe",
-    "license": "BSD",
+    "license": "BSD-3-Clause",
     "bugs": {
         "url": "https://github.com/ClarityMoe/Clara/issues"
     },
