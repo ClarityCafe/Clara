@@ -203,7 +203,7 @@ exports.skip = {
 
             let skips = bot.music.skips.get(ctx.guild.id);
             let chan = ctx.guild.channels.get(conn.channelID);
-            let track = bot.music.queues.get(ctx.guild.id)[0].info;
+            let track = bot.music.queues.get(ctx.guild.id).current.info;
 
             if (!skips.includes(ctx.author.id)) {
                 skips.push(ctx.author.id);
