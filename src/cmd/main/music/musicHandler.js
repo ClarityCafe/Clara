@@ -52,7 +52,10 @@ class MusicHandler {
             let info = await this.handlers[type].getInfo(getURL);
 
             q.push({info, ctx, timestamp: Date.now()});
-            await ctx.createMessage(`Queued **${info.title}** to position **${q.length}** (including currently playing).`);
+            await ctx.createMessage('music-queueSong', null, 'channel', {
+                item: info.title,
+                position: q.length + 1
+            });
         } else {
             await this.queuePlaylist(ctx, getURL);
         }
@@ -86,7 +89,11 @@ class MusicHandler {
             queuedAmt++;
         }
 
-        await ctx.createMessage(`Queued **${queuedAmt}** items from playlist \`${playlist.title}\`.\n**Duration**: ${timeFormat(fullDuration)}`);
+        await ctx.createMessage('music-queuePlaylist', null, 'channel', {
+            amount: queuedAmt,
+            playlist: playlist.title,
+            duration: timeFormat(fullDuration)
+        });
     }
 
     async search(ctx, terms) {
@@ -142,6 +149,7 @@ class MusicHandler {
             let bot = this._bot;
             let cnc = bot.voiceConnections.get(ctx.guild.id);
             let item = bot.music.queues.get(ctx.guild.id).shift();
+            bot.music.queues.get(ctx.guild.id).current = item;
 
             if (!item) {
                 bot.music.inactives.push([ctx.guild.channels.get(cnc.channelID), Date.now()]);
@@ -175,7 +183,7 @@ class MusicHandler {
                 if (!cnc.eventNames().includes('error')) {
                     cnc.on('error', async err => {
                         logger.error(`Voice error in guild ${ctx.guild.id}\n${err.stack}`);
-                        await ctx.createMessage(`Voice connection error: \`${err}\``);
+                        ctx.createMessage(`Voice connection error: \`${err}\``);
                     });
 
                     if (!cnc.eventNames().includes('end')) {
