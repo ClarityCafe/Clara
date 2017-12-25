@@ -4,7 +4,6 @@
     "description": "A general-purpose discord bot.",
     "main": "src/bot.js",
     "scripts": {
-    ,
         "run": "node src/bot.js",
         "lint": "eslint ./src"
     },
