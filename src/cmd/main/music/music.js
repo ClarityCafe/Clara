@@ -75,14 +75,21 @@ exports.queue = {
     usage: '[page number]',
     async main(bot, ctx) {
         let embed = {title: 'music-queueTitle'};
+        let q = bot.music.queues.get(ctx.guild.id);
 
-        if (!bot.music.queues.get(ctx.guild.id) || bot.music.queues.get(ctx.guild.id).length === 0) {
+        if (!q || q.length === 0) {
+            if (q && q.current) {
+                embed.author = {name: 'music-queueTitle'};
+                embed.title = 'music-queueNowPlaying';
+            }
+
             embed.description = 'music-queueEmpty';
 
-            return await ctx.createMessage({embed});
+            return await ctx.createMessage({embed}, null, 'channel', {
+                song: q ? q.current.info.title : null,
+                duration: q ? timeFormat(q.current.info.length) : null
+            });
         }
-
-        let q = bot.music.queues.get(ctx.guild.id);
 
         // I'm not certain what the first type coercion does, and at this point, I'm too afraid to ask.
         let page = !Number(ctx.suffix) || Number(ctx.suffix) === 0 ? 0 : Number(ctx.suffix) - 1;
@@ -101,10 +108,17 @@ exports.queue = {
             }];
         } else embed.description = thisPage.join('\n');
 
+        if (q.current) {
+            embed.author = {name: 'music-queueTitle'};
+            embed.title = 'music-queueNowPlaying';
+        }
+
         await ctx.createMessage({embed}, null, 'channel', {
             page: page + 1,
             total: pages,
-            items: q.length
+            items: q.length,
+            song: q.current.info.title,
+            duration: timeFormat(q.current.info.length)
         });
     }
 };
