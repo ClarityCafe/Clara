@@ -9,7 +9,7 @@
 // Imports
 const Clara = require(`${__dirname}/lib/Clara`);
 const fs = require('fs');
-let config; // = require(`${__dirname}/config.json`);
+let config;
 
 try {
     config = require(`${__dirname}/config.json`);
