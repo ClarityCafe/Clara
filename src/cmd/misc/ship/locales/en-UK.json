@@ -1,5 +1,6 @@
 {
     "ship": "Happy Shipping!\nYour ship name is: **{{result}}**! :heart:",
     "ship-noArgs": "Give me at least two names.",
-    "ship-sameThing": "You can't ship two of the same thing together, silly."
+    "ship-sameThing": "You can't ship two of the same thing together, silly.",
+    "ship-tooManyArgs": "I only need two names, silly."
 }
