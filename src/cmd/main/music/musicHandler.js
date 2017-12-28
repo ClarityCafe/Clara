@@ -54,7 +54,7 @@ class MusicHandler {
             q.push({info, ctx, timestamp: Date.now()});
             await ctx.createMessage('music-queueSong', null, 'channel', {
                 item: info.title,
-                position: q.length + 1
+                position: q.current ? q.length + 1 : q.length
             });
         } else {
             await this.queuePlaylist(ctx, getURL);
