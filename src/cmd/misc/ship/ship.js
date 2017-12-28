@@ -18,6 +18,9 @@ exports.ship = {
         if (ctx.mentions[0] && new RegExp(`<@!?${ctx.mentions[0].id}>`).test(ctx.args[1])) {
             ctx.mentions[1] = ctx.mentions[0];
             ctx.mentions[0] = null;
+        } else if (ctx.mentions[0] && new RegExp(`<@!?${ctx.mentions[0].id}>`).test(ctx.args[0])) {
+            ctx.mentions[0] = ctx.mentions[0];
+            ctx.mentions[1] = null;
         }
 
         let a = !ctx.mentions[0] ? ctx.args[0] : ctx.mentions[0].username;
