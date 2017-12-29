@@ -14,15 +14,23 @@ exports.marry = {
     desc: 'Marry someone.',
     usage: '<mention>',
     async main(bot, ctx) {
-        if (ctx.settings.user.partner) return await ctx.createMessage('marry-alreadyWed', null, 'channel', {partner: utils.formatUsername(bot.users.get(ctx.settings.user.partner))});
         if (!ctx.suffix) return await ctx.createMessage('marry-noPartner');
 
         let user = await bot.lookups.memberLookup(ctx, ctx.suffix);
 
         if (!user) return;
-        if (user.id === ctx.author.id) return await ctx.createMessage('marry-noSelfcest');
-        if (user.id === bot.user.id) return await ctx.createMessage('marry-selfMentioned');
-        if (await bot.db.has(user.id) && await bot.db[user.id].partner.get) {
+        else if (user.id === ctx.author.id) return await ctx.createMessage('marry-noSelfcest');
+        else if (user.id === bot.user.id) return await ctx.createMessage('marry-selfMentioned');
+        else if (user.bot) return await ctx.createMessage('marry-botMentioned');
+        else if (user.id === ctx.settings.user.partner) {
+            return await ctx.createMessage('marry-mentionPartner', null, 'channel', {
+                partner: utils.formatUsername(user)
+            });
+        } else if (ctx.settings.user.partner) {
+            return await ctx.createMessage('marry-alreadyWed', null, 'channel', {
+                partner: utils.formatUsername(bot.users.get(ctx.settings.user.partner))
+            });
+        } else if (await bot.db.has(user.id) && await bot.db[user.id].partner.get) {
             return await ctx.createMessage('marry-partnerIsMarried', null, 'channel', {
                 author: ctx.author.mention,
                 partner: utils.formatUsername(user)
@@ -68,7 +76,6 @@ exports.marry = {
 
 exports.divorce = {
     desc: 'Divorce your partner.',
-    usage: '<mention>',
     async main(bot, ctx) {
         if (!ctx.settings.user.partner) return await ctx.createMessage('divorce-noPartner');
 
