@@ -9,6 +9,7 @@ exports.commands = [
     'add',
     'delete',
     'limit',
+    'userlimit',
     'get',
     'remove'
 ];
@@ -86,17 +87,19 @@ exports.delete = {
     desc: 'Stops a role from being able to be used as a rank.',
     usage: '<rank name>',
     async main(bot, ctx) {
-        if (!ctx.settings.guild.ranks.roles.length) return await ctx.createMessage('ranks-deleteNoRanks');
+        let {guild} = ctx.settings;
+
+        if (!guild.ranks.roles.length) return await ctx.createMessage('ranks-deleteNoRanks');
         if (!ctx.suffix) return await ctx.createMessage('ranks-deleteNoArgs');
 
-        if (!isNaN(ctx.suffix) && ctx.setting.guild.ranks.roles.includes(ctx.suffix)) {
+        if (!isNaN(ctx.suffix) && guild.ranks.roles.includes(ctx.suffix)) {
             await bot.db[ctx.guild.id].ranks.roles.remove(role.id);
             return await ctx.createMessage('ranks-deleteDeletedRole', null, 'channel', {
                 id: ctx.suffix
             });
         }
 
-        let roles = ctx.guild.roles.filter(r => ctx.settings.guild.ranks.roles.includes(r.id));
+        let roles = ctx.guild.roles.filter(r => guild.ranks.roles.includes(r.id));
         roles = roles.filter(r => r.name.toLowerCase().includes(ctx.suffix.toLowerCase()) || r.id.includes(ctx.suffix));
         let role;
 
@@ -105,6 +108,7 @@ exports.delete = {
         else role = await bot.lookups._prompt(ctx, ctx.suffix, roles, 'roles');
 
         if (!role) return;
+        if (guild.ranks.userlimits.hasOwnProperty(role.id)) await bot.db[ctx.guild.id].ranks.userlimits.delete(role.id);
 
         await bot.db[ctx.guild.id].ranks.roles.remove(role.id);
         await ctx.createMessage('ranks-deleteDone', null, 'channel', {
@@ -120,7 +124,8 @@ exports.limit = {
     async main(bot, ctx) {
         if (!ctx.suffix) {
             if (!ctx.settings.guild.ranks.limit) return await ctx.createMessage('ranks-limitUnlimited');
-            else return await ctx.createMessage('ranks-limitShowLimit', null, 'channel', {
+
+            return await ctx.createMessage('ranks-limitShowLimit', null, 'channel', {
                 limit: ctx.settings.guild.ranks.limit
             });
         }
@@ -130,6 +135,43 @@ exports.limit = {
         await bot.db[ctx.guild.id].ranks.limit.set(Math.abs(Number(ctx.args[0])));
         await ctx.createMessage('ranks-limitDone', null, 'channel', {
             limit: Math.abs(Number(ctx.args[0]))
+        });
+    }
+};
+
+exports.userlimit = {
+    desc: 'Sets the maximum amount of users a rank can have.',
+    usage: '<rank name> [limit]',
+    async main(bot, ctx) {
+        if (!ctx.suffix) return await ctx.createMessage('ranks-userlimitNoArgs');
+
+        let role;
+
+        if (ctx.args.length === 1 || isNaN(ctx.args.slice(-1)[0])) role = await bot.lookups.roleLookup(ctx, ctx.suffix);
+        else role = await bot.lookups.roleLookup(ctx, ctx.args.slice(0, -1).join(' '));
+
+        if (!role) return;
+        if (!ctx.settings.guild.ranks.roles.includes(role.id)) {
+            return await ctx.createMessage('ranks-userlimitRoleNotRank', null, 'channel', {
+                role: role.name
+            });
+        }
+
+        if (ctx.args.length === 1 || isNaN(ctx.args.slice(-1)[0])) {
+            if (!ctx.settings.guild.ranks.userlimits[role.id]) return await ctx.createMessage('ranks-userlimitUnlimited', null, 'channel', {
+                rank: role.name
+            });
+
+            return await ctx.createMessage('ranks-userlimitShowLimit', null, 'channel', {
+                rank: role.name,
+                limit: ctx.settings.guild.ranks.userlimits[role.id]
+            });
+        }
+
+        await bot.db[ctx.guild.id].ranks.userlimits[role.id].set(Math.abs(Number(ctx.args.slice(-1)[0])));
+        await ctx.createMessage('ranks-userlimitDone', null, 'channel', {
+            rank: role.name,
+            limit: Math.abs(Number(ctx.args.slice(-1)[0]))
         });
     }
 };
@@ -183,6 +225,12 @@ exports.get = {
         else role = await bot.lookups._prompt(ctx, ctx.suffix, roles, 'roles');
 
         if (!role) return;
+        if (guild.ranks.userlimits[role.id] && ctx.guild.members.filter(m => m.roles.includes(role.id)).length >= guild.ranks.userlimits[role.id]) {
+            return await ctx.createMessage('ranks-getRankUserlimitReached', null, 'channel', {
+                rank: role.name,
+                limit: guild.ranks.userlimits[role.id]
+            });
+        }
 
         await ctx.member.addRole(role.id, 'Self-serve rank system');
 

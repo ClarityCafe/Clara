@@ -215,7 +215,8 @@ class Clara extends Eris.Client {
             },
             ranks: {
                 limit: 0,
-                roles: []
+                roles: [],
+                userlimits: {}
             }
         };
         
