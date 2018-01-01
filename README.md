@@ -20,6 +20,6 @@ Check out CONTRIBUTING.md for guidelines.
 
 # License
 Clara is licensed under the 3-Clause BSD License.  
-Copyright &copy; 2017 ClarityMoe.
+Copyright &copy; 2018 ClarityMoe.
 
 See [LICENSE](LICENSE) for full license.

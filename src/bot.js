@@ -2,7 +2,7 @@
   * @file the main file the makes everything work
   * @author Capuccino
   * @author Ovyerus
-  * @copyright Copyright (c) 2017 Capuccino, Ovyerus and the repository contributors.
+  * @copyright Copyright (c) 2018 Capuccino, Ovyerus and the repository contributors.
   * @license MIT
   */
 
