@@ -1,12 +1,11 @@
 {
     "name": "clara",
-    "version": "0.4.2",
+    "version": "0.4.2-SNAPSHOT",
     "description": "A general-purpose discord bot.",
     "main": "src/bot.js",
     "scripts": {
-        "heroku-prebuild": "npm i -g pm2",
-        "postinstall": "npm i -g pm2",
-        "start": "node src/bot.js",
+        "heroku-postbuild": "npm i -g pm2",
+        "run": "node src/bot.js",
         "lint": "eslint ./src"
     },
     "repository": {

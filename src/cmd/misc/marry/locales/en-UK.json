@@ -2,7 +2,10 @@
     "marry-noPartner": "Please mention your partner.",
     "marry-noSelfcest": "Hey! You're not allowed to marry yourself.",
     "marry-selfMentioned": "I-It's not like I'll say yes or anything >.<",
+    "marry-botMentioned": "I'm sorry, but I don't think they are capable of love.",
     "marry-alreadyWed": "You already have a partner, **{{partner}}**. You dirty cheater.",
+    "marry-partnerIsMarried": "{{author}}, I'm sorry, but **{{partner}}** is already married.",
+    "marry-mentionPartner": "You're already married to **{{partner}}**, silly!",
     "marry-prompt": "{{partner}}, will you marry {{author}}?\nRespond yes or no within 30 seconds.",
     "marry-success": "I hereby pronounce {{partner}} and {{author}} as husband and wife! :sparkling_heart:",
     "marry-decline": "{{author}}, unfortunately, your partner declined.",
@@ -11,5 +14,9 @@
     "divorce-noPartner": "You do not have a partner.",
     "divorce-prompt": "{{partner}}, will you let go of {{author}}?\nRespond with yes or no. (30 seconds)",
     "divorce-success": "{{author}} you're no longer married to {{partner}}.",
-    "divorce-fail": "{{author}}, your partner won't let go."
+    "divorce-fail": "{{author}}, your partner won't let go.",
+    "marrycheck-hasPartner": "Your partner is **{{partner}}**.",
+    "marrycheck-noPartner": "I'm sorry, but you do not have a partner.",
+    "marrycheck-otherUser-hasPartner": "**{{user}}** is married to **{{partner}}**.",
+    "marrycheck-otherUser-noPartner": "**{{user}}** does not have a partner."
 }

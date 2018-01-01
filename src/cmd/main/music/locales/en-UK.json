@@ -11,6 +11,7 @@
     "music-queueTitle": "Music Queue",
     "music-queueFooter": "Page {{page}}/{{total}}",
     "music-queueTotalItems": "{{items}} items in queue.",
+    "music-queueNowPlaying": "Current playing: **{{song}}** **[{{duration}}]**",
     "music-nowPlayingTitle": "Now Playing",
     "music-nowPlayingInfo": "Duration: {{duration}}, [**Link**]({{url}})",
     "music-nowPlayingFooter": "Queued by {{user}} | {{type}}",
