@@ -5,10 +5,13 @@
 
 const {Context} = require(`${mainDir}/lib/modules/CommandHolder`);
 const ytSearch = require('youtube-simple-search');
+const fs = require('fs');
+const crypto = require('crypto');
+const Stream = require('stream').Stream;
 
 // Link regexs
 const YTRegex = /^(?:https?:\/\/)?(?:(?:www\.|m.)?youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9-_]{11})/;
-const YTPlaylistRegex = /^(?:https:\/\/)(?:www.)?youtube\.com\/playlist\?list=(PL[a-zA-Z0-9-_]{32}|PL[A-Z0-9]{16})/;
+const YTPlaylistRegex = /^(?:https?:\/\/)?(?:www.)?youtube\.com\/playlist\?list=(PL[a-zA-Z0-9-_]{32}|PL[A-Z0-9]{16})/;
 const SCRegex = /^(?:https:\/\/)soundcloud\.com\/([a-z0-9-]+\/[a-z0-9-]+)/;
 const SCPlaylistRegex = /^(?:https:\/\/)?soundcloud\.com\/([a-z0-9-]+\/sets\/[a-z0-9-]+)$/;
 const ClypRegex = /^(?:https:\/\/)?clyp\.it\/([a-z0-9]{8})/;
@@ -149,21 +152,53 @@ class MusicHandler {
             let bot = this._bot;
             let cnc = bot.voiceConnections.get(ctx.guild.id);
             let item = bot.music.queues.get(ctx.guild.id).shift();
+            let last = bot.music.queues.get(ctx.guild.id).current;
             bot.music.queues.get(ctx.guild.id).current = item;
+
+            if (last) {
+                let lastFile = `${mainDir}/cache/${hashSong(last.info)}`;
+                let hasSong = bot.music.queues.filter(q => (q.current && q.current.info.url === last.url) || q.filter(s => s.info.url === last.url).length);
+
+                if (fs.existsSync(lastFile) && !hasSong.length) {
+                    fs.unlink(lastFile, err => {
+                        if (err) logger.warn(`Unable to delete temporary voice file "${lastFile}"`);
+                    });
+                }
+            }
 
             if (!item) {
                 bot.music.inactives.push([ctx.guild.channels.get(cnc.channelID), Date.now()]);
                 return resolve();
             }
 
-            this.handlers[item.info.type].getStream(item.info.url).then(stream => {
+            let destFile = `${mainDir}/cache/${hashSong(item.info)}`;
+            let destExists = fs.existsSync(destFile);
+            let getter;
+
+            if (destExists) {
+                getter = () => {
+                    return new Promise(_res => _res(fs.createReadStream(destFile)));
+                };
+            } else getter = this.handlers[item.info.type].getStream.bind(this.handlers[item.info.type]);
+
+            getter(item.info.url).then(remoteStream => {
+                if (!destExists && remoteStream instanceof Stream) {
+                    return new Promise(_res => {
+                        let piper = remoteStream.pipe(fs.createWriteStream(destFile));
+
+                        piper.on('finish', () => {
+                            _res(fs.createReadStream(destFile));
+                        });
+                    });
+                } else return remoteStream;
+            }).then(stream => {
                 bot.music.streams.add({
                     id: ctx.guild.id,
                     stream,
                     url: item.info.url
                 });
 
-                cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5', '-b:a', '96k', '-bufsize', '96k']});
+                cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5'/*, '-b:a', '96k', '-bufsize', '96k'*/]});
 
                 return ctx.createMessage({embed: {
                     author: {name: 'music-nowPlayingTitle'},
@@ -184,15 +219,16 @@ class MusicHandler {
                     cnc.on('error', async err => {
                         logger.error(`Voice error in guild ${ctx.guild.id}\n${err.stack}`);
                         ctx.createMessage(`Voice connection error: \`${err}\``);
+                        cnc.stopPlaying();
                     });
+                }
 
-                    if (!cnc.eventNames().includes('end')) {
-                        cnc.on('end', () => {
-                            if (bot.music.stopped.includes(ctx.guild.id)) return resolve();
+                if (!cnc.eventNames().includes('end')) {
+                    cnc.on('end', () => {
+                        if (bot.music.stopped.includes(ctx.guild.id)) return resolve();
 
-                            resolve(this.play(ctx));
-                        });
-                    }
+                        resolve(this.play(ctx));
+                    });
                 }
             }).catch(reject);
         });
@@ -221,6 +257,10 @@ function matchURL(url) {
     }
 }
 
+// Creates a unique hash per song when caching. Not intended to be cryptographically secure by any means.
+function hashSong(info) {
+    return crypto.createHash('md5').update(info.url).digest('hex');
+}
 
 function searchP(query, options) {
     return new Promise(resolve => {

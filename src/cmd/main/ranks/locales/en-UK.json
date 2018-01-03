@@ -18,12 +18,19 @@
     "ranks-limitNotNumber": "Please give me a number to set as the limit. If you want to disable it, give me `0`.",
     "ranks-limitDone": "Set rank limit to `{{limit}}`.",
 
+    "ranks-userlimitNoArgs": "Please tell me a role to check or set a user limit for.",
+    "ranks-userlimitRoleNotRank": "**{{role}}** has not been set as a rank.",
+    "ranks-userlimitUnlimited": "**{{rank}}** can be assigned to unlimited people.",
+    "ranks-userlimitShowLimit": "**{{rank}}** can assigned to a max of `{{limit}}` people.",
+    "ranks-userlimitDone": "**{{rank}}** can now be assigned to a max of `{{limit}}` people.",
+
     "ranks-removeNoRanks": "You do not have any ranks.",
     "ranks-removeNoArgs": "Please say what rank you wish to remove.",
     "ranks-removeDone": "You no longer have the rank **{{role}}**.",
 
     "ranks-getNoRanks": "There are no ranks you can receive.",
     "ranks-getNoArgs": "Please say what rank you want.",
-    "ranks-getReachedLimit": "You have reached the maximum of **{{limit}}** ranks for this server.",
+    "ranks-getReachedLimit": "You have reached the maximum of `{{limit}}` ranks for this server.",
+    "ranks-getRankUserlimitReached": "You are unable to get the rank **{{rank}}**, as it has reached its user limit of `{{limit}}` people",
     "ranks-getDone": "You now have the rank **{{role}}**"
 }

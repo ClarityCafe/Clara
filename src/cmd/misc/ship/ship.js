@@ -15,10 +15,12 @@ exports.ship = {
         if (ctx.args.length !== 2) return await ctx.createMessage('ship-noArgs');
         if (ctx.args[0].toLowerCase() === ctx.args[1].toLowerCase()) return await ctx.createMessage('ship-sameThing');
 
-        if (ctx.mentions[0] && new RegExp(`<@!?${ctx.mentions[0].id}>`).test(ctx.args[1])) {
+        if (ctx.mentions[0] && !ctx.mentions[1] && new RegExp(`<@!?${ctx.mentions[0].id}>`).test(ctx.args[1])) {
             ctx.mentions[1] = ctx.mentions[0];
             ctx.mentions[0] = null;
-        } else if (ctx.mentions[0] && new RegExp(`<@!?${ctx.mentions[0].id}>`).test(ctx.args[0])) {
+        }
+        
+        if (ctx.mentions[0] && !ctx.mentions[1] && new RegExp(`<@!?${ctx.mentions[0].id}>`).test(ctx.args[0])) {
             ctx.mentions[0] = ctx.mentions[0];
             ctx.mentions[1] = null;
         }
