@@ -45,7 +45,7 @@ global.logger = require(`${__dirname}/lib/modules/Logger`);
 global.Promise = require('bluebird');
 global.got = require('got');
 
-//bot stuff
+// Bot stuff
 const bot = new Clara(config, {
     seedVoiceConnections: true,
     maxShards: config.maxShards || 1,
@@ -67,6 +67,10 @@ Promise.config({
 });
 
 if (!fs.existsSync(`${__dirname}/cache`)) fs.mkdirSync(`${__dirname}/cache/`);
+if (fs.readdirSync(`${__dirname}/cache`).length) {
+    // Clears out anything in the cache directory if it has something.
+    fs.readdirSync(`${__dirname}/cache`).forEach(f => fs.unlinkSync(`${__dirname}/cache/${f}`));
+}
 
 require(`${__dirname}/lib/events`)(bot);
 bot.connect();

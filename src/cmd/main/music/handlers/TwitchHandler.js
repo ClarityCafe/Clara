@@ -37,8 +37,8 @@ class TwitchHandler {
         return new Promise((resolve, reject) => {
             if (typeof url !== 'string') throw new TypeError('url is not a string.');
 
-            this.streamGetter(url.split('/').pop()).then(res => {
-                return res.find(s => s.quality === 'Audio Only');
+            this.streamGetter.get(url.split('/').pop()).then(res => {
+                return res.find(s => s.quality === 'Audio Only').url;
             }).then(resolve).catch(reject);
         });
     }
