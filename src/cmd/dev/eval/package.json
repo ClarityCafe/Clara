@@ -1,6 +1,4 @@
 {
     "main": "eval.js",
-    "dependencies": {
-        "eris": "github:abalabahaha/eris"
-    }
+    "dependencies": {}
 }
