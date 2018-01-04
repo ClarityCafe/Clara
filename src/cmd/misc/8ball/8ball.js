@@ -16,7 +16,11 @@ exports.init = bot => {
     for (let key of filterKeys) RESPONSES.push(key);
 };
 
-exports.ball = {
+//export as a subcommand to circumvent limitations
+
+exports.loadAsSubCommands = true;
+
+exports.main = {
     desc: 'Make the bot decide for you or do some things.',
     usage: '<question>?',
     async main(bot, ctx) {
