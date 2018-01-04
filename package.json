@@ -3,6 +3,9 @@
     "version": "0.4.2-SNAPSHOT",
     "description": "A general-purpose discord bot.",
     "main": "src/bot.js",
+      "engines": {
+    "node": "7.6.0"
+    },
     "scripts": {
         "heroku-postbuild": "npm i -g pm2",
         "run": "node src/bot.js",
