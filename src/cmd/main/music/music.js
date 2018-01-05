@@ -238,7 +238,7 @@ exports.skip = {
                     total: chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf && !m.voiceState.deaf && m.id !== bot.user.id).length
                 });
             } else {
-                return await ctx.createMesage('music-skipVotedAlready', null, 'channel', {
+                return await ctx.createMessage('music-skipVotedAlready', null, 'channel', {
                     mention: ctx.author.mention,
                     item: track.title,
                     votes: skips.length,
