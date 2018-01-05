@@ -31,6 +31,7 @@ config.json
 src/data
 .idea/workspace.xml
 lines.txt
+cache/
 
 #Redis dunps
 dump .rdb
