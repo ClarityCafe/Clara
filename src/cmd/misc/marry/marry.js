@@ -135,6 +135,7 @@ exports.marrycheck = {
     async main(bot, ctx) {
         if (ctx.suffix) {
             let user = await bot.lookups.memberLookup(ctx, ctx.suffix);
+            if (!ctx.suffix) user = ctx.author.id;
 
             if (!user) return;
 
