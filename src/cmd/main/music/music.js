@@ -126,11 +126,12 @@ exports.queue = {
 exports.np = {
     desc: 'Show what song is now playing.',
     async main(bot, ctx) {
-        if ((bot.music.connections.get(ctx.guild.id) && !bot.music.connections.get(ctx.guild.id).playing)
-            || !bot.music.queues.get(ctx.guild.id)
-            || !bot.music.queues.get(ctx.guild.id).length) return await ctx.createMessage('music-notPlaying');
+        let conn = bot.music.connections.get(ctx.guild.id);
+        let q = bot.music.queues.get(ctx.guild.id);
 
-        let {info: item, ctx: c} = bot.music.queues.get(ctx.guild.id)[0];
+        if (!conn || (conn && !conn.playing) || !q || !q.current) return await ctx.createMessage('music-notPlaying');
+
+        let {info: item, ctx: c} = q.current;
         let embed = {
             author: {name: 'music-nowPlayingTitle'},
             title: item.title,
@@ -238,7 +239,7 @@ exports.skip = {
                     total: chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf && !m.voiceState.deaf && m.id !== bot.user.id).length
                 });
             } else {
-                return await ctx.createMesage('music-skipVotedAlready', null, 'channel', {
+                return await ctx.createMessage('music-skipVotedAlready', null, 'channel', {
                     mention: ctx.author.mention,
                     item: track.title,
                     votes: skips.length,

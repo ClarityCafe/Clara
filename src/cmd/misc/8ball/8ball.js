@@ -7,9 +7,7 @@
 const RESPONSES = ['yes', 'no'];
 const QUESTION_REGEX = /^(?:is|are|does|do|will|was|has|what|which|whose|who|where|how|when|why)|(?:\?|\uff1f)$/i;
 
-exports.commands = [
-    'ball'
-];
+exports.commands = ['ball'];
 
 exports.init = bot => {
     let filterKeys = Object.keys(bot.localeManager.locales['en-UK']).filter(k => /^ball-response\d+$/.test(k));
@@ -17,7 +15,7 @@ exports.init = bot => {
 };
 
 exports.ball = {
-    desc: 'Make the bot decide for you or do some things.',
+    desc: "Make the bot decide for you or do some things.",
     usage: '<question>?',
     async main(bot, ctx) {
         if (!ctx.suffix || !QUESTION_REGEX.test(ctx.suffix)) return await ctx.createMessage('ball-noQuestion');

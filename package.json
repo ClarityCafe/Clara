@@ -3,6 +3,9 @@
     "version": "0.4.2-SNAPSHOT",
     "description": "A general-purpose discord bot.",
     "main": "src/bot.js",
+      "engines": {
+    "npm" : "4.x.x"
+    },
     "scripts": {
         "heroku-postbuild": "npm i -g pm2",
         "run": "node src/bot.js",
@@ -24,7 +27,7 @@
     "homepage": "https://github.com/ClarityMoe/Clara",
     "dependencies": {
         "bluebird": "^3.5.1",
-        "eris": "abalabahaha/eris",
+        "eris": "github:abalabahaha/eris",
         "got": "^8.0.0",
         "redite": "^1.0.0"
     },
