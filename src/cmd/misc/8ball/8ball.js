@@ -15,7 +15,7 @@ exports.init = bot => {
 };
 
 exports.ball = {
-    desc: "Make the bot decide for you or do some things.",
+    desc: 'Make the bot decide for you or do some things.',
     usage: '<question>?',
     async main(bot, ctx) {
         if (!ctx.suffix || !QUESTION_REGEX.test(ctx.suffix)) return await ctx.createMessage('ball-noQuestion');
