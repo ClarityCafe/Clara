@@ -20,7 +20,7 @@
       "required": true
     },
     "ENABLE_PROMISE_WARNS": {
-      "required": true
+      "required": false
     },
     "GAME_NAME": {
       "required": true
@@ -29,7 +29,7 @@
       "required": false
     },
     "IB_TOKEN": {
-      "required": true
+      "required": false
     },
     "INSTANCES": {
       "required": false
@@ -38,13 +38,13 @@
       "required": true
     },
     "OSU_API_TOKEN": {
-      "required": true
+      "required": false
     },
     "OWNER_ID": {
       "required": true
     },
     "SAUCENAO_TOKEN": {
-      "required": true
+      "required": false
     },
     "YOUTUBE_TOKEN": {
       "required": true
