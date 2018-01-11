@@ -5,16 +5,16 @@
   },
   "env": {
     "DEBUG": {
-      "required": true
+      "required": false
     },
     "DEFAULT_PREFIX": {
       "required": true
     },
     "DISCORD_ORG_TOKEN": {
-      "required": true
+      "required": false
     },
     "DISCORD_PW_TOKEN": {
-      "required": true
+      "required": false
     },
     "DISCORD_TOKEN": {
       "required": true
@@ -26,13 +26,13 @@
       "required": true
     },
     "GAME_URL": {
-      "required": true
+      "required": false
     },
     "IB_TOKEN": {
       "required": true
     },
     "INSTANCES": {
-      "required": true
+      "required": false
     },
     "NASA_KEY": {
       "required": true
