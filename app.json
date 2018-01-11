@@ -23,7 +23,7 @@
       "required": false
     },
     "GAME_NAME": {
-      "required": true
+      "required": false
     },
     "GAME_URL": {
       "required": false
@@ -35,7 +35,7 @@
       "required": false
     },
     "NASA_KEY": {
-      "required": true
+      "required": false
     },
     "OSU_API_TOKEN": {
       "required": false
