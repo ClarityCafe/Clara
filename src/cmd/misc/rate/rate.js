@@ -10,7 +10,7 @@ exports.rate = {
         if (!ctx.suffix) {
             await ctx.createMessage('Give me something I can rate. Not your face.');
         } else {
-            let rater = Math.random() * 10;
+            let rater = Math.random() * 11;
             await ctx.createMessage(`I rate ${ctx.suffix} a ${rater.toFixed(1)}/10.`);
         }
     }
