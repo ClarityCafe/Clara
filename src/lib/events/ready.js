@@ -33,12 +33,19 @@ module.exports = bot => {
         } else {
             logger.info('Reconnected to Discord from disconnection.');
         }
-
-        bot.editStatus('online', {
-            name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
-            type: bot.config.gameURL ? 1 : 0,
-            url: `${bot.config.gameURL || null}`
-        });
+        if (!bot.config.gameURL) {
+            await bot.editStatus('online', {
+               name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
+               type: 0,
+               url: null
+           });
+        } else { 
+            await bot.editStatus('online', {
+                name: `${bot.config.gameName}` || `${bot.config.mainPrefix} for commands! | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
+                type: 1,
+                url: bot.config.gameURL
+            });
+        }  
         await bot.postGuildCount();
     });
 };
