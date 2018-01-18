@@ -38,7 +38,7 @@ module.exports = bot => {
                 name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
                 type: 0,
                 url: null
-           });
+          });
         } else { 
             await bot.editStatus('online', {
                 name: `${bot.config.gameName}` || `${bot.config.mainPrefix} for commands! | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
