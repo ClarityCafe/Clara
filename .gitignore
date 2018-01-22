@@ -22,10 +22,6 @@ package-lock.json
 .project
 data.json 
 
-# Visual Studio Files
-obj
-bin
-
 # Bot files  
 config.json
 src/data
