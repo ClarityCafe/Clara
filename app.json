@@ -4,9 +4,6 @@
   "scripts": {
   },
   "env": {
-    "DEBUG": {
-      "required": false
-    },
     "DEFAULT_PREFIX": {
       "required": true
     },
