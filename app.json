@@ -1,6 +1,7 @@
 {
   "name": "Clara",
   "description": "A General-Purpose Node.js Discord Bot",
+  "logo": "https://logos.speedtestcustom.com/prod/8380-1516204957824.png",
   "scripts": {
   },
   "env": {
