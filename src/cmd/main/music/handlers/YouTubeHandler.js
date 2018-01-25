@@ -30,7 +30,7 @@ class YouTubeHandler {
     async getStream(url) {
         if (typeof url !== 'string') throw new TypeError('url is not a string.');
             
-        let info = await ytdl.getInfo(url)
+        let info = await ytdl.getInfo(url);
         return got.stream(info.formats.find(f => f.itag === ITAG).url);
     }
 }
