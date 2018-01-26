@@ -1,0 +1,16 @@
+{
+  "env": {
+    "REDIS_URL": "@redis_url",
+    "DISCORD_TOKEN": "@discordapp_token",
+    "BOT_OWNER_ID": "@owner_id",
+    "DEFAULT_PREFIX": "@prefix",
+    "GAME_NAME": "@game_name",
+    "GAME_URL": "@game_url",
+    "INSTANCES": "1",
+    "IB_TOKEN": "@ib_token",
+    "NASA_KEY": "@nasa_token",
+    "OSU_API_TOKEN": "@osu_api_token",
+    "SAUCENAO_TOKEN": "@saucenao_token",
+    "YOUTUBE_TOKEN": "@youtube_token"
+  }
+}
