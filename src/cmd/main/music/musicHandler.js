@@ -1,5 +1,5 @@
 /**
- * @file Main music handler file.
+ * @file Music handler abstraction file.
  * @author Ovyerus
  */
 
@@ -34,6 +34,12 @@ class MusicHandler {
         };
     }
 
+    /**
+     * Queues a given song into the music queue.
+     * 
+     * @param {Context} ctx Context to use.
+     * @param {String} url Item URL to queue. Must be a supported service.
+     */
     async queue(ctx, url) {
         if (!(ctx instanceof Context)) throw new TypeError('ctx is not an instance of Context.');
         if (typeof url !== 'string') throw new TypeError('url is not a string.');
@@ -41,6 +47,7 @@ class MusicHandler {
 
         // Get queue. If it doesn't exist, create it
         if (!this._bot.music.queues.get(ctx.guild.id)) {
+            // JavaScript object magic hax.
             let magic = [];
             magic.id = ctx.guild.id;
 
@@ -64,13 +71,20 @@ class MusicHandler {
         }
     }
 
+    /**
+     * Queues all the tracks of a given playlist into the music queue.
+     * 
+     * @param {Context} ctx Context to use.
+     * @param {String} url Playlist URL to queue items from. Must be a supported service.
+     */
     async queuePlaylist(ctx, url) {
         if (!(ctx instanceof Context)) throw new TypeError('ctx is not an instance of Context.');
         if (typeof url !== 'string') throw new TypeError('url is not a string.');
         if (!checkURL(url)) throw new Error('Unsupported music source.');
 
-        // Get queue. If it doesn't exist, create it
+        // Get queue. If it doesn't exist, create it.
         if (!this._bot.music.queues.get(ctx.guild.id)) {
+            // JavaScript object magic hax.
             let magic = [];
             magic.id = ctx.guild.id;
 
@@ -99,6 +113,13 @@ class MusicHandler {
         });
     }
 
+    /**
+     * Searches YouTube for tracks matching user input.
+     * 
+     * @param {Context} ctx Context to use.
+     * @param {String} terms Search terms.
+     * @returns {String} The URL of the search choice.
+     */
     async search(ctx, terms) {
         if (!(ctx instanceof Context)) throw new TypeError('ctx is not an instance of Context.');
         if (typeof terms !== 'string') throw new TypeError('terms is not a string.');
@@ -132,6 +153,12 @@ class MusicHandler {
         } else throw new Error('Invalid selection (Number too high, too low, or not a number).');
     }
 
+    /**
+     * Pre-handler for playing music. Run this instead of MusicHandler#play.
+     * 
+     * @param {Context} ctx Context to use.
+     * @param {String} url URl of the track to play.
+     */
     async prePlay(ctx, url) {
         let bot = this._bot;
 
@@ -147,6 +174,12 @@ class MusicHandler {
         }
     }
 
+    /**
+     * Main handler for playing music. You probably want to use MusicHandler#prePlay instead, unless you really know what you're doing.
+     * 
+     * @param {Context} ctx Context to use.
+     * @returns {Promise} . 
+     */
     play(ctx) {
         return new Promise((resolve, reject) => {
             let bot = this._bot;
