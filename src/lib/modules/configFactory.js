@@ -13,8 +13,9 @@ class configFactory {
      *  @param {String} file filepath of the config object.
      */
     constructor(file) {
+        if (typeof file !== 'string') return new Error('file is not a string.');
+
         this.file = file;
-        if (typeof file !== String) return new Error('file is not a string');
     }
 
     /**
@@ -45,10 +46,8 @@ class configFactory {
                 nasaKey: process.env.NASA_KEY || null,
                 redisURL: process.env.REDIS_URL || 'redis://127.0.0.1/0'
             };
-        } else {
-            return JSON.parse(fs.readFileSync(this.file));
-        }
+        } else return JSON.parse(fs.readFileSync(this.file));
     }
 }
 
-exports.module = configFactory;
+module.exports = configFactory;
