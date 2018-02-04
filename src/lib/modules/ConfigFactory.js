@@ -5,12 +5,13 @@
 const fs = require('fs');
 
 /**
- *  Powder that makes you nya
- *  @class
+ * Abstraction class for managing loading config, falling back to environment args if the file doesn't exist.
  */
-class configFactory {
+class ConfigFactory {
     /**
-     *  @param {String} file filepath of the config object.
+     * Makes a new config factory.
+     * 
+     * @param {String} file Path of the config file.
      */
     constructor(file) {
         if (typeof file !== 'string') return new Error('file is not a string.');
@@ -19,10 +20,16 @@ class configFactory {
     }
 
     /**
+<<<<<<< HEAD:src/lib/modules/configFactory.js
      * Generates a config Object based on Env vars or on a JSON file 
      * @returns {Object} Config object
+=======
+     * Generates a config Object based on Env vars on a JSON file.
+     * 
+     * @returns {Object} Config object.
+>>>>>>> 9e952dcaf4ec58d615183f6715ecc5fc8908b732:src/lib/modules/ConfigFactory.js
      */
-    async generateConfig() {
+    generateConfig() {
         if (!fs.existsSync(this.file)) {
             return {
                 /** @see {Link} https://github.com/ClarityMoe/Clara/issues/133 */
@@ -50,4 +57,4 @@ class configFactory {
     }
 }
 
-module.exports = configFactory;
+module.exports = ConfigFactory;
