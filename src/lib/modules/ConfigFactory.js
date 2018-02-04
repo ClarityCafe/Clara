@@ -20,14 +20,8 @@ class ConfigFactory {
     }
 
     /**
-<<<<<<< HEAD:src/lib/modules/configFactory.js
      * Generates a config Object based on Env vars or on a JSON file 
      * @returns {Object} Config object
-=======
-     * Generates a config Object based on Env vars on a JSON file.
-     * 
-     * @returns {Object} Config object.
->>>>>>> 9e952dcaf4ec58d615183f6715ecc5fc8908b732:src/lib/modules/ConfigFactory.js
      */
     generateConfig() {
         if (!fs.existsSync(this.file)) {
