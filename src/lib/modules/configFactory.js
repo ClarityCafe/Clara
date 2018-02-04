@@ -4,7 +4,14 @@
  */
 const fs = require('fs');
 
+/**
+ *  Powder that makes you nya
+ *  @class
+ */
 class configFactory {
+    /**
+     *  @param {String} file filepath of the config object.
+     */
     constructor(file) {
         this.file = file;
         if (typeof file !== String) return new Error('file is not a string');
