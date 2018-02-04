@@ -24,7 +24,7 @@ class ConfigFactory {
      * 
      * @returns {Object} Config object.
      */
-    async generateConfig() {
+    generateConfig() {
         if (!fs.existsSync(this.file)) {
             return {
                 /** @see {Link} https://github.com/ClarityMoe/Clara/issues/133 */

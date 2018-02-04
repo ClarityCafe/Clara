@@ -8,7 +8,7 @@
 
 // Imports
 const Clara = require(`${__dirname}/lib/Clara`);
-const ConfigFactory = require(`${__dirname}/lib/modules/configFactory`);
+const ConfigFactory = require(`${__dirname}/lib/modules/ConfigFactory`);
 const fs = require('fs');
 
 const cf = new ConfigFactory(`${__dirname}/config.json`);
