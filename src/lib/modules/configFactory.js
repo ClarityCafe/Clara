@@ -19,7 +19,7 @@ class configFactory {
     }
 
     /**
-     * Generates a config Object based on Env vars on a JSON file 
+     * Generates a config Object based on Env vars or on a JSON file 
      * @returns {Object} Config object
      */
     async generateConfig() {
