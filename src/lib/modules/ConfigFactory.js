@@ -5,12 +5,13 @@
 const fs = require('fs');
 
 /**
- *  Powder that makes you nya
- *  @class
+ * Abstraction class for managing loading config, falling back to environment args if the file doesn't exist.
  */
-class configFactory {
+class ConfigFactory {
     /**
-     *  @param {String} file filepath of the config object.
+     * Makes a new config factory.
+     * 
+     * @param {String} file Path of the config file.
      */
     constructor(file) {
         if (typeof file !== 'string') return new Error('file is not a string.');
@@ -19,8 +20,9 @@ class configFactory {
     }
 
     /**
-     * Generates a config Object based on Env vars on a JSON file 
-     * @returns {Object} Config object
+     * Generates a config Object based on Env vars on a JSON file.
+     * 
+     * @returns {Object} Config object.
      */
     async generateConfig() {
         if (!fs.existsSync(this.file)) {
@@ -50,4 +52,4 @@ class configFactory {
     }
 }
 
-module.exports = configFactory;
+module.exports = ConfigFactory;
