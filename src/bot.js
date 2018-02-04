@@ -9,8 +9,9 @@
 // Imports
 const Clara = require(`${__dirname}/lib/Clara`);
 const fs = require('fs');
-const configFactory = new configFactory(`${__dirname}/config.json`);
-const config = configFactory.generateConfig();
+const configFactory = require(`${__dirname}/lib/modules/configFactory`);
+const cf = new configFactory(`${__dirname}/config.json`);
+const config = cf.generateConfig();
 
 // Globals
 global.mainDir = __dirname;
