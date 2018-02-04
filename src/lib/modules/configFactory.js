@@ -43,4 +43,4 @@ class ConfigFactory {
     }
 }
 
-exports.module = ConfigFactory;
+module.exports = ConfigFactory;
