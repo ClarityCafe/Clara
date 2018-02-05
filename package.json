@@ -8,7 +8,7 @@
         "npm": "4.x.x"
     },
     "scripts": {
-        "heroku-postbuild": "npm i -g pm2 && node ./src/modules/depPreloader --harmony",
+        "heroku-postbuild": "npm i -g pm2 && node ./src/lib/modules/depPreloader.js --harmony",
         "start": "node src/bot.js",
         "lint": "eslint ./src"
     },
