@@ -28,8 +28,8 @@
     "homepage": "https://github.com/ClarityMoe/Clara",
     "dependencies": {
         "bluebird": "^3.5.1",
-        "eris": "github:abalabahaha/eris",
-        "got": "^8.0.0",
+        "eris": "latest",
+        "got": "^8.0.3",
         "redite": "^1.0.0"
     },
     "devDependencies": {
