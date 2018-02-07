@@ -6,7 +6,9 @@
 const ytdl = require('ytdl-core');
 const got = require('got');
 
-const ITAG = '251'; // Preferred iTag quality to get. Default: 251.
+// List of all itag qualities can be found here: https://en.wikipedia.org/w/index.php?title=YouTube&oldid=800910021#Quality_and_formats.
+const ITAG = '140'; // Preferred itag quality to get. Default: 140.
+const ITAG_FALLBACK = '22'; // In the event that the previous itag could not be found, try finding this one. Should probably be a lower value.
 
 class YouTubeHandler {
     constructor() {}
@@ -31,7 +33,10 @@ class YouTubeHandler {
         if (typeof url !== 'string') throw new TypeError('url is not a string.');
             
         let info = await ytdl.getInfo(url);
-        return got.stream(info.formats.find(f => f.itag === ITAG).url);
+        let format = info.formats.find(f => f.itag === ITAG) || info.formats.find(f => f.itag === ITAG_FALLBACK);
+        format = format ? format.url : info.url; // Fallback to default URL if the wanted itags could not be found;
+
+        return got.stream(format);
     }
 }
 
