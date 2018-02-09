@@ -7,10 +7,10 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Bot (NoDemon)",
+            "name": "Launch Bot (Nodemon)",
             "runtimeExecutable": "nodemon",
             "runtimeArgs": [
-                "--debug=5858"
+                "--inspect=5858"
             ],
             "program": "${workspaceRoot}/src/bot.js",
             "restart": true,
@@ -20,7 +20,7 @@
         },
         {
             "type": "node",
-            "name": "Launch Bot (without NodeMon)",
+            "name": "Launch Bot (without Nodemon)",
             "request": "launch",
             "program": "${workspaceRoot}/src/bot.js",
             "cwd": "${workspaceRoot}"
