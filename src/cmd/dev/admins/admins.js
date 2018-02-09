@@ -3,8 +3,6 @@
  * @author Ovyerus
  */
 
-const fs = require('fs');
-
 exports.loadAsSubcommands = true;
 
 exports.commands = [
@@ -14,15 +12,14 @@ exports.commands = [
 
 exports.main = {
     desc: 'Manage bot admins.',
-    usage: '[<add|remove> <mention|id>]',
+    usage: '[<add|remove> <user>]',
     owner: true,
     async main(bot, ctx) {
+        let admins = bot.admins.concat(bot.config.ownerID).map(id => [bot.users.get(id), id]).map(([u, id]) => (u ? `**${utils.formatUsername(u)}** ` : '**Unknown user**') + ` (<@${id}>)`);
         let embed = {
             title: 'Bot Admins',
-            description: `**${utils.formatUsername(bot.users.get(bot.config.ownerID))}** (Bot owner)`
+            description: admins.join('\n')
         };
-
-        bot.admins.forEach(a => embed.description += `\n**${utils.formatUsername(bot.users.get(a))}**`);
 
         await ctx.createMessage({embed});
     }
@@ -30,40 +27,38 @@ exports.main = {
 
 exports.add = {
     desc: 'Add admins.',
-    usage: '<mention|id>',
+    usage: '<user>',
     async main(bot, ctx) {
         if (ctx.author.id !== bot.config.ownerID) return await ctx.createMessage('This is restricted to the bot owner.');
-        if (!/^<@!?\d+>$/.test(ctx.args[0])) return await ctx.createMessage('Please mention the user to add, or their id.');
+        if (!ctx.suffix) return await ctx.createMessage('Please give me a user to add as an admin.');
 
-        let id = /^(<@!?\d+>|\d+)$/.test(ctx.args[0]) ? ctx.args[0].replace(/^<@!?/, '').slice(0, -1) : ctx.args[0];
+        let user = await bot.lookups.memberLookup(ctx, ctx.suffix);
 
-        if (!bot.users.get(id)) return await ctx.createMessage('That user does not exist or I cannot see them.');
+        if (!user) return;
 
-        let newAdmins = bot.admins.concat(id);
-        let data = {admins: newAdmins, blacklist: bot.blacklist};
+        await ctx.createMessage(`Are you sure you wish to add **${utils.formatUsername(user)}** (${user.id}) as a bot admin?`);
+        let m = await bot.awaitMessage(ctx.channel.id, ctx.author.id);
 
-        fs.writeFileSync(`./data/data.json`, JSON.stringify(data));
-        bot.admins.push(id);
-        await ctx.createMessage(`Added admin **${utils.formatUsername(bot.users.get(id))}**.`);
+        if (/^no?$/i.test(m.content)) return await ctx.createMessage('I will not add that user as an admin.');
+        else if (!/^y(es)?$/i.test(m.content)) return await ctx.createMessage('Invalid response. I will not add that user an admin.');
+
+        await bot.addAdmin(user.id);
+        await ctx.createMessage(`Added admin **${utils.formatUsername(user)}**.`);
     }
 };
 
 exports.remove = {
     desc: 'Remove admins.',
-    usage: '<mention|ID>',
+    usage: '<user>',
     async main(bot, ctx) {
         if (ctx.author.id !== bot.config.ownerID) return await ctx.createMessage('This is restricted to the bot owner.');
-        if (!/^(<@!?\d+>|\d+)$/.test(ctx.args[0])) return await ctx.createMessage('Please mention the user to add, or their id.');
+        if (!ctx.suffix) return await ctx.createMessage('Please give me a user to remove as an admin.');
 
-        let id = /^<@!?\d+>$/.test(ctx.args[0]) ? ctx.args[0].replace(/^<@!?/, '').slice(0, -1) : ctx.args[0];
+        let user = await bot.lookups.memberLookup(ctx, ctx.suffix);
 
-        if (!bot.admins.includes(id)) return await ctx.createMessage('That user is not an admin.');
+        if (!user) return;
 
-        let newAdmins = bot.admins.filter(a => a !== id);
-        let data = {admins: newAdmins, blacklist: bot.blacklist};
-
-        fs.writeFileSync(`./data/data.json`, JSON.stringify(data));
-        bot.admins.splice(bot.admins.indexOf(id), 1);
-        await ctx.createMessage(`Removed admin **${utils.formatUsername(bot.users.get(id))}**.`);
+        await bot.removeAdmin(user.id);
+        await ctx.createMessage(`Removed admin **${utils.formatUsername(user)}**.`);
     }
 };
