@@ -4,14 +4,16 @@
  * @author Ovyerus
  */
 
-const fs = require('fs');
 const path = require('path');
 
 module.exports = bot => {
     bot.on('ready', async () => {
         if (bot.loadCommands) {
             try {
-                bot.prefixes = bot.prefixes.concat([`<@${bot.user.id}> `, `<@!${bot.user.id}> `]);
+                let {prefixes, blacklist, admins} = await bot.getDataSettings();
+                bot.admins = admins;
+                bot.blacklist = blacklist;
+                bot.prefixes = prefixes.concat([`<@${bot.user.id}> `, `<@!${bot.user.id}> `, bot.config.mainPrefix]);
 
                 await bot.localeManager.loadLocales(bot);
                 logger.info(`Loaded ${Object.keys(bot.localeManager.locales).length} locales.`);
@@ -22,17 +24,17 @@ module.exports = bot => {
                 bot.loadCommands = false;
                 bot.allowCommandUse = true;
 
-                let altPrefixes = JSON.parse(fs.readFileSync(path.resolve(`${__dirname}`, '../', '../', './data/prefixes.json')));
-
                 logger.info(`${bot.user.username} is connected to Discord and is ready to use.`);
-                logger.info(`Main prefix is '${bot.config.mainPrefix}', you can also use @mention.`);
-                logger.info(altPrefixes.length > 0 ? `Alternative prefixes: '${altPrefixes.join("', ")}'`: 'No alternative prefixes.');
+                logger.info('--------------------');
+                logger.info(`Owner: ${bot.config.ownerID}`);
+                logger.info(`Admins: ${admins.join(', ')}`);
+                logger.info(`Blacklist: ${blacklist.join(', ')}`);
+                logger.info(`Prefixes: "${[bot.config.mainPrefix, '@mention'].concat(prefixes).join('", "')}"`);
+                logger.info('--------------------\n');
             } catch(err) {
                 logger.error(`Error while starting up:\n${err.stack}`);
             }
-        } else {
-            logger.info('Reconnected to Discord from disconnection.');
-        }
+        } else logger.info('Reconnected to Discord from disconnection.');
         if (!bot.config.gameURL) {
             await bot.editStatus('online', {
                 name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,

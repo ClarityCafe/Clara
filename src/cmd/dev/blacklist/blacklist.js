@@ -3,8 +3,6 @@
  * @author Ovyerus
  */
 
-const fs = require('fs');
-
 exports.loadAsSubcommands = true;
 exports.commands = [
     'add',
@@ -13,28 +11,14 @@ exports.commands = [
 
 exports.main = {
     desc: 'Add or remove people in the blacklist.',
-    usage: '[<add|remove> <mention|id>]',
+    usage: '[<add|remove> <user>]',
     owner: true,
     async main(bot, ctx) {
+        let blacklist = bot.blacklist.map(id => [bot.users.get(id), id]).map(([u, id]) => (u ? `**${utils.formatUsername(u)}** ` : '**Unknown user**') + ` ($<${id}>)`);
         let embed = {
             title: 'Blacklisted Users',
-            description: []
+            description: blacklist.join('\n') || 'No one.'
         };
-
-        if (bot.blacklist.length === 0) {
-            embed.description = 'No one.';
-            return await ctx.createMessage({embed});
-        }
-
-        bot.blacklist.forEach(u => {
-            if (bot.users.get(u)) {
-                embed.description.push(`**${utils.formatUsername(bot.users.get(u))}** (${u})`);
-            } else {
-                embed.description.push(`**Unknown user** (${u})`);
-            }
-        });
-
-        embed.description = embed.description.join('\n');
 
         await ctx.createMessage({embed});
     }
@@ -42,43 +26,32 @@ exports.main = {
 
 exports.add = {
     desc: 'Add a user to the blacklist.',
-    usage: '<mention|id>',
+    usage: '<user>',
     async main(bot, ctx) {
-        if (!/^(<@!?\d+>|\d+)$/.test(ctx.args[0])) return await ctx.createMessage('Please mention the user to add, or their id.');
-        let id = /^<@!?\d+>$/.test(ctx.args[0]) ? ctx.args[0].replace(/^<@!?/, '').slice(0, -1) : ctx.args[0];
+        if (!ctx.suffix) return await ctx.createMessage('Please give me a user to blacklist.');
 
-        if (!bot.users.get(id)) return await ctx.createMessage('That user does not exist or I cannot see them.');
-        if (bot.checkBotPerms(id)) return await ctx.createMessage('You cannot blacklist a bot admin.');
+        let user = await bot.lookups.memberLookup(ctx, ctx.suffix);
 
-        let newBlacklist = bot.blacklist.concat(id);
-        let data = {admins: bot.blacklist, blacklist: newBlacklist};
+        if (!user) return;
+        if (bot.checkBotPerms(user.id)) return await ctx.createMessage('You cannot blacklist a bot admin.');
 
-        fs.writeFileSync(`./data/data.json`, JSON.stringify(data));
-        bot.blacklist.push(id);
-        await ctx.createMessage(`Added user **${utils.formatUsername(bot.users.get(id))}** to the blacklist.`);
+        await bot.addBlacklist(user.id);
+        await ctx.createMessage(`Added user **${utils.formatUsername(user)}** to the blacklist.`);
     }
 };
 
 exports.remove = {
     desc: 'Remove a user from the blacklist.',
-    usage: '<mention|ID>',
+    usage: '<user>',
     async main(bot, ctx) {
-        if (!/^(<@!?\d+>|\d+)$/.test(ctx.args[0])) return await ctx.createMessage('Please mention the user to add, or their id.');
+        if (!ctx.suffix) return await ctx.createMessage('Please give me a user to remove from the blacklist.');
 
-        let id = /^<@!?\d+>$/.test(ctx.args[0]) ? ctx.args[0].replace(/^<@!?/, '').slice(0, -1) : ctx.args[0];
+        let user = await bot.lookups.memberLookup(ctx, ctx.suffix);
 
-        if (!bot.blacklist.includes(id)) return await ctx.createMessage('That user is not on the blacklist.');
+        if (!user) return;
+        if (!bot.blacklist.includes(user.id)) return await ctx.createMessage('That user is not on the blacklist.');
 
-        let newBlacklist = bot.blacklist.filter(b => b !== id);
-        let data = {admins: bot.admins, blacklist: newBlacklist};
-
-        fs.writeFileSync(`./data/data.json`, JSON.stringify(data));
-        bot.blacklist.splice(bot.blacklist.indexOf(id), 1);
-
-        if (!bot.users.get(id)) {
-            await ctx.createMessage(`Removed user **${id}** from the blacklist.`);
-        } else {
-            await ctx.createMessage(`Removed user **${utils.formatUsername(bot.users.get(id))}** from the blacklist.`);
-        }
+        await bot.removeBlacklist(user.id);
+        await ctx.createMessage(`Removed user **${utils.formatUsername(user) || user.id}** from the blacklist.`);
     }
 };
