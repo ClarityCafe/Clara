@@ -29,7 +29,7 @@ exports.source = {
 
             if (!msgs[0]) return await ctx.createMessage('Please provide an image.');
             else url = msgs[0].embeds[0] ? msgs[0].embeds[0].url : msgs[0].attachments[0].url;
-        }  else if(ctx.mentions) {
+        }  else if (ctx.mentions) {
             url = ctx.mentions[0].dynamicAvatarURL('png', 1024);
         } else {
             url = ctx.attachments[0] ? ctx.attachments[0].url : ctx.suffix;
