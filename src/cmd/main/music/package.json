@@ -1,7 +1,7 @@
 {
   "main": "music.js",
   "dependencies": {
-    "ytdl-core": "latest",
+    "ytdl-core": "https://github.com/fent/node-ytdl-core",
     "youtube-simple-search": "latest",
     "ytpl": "latest",
     "twitch.tv": "latest",
