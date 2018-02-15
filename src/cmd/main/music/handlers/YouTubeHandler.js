@@ -16,7 +16,7 @@ class YouTubeHandler {
     async getInfo(url) {
         if (typeof url !== 'string') throw new TypeError('url is not a string.');
 
-        let info = await new Promise((res, rej) => ytdl.getInfo(url, (err, i) => err ? rej(err) : res(i));
+        let info = await new Promise((res, rej) => ytdl.getInfo(url, (err, i) => err ? rej(err) : res(i)));
         let res = {
             url,
             title: info.title,
@@ -32,7 +32,7 @@ class YouTubeHandler {
     async getStream(url) {
         if (typeof url !== 'string') throw new TypeError('url is not a string.');
             
-        let info = await new Promise((res, rej) => ytdl.getInfo(url, (err, i) => err ? rej(err) : res(i));
+        let info = await new Promise((res, rej) => ytdl.getInfo(url, (err, i) => err ? rej(err) : res(i)));
         let format = info.formats.find(f => f.itag === ITAG) || info.formats.find(f => f.itag === ITAG_FALLBACK);
         format = format ? format.url : info.url; // Fallback to default URL if the wanted itags could not be found;
 
