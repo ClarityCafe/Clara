@@ -1,5 +1,5 @@
 
-![ClarityMoe](nodebot_logo.png)
+![ClarityMoe](ClaraLogo.png)
 
 [![Official Discord server](https://discordapp.com/api/guilds/251664386459041792/embed.png)](https://discord.gg/rmMTZue)
 [![GitHub license](https://img.shields.io/badge/license-BSD-blue.svg)](https://raw.githubusercontent.com/awau/Clara/master/LICENSE)
