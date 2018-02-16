@@ -16,13 +16,13 @@ class YouTubeHandler {
     async getInfo(url) {
         if (typeof url !== 'string') throw new TypeError('url is not a string.');
 
-        let info = await new Promise((res, rej) => ytdl.getInfo(url, (err, i) => err ? rej(err) : res(i)));
+        let info = await new Promise((res, rej) => ytdl.getInfo(url, [], {maxBuffer: Infinity}, (err, i) => err ? rej(err) : res(i)));
         let res = {
             url,
             title: info.title,
-            uploader: info.author.name,
-            thumbnail: info.thumbnail_url.replace('default.jpg', 'hqdefault.jpg'),
-            length: Number(info.length_seconds),
+            uploader: info.uploader,
+            thumbnail: info.thumbnail,
+            length: splitTime(info.duration),
             type: 'YouTubeVideo'
         };
 
@@ -31,13 +31,17 @@ class YouTubeHandler {
 
     async getStream(url) {
         if (typeof url !== 'string') throw new TypeError('url is not a string.');
-            
-        let info = await new Promise((res, rej) => ytdl.getInfo(url, (err, i) => err ? rej(err) : res(i)));
-        let format = info.formats.find(f => f.itag === ITAG) || info.formats.find(f => f.itag === ITAG_FALLBACK);
+
+        let info = await new Promise((res, rej) => ytdl.getInfo(url, [], {maxBuffer: Infinity}, (err, i) => err ? rej(err) : res(i)));
+        let format = info.formats.find(f => f.format_id === ITAG) || info.formats.find(f => f.format_id === ITAG_FALLBACK);
         format = format ? format.url : info.url; // Fallback to default URL if the wanted itags could not be found;
 
         return got.stream(format);
     }
+}
+
+function splitTime(time) {
+    return time.split(':').reverse().map(v => Number(v)).reduce((m, v, i) => m + (v * (60 ** i)));
 }
 
 module.exports = YouTubeHandler;
