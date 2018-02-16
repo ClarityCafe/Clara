@@ -159,5 +159,10 @@ exports.marrycheck = {
                 partner: utils.formatUsername(partner)
             });
         } else return await ctx.createMessage('marrycheck-noPartner');
+        
+        if (ctx.mentions[0].id === bot.user.id) {
+            // currently needed to prevent dumbos from trying to check bot's relationship
+            ctx.createMessage('marrycheck-Self')
+        }
     }
 };
