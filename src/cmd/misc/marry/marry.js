@@ -151,7 +151,11 @@ exports.marrycheck = {
                 });
             }
         }
-
+         if (ctx.mentions[0].id === bot.user.id) {
+            // currently needed to prevent dumbos from trying to check bot's relationship
+            ctx.createMessage('marrycheck-Self', null, 'channel', {user: utils.formatUsername(user)});
+        }
+        
         if (ctx.settings.user.partner) {
             let partner = bot.users.get(ctx.settings.user.partner);
 
@@ -160,9 +164,5 @@ exports.marrycheck = {
             });
         } else return await ctx.createMessage('marrycheck-noPartner');
         
-        if (ctx.mentions[0].id === bot.user.id) {
-            // currently needed to prevent dumbos from trying to check bot's relationship
-            ctx.createMessage('marrycheck-Self', null, 'channel', {user: utils.formatUsername(user)});
-        }
     }
 };
