@@ -154,7 +154,7 @@ exports.marrycheck = {
         
          if (ctx.mentions[0].id === bot.user.id) {
             // currently needed to prevent dumbos from trying to check bot's relationship
-            ctx.createMessage('marrycheck-Self', null, 'channel', {user: utils.formatUsername(user)});
+            ctx.createMessage('marrycheck-Self', null, 'channel', {user: ctx.author.username});
         }
         
         if (ctx.settings.user.partner) {
