@@ -35,7 +35,7 @@ module.exports = bot => {
                 logger.error(`Error while starting up:\n${err.stack}`);
             }
         } else logger.info('Reconnected to Discord from disconnection.');
-        if (!bot.config.gameURL || bot.config.gameURL === null) {
+        if (!bot.config.gameURL) {
             await bot.editStatus('online', {
                 name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
                 type: 0,
