@@ -120,14 +120,15 @@ class Clara extends Eris.Client {
 
         if (this.config.discordBotsOrgKey) {
             try {
-                await got(`https://discordbots.org/api/bots/${this.user.id}/stats`, {
+                await got(`https://discordbots.org/api/bots/stats`, {
                     method: 'POST',
                     headers: {
                         Authorization: this.config.discordBotsOrgKey,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        server_count: this.guilds.size
+                        server_count: this.guilds.size,
+                        shard_count: this.shards.size
                     })
                 });
             } catch(err) {

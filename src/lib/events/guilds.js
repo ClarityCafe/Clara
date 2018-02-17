@@ -21,6 +21,8 @@ module.exports = bot => {
                 type: 1,
                 url: bot.config.gameURL
             });
+            
+            await bot.postGuildCount();
         }
     });
 
