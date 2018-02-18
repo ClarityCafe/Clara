@@ -201,7 +201,7 @@ class Clara extends Eris.Client {
     }
 
     /**
-     * Adds a prefix to the database and the cached object.
+     * Adds a prefix.
      * 
      * @param {String} prefix Prefix to add.
      */
@@ -213,7 +213,7 @@ class Clara extends Eris.Client {
     }
 
     /**
-     * Removes a prefix from the database, and from the cached object.
+     * Removes a prefix.
      * 
      * @param {String} prefix Prefix to remove.
      */
@@ -225,7 +225,7 @@ class Clara extends Eris.Client {
     }
 
     /**
-     * Add's a user as an admin in the database and the cached object.
+     * Add's a user as an admin.
      * 
      * @param {String} userID User to add as an admin. 
      */
@@ -237,7 +237,7 @@ class Clara extends Eris.Client {
     }
 
     /**
-     * Removes a user as an admin from the database, and from the cached object.
+     * Removes a user as an admin.
      * 
      * @param {String} userID User to remove as an admin.
      */
@@ -249,7 +249,7 @@ class Clara extends Eris.Client {
     }
 
     /**
-     * Adds a user to the blacklist in the database, and in the cached object.
+     * Adds a user to the blacklist.
      * 
      * @param {String} userID User to add to the blacklist.
      */
@@ -261,7 +261,7 @@ class Clara extends Eris.Client {
     }
 
     /**
-     * Removes a user from the blacklist in the database, and from the cached object.
+     * Removes a user from the blacklist.
      * 
      * @param {String} userID User to remove from the blacklist.
      */
