@@ -1,6 +1,6 @@
 {
     "main": "ibsearch.js",
     "dependencies": {
-        "moment": "^2.17.1"
+        "moment": "^2.20.1"
     }
 }

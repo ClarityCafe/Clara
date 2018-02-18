@@ -106,7 +106,7 @@ exports.divorce = {
             });
         }
 
-        if (/^y(es)?$/i.test(msg.content)) {
+        if (msg.content.replace(/\s+/g, '').toLowerCase().includes('yes')) {
             await bot.db[ctx.author.id].partner.set(null);
             await bot.db[user.id].partner.set(null);
 
@@ -116,7 +116,7 @@ exports.divorce = {
             });
         }
         
-        if (/^no?$/i.test(msg.content)) {
+        if (msg.content.replace(/\s+/g, '').toLowerCase().includes('no')) {
             return await ctx.createMessage('divorce-fail', null, 'channel', {
                 author: ctx.author.mention
             });
@@ -151,7 +151,7 @@ exports.marrycheck = {
                 });
             }
         }
-
+        
         if (ctx.settings.user.partner) {
             let partner = bot.users.get(ctx.settings.user.partner);
 
@@ -159,5 +159,6 @@ exports.marrycheck = {
                 partner: utils.formatUsername(partner)
             });
         } else return await ctx.createMessage('marrycheck-noPartner');
+        
     }
 };

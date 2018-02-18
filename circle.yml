@@ -14,4 +14,4 @@ jobs:
           command: npm run lint
 notify:
   webhooks:
-    - url: https://claraio-circledisc.herokuapp.com/hooks/circleci
+    - url: https://circledisc-clarity.herokuapp.com/webhook/circle

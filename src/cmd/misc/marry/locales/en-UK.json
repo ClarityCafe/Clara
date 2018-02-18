@@ -18,5 +18,6 @@
     "marrycheck-hasPartner": "Your partner is **{{partner}}**.",
     "marrycheck-noPartner": "I'm sorry, but you do not have a partner.",
     "marrycheck-otherUser-hasPartner": "**{{user}}** is married to **{{partner}}**.",
-    "marrycheck-otherUser-noPartner": "**{{user}}** does not have a partner."
+    "marrycheck-otherUser-noPartner": "**{{user}}** is single.",
+    "marrycheck-Self": "I'm always single, don't ask why, {{user}}."
 }

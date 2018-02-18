@@ -20,18 +20,18 @@ exports.commands = [
 exports.source = {
     desc: 'Tries to find the source for an image.',
     usage: '<url or attachment>',
+    aliases: ['sauce', 'saucenao', 'sourcenow'],
     async main(bot, ctx) {
         let url;
 
-        if (!ctx.attachments[0] && (!ctx.suffix || !urlRegex.test(ctx.suffix))) {
+        if (!ctx.attachments[0] && (!ctx.suffix || !urlRegex.test(ctx.suffix)) && !ctx.mentions.length) {
             let msgs = await ctx.channel.getMessages(100);
             msgs = msgs.filter(m => m.embeds.filter(e => e.type === 'image')[0] || m.attachments.filter(a => a.width || a.height)[0]);
 
             if (!msgs[0]) return await ctx.createMessage('Please provide an image.');
             else url = msgs[0].embeds[0] ? msgs[0].embeds[0].url : msgs[0].attachments[0].url;
-        } else {
-            url = ctx.attachments[0] ? ctx.attachments[0].url : ctx.suffix;
-        }
+        } else if (ctx.mentions.length) url = ctx.mentions[0].dynamicAvatarURL('png', 1024);
+        else url = ctx.attachments[0] ? ctx.attachments[0].url : ctx.suffix;
 
         await ctx.channel.sendTyping();
 
@@ -40,7 +40,8 @@ exports.source = {
         await ctx.createMessage({embed: {
             title: 'Source Found',
             description: `[**Source URL**](${res[0].url})`,
-            thumbnail: {url: res[0].thumbnail},
+            thumbnail: {url},
+            image: {url: res[0].thumbnail},
             fields: [
                 {
                     name: 'Site',

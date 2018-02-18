@@ -1,6 +1,6 @@
 {
     "name": "clara",
-    "version": "0.4.2-SNAPSHOT",
+    "version": "0.4.3-SNAPSHOT",
     "description": "A general-purpose discord bot.",
     "main": "src/bot.js",
     "engines": {
@@ -8,6 +8,7 @@
         "npm": "4.x.x"
     },
     "scripts": {
+        "circle-postinstall": "node ./lib/modules/depPreloader.js --harmony",
         "heroku-postbuild": "npm i -g pm2 && node ./src/lib/modules/depPreloader.js --harmony",
         "start": "node src/bot.js",
         "lint": "eslint ./src"

@@ -60,15 +60,16 @@ class MusicHandler {
         // Get song info and queue it
         if (!PlaylistTypes.includes(type)) {
             let info = await this.handlers[type].getInfo(getURL);
+            let item = {info, ctx, timestamp: Date.now()};
 
-            q.push({info, ctx, timestamp: Date.now()});
+            q.push(item);
             await ctx.createMessage('music-queueSong', null, 'channel', {
                 item: info.title,
                 position: q.current ? q.length + 1 : q.length
             });
-        } else {
-            await this.queuePlaylist(ctx, getURL);
-        }
+
+            if (q.indexOf(item) === 0) await this.cacheTrack(item, true);
+        } else await this.queuePlaylist(ctx, getURL);
     }
 
     /**
@@ -169,9 +170,7 @@ class MusicHandler {
             bot.music.connections.get(ctx.guild.id).summoner = ctx.member;
 
             await this.play(ctx);
-        } else if (!bot.music.connections.get(ctx.guild.id).playing) {
-            await this.play(ctx);
-        }
+        } else if (!bot.music.connections.get(ctx.guild.id).playing) await this.play(ctx);
     }
 
     /**
@@ -184,9 +183,10 @@ class MusicHandler {
         return new Promise((resolve, reject) => {
             let bot = this._bot;
             let cnc = bot.voiceConnections.get(ctx.guild.id);
-            let item = bot.music.queues.get(ctx.guild.id).shift();
-            let last = bot.music.queues.get(ctx.guild.id).current;
-            bot.music.queues.get(ctx.guild.id).current = item;
+            let q = bot.music.queues.get(ctx.guild.id);
+            let item = q.shift();
+            let last = q.current;
+            q.current = item;
 
             if (last) {
                 let lastFile = `${mainDir}/cache/${hashSong(last.info)}`;
@@ -204,34 +204,14 @@ class MusicHandler {
                 return resolve();
             }
 
-            let destFile = `${mainDir}/cache/${hashSong(item.info)}`;
-            let destExists = fs.existsSync(destFile);
-            let getter;
-
-            if (destExists) {
-                getter = () => {
-                    return new Promise(_res => _res(fs.createReadStream(destFile)));
-                };
-            } else getter = this.handlers[item.info.type].getStream.bind(this.handlers[item.info.type]);
-
-            getter(item.info.url).then(remoteStream => {
-                if (!destExists && remoteStream instanceof Stream) {
-                    return new Promise(_res => {
-                        let piper = remoteStream.pipe(fs.createWriteStream(destFile));
-
-                        piper.on('finish', () => {
-                            _res(fs.createReadStream(destFile));
-                        });
-                    });
-                } else return remoteStream;
-            }).then(stream => {
+            this.cacheTrack(item).then(stream => {
                 bot.music.streams.add({
                     id: ctx.guild.id,
                     stream,
                     url: item.info.url
                 });
 
-                cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5'/*, '-b:a', '96k', '-bufsize', '96k'*/]});
+                cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5']});
 
                 return ctx.createMessage({embed: {
                     author: {name: 'music-nowPlayingTitle'},
@@ -248,8 +228,10 @@ class MusicHandler {
                     type: item.info.type
                 });
             }).then(() => {
+                if (q.length) this.cacheTrack(q[0], true);
+
                 if (!cnc.eventNames().includes('error')) {
-                    cnc.on('error', async err => {
+                    cnc.on('error', err => {
                         logger.error(`Voice error in guild ${ctx.guild.id}\n${err.stack}`);
                         ctx.createMessage(`Voice connection error: \`${err}\``);
                         cnc.stopPlaying();
@@ -265,6 +247,28 @@ class MusicHandler {
                 }
             }).catch(reject);
         });
+    }
+
+    async cacheTrack(item, noReturn=false) {
+        let destFile = `${mainDir}/cache/${hashSong(item.info)}`;
+        let destExists = fs.existsSync(destFile);
+        let getter = this.handlers[item.info.type].getStream.bind(this.handlers[item.info.type]);
+
+        if (destExists && !noReturn) return fs.createReadStream(destFile);
+        else if (destExists) return;
+
+        let stream = await getter(item.info.url);
+
+        if (!destExists && stream instanceof Stream) {
+            let p = await new Promise((resolve, reject) => {
+                let piper = stream.pipe(fs.createWriteStream(destFile));
+
+                piper.on('error', reject);
+                piper.on('finish', () => resolve(fs.createReadStream(destFile)));
+            });
+
+            if (!noReturn) return p;
+        } else if (!noReturn) return stream;
     }
 }
 
