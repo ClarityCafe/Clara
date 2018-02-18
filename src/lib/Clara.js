@@ -183,8 +183,21 @@ class Clara extends Eris.Client {
      * @returns {Object} Settings from the database.
      */
     async getDataSettings() {
-        if (!await this.db.settings.get)  await this.db.settings.set({prefixes: [], admins: [], blacklist: []});
-        return await this.db.settings.get;
+        if (!await this.db.settings.get) {
+            await this.db.settings.set({
+                prefixes: [],
+                admins: [],
+                blacklist: [],
+                unloadedModules: []
+            });
+        } else {
+            let res = await this.db.settings.get;
+            let noHave = ['prefixes', 'admins', 'blacklist', 'unloadedModules'].filter(v => !Object.keys(res).includes(v));
+
+            for (let key of noHave) await this.db.settings[key].set([]);
+        }
+
+        return this.db.settings.get;
     }
 
     /**
@@ -257,6 +270,30 @@ class Clara extends Eris.Client {
 
         await this.db.settings.blacklist.remove(userID);
         this.blacklist.splice(this.blacklist.indexOf(userID), 1);
+    }
+
+    /**
+     * Marks a module as persistently unloaded.
+     * 
+     * @param {String} mod Module to mark as unloaded.
+     */
+    async addUnloadedModule(mod) {
+        if (typeof mod !== 'string') throw new TypeError('mod is not a string.');
+
+        await this.db.settings.unloadedModules.push(mod);
+        this.unloadedModules.push(mod);
+    }
+
+    /**
+     * Unmarks a module as persistently unloaded.
+     * 
+     * @param {String} mod Module to unmark as unloaded.
+     */
+    async removeUnloadedModule(mod) {
+        if (typeof mod !== 'string') throw new TypeError('mod is not a string.');
+
+        await this.db.settings.unloadedModules.remove(mod);
+        this.unloadedModules.splice(this.unloadedModules.indexOf(mod), 1);
     }
 
     /**
