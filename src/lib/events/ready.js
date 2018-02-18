@@ -10,10 +10,11 @@ module.exports = bot => {
     bot.on('ready', async () => {
         if (bot.loadCommands) {
             try {
-                let {prefixes, blacklist, admins} = await bot.getDataSettings();
+                let {prefixes, blacklist, admins, unloadedModules} = await bot.getDataSettings();
                 bot.admins = admins;
                 bot.blacklist = blacklist;
                 bot.prefixes = prefixes.concat([`<@${bot.user.id}> `, `<@!${bot.user.id}> `, bot.config.mainPrefix]);
+                bot.unloadedModules = unloadedModules;
 
                 await bot.localeManager.loadLocales(bot);
                 logger.info(`Loaded ${Object.keys(bot.localeManager.locales).length} locales.`);

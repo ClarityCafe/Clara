@@ -19,26 +19,14 @@ exports.main = {
     usage: '[load|unload|reload]',
     owner: true,
     async main(bot, ctx) {
-        let unloadedMods = JSON.parse(fs.readFileSync(`${mainDir}/data/unloadedCommands.json`));
         let embed = {
             title: 'Currently enabled command modules',
             description: `Showing **${bot.commandFolders.length}** command modules.`,
             fields: [
-                {name: 'Loaded Modules', value: []},
-                {name: 'Unloaded Modules', value: []}
+                {name: 'Loaded Modules', value: Object.keys(bot.commands.modules).map(mod => `\`${mod}\``).join(', ')},
+                {name: 'Unloaded Modules', value: bot.unloadedModules.map(mod => `\`${mod}\``).join(', ') || 'None'}
             ]
         };
-
-        Object.keys(bot.commands.modules).filter(m => !m.endsWith('-fixed')).forEach(mod => {
-            embed.fields[0].value.push(`\`${mod}\``);
-        });
-
-        unloadedMods.forEach(mod =>  {
-            embed.fields[1].value.push(`\`${mod.split('/').slice(-1)[0]}\``);
-        });
-
-        embed.fields[0].value = embed.fields[0].value.join(', ');
-        embed.fields[1].value = embed.fields[1].value.join(', ') || 'None';
 
         await ctx.createMessage({embed});
     }
@@ -59,14 +47,7 @@ exports.load = {
         let mod = `${bot.commandFolders[folders.indexOf(ctx.args[0])]}/${pkg.main}`;
 
         bot.commands.loadModule(mod);
-
-        let unloadedMods = JSON.parse(fs.readFileSync(`${mainDir}/data/unloadedCommands.json`));
-        let sliced = unloadedMods.map(f => f.split('/').slice(-1)[0]);
-
-        if (!sliced.includes(ctx.args[0])) {
-            unloadedMods.splice(sliced.indexOf(ctx.args[0]), 1);
-            fs.writeFileSync(`${mainDir}/data/unloadedCommands.json`, JSON.stringify(unloadedMods));
-        }
+        await bot.removeUnloadedModule(ctx.args[0]);
 
         await ctx.createMessage(`Loaded module **${ctx.args[0]}**`);
     }
@@ -86,11 +67,7 @@ exports.unload = {
         bot.commands.unloadModule(mod);
         delete require.cache[require.resolve(mod)];
 
-        let unloadedMods = JSON.parse(fs.readFileSync(`${mainDir}/data/unloadedCommands.json`));
-
-        unloadedMods.push(mod.split('/').slice(0, -1).join('/'));
-        fs.writeFileSync(`${mainDir}/data/unloadedCommands.json`, JSON.stringify(unloadedMods));
-
+        await bot.addUnloadedModule(ctx.args[0]);
         await ctx.channel.createMessage(`Unloaded module **${ctx.args[0]}**`);
     }
 };
