@@ -16,10 +16,8 @@ function exists(module) {
     }
 }
 
-module.exports = bot => {
+module.exports = async bot => {
     let allDeps = [];
-    let dontLoad = [];
-    let unloaded;
 
     logger.custom('loader', 'Preloading commands...');
 
@@ -30,7 +28,7 @@ module.exports = bot => {
 
         if (!files.includes('package.json')) {
             logger.customError('loader', `Will not load "${name}" due to missing package.json.`);
-            dontLoad.push(cmd);
+            await bot.addUnloadedModule(name);
             continue;
         }
 
@@ -38,6 +36,7 @@ module.exports = bot => {
             pkg = JSON.parse(fs.readFileSync(`${cmd}/package.json`));
         } catch(err) {
             logger.customError('loader', `Malformed package file for "${name}".`);
+            await bot.addUnloadedModule(name);
             continue;
         }
 
@@ -53,29 +52,23 @@ module.exports = bot => {
         cp.execSync(`npm i ${allDeps.join(' ')} --no-save`);
     }
 
-    try {
-        unloaded = JSON.parse(fs.readFileSync(bot.unloadedPath));
-    } catch(err) {
-        fs.writeFileSync(bot.unloadedPath, '[]');
-        unloaded = [];
-    }
-
     logger.custom('loader', 'Loading commands...');
 
     for (let cmd of bot.commandFolders) {
-        if (dontLoad.includes(cmd) || unloaded.includes(cmd)) continue;
+        let name = cmd.split('/').slice(-1)[0];
+
+        if (bot.unloadedModules.includes(name)) continue;
 
         let pkg = JSON.parse(fs.readFileSync(`${cmd}/package.json`));
         let path = `${cmd}/${pkg.main}`;
-        let name = cmd.split('/').slice(-1)[0];
 
         try {
             bot.commands.loadModule(path);
         } catch(err) {
             logger.customError('loader', `Error while loading "${name}"\n${err}${err.stack ? `\n${err.stack.split('\n')[1]}` : ''}`);
-            unloaded.push(cmd);
+            await bot.addUnloadedModule(name);
         }
     }
 
-    fs.writeFileSync(bot.unloadedPath, JSON.stringify(unloaded));
+    logger.custom('loader', 'Finshed loading commands.\n');
 };
