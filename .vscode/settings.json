@@ -2,6 +2,5 @@
 {
 "eslint.enable": true,
 "eslint.validate" : ["javascript"],
-"vsicons.presets.angular": false,
 "tslint.enable": false
 }

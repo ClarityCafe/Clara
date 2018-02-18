@@ -1,56 +1,48 @@
 {
   "name": "Clara",
   "description": "A General-Purpose Node.js Discord Bot",
+  "logo": "https://logos.speedtestcustom.com/prod/8380-1516204957824.png",
   "scripts": {
   },
   "env": {
-    "DEBUG": {
-      "required": true
-    },
     "DEFAULT_PREFIX": {
       "required": true
     },
     "DISCORD_ORG_TOKEN": {
-      "required": true
+      "required": false
     },
     "DISCORD_PW_TOKEN": {
-      "required": true
+      "required": false
     },
     "DISCORD_TOKEN": {
       "required": true
     },
     "ENABLE_PROMISE_WARNS": {
-      "required": true
+      "required": false
     },
     "GAME_NAME": {
-      "required": true
+      "required": false
     },
     "GAME_URL": {
-      "required": true
+      "required": false
     },
     "IB_TOKEN": {
-      "required": true
+      "required": false
     },
     "INSTANCES": {
-      "required": true
+      "required": false
     },
     "NASA_KEY": {
-      "required": true
+      "required": false
     },
     "OSU_API_TOKEN": {
-      "required": true
+      "required": false
     },
     "OWNER_ID": {
       "required": true
     },
-    "PAPERTRAIL_API_TOKEN": {
-      "required": true
-    },
-    "REDIS_URL": {
-      "required": true
-    },
     "SAUCENAO_TOKEN": {
-      "required": true
+      "required": false
     },
     "YOUTUBE_TOKEN": {
       "required": true

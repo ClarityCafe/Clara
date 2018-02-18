@@ -22,15 +22,12 @@ package-lock.json
 .project
 data.json 
 
-# Visual Studio Files
-obj
-bin
-
 # Bot files  
-src/config.json
+config.json
 src/data
 .idea/workspace.xml
 lines.txt
+cache/
 
 #Redis dunps
 dump .rdb

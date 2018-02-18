@@ -1,14 +1,17 @@
 /**
- * @file Main music handler file.
+ * @file Music handler abstraction file.
  * @author Ovyerus
  */
 
 const {Context} = require(`${mainDir}/lib/modules/CommandHolder`);
 const ytSearch = require('youtube-simple-search');
+const fs = require('fs');
+const crypto = require('crypto');
+const Stream = require('stream').Stream;
 
 // Link regexs
 const YTRegex = /^(?:https?:\/\/)?(?:(?:www\.|m.)?youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9-_]{11})/;
-const YTPlaylistRegex = /^(?:https:\/\/)(?:www.)?youtube\.com\/playlist\?list=(PL[a-zA-Z0-9-_]{32}|PL[A-Z0-9]{16})/;
+const YTPlaylistRegex = /^(?:https?:\/\/)?(?:www.)?youtube\.com\/playlist\?list=(PL[a-zA-Z0-9-_]{32}|PL[A-Z0-9]{16})/;
 const SCRegex = /^(?:https:\/\/)soundcloud\.com\/([a-z0-9-]+\/[a-z0-9-]+)/;
 const SCPlaylistRegex = /^(?:https:\/\/)?soundcloud\.com\/([a-z0-9-]+\/sets\/[a-z0-9-]+)$/;
 const ClypRegex = /^(?:https:\/\/)?clyp\.it\/([a-z0-9]{8})/;
@@ -31,6 +34,12 @@ class MusicHandler {
         };
     }
 
+    /**
+     * Queues a given song into the music queue.
+     * 
+     * @param {Context} ctx Context to use.
+     * @param {String} url Item URL to queue. Must be a supported service.
+     */
     async queue(ctx, url) {
         if (!(ctx instanceof Context)) throw new TypeError('ctx is not an instance of Context.');
         if (typeof url !== 'string') throw new TypeError('url is not a string.');
@@ -38,6 +47,7 @@ class MusicHandler {
 
         // Get queue. If it doesn't exist, create it
         if (!this._bot.music.queues.get(ctx.guild.id)) {
+            // JavaScript object magic hax.
             let magic = [];
             magic.id = ctx.guild.id;
 
@@ -50,21 +60,32 @@ class MusicHandler {
         // Get song info and queue it
         if (!PlaylistTypes.includes(type)) {
             let info = await this.handlers[type].getInfo(getURL);
+            let item = {info, ctx, timestamp: Date.now()};
 
-            q.push({info, ctx, timestamp: Date.now()});
-            await ctx.createMessage(`Queued **${info.title}** to position **${q.length}** (including currently playing).`);
-        } else {
-            await this.queuePlaylist(ctx, getURL);
-        }
+            q.push(item);
+            await ctx.createMessage('music-queueSong', null, 'channel', {
+                item: info.title,
+                position: q.current ? q.length + 1 : q.length
+            });
+
+            if (q.indexOf(item) === 0) await this.cacheTrack(item, true);
+        } else await this.queuePlaylist(ctx, getURL);
     }
 
+    /**
+     * Queues all the tracks of a given playlist into the music queue.
+     * 
+     * @param {Context} ctx Context to use.
+     * @param {String} url Playlist URL to queue items from. Must be a supported service.
+     */
     async queuePlaylist(ctx, url) {
         if (!(ctx instanceof Context)) throw new TypeError('ctx is not an instance of Context.');
         if (typeof url !== 'string') throw new TypeError('url is not a string.');
         if (!checkURL(url)) throw new Error('Unsupported music source.');
 
-        // Get queue. If it doesn't exist, create it
+        // Get queue. If it doesn't exist, create it.
         if (!this._bot.music.queues.get(ctx.guild.id)) {
+            // JavaScript object magic hax.
             let magic = [];
             magic.id = ctx.guild.id;
 
@@ -86,9 +107,20 @@ class MusicHandler {
             queuedAmt++;
         }
 
-        await ctx.createMessage(`Queued **${queuedAmt}** items from playlist \`${playlist.title}\`.\n**Duration**: ${timeFormat(fullDuration)}`);
+        await ctx.createMessage('music-queuePlaylist', null, 'channel', {
+            amount: queuedAmt,
+            playlist: playlist.title,
+            duration: timeFormat(fullDuration)
+        });
     }
 
+    /**
+     * Searches YouTube for tracks matching user input.
+     * 
+     * @param {Context} ctx Context to use.
+     * @param {String} terms Search terms.
+     * @returns {String} The URL of the search choice.
+     */
     async search(ctx, terms) {
         if (!(ctx instanceof Context)) throw new TypeError('ctx is not an instance of Context.');
         if (typeof terms !== 'string') throw new TypeError('terms is not a string.');
@@ -122,6 +154,12 @@ class MusicHandler {
         } else throw new Error('Invalid selection (Number too high, too low, or not a number).');
     }
 
+    /**
+     * Pre-handler for playing music. Run this instead of MusicHandler#play.
+     * 
+     * @param {Context} ctx Context to use.
+     * @param {String} url URl of the track to play.
+     */
     async prePlay(ctx, url) {
         let bot = this._bot;
 
@@ -132,30 +170,48 @@ class MusicHandler {
             bot.music.connections.get(ctx.guild.id).summoner = ctx.member;
 
             await this.play(ctx);
-        } else if (!bot.music.connections.get(ctx.guild.id).playing) {
-            await this.play(ctx);
-        }
+        } else if (!bot.music.connections.get(ctx.guild.id).playing) await this.play(ctx);
     }
 
+    /**
+     * Main handler for playing music. You probably want to use MusicHandler#prePlay instead, unless you really know what you're doing.
+     * 
+     * @param {Context} ctx Context to use.
+     * @returns {Promise} . 
+     */
     play(ctx) {
         return new Promise((resolve, reject) => {
             let bot = this._bot;
             let cnc = bot.voiceConnections.get(ctx.guild.id);
-            let item = bot.music.queues.get(ctx.guild.id).shift();
+            let q = bot.music.queues.get(ctx.guild.id);
+            let item = q.shift();
+            let last = q.current;
+            q.current = item;
+
+            if (last) {
+                let lastFile = `${mainDir}/cache/${hashSong(last.info)}`;
+                let hasSong = bot.music.queues.filter(q => (q.current && q.current.info.url === last.url) || q.filter(s => s.info.url === last.url).length);
+
+                if (fs.existsSync(lastFile) && !hasSong.length) {
+                    fs.unlink(lastFile, err => {
+                        if (err) logger.warn(`Unable to delete temporary voice file "${lastFile}"`);
+                    });
+                }
+            }
 
             if (!item) {
                 bot.music.inactives.push([ctx.guild.channels.get(cnc.channelID), Date.now()]);
                 return resolve();
             }
 
-            this.handlers[item.info.type].getStream(item.info.url).then(stream => {
+            this.cacheTrack(item).then(stream => {
                 bot.music.streams.add({
                     id: ctx.guild.id,
                     stream,
                     url: item.info.url
                 });
 
-                cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5', '-b:a', '96k', '-bufsize', '96k']});
+                cnc.play(stream, {encoderArgs: ['-af', 'volume=0.5']});
 
                 return ctx.createMessage({embed: {
                     author: {name: 'music-nowPlayingTitle'},
@@ -172,22 +228,47 @@ class MusicHandler {
                     type: item.info.type
                 });
             }).then(() => {
+                if (q.length) this.cacheTrack(q[0], true);
+
                 if (!cnc.eventNames().includes('error')) {
-                    cnc.on('error', async err => {
+                    cnc.on('error', err => {
                         logger.error(`Voice error in guild ${ctx.guild.id}\n${err.stack}`);
-                        await ctx.createMessage(`Voice connection error: \`${err}\``);
+                        ctx.createMessage(`Voice connection error: \`${err}\``);
+                        cnc.stopPlaying();
                     });
+                }
 
-                    if (!cnc.eventNames().includes('end')) {
-                        cnc.on('end', () => {
-                            if (bot.music.stopped.includes(ctx.guild.id)) return resolve();
+                if (!cnc.eventNames().includes('end')) {
+                    cnc.on('end', () => {
+                        if (bot.music.stopped.includes(ctx.guild.id)) return resolve();
 
-                            resolve(this.play(ctx));
-                        });
-                    }
+                        resolve(this.play(ctx));
+                    });
                 }
             }).catch(reject);
         });
+    }
+
+    async cacheTrack(item, noReturn=false) {
+        let destFile = `${mainDir}/cache/${hashSong(item.info)}`;
+        let destExists = fs.existsSync(destFile);
+        let getter = this.handlers[item.info.type].getStream.bind(this.handlers[item.info.type]);
+
+        if (destExists && !noReturn) return fs.createReadStream(destFile);
+        else if (destExists) return;
+
+        let stream = await getter(item.info.url);
+
+        if (!destExists && stream instanceof Stream) {
+            let p = await new Promise((resolve, reject) => {
+                let piper = stream.pipe(fs.createWriteStream(destFile));
+
+                piper.on('error', reject);
+                piper.on('finish', () => resolve(fs.createReadStream(destFile)));
+            });
+
+            if (!noReturn) return p;
+        } else if (!noReturn) return stream;
     }
 }
 
@@ -213,6 +294,10 @@ function matchURL(url) {
     }
 }
 
+// Creates a unique hash per song when caching. Not intended to be cryptographically secure by any means.
+function hashSong(info) {
+    return crypto.createHash('md5').update(info.url).digest('hex');
+}
 
 function searchP(query, options) {
     return new Promise(resolve => {

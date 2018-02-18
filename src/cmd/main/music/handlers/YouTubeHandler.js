@@ -3,44 +3,45 @@
  * @author Ovyerus
  */
 
-const ytdl = require('ytdl-core');
-// const got = require('got');
+const ytdl = require('youtube-dl');
+const got = require('got');
+
+// List of all itag qualities can be found here: https://en.wikipedia.org/w/index.php?title=YouTube&oldid=800910021#Quality_and_formats.
+const ITAG = '140'; // Preferred itag quality to get. Default: 140.
+const ITAG_FALLBACK = '22'; // In the event that the previous itag could not be found, try finding this one. Should probably be a lower value.
 
 class YouTubeHandler {
     constructor() {}
 
-    getInfo(url) {
-        return new Promise((resolve, reject) => {
-            if (typeof url !== 'string') throw new TypeError('url is not a string.');
+    async getInfo(url) {
+        if (typeof url !== 'string') throw new TypeError('url is not a string.');
 
-            ytdl.getInfo(url, {filter: 'audioonly'}).then(info => {
-                let res = {
-                    url,
-                    title: info.title,
-                    uploader: info.author.name,
-                    thumbnail: info.thumbnail_url.replace('default.jpg', 'hqdefault.jpg'),
-                    length: Number(info.length_seconds),
-                    type: 'YouTubeVideo'
-                };
+        let info = await new Promise((res, rej) => ytdl.getInfo(url, [], {maxBuffer: Infinity}, (err, i) => err ? rej(err) : res(i)));
+        let res = {
+            url,
+            title: info.title,
+            uploader: info.uploader,
+            thumbnail: info.thumbnail,
+            length: splitTime(info.duration),
+            type: 'YouTubeVideo'
+        };
 
-                return res;
-            }).then(resolve).catch(reject);
-        });
+        return res;
     }
 
-    getStream(url) {
-        return new Promise((resolve, reject) => {
-            if (typeof url !== 'string') throw new TypeError('url is not a string.');
-            
-            ytdl.getInfo(url, {filter: 'audioonly'}).then(info => {
-                // Sort the various bitrates and pick the highest quality (that is 96kbps or less)
-                let bitrates = info.formats.filter(f => f.audioBitrate <= 96 && typeof f.audioBitrate === 'number');
-                bitrates = bitrates.map(f => {return {bitrate: f.bitrate, url: f.url};}).sort((a, b) => b.bitrate - a.bitrate);
+    async getStream(url) {
+        if (typeof url !== 'string') throw new TypeError('url is not a string.');
 
-                return bitrates[0].url;
-            }).then(resolve).catch(reject);
-        });
+        let info = await new Promise((res, rej) => ytdl.getInfo(url, [], {maxBuffer: Infinity}, (err, i) => err ? rej(err) : res(i)));
+        let format = info.formats.find(f => f.format_id === ITAG) || info.formats.find(f => f.format_id === ITAG_FALLBACK);
+        format = format ? format.url : info.url; // Fallback to default URL if the wanted itags could not be found;
+
+        return got.stream(format);
     }
+}
+
+function splitTime(time) {
+    return time.split(':').reverse().map(v => Number(v)).reduce((m, v, i) => m + (v * (60 ** i)));
 }
 
 module.exports = YouTubeHandler;

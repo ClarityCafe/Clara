@@ -1,6 +1,6 @@
 {
     "main": "yori.js",
     "dependencies": {
-        "cheerio": "^0.22.0"
+        "cheerio": "^1.0.0-rc.2"
     }
 }

@@ -1,11 +1,15 @@
 {
     "name": "clara",
-    "version": "0.4.2",
+    "version": "0.4.3",
     "description": "A general-purpose discord bot.",
     "main": "src/bot.js",
+    "engines": {
+        "node": "9.x.x",
+        "npm": "4.x.x"
+    },
     "scripts": {
-        "heroku-prebuild": "npm i -g pm2",
-        "postinstall": "npm i -g pm2",
+        "circle-postinstall": "node ./lib/modules/depPreloader.js --harmony",
+        "heroku-postbuild": "npm i -g pm2 && node ./src/lib/modules/depPreloader.js --harmony",
         "start": "node src/bot.js",
         "lint": "eslint ./src"
     },
@@ -25,8 +29,8 @@
     "homepage": "https://github.com/ClarityMoe/Clara",
     "dependencies": {
         "bluebird": "^3.5.1",
-        "eris": "abalabahaha/eris",
-        "got": "^8.0.0",
+        "eris": "latest",
+        "got": "^8.0.3",
         "redite": "^1.0.0"
     },
     "devDependencies": {

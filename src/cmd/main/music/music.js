@@ -75,14 +75,21 @@ exports.queue = {
     usage: '[page number]',
     async main(bot, ctx) {
         let embed = {title: 'music-queueTitle'};
+        let q = bot.music.queues.get(ctx.guild.id);
 
-        if (!bot.music.queues.get(ctx.guild.id) || bot.music.queues.get(ctx.guild.id).length === 0) {
+        if (!q || q.length === 0) {
+            if (q && q.current) {
+                embed.author = {name: 'music-queueTitle'};
+                embed.title = 'music-queueNowPlaying';
+            }
+
             embed.description = 'music-queueEmpty';
 
-            return await ctx.createMessage({embed});
+            return await ctx.createMessage({embed}, null, 'channel', {
+                song: q ? q.current.info.title : null,
+                duration: q ? timeFormat(q.current.info.length) : null
+            });
         }
-
-        let q = bot.music.queues.get(ctx.guild.id);
 
         // I'm not certain what the first type coercion does, and at this point, I'm too afraid to ask.
         let page = !Number(ctx.suffix) || Number(ctx.suffix) === 0 ? 0 : Number(ctx.suffix) - 1;
@@ -101,10 +108,17 @@ exports.queue = {
             }];
         } else embed.description = thisPage.join('\n');
 
+        if (q.current) {
+            embed.author = {name: 'music-queueTitle'};
+            embed.title = 'music-queueNowPlaying';
+        }
+
         await ctx.createMessage({embed}, null, 'channel', {
             page: page + 1,
             total: pages,
-            items: q.length
+            items: q.length,
+            song: q.current.info.title,
+            duration: timeFormat(q.current.info.length)
         });
     }
 };
@@ -112,11 +126,12 @@ exports.queue = {
 exports.np = {
     desc: 'Show what song is now playing.',
     async main(bot, ctx) {
-        if ((bot.music.connections.get(ctx.guild.id) && !bot.music.connections.get(ctx.guild.id).playing)
-            || !bot.music.queues.get(ctx.guild.id)
-            || !bot.music.queues.get(ctx.guild.id).length) return await ctx.createMessage('music-notPlaying');
+        let conn = bot.music.connections.get(ctx.guild.id);
+        let q = bot.music.queues.get(ctx.guild.id);
 
-        let {info: item, ctx: c} = bot.music.queues.get(ctx.guild.id)[0];
+        if (!conn || (conn && !conn.playing) || !q || !q.current) return await ctx.createMessage('music-notPlaying');
+
+        let {info: item, ctx: c} = q.current;
         let embed = {
             author: {name: 'music-nowPlayingTitle'},
             title: item.title,
@@ -203,7 +218,7 @@ exports.skip = {
 
             let skips = bot.music.skips.get(ctx.guild.id);
             let chan = ctx.guild.channels.get(conn.channelID);
-            let track = bot.music.queues.get(ctx.guild.id)[0].info;
+            let track = bot.music.queues.get(ctx.guild.id).current.info;
 
             if (!skips.includes(ctx.author.id)) {
                 skips.push(ctx.author.id);
@@ -224,7 +239,7 @@ exports.skip = {
                     total: chan.voiceMembers.filter(m => !m.bot && !m.voiceState.selfDeaf && !m.voiceState.deaf && m.id !== bot.user.id).length
                 });
             } else {
-                return await ctx.createMesage('music-skipVotedAlready', null, 'channel', {
+                return await ctx.createMessage('music-skipVotedAlready', null, 'channel', {
                     mention: ctx.author.mention,
                     item: track.title,
                     votes: skips.length,
@@ -258,11 +273,11 @@ exports.clear = {
         if (conn.summoner && conn.summoner.id !== ctx.author.id && !ctx.hasPermission('manageGuild', 'author')) return await ctx.createMessage('music-userNotSummoner');
         if (!q || !q.length) return await ctx.createMessage('music-clearEmptyQueue');
 
-        await bot.createMessage('music-clearConfirm');
+        await ctx.createMessage('music-clearConfirm');
 
         let msg = await bot.awaitMessage(ctx.channel.id, ctx.author.id);
 
-        if (/^y(es)?$/i.test(msg.content)) await ctx.createMessage('music.clearConfirmYes');
+        if (/^y(es)?$/i.test(msg.content)) await ctx.createMessage('music-clearConfirmYes');
         else if (/^no?$/i.test(msg.content)) {
             await ctx.createMessage('music-clearConfirmNo');
             clear(q);

@@ -1,10 +1,9 @@
 {
   "main": "music.js",
   "dependencies": {
-    "ytdl-core": "^0.12.1",
-    "youtube-simple-search": "^0.1.1",
-    "ytpl": "^0.1.1",
-    "twitch.tv": "^2.1.0",
-    "twitch-get-stream": "^0.4.0"
+    "youtube-dl": "1.12.2",
+    "youtube-simple-search": "0.1.1",
+    "twitch.tv": "2.1.0",
+    "twitch-get-stream": "0.4.1"
   }
 }

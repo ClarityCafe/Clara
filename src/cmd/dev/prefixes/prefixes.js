@@ -3,8 +3,6 @@
  * @author Ovyerus
  */
 
-const fs = require('fs');
-
 exports.loadAsSubcommands = true;
 exports.commands = [
     'add',
@@ -15,23 +13,14 @@ exports.main = {
     desc: 'View the various prefixes used by the bot and edit them.',
     usage: '[<add|remove> <prefix>]',
     async main(bot, ctx) {
+        let prefixes = bot.prefixes.map(prefix => {
+            if (RegExp(`^<@!?${bot.user.id}> $`).test(prefix)) return '@mention';
+            else return prefix;
+        }).reduce((m, v) => !m.includes(v) ? m.concat(v) : m, []); // Remove any duplicate entries.
         let embed = {
-            title: `Displaying **${bot.prefixes.length - 1}** prefixes`,
-            description: [],
-            author: {
-                name: 'Current Prefixes'
-            }
+            title: `Showing ${prefixes.length} prefixes`,
+            description: `\`${prefixes.join('`, `')}\``
         };
-
-        bot.prefixes.forEach(prefix => {
-            if (RegExp(`^<@!?${bot.user.id}> $`).test(prefix) && !~embed.description.indexOf('`@mention`')) {
-                embed.description.push('`@mention`');
-            } else if (!RegExp(`^<@!?${bot.user.id}> $`).test(prefix)) {
-                embed.description.push(`\`${prefix}\``);
-            }
-        });
-
-        embed.description = embed.description.join(', ');
 
         await ctx.createMessage({embed});
     }
@@ -42,13 +31,13 @@ exports.add = {
     usage: '<prefix>',
     owner: true,
     async main(bot, ctx) {
-        if (ctx.args.length === 0) return await ctx.createMessage('Please give me a prefix to add.');
+        if (!ctx.suffix) return await ctx.createMessage('Please give me a prefix to add.');
 
-        let prefix = ctx.args.join(' ');
-        let newPrefixes = bot.prefixes.concat(prefix).filter(p => p !== bot.config.mainPrefix && !RegExp(`^<@!?${bot.user.id}> $`).test(p));
+        let prefix = ctx.args.join(' '); // Using ctx.suffix would mean that "" in multi-word arguments would be kept. This stops that.
 
-        fs.writeFileSync('./data/prefixes.json', JSON.stringify(newPrefixes));
-        bot.prefixes.push(ctx.args.join(' '));
+        if (bot.prefixes.includes(prefix)) return await ctx.createMessage('That prefix already exists.');
+
+        await bot.addPrefix(prefix); // Yay, abstraction.
         await ctx.createMessage(`Added prefix \`${prefix}\``);
     }
 };
@@ -58,35 +47,15 @@ exports.remove = {
     usage: '<prefix>',
     owner: true,
     async main(bot, ctx) {
-        if (ctx.args.length === 0) return await ctx.createMessage('Please give me a prefix to remove.');
+        if (!ctx.suffix) return await ctx.createMessage('Please give me a prefix to remove.');
 
         let prefix = ctx.args.join(' ');
-        let newPrefixes = bot.prefixes.filter(p => p !== prefix);
+        let isPermanent = RegExp(`^<@!?${bot.user.id}> ?$`).test(prefix) || prefix === bot.config.mainPrefix;
 
-        if (RegExp(`^<@!?${bot.user.id}> ?$`).test(prefix) || prefix === bot.config.mainPrefix || newPrefixes.equals(bot.prefixes)) return await ctx.createMessage("That prefix doesn't exist or can't be removed.");
+        if (isPermanent) return await ctx.createMessage('That prefix cannot be removed.');
+        else if (!bot.prefixes.includes(prefix)) return await ctx.createMessage("That prefix doesn't exist.");
 
-        newPrefixes = newPrefixes.filter(p => p !== bot.config.mainPrefix && !RegExp(`^<@!?${bot.user.id}> $`).test(p));
-
-        fs.writeFileSync('./data/prefixes.json', JSON.stringify(newPrefixes));
-        bot.prefixes.splice(bot.prefixes.indexOf(prefix), 1);
+        await bot.removePrefix(prefix);
         await ctx.createMessage(`Removed prefix \`${prefix}\``);
     }
 };
-
-Array.prototype.equals = array => {
-    if (!array || this.length !== array.length) return false;
-
-    for (var i = 0, l=this.length; i < l; i++) {
-        if (this[i] instanceof Array && array[i] instanceof Array) {
-            if (!this[i].equals(array[i])) {
-                return false;
-            }
-        } else if (this[i] !== array[i]) {
-            return false;
-        }
-    }
-
-    return true;
-};
-
-Object.defineProperty(Array.prototype, 'equals', {enumerable: false});

@@ -358,7 +358,7 @@ class CommandHolder {
                 for (let key in cmd.permissions) {
                     if (Array.isArray(cmd.permissions[key])) {
                         for (let perm of cmd.permissions[key]) {
-                            if (!~permChecks[key].indexOf(perm)) {
+                            if (!permChecks[key].includes(perm)) {
                                 foundPerm = {perm, who: key};
                                 break;
                             }

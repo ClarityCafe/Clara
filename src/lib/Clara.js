@@ -6,6 +6,7 @@
 const Eris = require('eris');
 const got = require('got');
 const fs = require('fs');
+const process = require('process');
 const Redite = require('redite');
 const {CommandHolder} = require(`${__dirname}/modules/CommandHolder`);
 const LocaleManager = require(`${__dirname}/modules/LocaleManager`);
@@ -41,18 +42,13 @@ class Clara extends Eris.Client {
         if (!fs.existsSync(path.resolve(`${__dirname}`, '../', './data'))) fs.mkdirSync(path.resolve(`${__dirname}`, '../', './data'));
         if (!fs.existsSync(path.resolve(`${__dirname}`, '../', './data/data.json'))) fs.writeFileSync(path.resolve(`${__dirname}`, '../', './data/data.json'), '{"admins": [], "blacklist": []}');
         if (!fs.existsSync(path.resolve(`${__dirname}`, '../', './data/prefixes.json'))) fs.writeFileSync(path.resolve(`${__dirname}`, '../', './data/prefixes.json'), '[]');
-        
-        let tmp = JSON.parse(fs.readFileSync(path.resolve(`${__dirname}`, '../', './data/data.json')));
-
-        this.blacklist = tmp.blacklist;
-        this.admins = tmp.admins;
-        this.config = config;
-        this.prefixes = JSON.parse(fs.readFileSync(path.resolve(`${__dirname}`, '../', './data/prefixes.json'))).concat([config.mainPrefix]);
 
         this.lookups = new Lookups(this);
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
-        this.db = new Redite({url: config.redisURL || config.redisUrl || 'redis://127.0.0.1/0'});
+        this.db = new Redite({url: config.redisURL || config.redisUrl || process.env.REDIS_URL|| 'redis://127.0.0.1/0'});
+
+        this.config = config;
 
         this.loadCommands = true;
         this.allowCommandUse = false;
@@ -124,14 +120,15 @@ class Clara extends Eris.Client {
 
         if (this.config.discordBotsOrgKey) {
             try {
-                await got(`https://discordbots.org/api/bots/${this.user.id}/stats`, {
+                await got(`https://discordbots.org/api/bots/stats`, {
                     method: 'POST',
                     headers: {
                         Authorization: this.config.discordBotsOrgKey,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        server_count: this.guilds.size
+                        server_count: this.guilds.size,
+                        shard_count: this.shards.size
                     })
                 });
             } catch(err) {
@@ -180,18 +177,127 @@ class Clara extends Eris.Client {
         return this.blacklist.includes(userID);
     }
 
-    async reloadData() {
-        let res = await new Promise((resolve, reject) => fs.readFile('../data/data.json', (err, r) => {
-            if (err) reject(err);
-            else resolve(JSON.parse(r));
-        }));
+    /**
+     * Gets settings from the database, and sets them if they don't exist.
+     * 
+     * @returns {Object} Settings from the database.
+     */
+    async getDataSettings() {
+        if (!await this.db.settings.get) {
+            await this.db.settings.set({
+                prefixes: [],
+                admins: [],
+                blacklist: [],
+                unloadedModules: []
+            });
+        } else {
+            let res = await this.db.settings.get;
+            let noHave = ['prefixes', 'admins', 'blacklist', 'unloadedModules'].filter(v => !Object.keys(res).includes(v));
 
-        this.admins = res.admins;
-        this.blacklist = res.blacklist;
+            for (let key of noHave) await this.db.settings[key].set([]);
+        }
+
+        return this.db.settings.get;
     }
 
     /**
-    * Initialize settings for a guild.
+     * Adds a prefix.
+     * 
+     * @param {String} prefix Prefix to add.
+     */
+    async addPrefix(prefix) {
+        if (typeof prefix !== 'string') throw new TypeError('prefix is not a string.');
+
+        await this.db.settings.prefixes.push(prefix);
+        this.prefixes.push(prefix);
+    }
+
+    /**
+     * Removes a prefix.
+     * 
+     * @param {String} prefix Prefix to remove.
+     */
+    async removePrefix(prefix) {
+        if (typeof prefix !== 'string') throw new TypeError('prefix is not a string.');
+
+        await this.db.settings.prefixes.remove(prefix);
+        this.prefixes.splice(this.prefixes.indexOf(prefix), 1);
+    }
+
+    /**
+     * Add's a user as an admin.
+     * 
+     * @param {String} userID User to add as an admin. 
+     */
+    async addAdmin(userID) {
+        if (typeof userID !== 'string') throw new TypeError('userId is not a string.');
+
+        await this.db.settings.admins.push(userID);
+        this.admins.push(userID);
+    }
+
+    /**
+     * Removes a user as an admin.
+     * 
+     * @param {String} userID User to remove as an admin.
+     */
+    async removeAdmin(userID) {
+        if (typeof userID !== 'string') throw new TypeError('userId is not a string.');
+
+        await this.db.settings.admins.remove(userID);
+        this.admins.splice(this.admins.indexOf(userID), 1);
+    }
+
+    /**
+     * Adds a user to the blacklist.
+     * 
+     * @param {String} userID User to add to the blacklist.
+     */
+    async addBlacklist(userID) {
+        if (typeof userID !== 'string') throw new TypeError('userId is not a string.');
+
+        await this.db.settings.blacklist.push(userID);
+        this.blacklist.push(userID);
+    }
+
+    /**
+     * Removes a user from the blacklist.
+     * 
+     * @param {String} userID User to remove from the blacklist.
+     */
+    async removeBlacklist(userID) {
+        if (typeof userID !== 'string') throw new TypeError('userId is not a string.');
+
+        await this.db.settings.blacklist.remove(userID);
+        this.blacklist.splice(this.blacklist.indexOf(userID), 1);
+    }
+
+    /**
+     * Marks a module as persistently unloaded.
+     * 
+     * @param {String} mod Module to mark as unloaded.
+     */
+    async addUnloadedModule(mod) {
+        if (typeof mod !== 'string') throw new TypeError('mod is not a string.');
+
+        await this.db.settings.unloadedModules.push(mod);
+        this.unloadedModules.push(mod);
+    }
+
+    /**
+     * Unmarks a module as persistently unloaded.
+     * 
+     * @param {String} mod Module to unmark as unloaded.
+     */
+    async removeUnloadedModule(mod) {
+        if (typeof mod !== 'string') throw new TypeError('mod is not a string.');
+
+        await this.db.settings.unloadedModules.remove(mod);
+        this.unloadedModules.splice(this.unloadedModules.indexOf(mod), 1);
+    }
+
+    /**
+    * Initialise settings for a guild.
     *
     * @param {String} guildID ID of guild to init settings for.
     * @returns {Object} Settings for the guild.
@@ -216,7 +322,7 @@ class Clara extends Eris.Client {
             ranks: {
                 limit: 0,
                 roles: [],
-                users: {}
+                userlimits: {}
             }
         };
         

@@ -76,6 +76,18 @@ class Utils {
     }
 
     /**
+     * Lehmer LCG random number generator.
+     * 
+     * @param {Number} [seed] Seed to start the generator off with.
+     * @returns {Function} Function that returns a new number.
+     */
+    static LCG(seed) {
+        let lcg = a => a * 48271 % 2147483647;
+        seed = seed ? lcg(seed) : lcg(Math.random());
+        return () => (seed = lcg(seed)) / 2147483648;
+    }
+
+    /**
      * Generate's a human-readable byte count, scaled accordingly to the appropriate amount.
      * 
      * @param {Number} amt Amount to generate string from.

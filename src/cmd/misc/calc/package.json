@@ -1,6 +1,6 @@
 {
     "main": "calc.js",
     "dependencies": {
-        "mathjs": "^3.16.5"
+        "mathjs": "^3.20.2"
     }
 }
