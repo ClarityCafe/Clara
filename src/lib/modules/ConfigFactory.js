@@ -46,7 +46,7 @@ class ConfigFactory {
                 discordBotsOrgKey: process.env.DISCORD_ORG_TOKEN || null,
                 twitchKey: process.env.TWITCH_TOKEN || null,
                 nasaKey: process.env.NASA_KEY || null,
-                redisURL: process.env.REDIS_URL || 'redis://127.0.0.1/0'
+                redisURL: process.env.REDIS_URL || process.env.REDISCLOUD_URL || 'redis://127.0.0.1/0'
             };
         } else if (fs.existsSync(this.file)) return YAML.parse(fs.readFileSync(this.file));
     }
