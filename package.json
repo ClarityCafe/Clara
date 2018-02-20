@@ -31,7 +31,6 @@
     "bluebird": "^3.5.1",
     "eris": "latest",
     "got": "^8.0.3",
-    "mime-types": "^2.1.18",
     "redite": "^1.0.0",
     "yamljs": "^0.3.0"
   },
