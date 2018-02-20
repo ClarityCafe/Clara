@@ -3,7 +3,6 @@
  *  @author Capuccino
  */
 const fs = require('fs');
-const mm = require('mime-types');
 const YAML = require('yamljs');
 
 /**
