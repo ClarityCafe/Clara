@@ -3,6 +3,8 @@
  *  @author Capuccino
  */
 const fs = require('fs');
+const mm = require('mime-types');
+const YAML = require('yamljs');
 
 /**
  * Abstraction class for managing loading config, falling back to environment args if the file doesn't exist.
@@ -47,7 +49,9 @@ class ConfigFactory {
                 nasaKey: process.env.NASA_KEY || null,
                 redisURL: process.env.REDIS_URL || 'redis://127.0.0.1/0'
             };
-        } else return JSON.parse(fs.readFileSync(this.file));
+        } else if(this.file === mm.contentType('.yml' || '.yaml')) {
+            return YAML.parse(this.file);
+        } else if(this.file === mm.contentType('.json')) return JSON.parse(fs.readFileSync(this.file));
     }
 }
 
