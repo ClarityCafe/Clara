@@ -1,9 +1,10 @@
 {
-  "main": "music.js",
-  "dependencies": {
-    "youtube-dl": "1.12.2",
-    "youtube-simple-search": "0.1.1",
-    "twitch.tv": "2.1.0",
-    "twitch-get-stream": "0.4.1"
-  }
+    "main": "music.js",
+    "dependencies": {
+        "youtube-dl": "1.12.2",
+        "youtube-simple-search": "0.1.1",
+        "twitch.tv": "2.1.0",
+        "twitch-get-stream": "0.4.1"
+    },
+    "requiredTokens": ["youtube", "twitch"]
 }

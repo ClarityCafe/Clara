@@ -1,4 +1,5 @@
 {
     "main" : "apod.js",
-    "dependencies": {}
+    "dependencies": {},
+    "requiredTokens": ["nasa"]
 }

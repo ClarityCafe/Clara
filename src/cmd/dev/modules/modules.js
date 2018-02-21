@@ -46,6 +46,12 @@ exports.load = {
         let pkg = JSON.parse(fs.readFileSync(bot.commandFolders[folders.indexOf(ctx.args[0])] + '/package.json'));
         let mod = `${bot.commandFolders[folders.indexOf(ctx.args[0])]}/${pkg.main}`;
 
+        if (Array.isArray(pkg.requiredTokens)) {
+            let missingTokens = pkg.requiredTokens.filter(tkn => !bot.config.tokens[tkn]);
+
+            if (missingTokens.length) return await ctx.createMessage(`Will not load **${ctx.args[0]}** due to missing tokens: \`${missingTokens.join(', ')}\``)
+        }
+
         bot.commands.loadModule(mod);
         await bot.removeUnloadedModule(ctx.args[0]);
 

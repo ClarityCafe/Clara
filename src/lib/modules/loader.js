@@ -62,6 +62,16 @@ module.exports = async bot => {
         let pkg = JSON.parse(fs.readFileSync(`${cmd}/package.json`));
         let path = `${cmd}/${pkg.main}`;
 
+        if (Array.isArray(pkg.requiredTokens)) {
+            let missingTokens = pkg.requiredTokens.filter(tkn => !bot.config.tokens[tkn]);
+
+            if (missingTokens.length) {
+                logger.customError('loader', `Will not load "${name}" due to missing tokens: "${missingTokens.join('", "')}"`);
+                await bot.addUnloadedModule(name);
+                continue;
+            }
+        }
+
         try {
             bot.commands.loadModule(path);
         } catch(err) {
