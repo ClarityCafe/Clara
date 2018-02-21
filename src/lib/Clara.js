@@ -6,7 +6,6 @@
 const Eris = require('eris');
 const got = require('got');
 const fs = require('fs');
-const path = require('path');
 const {URL} = require('url');
 const Redite = require('redite');
 const {CommandHolder} = require(`${__dirname}/modules/CommandHolder`);
@@ -56,7 +55,7 @@ class Clara extends Eris.Client {
 
         if (!general.ownerID) throw new Error('Configuration is missing general.ownerID');
         if (!general.token) throw new Error('Configuration is missing general.token');
-        if (!general.mainPrefix) throw new Error('Configuration is missing general.mainPrefix')
+        if (!general.mainPrefix) throw new Error('Configuration is missing general.mainPrefix');
         if (general.maxShards === 0) throw new Error('config.general.maxShards cannot be 0.');
         if (!general.maxShards) throw new Error('Configuration is missing general.maxShards');
 
