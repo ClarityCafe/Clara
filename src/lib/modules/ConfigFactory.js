@@ -42,7 +42,7 @@ class ConfigFactory {
                 general: {
                     ownerID: process.env.CLARA_GENERAL_OWNERID,
                     token: process.env.CLARA_GENERAL_TOKEN,
-                    redisURL: process.env.CLARA_GENERAL_REDISURL || 'redis://127.0.0.1/0',
+                    redisURL: process.env.CLARA_GENERAL_REDISURL || 'redis://127.0.0.1/0' || process.env.REDISCLOUD_URL || process.env.REDIS_URL,
                     mainPrefix: process.env.CLARA_GENERAL_MAINPREFIX,
                     maxShards: process.env.CLARA_GENERAL_MAXSHARDS || 1
                 },
