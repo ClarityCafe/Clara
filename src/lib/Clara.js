@@ -6,12 +6,12 @@
 const Eris = require('eris');
 const got = require('got');
 const fs = require('fs');
-const process = require('process');
+const path = require('path');
+const {URL} = require('url');
 const Redite = require('redite');
 const {CommandHolder} = require(`${__dirname}/modules/CommandHolder`);
 const LocaleManager = require(`${__dirname}/modules/LocaleManager`);
 const Lookups = require(`${__dirname}/modules/Lookups`);
-const path = require('path');
 
 /**
  * Main class for Clara.
@@ -38,20 +38,42 @@ class Clara extends Eris.Client {
     constructor(config, options = {}) {
         if (!config && typeof config !== 'object') throw new TypeError('config is not an object.');
         
-        super(config.token, options);
-        if (!fs.existsSync(path.resolve(`${__dirname}`, '../', './data'))) fs.mkdirSync(path.resolve(`${__dirname}`, '../', './data'));
-        if (!fs.existsSync(path.resolve(`${__dirname}`, '../', './data/data.json'))) fs.writeFileSync(path.resolve(`${__dirname}`, '../', './data/data.json'), '{"admins": [], "blacklist": []}');
-        if (!fs.existsSync(path.resolve(`${__dirname}`, '../', './data/prefixes.json'))) fs.writeFileSync(path.resolve(`${__dirname}`, '../', './data/prefixes.json'), '[]');
+        super(config.general.token, options);
 
         this.lookups = new Lookups(this);
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
-        this.db = new Redite({url: config.redisURL || config.redisUrl || process.env.REDIS_URL|| 'redis://127.0.0.1/0'});
+        this.db = new Redite({url: config.general.redisURL || config.general.redisUrl || 'redis://127.0.0.1/0'});
 
         this.config = config;
 
         this.loadCommands = true;
         this.allowCommandUse = false;
+    }
+
+    async connect() {
+        let {general} = this.config;
+
+        if (!general.ownerID) throw new Error('Configuration is missing general.ownerID');
+        if (!general.token) throw new Error('Configuration is missing general.token');
+        if (!general.mainPrefix) throw new Error('Configuration is missing general.mainPrefix')
+        if (general.maxShards === 0) throw new Error('config.general.maxShards cannot be 0.');
+        if (!general.maxShards) throw new Error('Configuration is missing general.maxShards');
+
+        if (!general.redisURL) throw new Error('Configuration is missing general.redisURL');
+        else {
+            let parsed = new URL(general.redisURL);
+
+            if (parsed.protocol !== 'redis:') throw new Error(`Invalid protocol for config.general.redisURL: "${parsed.protocol}" must instead be "redis:"`);
+            if (!parsed.host) throw new Error('config.general.redisURL is missing host.');
+
+            if (parsed.pathname && parsed.pathname !== '/') {
+                if (isNaN(parsed.pathname.slice(1))) throw new Error('Invalid database for config.general.redisURL. Must be a number.');
+                if (!(0 <= Number(parsed.pathname.slice(1)) < 16)) throw new Error(`Invalid database for config.general.redisURL. Must be between 0 and 15, inclusive.`);
+            }
+        }
+
+        await super.connect();
     }
 
     /**
@@ -95,15 +117,15 @@ class Clara extends Eris.Client {
     }
 
     /**
-     * POSTs guild count to various bot sites.
+     * Sends guild count to various bot sites.
      */
     async postGuildCount() {
-        if (this.config.discordBotsPWKey) {
+        if (this.config.botlistTokens.dbots) {
             try {
                 await got(`https://bots.discord.pw/api/bots/${this.user.id}/stats`, {
                     method: 'POST',
                     headers: {
-                        Authorization: this.config.discordBotsPWKey,
+                        Authorization: this.config.botlistTokens.dbots,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
@@ -111,19 +133,19 @@ class Clara extends Eris.Client {
                     })
                 });
             } catch(err) {
-                logger.error(`Error POSTing to DBots:\n${err}`);
+                logger.error(`Error sending stats to bots.discord.pw:\n${err}`);
                 return;
             }
 
-            logger.info('Posted to DBots.');
+            logger.info('Sent stats to bots.discord.pw.');
         }
 
-        if (this.config.discordBotsOrgKey) {
+        if (this.config.botlistTokens.dbl) {
             try {
                 await got(`https://discordbots.org/api/bots/stats`, {
                     method: 'POST',
                     headers: {
-                        Authorization: this.config.discordBotsOrgKey,
+                        Authorization: this.config.botlistTokens.dbl,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
@@ -132,11 +154,11 @@ class Clara extends Eris.Client {
                     })
                 });
             } catch(err) {
-                logger.error(`Error POSTing to discordbots.org:\n${err}`);
+                logger.error(`Error sending stats to discordbots.org:\n${err}`);
                 return;
             }
 
-            logger.info('POSTed to discordbots.org.');
+            logger.info('Sent stats to discordbots.org.');
         }
     }
 
@@ -164,7 +186,7 @@ class Clara extends Eris.Client {
      * @returns {Boolean} If the user has perms.
      */
     checkBotPerms(userID) {
-        return userID === this.config.ownerID || this.admins.includes(userID);
+        return userID === this.config.general.ownerID || this.admins.includes(userID);
     }
 
     /**
@@ -409,25 +431,38 @@ class Clara extends Eris.Client {
 
 /**
  * Configuration used for Clara instances.
- * @see config.json.example
+ * @see config.example.yaml
  * 
- * @prop {Boolean} [debug=false] Whether to output error stacks to console.
- * @prop {String} discordBotsOrgKey API key to use for posting stats to discordbots.org.
- * @prop {String} discordBotsPWKey API key to use for posting stats to bots.discord.pw.
- * @prop {String} gameName Text to use for playing status.
- * @prop {String} gameURL Stream url for playing status. Must be a Twitch link.
- * @prop {String} ibKey API key to use for ibsear.ch.
- * @prop {String} mainPrefix Default prefix for the bot.
- * @prop {Number} maxShards Maximum number of shards for the bot to use.
- * @prop {String} nasaKey API key for the NASAS commands.
- * @prop {String} osuApiKey API key to use for osu! commands.
- * @prop {String} ownerID ID of the person who has the most permissions for the bot.
- * @prop {Boolean} promiseWarnings Whether to get the shitty errors from the Promise library.
- * @prop {Object} redisUrl `redis://` url to connect to. Defaults to `redis://127.0.0.1/0`
- * @prop {String} sauceKey API key to use for SauceNAO.
- * @prop {String} token Token to use when connecting to Discord.
- * @prop {String} twitchKey Key to use for Twitch.
- * @prop {String} ytSearchKey Key to use for searching YouTube tracks.
+ * @prop {Object} tokens Tokens used by APIs for different commands.
+ * @prop {String} tokens.youtube
+ * @prop {String} tokens.soundcloud If this is not set, this will be automatically scraped.
+ * @prop {String} tokens.ibsearch
+ * @prop {String} tokens.osu
+ * @prop {String} tokens.saucenao
+ * @prop {String} tokens.nasa
+ * 
+ * @prop {Object} botlistTokens Tokens used for sending stats to various bot list sites.
+ * @prop {String} botlistTokens.dbl discordbots.org token.
+ * @prop {String} botlistTokens.dbots bots.discord.pw token.
+ * 
+ * @prop {Object} development Various debugging options.
+ * @prop {Boolean} development.debug
+ * @prop {Boolean} development.promiseWarnings
+ * 
+ * @prop {Object} general Configuration options for the main bot.
+ * @prop {String} general.ownerID
+ * @prop {String} general.token
+ * @prop {String} general.redisURL
+ * @prop {String} general.mainPrefix
+ * @prop {Number} general.maxShards
+ * 
+ * 
+ * @prop {Object} discord Miscellaneous Discord-related options.
+ * @prop {String} discord.status
+ * @prop {Object} discord.game
+ * @prop {String} discord.game.url
+ * @prop {Integer} discord.game.type
+ * @prop {String} discord.game.name
  */
 class ClaraConfig { // eslint-disable-line
     // Only here for documentation purposes.

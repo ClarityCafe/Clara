@@ -10,45 +10,52 @@ const YAML = require('yamljs');
  */
 class ConfigFactory {
     /**
-     * Makes a new config factory.
+     * Generates a config Object based on Env vars or on a JSON file
      * 
-     * @param {String} file Path of the config file.
-     */
-    constructor(file) {
-        if (typeof file !== 'string') return new Error('file is not a string.');
-
-        this.file = file;
-    }
-
-    /**
-     * Generates a config Object based on Env vars or on a JSON file 
+     * @param {String} [file] Config file to try and load. Will fallback to environment args if it doesn't exist.
      * @returns {Object} Config object
      */
-    generateConfig() {
-        if (!fs.existsSync(this.file)) {
+    static generate(file) {
+        if (file && fs.existsSync(file)) return YAML.load(file);
+        else {
+            /**
+             * @todo Make this programmatic so its easier to have new options added.
+             */
             return {
-                /** @see {Link} https://github.com/ClarityMoe/Clara/issues/133 */
-
-                token: process.env.DISCORD_TOKEN,
-                debug: process.env.DEBUG || false,
-                promiseWarnings: process.env.ENABLE_PROMISE_WARNS || false,
-                ibKey: process.env.IB_TOKEN || null,
-                mainPrefix: process.env.DEFAULT_PREFIX,
-                osuApiKey: process.env.OSU_API_TOKEN || null,
-                sauceKey: process.env.SAUCENAO_TOKEN || null,
-                soundCloudKey: process.env.SOUNDCLOUD_TOKEN || null,
-                gameName: process.env.GAME_NAME || null,
-                gameURL: process.env.GAME_URL || null,
-                ownerID: process.env.BOT_OWNER_ID,
-                maxShards: process.env.INSTANCES || 1,
-                ytSearchKey: process.env.YOUTUBE_TOKEN || null,
-                discordBotsPWKey: process.env.DISCORD_PW_TOKEN || null,
-                discordBotsOrgKey: process.env.DISCORD_ORG_TOKEN || null,
-                twitchKey: process.env.TWITCH_TOKEN || null,
-                nasaKey: process.env.NASA_KEY || null,
-                redisURL: process.env.REDIS_URL || process.env.REDISCLOUD_URL || 'redis://127.0.0.1/0'
+                tokens: {
+                    youtube: process.env.CLARA_TOKENS_YOUTUBE,
+                    soundcloud: process.env.CLARA_TOKENS_SOUNDCLOUD,
+                    ibsearch: process.env.CLARA_TOKENS_IBSEARCH,
+                    osu: process.env.CLARA_TOKENS_OSU,
+                    saucenao: process.env.CLARA_TOKENS_SAUCENAO,
+                    nasa: process.env.CLARA_TOKENS_NASA,
+                    twitch: process.env.CLARA_TOKENS_TWITCH
+                },
+                botlistTokens: {
+                    dbl: process.env.CLARA_BOTLIST_TOKENS_DBL,
+                    dbots: process.env.CLARA_BOTLIST_TOKENS_DBOTS
+                },
+                development: {
+                    debug: process.env.CLARA_DEVELOPMENT_DEBUG,
+                    promiseWarnings: process.env.CLARA_DEVELOPMENT_PROCESS_WARNINGS
+                },
+                general: {
+                    ownerID: process.env.CLARA_GENERAL_OWNERID,
+                    token: process.env.CLARA_GENERAL_TOKEN,
+                    redisURL: process.env.CLARA_GENERAL_REDISURL || 'redis://127.0.0.1/0',
+                    mainPrefix: process.env.CLARA_GENERAL_MAINPREFIX,
+                    maxShards: process.env.CLARA_GENERAL_MAXSHARDS || 1
+                },
+                discord: {
+                    status: process.env.CLARA_DISCORD_STATUS || 'online',
+                    game: {
+                        url: process.env.CLARA_DISCORD_GAME_URL,
+                        type: process.env.CLARA_DISCORD_GAME_TYPE || 0,
+                        name: process.env.CLARA_DISCORD_GAME_NAME
+                    }
+                }
             };
-        } else if (fs.existsSync(this.file)) return YAML.parse(fs.readFileSync(this.file));
+        }
     }
 }
 

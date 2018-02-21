@@ -11,8 +11,7 @@ const Clara = require(`${__dirname}/lib/Clara`);
 const ConfigFactory = require(`${__dirname}/lib/modules/ConfigFactory`);
 const fs = require('fs');
 
-const cf = new ConfigFactory(`${__dirname}/config.json`);
-const config = cf.generateConfig();
+const config = ConfigFactory.generate(`${__dirname}/config.yaml`);
 
 // Globals
 global.mainDir = __dirname;
@@ -21,10 +20,16 @@ global.logger = require(`${__dirname}/lib/modules/Logger`);
 global.Promise = require('bluebird');
 global.got = require('got');
 
+//Promise configuration
+Promise.config({
+    warnings: {wForgottenReturn: config.development.promiseWarnings},
+    longStackTraces: config.development.promiseWarnings
+});
+
 // Bot stuff
 const bot = new Clara(config, {
     seedVoiceConnections: true,
-    maxShards: config.maxShards || 1,
+    maxShards: config.general.maxShards,
     latencyThreshold: 420000000,
     defaultImageFormat: 'webp',
     defaultImageSize: 512,
@@ -36,12 +41,6 @@ const bot = new Clara(config, {
 bot.commandsDir = `${__dirname}/cmd`;
 bot.unloadedPath = `${__dirname}/data/unloadedCommands.json`;
 
-//Promise configuration
-Promise.config({
-    warnings: {wForgottenReturn: config.promiseWarnings || false},
-    longStackTraces: config.promiseWarnings || false
-});
-
 if (!fs.existsSync(`${__dirname}/cache`)) fs.mkdirSync(`${__dirname}/cache/`);
 if (fs.readdirSync(`${__dirname}/cache`).length) {
     // Clears out anything in the cache directory if it has something.
@@ -49,6 +48,7 @@ if (fs.readdirSync(`${__dirname}/cache`).length) {
 }
 
 require(`${__dirname}/lib/events`)(bot);
-bot.connect();
-
-exports.bot = bot;
+bot.connect().catch(err => {
+    console.error(err);
+    process.exit(1);
+});

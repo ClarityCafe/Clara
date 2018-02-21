@@ -21,7 +21,7 @@ exports.commands = [
 ];
 
 exports.init = bot => {
-    osu = require('osu').api(bot.config.osuApiKey);
+    osu = require('osu').api(bot.config.tokens.osu);
 };
 
 exports.main = {

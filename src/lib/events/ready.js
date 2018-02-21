@@ -13,7 +13,7 @@ module.exports = bot => {
                 let {prefixes, blacklist, admins, unloadedModules} = await bot.getDataSettings();
                 bot.admins = admins;
                 bot.blacklist = blacklist;
-                bot.prefixes = prefixes.concat([`<@${bot.user.id}> `, `<@!${bot.user.id}> `, bot.config.mainPrefix]);
+                bot.prefixes = prefixes.concat([`<@${bot.user.id}> `, `<@!${bot.user.id}> `, bot.config.general.mainPrefix]);
                 bot.unloadedModules = unloadedModules;
 
                 await bot.localeManager.loadLocales(bot);
@@ -27,28 +27,17 @@ module.exports = bot => {
 
                 logger.info(`${bot.user.username} is connected to Discord and is ready to use.`);
                 logger.info('--------------------');
-                logger.info(`Owner: ${bot.config.ownerID}`);
+                logger.info(`Owner: ${bot.config.general.ownerID}`);
                 logger.info(`Admins: ${admins.join(', ')}`);
                 logger.info(`Blacklist: ${blacklist.join(', ')}`);
-                logger.info(`Prefixes: "${[bot.config.mainPrefix, '@mention'].concat(prefixes).join('", "')}"`);
+                logger.info(`Prefixes: "${[bot.config.general.mainPrefix, '@mention'].concat(prefixes).join('", "')}"`);
                 logger.info('--------------------\n');
             } catch(err) {
                 logger.error(`Error while starting up:\n${err.stack}`);
             }
         } else logger.info('Reconnected to Discord from disconnection.');
-        if (!bot.config.gameURL) {
-            await bot.editStatus('online', {
-                name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
-                type: 0,
-                url: null
-            });
-        } else { 
-            await bot.editStatus('online', {
-                name: `${bot.config.gameName}` || `${bot.config.mainPrefix} for commands! | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
-                type: 1,
-                url: bot.config.gameURL
-            });
-        }  
+
+        bot.editStatus(bot.config.discord.status || 'online', bot.config.discord.game || {});
         await bot.postGuildCount();
     });
 };
