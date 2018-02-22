@@ -5,6 +5,15 @@
 const fs = require('fs');
 const YAML = require('yamljs');
 
+const capitalReplacers = ['id', 'url'];
+
+function formatStr(str, len) {
+    let res = str.slice(len).toLowerCase();
+    capitalReplacers.forEach(rep => res = res.replace(rep, v => v.toUpperCase()));
+
+    return res.replace(/_./g, (m, i, s) => /[A-Z]/.test(s[i--]) ? m[1] : m[1].toUpperCase());
+}
+
 /**
  * Abstraction class for managing loading config, falling back to environment args if the file doesn't exist.
  */
@@ -16,36 +25,28 @@ class ConfigFactory {
      * @returns {Object} Config object
      */
     static generate(file) {
-        if (file && fs.existsSync(file)) return YAML.load(file);
+        let conf;
+
+        if (file && fs.existsSync(file)) conf = YAML.load(file);
         else {
-            /**
-             * @todo Make this programmatic so its easier to have new options added.
+            let env = Object.entries(process.env);
+
+            /*
+             * 13 = length of "CLARA_TOKENS_"
+             * 21 = length of "CLARA_BOTLIST_TOKENS_"
+             * 18 = length of "CLARA_DEVELOPMENT_"
+             * 14 = length of "CLARA_GENERAL_"
              */
-            return {
-                tokens: {
-                    youtube: process.env.CLARA_TOKENS_YOUTUBE,
-                    soundcloud: process.env.CLARA_TOKENS_SOUNDCLOUD,
-                    ibsearch: process.env.CLARA_TOKENS_IBSEARCH,
-                    osu: process.env.CLARA_TOKENS_OSU,
-                    saucenao: process.env.CLARA_TOKENS_SAUCENAO,
-                    nasa: process.env.CLARA_TOKENS_NASA,
-                    twitch: process.env.CLARA_TOKENS_TWITCH
-                },
-                botlistTokens: {
-                    dbl: process.env.CLARA_BOTLIST_TOKENS_DBL,
-                    dbots: process.env.CLARA_BOTLIST_TOKENS_DBOTS
-                },
-                development: {
-                    debug: process.env.CLARA_DEVELOPMENT_DEBUG,
-                    promiseWarnings: process.env.CLARA_DEVELOPMENT_PROCESS_WARNINGS
-                },
-                general: {
-                    ownerID: process.env.CLARA_GENERAL_OWNERID,
-                    token: process.env.CLARA_GENERAL_TOKEN,
-                    redisURL: process.env.CLARA_GENERAL_REDISURL || process.env.REDISCLOUD_URL || process.env.REDIS_URL || 'redis://127.0.0.1/0',
-                    mainPrefix: process.env.CLARA_GENERAL_MAINPREFIX,
-                    maxShards: process.env.CLARA_GENERAL_MAXSHARDS || 1
-                },
+            let tokens = env.filter(v => v[0].startsWith('CLARA_TOKENS_')).map(([k, v]) => ({[formatStr(k, 13)]: v}));
+            let botlistTokens = env.filter(v => v[0].startsWith('CLARA_BOTLIST_TOKENS_')).map(([k, v]) => ({[formatStr(k, 21)]: v}));
+            let development = env.filter(v => v[0].startsWith('CLARA_DEVELOPMENT_')).map(([k, v]) => ({[formatStr(k, 18)]: v}));
+            let general = env.filter(v => v[0].startsWith('CLARA_GENERAL_')).map(([k, v]) => ({[formatStr(k, 14)]: v}));
+
+            conf = {
+                tokens: tokens.reduce((m, v) => Object.assign(m, v), {}),
+                botlistTokens: botlistTokens.reduce((m, v) => Object.assign(m, v), {}),
+                development: development.reduce((m, v) => Object.assign(m, v), {}),
+                general: general.reduce((m, v) => Object.assign(m, v), {}),
                 discord: {
                     status: process.env.CLARA_DISCORD_STATUS || 'online',
                     game: {
@@ -56,6 +57,11 @@ class ConfigFactory {
                 }
             };
         }
+
+        // Force debug mode if not production env.
+        if (process.env.NODE_ENV !== 'production') conf.development.debug = true;
+
+        return conf;
     }
 }
 
