@@ -39,7 +39,6 @@ class Clara extends Eris.Client {
         
         super(config.general.token, options);
         
-        this.options.firstShardID = this.options.firstShardID || Math.floor(Math.random() * 100).toFixed(0);
         this.lookups = new Lookups(this);
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
@@ -54,13 +53,13 @@ class Clara extends Eris.Client {
     async connect() {
         let {general} = this.config;
 
-        if (!general.ownerID) throw new Error('Configuration is missing general.ownerID');
-        if (!general.token) throw new Error('Configuration is missing general.token');
-        if (!general.mainPrefix) throw new Error('Configuration is missing general.mainPrefix');
-        if (general.maxShards === 0) throw new Error('config.general.maxShards cannot be 0.');
-        if (!general.maxShards) throw new Error('Configuration is missing general.maxShards');
+        if (!general.ownerID) throw new TypeError('Configuration is missing general.ownerID');
+        if (!general.token) throw new TypeError('Configuration is missing general.token');
+        if (!general.mainPrefix) throw new TypeError('Configuration is missing general.mainPrefix');
+        if (general.maxShards === 0) general.maxShards = 1;
+        if (!general.maxShards) general.maxShards = 1;
 
-        if (!general.redisURL) throw new Error('Configuration is missing general.redisURL');
+        if (!general.redisURL) throw new TypeError('Configuration is missing general.redisURL');
         else {
             let parsed = new URL(general.redisURL);
 
