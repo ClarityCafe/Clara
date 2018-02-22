@@ -38,7 +38,8 @@ class Clara extends Eris.Client {
         if (!config && typeof config !== 'object') throw new TypeError('config is not an object.');
         
         super(config.general.token, options);
-
+        
+        this.options.firstShardID = this.options.firstShardID || Math.floor(Math.random() * 100).toFixed(0);
         this.lookups = new Lookups(this);
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
