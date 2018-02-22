@@ -60,6 +60,7 @@ class ConfigFactory {
 
         // Force debug mode if not production env.
         if (process.env.NODE_ENV !== 'production') conf.development.debug = true;
+        if (conf.discord.game && conf.discord.game.url) conf.discord.game.type = 1;
 
         return conf;
     }

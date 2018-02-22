@@ -37,7 +37,17 @@ module.exports = bot => {
             }
         } else logger.info('Reconnected to Discord from disconnection.');
 
-        bot.editStatus(bot.config.discord.status || 'online', bot.config.discord.game || {});
+        let status = bot.config.discord.status || 'online';
+        let game = bot.config.discord.game || {};
+
+        if (game.name) game.name = game.name.replace(/{{(guilds|users|channels|prefix)}}/g, (_, variable) => {
+            if (variable === 'guilds') return bot.guilds.size;
+            else if (variable === 'users') return bot.users.size;
+            else if (variable === 'channels') return Object.keys(bot.channelGuildMap).length;
+            else if (variable === 'prefix') return bot.config.general.mainPrefix;
+        });
+
+        bot.editStatus(status, game);
         await bot.postGuildCount();
     });
 };
