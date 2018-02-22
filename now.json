@@ -1,16 +1,29 @@
 {
-  "env": {
-    "REDIS_URL": "@redis_url",
-    "DISCORD_TOKEN": "@discordapp_token",
-    "BOT_OWNER_ID": "@owner_id",
-    "DEFAULT_PREFIX": "@prefix",
-    "GAME_NAME": "@game_name",
-    "GAME_URL": "@game_url",
-    "INSTANCES": "1",
-    "IB_TOKEN": "@ib_token",
-    "NASA_KEY": "@nasa_token",
-    "OSU_API_TOKEN": "@osu_api_token",
-    "SAUCENAO_TOKEN": "@saucenao_token",
-    "YOUTUBE_TOKEN": "@youtube_token"
-  }
+    "name": "clara",
+    "env": [
+        "CLARA_TOKENS_YOUTUBE",
+        "CLARA_TOKENS_SOUNDCLOUD",
+        "CLARA_TOKENS_IBSEARCH",
+        "CLARA_TOKENS_OSU",
+        "CLARA_TOKENS_SAUCENAO",
+        "CLARA_TOKENS_NASA",
+        "CLARA_TOKENS_TWITCH",
+
+        "CLARA_BOTLIST_TOKENS_DBL",
+        "CLARA_BOTLIST_TOKENS_DBOTS",
+
+        "CLARA_DEVELOPMENT_DEBUG",
+        "CLARA_DEVELOPMENT_PROMISE_WARNINGS",
+
+        "CLARA_GENERAL_OWNERID",
+        "CLARA_GENERAL_TOKEN",
+        "CLARA_GENERAL_REDISURL",
+        "CLARA_GENERAL_MAINPREFIX",
+        "CLARA_GENERAL_MAXSHARDS",
+
+        "CLARA_DISCORD_STATUS",
+        "CLARA_DISCORD_GAME_URL",
+        "CLARA_DISCORD_GAME_TYPE",
+        "CLARA_DISCORD_GAME_NAME"
+    ]
 }
