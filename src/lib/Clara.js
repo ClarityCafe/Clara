@@ -39,6 +39,7 @@ class Clara extends Eris.Client {
         
         super(config.general.token, options);
         
+        this._currentlyAwaiting = {};
         this.lookups = new Lookups(this);
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
@@ -75,43 +76,39 @@ class Clara extends Eris.Client {
     }
 
     /**
-    * Wait for a message in the specified channel from the specified user.
-    *
-    * @param {String} channelID ID of channel to wait in.
-    * @param {String} userID ID of user to wait for.
-    * @param {Function} [filter] Filter to pass to message. Must return true.
-    * @param {Number} [timeout=15000] Time in milliseconds to wait for message.
-    * @returns {Promise<Eris.Message>} Awaited message.
-    */
-    awaitMessage(channelID, userID, filter = () => true, timeout = 15000) {
-        return new Promise((resolve, reject) => {
-            if (!channelID || typeof channelID !== 'string') {
-                reject(new TypeError('channelID is not string.'));
-            } else if (!userID || typeof userID !== 'string') {
-                reject(new TypeError('userId is not string.'));
-            } else {
-                var responded, rmvTimeout;
+     * Wait for a message from a user.
+     * 
+     * @param {String} channelID ID of the channel to wait in.
+     * @param {String} userID ID of the user to wait for.
+     * @param {Function} [filter] Filter to apply on messages.
+     * @param {Number} [timeout=15000] Time in milliseconds before the await expires.
+     * @returns {Promise<Eris.Message>} Awaited message.
+     */
+    awaitMessage(channelID, userID, filter, timeout=15000) {
+        if (typeof channelID !== 'string') return Promise.reject(new TypeError('channelID is not a string.'));
+        if (typeof userID !== 'string') return Promise.reject(new TypeError('userID is not a string'));
+        if (!filter) filter = () => true;
 
-                var onCrt = msg => {
-                    if (msg.channel.id === channelID && msg.author.id === userID && filter(msg)) responded = true;
-
-                    if (responded) {
-                        this.removeListener('messageCreate', onCrt);
-                        clearInterval(rmvTimeout);
-                        resolve(msg);
-                    }
-                };
-
-                this.on('messageCreate', onCrt);
-
-                rmvTimeout = setTimeout(() => {
-                    if (!responded) {
-                        this.removeListener('messageCreate', onCrt);
-                        reject(new Error('Message await expired.'));
-                    }
-                }, timeout);
-            }
+        let resolve, reject;
+        let promise = new Promise(function() {
+            [resolve, reject] = arguments;
         });
+
+        let deferred = {promise, resolve, reject};
+        let timer = setTimeout(() => {
+            if (deferred.promise.isPending) {
+                deferred.reject(new Error('Message await expired.'));
+                delete this._currentlyAwaiting[channelID + userID];
+            }
+        }, timeout);
+
+        this._currentlyAwaiting[channelID + userID] = {
+            p: deferred,
+            filter,
+            timer
+        };
+
+        return deferred.promise;
     }
 
     /**
