@@ -56,8 +56,7 @@ class Clara extends Eris.Client {
         if (!general.ownerID) throw new TypeError('Configuration is missing general.ownerID');
         if (!general.token) throw new TypeError('Configuration is missing general.token');
         if (!general.mainPrefix) throw new TypeError('Configuration is missing general.mainPrefix');
-        if (general.maxShards === 0) general.maxShards = 1;
-        if (!general.maxShards) general.maxShards = 1;
+        if (general.maxShards === 0 || !general.maxShards) general.maxShards = 1;
 
         if (!general.redisURL) throw new TypeError('Configuration is missing general.redisURL');
         else {
