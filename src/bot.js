@@ -28,7 +28,7 @@ Promise.config({
 
 // Bot stuff
 const bot = new Clara(config, {
-    firstShardID : Math.floor(Math.random() * 100).toFixed(0),
+    firstShardID: Math.floor(Math.random() * 100).toFixed(0),
     maxShards: config.general.maxShards ||'auto',
     seedVoiceConnections: true,
     latencyThreshold: 420000000,

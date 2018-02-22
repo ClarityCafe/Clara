@@ -49,7 +49,7 @@ exports.load = {
         if (Array.isArray(pkg.requiredTokens)) {
             let missingTokens = pkg.requiredTokens.filter(tkn => !bot.config.tokens[tkn]);
 
-            if (missingTokens.length) return await ctx.createMessage(`Will not load **${ctx.args[0]}** due to missing tokens: \`${missingTokens.join(', ')}\``)
+            if (missingTokens.length) return await ctx.createMessage(`Will not load **${ctx.args[0]}** due to missing tokens: \`${missingTokens.join(', ')}\``);
         }
 
         bot.commands.loadModule(mod);
