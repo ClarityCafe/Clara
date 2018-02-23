@@ -4,6 +4,7 @@
     "description": "A general-purpose discord bot.",
     "main": "src/bot.js",
     "engines": {
+        "node": "9.x.x",
         "npm": "^4.0.0"
     },
     "scripts": {
