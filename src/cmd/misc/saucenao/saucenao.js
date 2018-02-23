@@ -14,10 +14,10 @@ exports.init = bot => {
 };
 
 exports.commands = [
-    'source'
+    'saucenao'
 ];
 
-exports.source = {
+exports.saucenao = {
     desc: 'Tries to find the source for an image.',
     usage: '<url or attachment>',
     aliases: ['sauce', 'saucenao', 'sourcenow'],
