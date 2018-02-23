@@ -13,4 +13,4 @@ README.md
 nodebot_logo.png
 .jshintrc
 .codeclimate.yml
-
+.cfignore
