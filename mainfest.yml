@@ -7,11 +7,11 @@ applications:
 - name: clara
 buildpack: https://github.com/cloudfoundry/nodejs-buildpack.git
 env:
-    CLARA_TOKENS_SAUCENAO: ''
     CLARA_TOKENS_NASA: ''
     CLARA_TOKENS_OSU: ''
     CLARA_TOKENS_TWITCH: ''
     CLARA_TOKENS_SAUCENAO: ''
+    CLARA_TOKENS_YOUTUBE: ''
     CLARA_TOKENS_IBSEARCH: ''
     CLARA_BOTLIST_TOKENS_DBOTS: ''
     CLARA_BOTLIST_TOKENS_DBL: ''
