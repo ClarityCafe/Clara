@@ -5,5 +5,5 @@
     "watch": ["./bot.js"],
     "ignore_watch": ["data", "logs", "cmd", "cache", "node_modules"],
     "args": ["--color"],
-    "interpreter_args": ["--max-old-space-size 100", "--harmony"]
+    "interpreter_args": "--max-old-space-size 100 --harmony"
 }
