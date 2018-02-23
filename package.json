@@ -11,6 +11,9 @@
         "start": "node src/bot.js",
         "lint": "eslint ./src"
     },
+    "env": {
+        "NODE_ENV": "development"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/ClarityMoe/Clara.git"
