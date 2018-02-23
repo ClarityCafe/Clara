@@ -1,1 +1,1 @@
-worker: cd src && pm2 start ./pm2.json && pm2 logs Clara
+worker: node src/bot --max-old-space-size=100
