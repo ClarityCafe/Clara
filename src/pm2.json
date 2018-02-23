@@ -4,5 +4,6 @@
     "log_date_format": "YYYY-MM-DD HH:mm Z",
     "watch": ["./bot.js"],
     "ignore_watch": ["data", "logs", "cmd", "cache", "node_modules"],
-    "args": ["--color"]
+    "args": ["--color"],
+    "interpreter_args": "--max-old-space-size=100"
 }
