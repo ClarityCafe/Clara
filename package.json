@@ -31,6 +31,7 @@
         "bluebird": "^3.5.1",
         "eris": "latest",
         "got": "^8.0.3",
+        "node-opus": "^0.2.7",
         "redite": "^1.0.0",
         "yamljs": "^0.3.0"
     },
