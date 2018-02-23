@@ -15,7 +15,7 @@ exports.main = {
     usage: '[<add|remove> <user>]',
     owner: true,
     async main(bot, ctx) {
-        let admins = bot.admins.concat(bot.config.ownerID).map(id => [bot.users.get(id), id]).map(([u, id]) => (u ? `**${utils.formatUsername(u)}** ` : '**Unknown user**') + ` (<@${id}>)`);
+        let admins = bot.admins.concat(bot.config.general.ownerID).map(id => [bot.users.get(id), id]).map(([u, id]) => (u ? `**${utils.formatUsername(u)}** ` : '**Unknown user**') + ` (<@${id}>)`);
         let embed = {
             title: 'Bot Admins',
             description: admins.join('\n')
@@ -29,7 +29,7 @@ exports.add = {
     desc: 'Add admins.',
     usage: '<user>',
     async main(bot, ctx) {
-        if (ctx.author.id !== bot.config.ownerID) return await ctx.createMessage('This is restricted to the bot owner.');
+        if (ctx.author.id !== bot.config.general.ownerID) return await ctx.createMessage('This is restricted to the bot owner.');
         if (!ctx.suffix) return await ctx.createMessage('Please give me a user to add as an admin.');
 
         let user = await bot.lookups.memberLookup(ctx, ctx.suffix);
@@ -51,7 +51,7 @@ exports.remove = {
     desc: 'Remove admins.',
     usage: '<user>',
     async main(bot, ctx) {
-        if (ctx.author.id !== bot.config.ownerID) return await ctx.createMessage('This is restricted to the bot owner.');
+        if (ctx.author.id !== bot.config.general.ownerID) return await ctx.createMessage('This is restricted to the bot owner.');
         if (!ctx.suffix) return await ctx.createMessage('Please give me a user to remove as an admin.');
 
         let user = await bot.lookups.memberLookup(ctx, ctx.suffix);
