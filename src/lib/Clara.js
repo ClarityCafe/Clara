@@ -43,7 +43,7 @@ class Clara extends Eris.Client {
         this.lookups = new Lookups(this);
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
-        this.db = new Redite({url: config.general.redisURL || config.general.redisUrl || 'redis://127.0.0.1/0'});
+        this.db = new Redite({url: config.general.redisURL || 'redis://127.0.0.1/0'});
 
         this.config = config;
 
