@@ -26,14 +26,14 @@ module.exports = async bot => {
         let files = fs.readdirSync(cmd);
         let pkg;
 
-        if (!files.includes('package.json')) {
-            logger.customError('loader', `Will not load "${name}" due to missing package.json.`);
+        if (!files.includes('command.json')) {
+            logger.customError('loader', `Will not load "${name}" due to missing command.json.`);
             await bot.addUnloadedModule(name);
             continue;
         }
 
         try {
-            pkg = JSON.parse(fs.readFileSync(`${cmd}/package.json`));
+            pkg = JSON.parse(fs.readFileSync(`${cmd}/command.json`));
         } catch(err) {
             logger.customError('loader', `Malformed package file for "${name}".`);
             await bot.addUnloadedModule(name);
@@ -59,7 +59,7 @@ module.exports = async bot => {
 
         if (bot.unloadedModules.includes(name)) continue;
 
-        let pkg = JSON.parse(fs.readFileSync(`${cmd}/package.json`));
+        let pkg = JSON.parse(fs.readFileSync(`${cmd}/command.json`));
         let path = `${cmd}/${pkg.main}`;
 
         if (Array.isArray(pkg.requiredTokens)) {
