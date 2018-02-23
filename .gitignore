@@ -33,3 +33,5 @@ cache/
 
 #Redis dunps
 dump .rdb
+
+*.manifest.yml
