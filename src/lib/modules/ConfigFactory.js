@@ -26,6 +26,7 @@ class ConfigFactory {
      */
     static generate(file) {
         let conf;
+        let fromEnv = false;
 
         if (file && fs.existsSync(file)) conf = YAML.load(file);
         else {
@@ -56,11 +57,15 @@ class ConfigFactory {
                     }
                 }
             };
+
+            fromEnv = true;
         }
 
         // Force debug mode if not production env.
         if (process.env.NODE_ENV !== 'production') conf.development.debug = true;
         if (conf.discord.game && conf.discord.game.url) conf.discord.game.type = 1;
+        if (fromEnv && !conf.general.redisURL) conf.general.redisURL = process.env.REDIS_URL || process.env.REDISCLOUD_URL;
+        if (!conf.general.redisURL) conf.general.redisURL = 'redis://127.0.0.1/0';
 
         return conf;
     }
