@@ -64,6 +64,7 @@ class ConfigFactory {
         // Force debug mode if not production env.
         if (process.env.NODE_ENV !== 'production') conf.development.debug = true;
         if (conf.discord.game && conf.discord.game.url) conf.discord.game.type = 1;
+        if (conf.discord.game && !conf.discord.game.name) conf.discord.game.name = '{{prefix}}help | {{guilds}} guilds';
         if (fromEnv && !conf.general.redisURL) conf.general.redisURL = process.env.REDIS_URL || process.env.REDISCLOUD_URL;
         if (!conf.general.redisURL) conf.general.redisURL = 'redis://127.0.0.1/0';
 

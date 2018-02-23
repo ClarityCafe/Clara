@@ -5,6 +5,7 @@
  */
 
 const path = require('path');
+const pkg = require(path.resolve(mainDir, '..', 'package.json'));
 
 module.exports = bot => {
     bot.on('ready', async () => {
@@ -40,11 +41,12 @@ module.exports = bot => {
         let status = bot.config.discord.status || 'online';
         let game = bot.config.discord.game || {};
 
-        if (game.name) game.name = game.name.replace(/{{(guilds|users|channels|prefix)}}/g, (_, variable) => {
+        if (game.name) game.name = game.name.replace(/{{(guilds|users|channels|prefix|version)}}/g, (_, variable) => {
             if (variable === 'guilds') return bot.guilds.size;
             else if (variable === 'users') return bot.users.size;
             else if (variable === 'channels') return Object.keys(bot.channelGuildMap).length;
             else if (variable === 'prefix') return bot.config.general.mainPrefix;
+            else if (variable === 'version') return pkg.version;
         });
 
         bot.editStatus(status, game);
