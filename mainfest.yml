@@ -5,7 +5,11 @@
 ---
 applications:
 - name: clara
-buildpack: https://github.com/cloudfoundry/nodejs-buildpack.git
+  buildpack: https://github.com/cloudfoundry/nodejs-buildpack.git
+  health-check-type: process
+  memory: 256M
+  no-route: true
+  
 env:
     CLARA_TOKENS_NASA: ''
     CLARA_TOKENS_OSU: ''
