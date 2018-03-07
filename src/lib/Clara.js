@@ -44,7 +44,7 @@ class Clara extends Eris.Client {
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
         this.db = new Redite({url: config.general.redisURL || 'redis://127.0.0.1/0'});
-        this.commandsFolder = this.commandsFolder || './cmd';
+        this.commandsFolder = this.commandsFolder;
 
         this.config = config;
 
