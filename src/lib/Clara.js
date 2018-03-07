@@ -19,7 +19,7 @@ const Lookups = require(`${__dirname}/modules/Lookups`);
  * @prop {Boolean} allowCommandUse If commands can be run.
  * @prop {String[]} blacklist Array of people who cannot use the bot.
  * @prop {CommandHolder} commands Command holder object.
- * @prop {String[]} commandFolders todo
+ * @prop {String[]} commandFolder directory of the commands.
  * @prop {ClaraConfig} config Configuration passed during construction.
  * @prop {Redite} db Database connection manager.
  * @prop {Boolean} loadCommands If the bot should load commands or not.
@@ -44,11 +44,15 @@ class Clara extends Eris.Client {
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
         this.db = new Redite({url: config.general.redisURL || 'redis://127.0.0.1/0'});
+        this.commandsFolder = this.commandsFolder || './cmd';
 
         this.config = config;
 
         this.loadCommands = true;
         this.allowCommandUse = false;
+        
+        if (typeof this.commandsFolder === 'string') return new TypeError('commandFolder is not a string.');
+        else if (!fs.existsSync(this.commandsFolder)) return new Error('directory defined in commandsFolder does not exist.');
     }
 
     async connect() {
