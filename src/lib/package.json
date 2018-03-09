@@ -1,0 +1,36 @@
+{
+    "name": "clara-core",
+    "version": "1.0.0-Next",
+    "description": "A unopinionated Discord bot Framework written with easiness and simplicity in mind.",
+    "main": "index.js",
+
+    "scripts": {
+        "lint": "eslint ./src"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ClarityMoe/Clara.git"
+    },
+    "keywords": [
+        "discord",
+        "bot"
+    ],
+    "author": "ClarityMoe",
+    "license": "BSD-3-Clause",
+    "bugs": {
+        "url": "https://github.com/ClarityMoe/Clara/issues"
+    },
+    "homepage": "https://github.com/ClarityMoe/Clara",
+    "dependencies": {
+        "bluebird": "^3.5.1",
+        "eris": "latest",
+        "got": "^8.2.0",
+        "node-opus": "^0.2.7",
+        "redite": "^1.1.0",
+        "yamljs": "^0.3.0"
+    },
+    "devDependencies": {
+        "eslint": "^4.18.1",
+        "eslint-config-defaults": "^9.0.0"
+    }
+}
