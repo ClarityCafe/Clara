@@ -21,7 +21,11 @@ build:
   # http://devcenter.wercker.com/docs/steps/index.html
   steps:
     # A step that executes `npm install` command
-    - npm-install
+    - script: 
+      name: Install dependencies and ESLint
+      code: npm i -g eslint && npm install --save
+    # A step that would execute the `npm lint` command
+    - npm-lint
 
     # A custom script step, name value is used in the UI
     # and the code value contains the command that get executed
