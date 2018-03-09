@@ -25,7 +25,9 @@ build:
       name: Install dependencies and ESLint
       code: npm i -g eslint && npm install --save
     # A step that would execute the `npm lint` command
-    - npm-lint
+    - script:
+       name: Lint Codebase
+       code: npm lint
 
     # A custom script step, name value is used in the UI
     # and the code value contains the command that get executed
