@@ -24,7 +24,8 @@ let sandbox = {
     cp: require('child_process'),
     path: require('path'),
     got: require('got'),
-    require
+    require,
+    process
 };
 
 exports.commands = ['eval'];
