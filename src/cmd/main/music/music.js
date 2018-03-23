@@ -44,7 +44,7 @@ exports.play = {
         if (!ctx.member.voiceState.channelID) return await ctx.createMessage('music-userNotInChannel');
 
         if (ctx.suffix) {
-            if (!urlRegex.test(ctx.suffix) && bot.config.ytSearchKey) {
+            if (!urlRegex.test(ctx.suffix) && bot.config.tokens.youtube) {
                 let res;
                 
                 try {
