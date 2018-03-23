@@ -62,7 +62,7 @@ exports.eval = {
         // This is where stuff gets really weird.
         // This merges the sandbox template above with some variables from the context object.
         // Then it wraps that into a Proxy to prevent the needed variables from being overriden (that is __vmDone__ and __vmErr__).
-        let vmSandbox = new Proxy(Object.assign({}, sandbox, {args, cmd, suffix, cleanSuffix, settings, guildBot, channel, guild, author}, {
+        let vmSandbox = new Proxy(Object.assign({}, sandbox, {args, cmd, suffix, cleanSuffix, settings, guildBot, channel, guild, author, ctx}, {
             async __vmDone__(val) {
                 await handleResult(val, ctx, bot);
             },
@@ -133,8 +133,6 @@ async function handleResult(val, ctx, bot, isErr=false) {
     }
 
     if (val === oldVal) return;
-
-    
 
     str = util.inspect(val, {depth: 1});
 
