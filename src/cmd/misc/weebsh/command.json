@@ -1,0 +1,7 @@
+{
+    "main": "weebsh.js",
+    "dependencies": {
+        "wolken": "^0.1.0"
+    },
+    "requiredTokens": ["weebsh"]
+}
