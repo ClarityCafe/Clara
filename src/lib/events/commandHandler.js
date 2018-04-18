@@ -44,6 +44,19 @@ module.exports = bot => {
         }
     });
 
+    // Message await handler.
+    bot.on('messageCreate', msg => {
+        let awaiting = bot._currentlyAwaiting[msg.channel.id + msg.author.id];
+
+        // Test if something is being awaited, if it does, try the filter and return if it doesnt return a truthy.
+        if (!awaiting || !awaiting.filter(msg)) return;
+
+        // Resolve and clean up.
+        awaiting.p.resolve(msg);
+        clearTimeout(awaiting.timer);
+        delete bot._currentlyAwaiting[msg.channel.id + msg.author.id];
+    });
+    
     /**
      * Returns pre-formatted prefix to use in the logger.
      *

@@ -14,8 +14,9 @@ package-lock.json
 # Output of 'npm pack'
 *.tgz
 
-# Yarn Integrity file
+# Yarn stuff
 .yarn-integrity
+yarn.lock
 
 # Eclipse WS file
 .settings
@@ -24,6 +25,7 @@ data.json
 
 # Bot files  
 config.json
+config.yaml
 src/data
 .idea/workspace.xml
 lines.txt
@@ -31,3 +33,5 @@ cache/
 
 #Redis dunps
 dump .rdb
+
+*.manifest.yml

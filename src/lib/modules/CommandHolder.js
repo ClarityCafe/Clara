@@ -82,7 +82,7 @@ class CommandHolder {
      * @throws {TypeError} Argument must be correct type
      * @throws {Error} Module must not be loaded already.
      */
-    loadModule(moduleName) {
+    async loadModule(moduleName) {
         if (typeof moduleName !== 'string') throw new TypeError('moduleName is not a string.');
 
         let name = moduleName.split(/\\|\//).slice(-1)[0].slice(0, -3);
@@ -90,6 +90,7 @@ class CommandHolder {
         if (this.modules[name]) throw new Error(`Module '${name}' is already loaded.`);
 
         let module = require(moduleName);
+        if (typeof module.init === 'function') await module.init(this[_bot]);
 
         if (!module.commands) {
             delete require.cache[moduleName];
@@ -99,7 +100,6 @@ class CommandHolder {
             throw new Error(`Command array for '${name}' is not an array.`);
         }
 
-        if (typeof module.init === 'function') module.init(this[_bot]);
         let loadedCommands = [];
         let loadedAliases = [];
 
@@ -115,7 +115,7 @@ class CommandHolder {
 
             if (!module.main.main) {
                 command.main = async (bot, ctx) => {
-                    let collect = [];
+                    let collect = []; 
                     let embed = {title: name};
 
                     for (let nam in command.subcommands) {

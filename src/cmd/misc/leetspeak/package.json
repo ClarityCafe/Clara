@@ -1,6 +1,0 @@
-{
-    "main": "leetspeak.js",
-    "dependencies": {
-        "l33tsp34k": "^1.0.5"
-    }
-}

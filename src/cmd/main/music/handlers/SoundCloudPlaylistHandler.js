@@ -8,7 +8,7 @@ const got = require('got');
 class SoundCloudPlaylistHandler {
     constructor(bot) {
         this.maxGet = bot.config.musicPlaylistMaxAmt || 200;
-        this.clientID = bot.config.soundCloudKey;
+        this.clientID = bot.config.tokens.soundcloud;
     }
 
     async getPlaylist(url) {

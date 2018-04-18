@@ -43,8 +43,14 @@ exports.load = {
 
         if (!folders.includes(ctx.args[0])) return await ctx.channel.createMessage(`Module **${ctx.args[0]}** does not exist.`);
 
-        let pkg = JSON.parse(fs.readFileSync(bot.commandFolders[folders.indexOf(ctx.args[0])] + '/package.json'));
+        let pkg = JSON.parse(fs.readFileSync(bot.commandFolders[folders.indexOf(ctx.args[0])] + '/command.json'));
         let mod = `${bot.commandFolders[folders.indexOf(ctx.args[0])]}/${pkg.main}`;
+
+        if (Array.isArray(pkg.requiredTokens)) {
+            let missingTokens = pkg.requiredTokens.filter(tkn => !bot.config.tokens[tkn]);
+
+            if (missingTokens.length) return await ctx.createMessage(`Will not load **${ctx.args[0]}** due to missing tokens: \`${missingTokens.join(', ')}\``);
+        }
 
         bot.commands.loadModule(mod);
         await bot.removeUnloadedModule(ctx.args[0]);
@@ -61,7 +67,7 @@ exports.unload = {
         if (!bot.commands.checkModule(ctx.args[0])) return await ctx.createMessage(`Module **${ctx.args[0]}** is not loaded or does not exist.`);
 
         let folders = bot.commandFolders.map(f => f.split('/').slice(-1)[0]);
-        let pkg = JSON.parse(fs.readFileSync(bot.commandFolders[folders.indexOf(ctx.args[0])] + '/package.json'));
+        let pkg = JSON.parse(fs.readFileSync(bot.commandFolders[folders.indexOf(ctx.args[0])] + '/command.json'));
         let mod = `${bot.commandFolders[folders.indexOf(ctx.args[0])]}/${pkg.main}`;
 
         bot.commands.unloadModule(mod);
@@ -80,7 +86,7 @@ exports.reload = {
         if (!bot.commands.checkModule(ctx.args[0])) return await exports.load.main(bot, ctx);
 
         let folders = bot.commandFolders.map(f => f.split('/').slice(-1)[0]);
-        let pkg = JSON.parse(fs.readFileSync(bot.commandFolders[folders.indexOf(ctx.args[0])] + '/package.json'));
+        let pkg = JSON.parse(fs.readFileSync(bot.commandFolders[folders.indexOf(ctx.args[0])] + '/command.json'));
         let mod = `${bot.commandFolders[folders.indexOf(ctx.args[0])]}/${pkg.main}`;
 
         bot.commands.reloadModule(mod);

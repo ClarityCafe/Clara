@@ -10,14 +10,14 @@ const urlRegex = /^(?:(?:https?:)?\/\/)?(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\
 let sourcer;
 
 exports.init = bot => {
-    sourcer = new Sagiri(bot.config.sauceKey);
+    sourcer = new Sagiri(bot.config.tokens.saucenao);
 };
 
 exports.commands = [
-    'source'
+    'saucenao'
 ];
 
-exports.source = {
+exports.saucenao = {
     desc: 'Tries to find the source for an image.',
     usage: '<url or attachment>',
     aliases: ['sauce', 'saucenao', 'sourcenow'],

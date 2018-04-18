@@ -27,7 +27,7 @@ exports.ibsearch = {
         query += `limit=${QUERY_LIMIT}`;
         let res = await got(`https://ibsear.ch/api/v1/images.json${query}`, {
             headers: {
-                'X-IbSearch-Key': bot.config.ibKey,
+                'X-IbSearch-Key': bot.config.tokens.ibsearch,
                 'User-Agent': 'Clara/0.4.0'
             }
         });

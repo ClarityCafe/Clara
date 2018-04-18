@@ -1,17 +1,19 @@
 {
     "name": "clara",
-    "version": "0.4.3",
+    "version": "0.4.4-SNAPSHOT",
     "description": "A general-purpose discord bot.",
     "main": "src/bot.js",
     "engines": {
         "node": "9.x.x",
-        "npm": "4.x.x"
+        "npm": "^4.0.0"
     },
     "scripts": {
-        "circle-postinstall": "node ./lib/modules/depPreloader.js --harmony",
-        "heroku-postbuild": "npm i -g pm2 && node ./src/lib/modules/depPreloader.js --harmony",
+        "postinstall": "npm i -g pm2 && node ./src/lib/modules/depPreloader.js --harmony",
         "start": "node src/bot.js",
         "lint": "eslint ./src"
+    },
+    "env": {
+        "NODE_ENV": "development"
     },
     "repository": {
         "type": "git",
@@ -30,11 +32,13 @@
     "dependencies": {
         "bluebird": "^3.5.1",
         "eris": "latest",
-        "got": "^8.0.3",
-        "redite": "^1.0.0"
+        "got": "^8.2.0",
+        "node-opus": "^0.2.7",
+        "redite": "^1.1.0",
+        "yamljs": "^0.3.0"
     },
     "devDependencies": {
-        "eslint": "^4.10.0",
+        "eslint": "^4.18.1",
         "eslint-config-defaults": "^9.0.0"
     }
 }

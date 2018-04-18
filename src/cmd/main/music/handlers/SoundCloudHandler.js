@@ -7,7 +7,7 @@ const got = require('got');
 
 class SoundCloudHandler {
     constructor(bot) {
-        this.clientID = bot.config.soundCloudKey;
+        this.clientID = bot.config.tokens.soundcloud;
     }
 
     async getInfo(url) {

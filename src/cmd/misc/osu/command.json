@@ -3,5 +3,6 @@
     "dependencies": {
         "osu": "^2.0.0",
         "iso-3166-1-alpha-2": "^1.0.0"
-    }
+    },
+    "requiredTokens": ["osu"]
 }
