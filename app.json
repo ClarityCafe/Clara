@@ -65,10 +65,6 @@
             "description": "Token used to log into Discord with.",
             "required": true
         },
-        "CLARA_GENERAL_REDISURL": {
-            "description": "URL of the Redis instance to connect to.",
-            "value": "redis://127.0.0.1/0"
-        },
         "CLARA_GENERAL_MAINPREFIX": {
             "description": "Initial, static prefix of the bot.",
             "required": true
