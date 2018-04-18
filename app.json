@@ -1,68 +1,106 @@
 {
-  "name": "Clara",
-  "description": "A General-Purpose Node.js Discord Bot",
-  "logo": "https://logos.speedtestcustom.com/prod/8380-1516204957824.png",
-  "scripts": {
-  },
-  "env": {
-    "DEFAULT_PREFIX": {
-      "required": true
+    "name": "Clara",
+    "description": "A general-purpose NodeJS Discord bot",
+    "repository": "https://github.com/ClarityMoe/Clara",
+    "logo": "https://logos.speedtestcustom.com/prod/8380-1516204957824.png",
+    "addons": ["papertrail", "heroku-redis"],
+    "formation": {
+        "worker": {
+            "quantity": 1
+        }
     },
-    "DISCORD_ORG_TOKEN": {
-      "required": false
+    "env": {
+        "CLARA_TOKENS_YOUTUBE": {
+            "description": "Token used for searching on YouTube.",
+            "required": false
+        },
+        "CLARA_TOKENS_SOUNDCLOUD": {
+            "description": "Token used for the SoundCloud API.",
+            "required": false
+        },
+        "CLARA_TOKENS_IBSEARCH": {
+            "description": "Token used for the IBSearch API.",
+            "required": false
+        },
+        "CLARA_TOKENS_OSU": {
+            "description": "Token used for the osu! API.",
+            "required": false
+        },
+        "CLARA_TOKENS_SAUCENAO": {
+            "description": "Token used for the SauceNAO API.",
+            "required": false
+        },
+        "CLARA_TOKENS_NASA": {
+            "description": "Token used for Nasa's APOD API.",
+            "required": false
+        },
+        "CLARA_TOKENS_TWITCH": {
+            "description": "Token used for the Twitch API.",
+            "required": false
+        },
+
+        "CLARA_BOTLIST_TOKENS_DBL": {
+            "description": "Token for sending stats to discordbots.org.",
+            "required": false
+        },
+        "CLARA_BOTLIST_TOKENS_DBOTS": {
+            "description": "Token for sending stats to bots.discord.pw.",
+            "required": false
+        },
+
+        "CLARA_DEVELOPMENT_DEBUG": {
+            "description": "Whether or not to print stack traces to the console.",
+            "required": false
+        },
+        "CLARA_DEVELOPMENT_PROMISE_WARNINGS": {
+            "description": "Whether or not to have warnings from Bluebird get printed.",
+            "required": false
+        },
+
+        "CLARA_GENERAL_OWNERID": {
+            "description": "ID of the bot owner. Used to run owner-only commands.",
+            "required": true
+        },
+        "CLARA_GENERAL_TOKEN": {
+            "description": "Token used to log into Discord with.",
+            "required": true
+        },
+        "CLARA_GENERAL_REDISURL": {
+            "description": "URL of the Redis instance to connect to.",
+            "value": "redis://127.0.0.1/0"
+        },
+        "CLARA_GENERAL_MAINPREFIX": {
+            "description": "Initial, static prefix of the bot.",
+            "required": true
+        },
+        "CLARA_GENERAL_MAXSHARDS": {
+            "description": "Maximum number of shards to run. Only change this if you have a really big bot.",
+            "value": "1"
+        },
+
+        "CLARA_DISCORD_STATUS": {
+            "description": "Presence to display on Discord.",
+            "value": "online"
+        },
+        "CLARA_DISCORD_GAME_URL": {
+            "description": "Twitch URL to show as streaming on Discord.",
+            "required": false
+        },
+        "CLARA_DISCORD_GAME_TYPE": {
+            "description": "Game type to use on Discord. Will be overriden if a URL is specified above.",
+            "value": "0"
+        },
+        "CLARA_DISCORD_GAME_NAME": {
+            "description:": "Name of the game to use on Discord. Supports variables {{version}}, {{guilds}}, {{channels}}, {{prefix}} and {{users}}.",
+            "required": false
+        }
     },
-    "DISCORD_PW_TOKEN": {
-      "required": false
-    },
-    "DISCORD_TOKEN": {
-      "required": true
-    },
-    "ENABLE_PROMISE_WARNS": {
-      "required": false
-    },
-    "GAME_NAME": {
-      "required": false
-    },
-    "GAME_URL": {
-      "required": false
-    },
-    "IB_TOKEN": {
-      "required": false
-    },
-    "INSTANCES": {
-      "required": false
-    },
-    "NASA_KEY": {
-      "required": false
-    },
-    "OSU_API_TOKEN": {
-      "required": false
-    },
-    "OWNER_ID": {
-      "required": true
-    },
-    "SAUCENAO_TOKEN": {
-      "required": false
-    },
-    "YOUTUBE_TOKEN": {
-      "required": true
-    }
-  },
-  "formation": {
-    "worker": {
-      "quantity": 1
-    }
-  },
-  "addons": [
-    "papertrail",
-    "heroku-redis"
-  ],
-  "buildpacks": [
-    {
-      "url": "heroku/nodejs"
-    },
-    {
-      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
-    }
-  ]
+    "buildpacks": [
+        {
+            "url": "heroku/nodejs"
+        },
+        {
+            "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+        }
+    ]
 }

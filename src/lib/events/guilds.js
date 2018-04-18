@@ -6,7 +6,7 @@
 
 module.exports = bot => {
     bot.on('guildCreate', async guild => {
-        if (guild.members.filter(m => m.bot).filter / guild.members.size >= 0.50) {
+        if (guild.members.filter(m => m.bot).length / guild.members.size >= 0.50) {
             logger.info(`Detected bot collection guild '${guild.name}' (${guild.id}). Autoleaving...`);
             await guild.leave();
         } else if (!bot.config.gameURL) {
@@ -27,7 +27,7 @@ module.exports = bot => {
     });
 
     bot.on('guildDelete', async guild => {
-        if (guild.members.filter(m => m.bot).filter / guild.members.size >= 0.50) return;
+        if (guild.members.filter(m => m.bot).length / guild.members.size >= 0.50) return;
 
         if (!bot.config.gameURL) {
             await bot.editStatus('online', {

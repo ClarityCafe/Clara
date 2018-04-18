@@ -5,6 +5,7 @@
  */
 
 const path = require('path');
+const pkg = require(path.resolve(mainDir, '..', 'package.json'));
 
 module.exports = bot => {
     bot.on('ready', async () => {
@@ -13,13 +14,13 @@ module.exports = bot => {
                 let {prefixes, blacklist, admins, unloadedModules} = await bot.getDataSettings();
                 bot.admins = admins;
                 bot.blacklist = blacklist;
-                bot.prefixes = prefixes.concat([`<@${bot.user.id}> `, `<@!${bot.user.id}> `, bot.config.mainPrefix]);
+                bot.prefixes = prefixes.concat([`<@${bot.user.id}> `, `<@!${bot.user.id}> `, bot.config.general.mainPrefix]);
                 bot.unloadedModules = unloadedModules;
 
                 await bot.localeManager.loadLocales(bot);
                 logger.info(`Loaded ${Object.keys(bot.localeManager.locales).length} locales.`);
 
-                require(path.resolve(__dirname, '../modules', 'loader'))(bot);
+                await require(path.resolve(__dirname, '../modules', 'loader'))(bot);
                 logger.info(`Loaded ${bot.commands.length} ${bot.commands.length === 1 ? 'command' : 'commands'}.`);
 
                 bot.loadCommands = false;
@@ -27,28 +28,28 @@ module.exports = bot => {
 
                 logger.info(`${bot.user.username} is connected to Discord and is ready to use.`);
                 logger.info('--------------------');
-                logger.info(`Owner: ${bot.config.ownerID}`);
+                logger.info(`Owner: ${bot.config.general.ownerID}`);
                 logger.info(`Admins: ${admins.join(', ')}`);
                 logger.info(`Blacklist: ${blacklist.join(', ')}`);
-                logger.info(`Prefixes: "${[bot.config.mainPrefix, '@mention'].concat(prefixes).join('", "')}"`);
+                logger.info(`Prefixes: "${[bot.config.general.mainPrefix, '@mention'].concat(prefixes).join('", "')}"`);
                 logger.info('--------------------\n');
             } catch(err) {
                 logger.error(`Error while starting up:\n${err.stack}`);
             }
         } else logger.info('Reconnected to Discord from disconnection.');
-        if (!bot.config.gameURL) {
-            await bot.editStatus('online', {
-                name: `${bot.config.gameName || `${bot.config.mainPrefix}help for commands!`} | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
-                type: 0,
-                url: null
-            });
-        } else { 
-            await bot.editStatus('online', {
-                name: `${bot.config.gameName}` || `${bot.config.mainPrefix} for commands! | ${bot.guilds.size} ${bot.guilds.size === 1 ? 'server' : 'servers'}`,
-                type: 1,
-                url: bot.config.gameURL
-            });
-        }  
+
+        let status = bot.config.discord.status || 'online';
+        let game = bot.config.discord.game || {};
+
+        if (game.name) game.name = game.name.replace(/{{(guilds|users|channels|prefix|version)}}/g, (_, variable) => {
+            if (variable === 'guilds') return bot.guilds.size;
+            else if (variable === 'users') return bot.users.size;
+            else if (variable === 'channels') return Object.keys(bot.channelGuildMap).length;
+            else if (variable === 'prefix') return bot.config.general.mainPrefix;
+            else if (variable === 'version') return pkg.version;
+        });
+
+        bot.editStatus(status, game);
         await bot.postGuildCount();
     });
 };

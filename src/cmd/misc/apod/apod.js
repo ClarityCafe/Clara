@@ -14,7 +14,7 @@ exports.commands = [
 exports.apod = {
     desc: "Shows NASA's [Astronomy Picture of the Day](http://apod.nasa.gov/apod/astropix.html) (APOD)",
     async main(bot, ctx) {
-        if (!bot.config.nasaKey) return await ctx.createMessage('nasa-noKey');
+        if (!bot.config.tokens.nasa) return await ctx.createMessage('nasa-noKey');
 
         await ctx.channel.sendTyping();
 

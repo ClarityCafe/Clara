@@ -6,12 +6,11 @@
 const Eris = require('eris');
 const got = require('got');
 const fs = require('fs');
-const process = require('process');
+const {URL} = require('url');
 const Redite = require('redite');
 const {CommandHolder} = require(`${__dirname}/modules/CommandHolder`);
 const LocaleManager = require(`${__dirname}/modules/LocaleManager`);
 const Lookups = require(`${__dirname}/modules/Lookups`);
-const path = require('path');
 
 /**
  * Main class for Clara.
@@ -38,15 +37,13 @@ class Clara extends Eris.Client {
     constructor(config, options = {}) {
         if (!config && typeof config !== 'object') throw new TypeError('config is not an object.');
         
-        super(config.token, options);
-        if (!fs.existsSync(path.resolve(`${__dirname}`, '../', './data'))) fs.mkdirSync(path.resolve(`${__dirname}`, '../', './data'));
-        if (!fs.existsSync(path.resolve(`${__dirname}`, '../', './data/data.json'))) fs.writeFileSync(path.resolve(`${__dirname}`, '../', './data/data.json'), '{"admins": [], "blacklist": []}');
-        if (!fs.existsSync(path.resolve(`${__dirname}`, '../', './data/prefixes.json'))) fs.writeFileSync(path.resolve(`${__dirname}`, '../', './data/prefixes.json'), '[]');
-
+        super(config.general.token, options);
+        
+        this._currentlyAwaiting = {};
         this.lookups = new Lookups(this);
         this.localeManager = new LocaleManager();
         this.commands = new CommandHolder(this);
-        this.db = new Redite({url: config.redisURL || config.redisUrl || process.env.REDIS_URL|| 'redis://127.0.0.1/0'});
+        this.db = new Redite({url: config.general.redisURL || 'redis://127.0.0.1/0'});
 
         this.config = config;
 
@@ -54,56 +51,76 @@ class Clara extends Eris.Client {
         this.allowCommandUse = false;
     }
 
-    /**
-    * Wait for a message in the specified channel from the specified user.
-    *
-    * @param {String} channelID ID of channel to wait in.
-    * @param {String} userID ID of user to wait for.
-    * @param {Function} [filter] Filter to pass to message. Must return true.
-    * @param {Number} [timeout=15000] Time in milliseconds to wait for message.
-    * @returns {Promise<Eris.Message>} Awaited message.
-    */
-    awaitMessage(channelID, userID, filter = () => true, timeout = 15000) {
-        return new Promise((resolve, reject) => {
-            if (!channelID || typeof channelID !== 'string') {
-                reject(new TypeError('channelID is not string.'));
-            } else if (!userID || typeof userID !== 'string') {
-                reject(new TypeError('userId is not string.'));
-            } else {
-                var responded, rmvTimeout;
+    async connect() {
+        let {general} = this.config;
 
-                var onCrt = msg => {
-                    if (msg.channel.id === channelID && msg.author.id === userID && filter(msg)) responded = true;
+        if (!general.ownerID) throw new TypeError('Configuration is missing general.ownerID');
+        if (!general.token) throw new TypeError('Configuration is missing general.token');
+        if (!general.mainPrefix) throw new TypeError('Configuration is missing general.mainPrefix');
+        if (!general.maxShards) general.maxShards = 1;
 
-                    if (responded) {
-                        this.removeListener('messageCreate', onCrt);
-                        clearInterval(rmvTimeout);
-                        resolve(msg);
-                    }
-                };
+        if (!general.redisURL) throw new TypeError('Configuration is missing general.redisURL');
+        else {
+            let parsed = new URL(general.redisURL);
 
-                this.on('messageCreate', onCrt);
+            if (parsed.protocol !== 'redis:') throw new Error(`Invalid protocol for config.general.redisURL: "${parsed.protocol}" must instead be "redis:"`);
+            if (!parsed.host) throw new Error('config.general.redisURL is missing host.');
 
-                rmvTimeout = setTimeout(() => {
-                    if (!responded) {
-                        this.removeListener('messageCreate', onCrt);
-                        reject(new Error('Message await expired.'));
-                    }
-                }, timeout);
+            if (parsed.pathname && parsed.pathname !== '/') {
+                if (isNaN(parsed.pathname.slice(1))) throw new Error('Invalid database for config.general.redisURL. Must be a number.');
+                if (!(0 <= Number(parsed.pathname.slice(1)) < 16)) throw new Error(`Invalid database for config.general.redisURL. Must be between 0 and 15, inclusive.`);
             }
-        });
+        }
+
+        await super.connect();
     }
 
     /**
-     * POSTs guild count to various bot sites.
+     * Wait for a message from a user.
+     * 
+     * @param {String} channelID ID of the channel to wait in.
+     * @param {String} userID ID of the user to wait for.
+     * @param {Function} [filter] Filter to apply on messages.
+     * @param {Number} [timeout=15000] Time in milliseconds before the await expires.
+     * @returns {Promise<Eris.Message>} Awaited message.
+     */
+    awaitMessage(channelID, userID, filter, timeout=15000) {
+        if (typeof channelID !== 'string') return Promise.reject(new TypeError('channelID is not a string.'));
+        if (typeof userID !== 'string') return Promise.reject(new TypeError('userID is not a string'));
+        if (!filter) filter = () => true;
+
+        let resolve, reject;
+        let promise = new Promise(function() {
+            [resolve, reject] = arguments;
+        });
+
+        let deferred = {promise, resolve, reject};
+        let timer = setTimeout(() => {
+            if (deferred.promise.isPending) {
+                deferred.reject(new Error('Message await expired.'));
+                delete this._currentlyAwaiting[channelID + userID];
+            }
+        }, timeout);
+
+        this._currentlyAwaiting[channelID + userID] = {
+            p: deferred,
+            filter,
+            timer
+        };
+
+        return deferred.promise;
+    }
+
+    /**
+     * Sends guild count to various bot sites.
      */
     async postGuildCount() {
-        if (this.config.discordBotsPWKey) {
+        if (this.config.botlistTokens.dbots) {
             try {
                 await got(`https://bots.discord.pw/api/bots/${this.user.id}/stats`, {
                     method: 'POST',
                     headers: {
-                        Authorization: this.config.discordBotsPWKey,
+                        Authorization: this.config.botlistTokens.dbots,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
@@ -111,19 +128,19 @@ class Clara extends Eris.Client {
                     })
                 });
             } catch(err) {
-                logger.error(`Error POSTing to DBots:\n${err}`);
+                logger.error(`Error sending stats to bots.discord.pw:\n${err}`);
                 return;
             }
 
-            logger.info('Posted to DBots.');
+            logger.info('Sent stats to bots.discord.pw.');
         }
 
-        if (this.config.discordBotsOrgKey) {
+        if (this.config.botlistTokens.dbl) {
             try {
                 await got(`https://discordbots.org/api/bots/stats`, {
                     method: 'POST',
                     headers: {
-                        Authorization: this.config.discordBotsOrgKey,
+                        Authorization: this.config.botlistTokens.dbl,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
@@ -132,11 +149,11 @@ class Clara extends Eris.Client {
                     })
                 });
             } catch(err) {
-                logger.error(`Error POSTing to discordbots.org:\n${err}`);
+                logger.error(`Error sending stats to discordbots.org:\n${err}`);
                 return;
             }
 
-            logger.info('POSTed to discordbots.org.');
+            logger.info('Sent stats to discordbots.org.');
         }
     }
 
@@ -164,7 +181,7 @@ class Clara extends Eris.Client {
      * @returns {Boolean} If the user has perms.
      */
     checkBotPerms(userID) {
-        return userID === this.config.ownerID || this.admins.includes(userID);
+        return userID === this.config.general.ownerID || this.admins.includes(userID);
     }
 
     /**
@@ -409,25 +426,38 @@ class Clara extends Eris.Client {
 
 /**
  * Configuration used for Clara instances.
- * @see config.json.example
+ * @see config.example.yaml
  * 
- * @prop {Boolean} [debug=false] Whether to output error stacks to console.
- * @prop {String} discordBotsOrgKey API key to use for posting stats to discordbots.org.
- * @prop {String} discordBotsPWKey API key to use for posting stats to bots.discord.pw.
- * @prop {String} gameName Text to use for playing status.
- * @prop {String} gameURL Stream url for playing status. Must be a Twitch link.
- * @prop {String} ibKey API key to use for ibsear.ch.
- * @prop {String} mainPrefix Default prefix for the bot.
- * @prop {Number} maxShards Maximum number of shards for the bot to use.
- * @prop {String} nasaKey API key for the NASAS commands.
- * @prop {String} osuApiKey API key to use for osu! commands.
- * @prop {String} ownerID ID of the person who has the most permissions for the bot.
- * @prop {Boolean} promiseWarnings Whether to get the shitty errors from the Promise library.
- * @prop {Object} redisUrl `redis://` url to connect to. Defaults to `redis://127.0.0.1/0`
- * @prop {String} sauceKey API key to use for SauceNAO.
- * @prop {String} token Token to use when connecting to Discord.
- * @prop {String} twitchKey Key to use for Twitch.
- * @prop {String} ytSearchKey Key to use for searching YouTube tracks.
+ * @prop {Object} tokens Tokens used by APIs for different commands.
+ * @prop {String} tokens.youtube
+ * @prop {String} tokens.soundcloud If this is not set, this will be automatically scraped.
+ * @prop {String} tokens.ibsearch
+ * @prop {String} tokens.osu
+ * @prop {String} tokens.saucenao
+ * @prop {String} tokens.nasa
+ * 
+ * @prop {Object} botlistTokens Tokens used for sending stats to various bot list sites.
+ * @prop {String} botlistTokens.dbl discordbots.org token.
+ * @prop {String} botlistTokens.dbots bots.discord.pw token.
+ * 
+ * @prop {Object} development Various debugging options.
+ * @prop {Boolean} development.debug
+ * @prop {Boolean} development.promiseWarnings
+ * 
+ * @prop {Object} general Configuration options for the main bot.
+ * @prop {String} general.ownerID
+ * @prop {String} general.token
+ * @prop {String} general.redisURL
+ * @prop {String} general.mainPrefix
+ * @prop {Number} general.maxShards
+ * 
+ * 
+ * @prop {Object} discord Miscellaneous Discord-related options.
+ * @prop {String} discord.status
+ * @prop {Object} discord.game
+ * @prop {String} discord.game.url
+ * @prop {Integer} discord.game.type
+ * @prop {String} discord.game.name
  */
 class ClaraConfig { // eslint-disable-line
     // Only here for documentation purposes.

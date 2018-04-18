@@ -126,7 +126,7 @@ class MusicHandler {
         if (typeof terms !== 'string') throw new TypeError('terms is not a string.');
 
         let msg;
-        let res = await searchP(terms, {key: this._bot.config.ytSearchKey, maxResults: 10});
+        let res = await searchP(terms, {key: this._bot.config.tokens.youtube, maxResults: 10});
         res = res.filter(r => r.id.kind === 'youtube#video').slice(0, 5);
 
         if (res.length > 0) {

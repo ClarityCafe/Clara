@@ -46,15 +46,15 @@ for (let cmd of allCmdFolders) {
     let files = fs.readdirSync(cmd);
     let pkg;
 
-    if (!files.includes('package.json')) {
-        logger.customError('pre-installer', `Cannot pre-install dependencies for "${name}" due to missing package.json.`);
+    if (!files.includes('command.json')) {
+        logger.customError('pre-installer', `Cannot pre-install dependencies for "${name}" due to missing command.json.`);
         continue;
     }
 
     try {
-        pkg = JSON.parse(fs.readFileSync(path.join(cmd, 'package.json')));
+        pkg = JSON.parse(fs.readFileSync(path.join(cmd, 'command.json')));
     } catch(err) {
-        logger.customError('pre-installer', `Unable to load package.json for "${name}", possibly malformed JSON.`);
+        logger.customError('pre-installer', `Unable to load command.json for "${name}", possibly malformed JSON.`);
         continue;
     }
 

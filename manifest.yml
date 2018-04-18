@@ -1,0 +1,30 @@
+# Cpyright 2018 (c) Clarity LLC, all rights reserved.
+# Licensed under BSD 3-Clause.
+# Cloud Foundry implementation: Ayane "Capuccino" Satomi.
+
+---
+applications:
+- name: clara
+  buildpack: https://github.com/cloudfoundry/nodejs-buildpack.git
+  health-check-type: process
+  memory: 256M
+  no-route: true
+  
+env:
+    CLARA_TOKENS_NASA: ''
+    CLARA_TOKENS_OSU: ''
+    CLARA_TOKENS_TWITCH: ''
+    CLARA_TOKENS_SAUCENAO: ''
+    CLARA_TOKENS_YOUTUBE: ''
+    CLARA_TOKENS_IBSEARCH: ''
+    CLARA_BOTLIST_TOKENS_DBOTS: ''
+    CLARA_BOTLIST_TOKENS_DBL: ''
+    CLARA_DEVELOPMENT_PROMISE_WARNINGS: ''
+    CLARA_GENERAL_OWNERID: ''
+    CLARA_GENERAL_TOKEN: ''
+    REDIS_URL: ''
+    CLARA_GENERAL_MAIN_PREFIX: ''
+    CLARA_GENERAL_OWNERID: ''
+    CLARA_DISCORD_GAME_URL: ''
+    CLARA_DISCORD_GAME_NAME: ''
+    OPTIMIZE_MEMORY: true

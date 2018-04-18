@@ -15,9 +15,9 @@ exports.help = {
             let cmdCollect = [];
 
             bot.commands.forEach((cmd, name) => {
-                if ((cmd.owner || cmd.hidden) && bot.checkBotPerms(ctx.author.id)) cmds.push(`${bot.config.mainPrefix}${name}${cmd.usage ? ` ${cmd.usage}` : ''}`);
+                if ((cmd.owner || cmd.hidden) && bot.checkBotPerms(ctx.author.id)) cmds.push(`${bot.config.general.mainPrefix}${name}${cmd.usage ? ` ${cmd.usage}` : ''}`);
                 else if (cmd.owner || cmd.hidden) return null;
-                else cmds.push(`${bot.config.mainPrefix}${name}${cmd.usage ? ` ${cmd.usage}` : ''}`);
+                else cmds.push(`${bot.config.general.mainPrefix}${name}${cmd.usage ? ` ${cmd.usage}` : ''}`);
             });
 
             await ctx.createMessage('help-sending');
@@ -55,14 +55,14 @@ exports.help = {
 
             let cmd = bot.commands.getCommand(ctx.args[0]);
             let embed = {
-                description: `\`${bot.config.mainPrefix}${ctx.args[0]}${cmd.usage ? ` ${cmd.usage}` : ''}\n\u200b - ${cmd.desc}\`\n\n`
+                description: `\`${bot.config.general.mainPrefix}${ctx.args[0]}${cmd.usage ? ` ${cmd.usage}` : ''}\n\u200b - ${cmd.desc}\`\n\n`
             };
 
             if (cmd.subcommands) {
                 for (let name in cmd.subcommands) {
                     let scmd = cmd.subcommands[name];
 
-                    embed.description += `\`${bot.config.mainPrefix}${ctx.args[0]} ${name}${scmd.usage ? ` ${scmd.usage}` : ''}\n\u200b - ${scmd.desc}\`\n\n`;
+                    embed.description += `\`${bot.config.general.mainPrefix}${ctx.args[0]} ${name}${scmd.usage ? ` ${scmd.usage}` : ''}\n\u200b - ${scmd.desc}\`\n\n`;
                 }
             }
 

@@ -2,5 +2,6 @@
     "main": "ibsearch.js",
     "dependencies": {
         "moment": "^2.20.1"
-    }
+    },
+    "requiredTokens": ["ibsearch"]
 }

@@ -10,8 +10,8 @@ const twitchStream = require('twitch-get-stream');
 
 class TwitchHandler {
     constructor(bot) {
-        this.clientID = bot.config.twitchKey;
-        this.streamGetter = twitchStream(bot.config.twitchKey);
+        this.clientID = bot.config.tokens.twitch;
+        this.streamGetter = twitchStream(bot.config.tokens.twitch);
     }
     
     getInfo(url) {

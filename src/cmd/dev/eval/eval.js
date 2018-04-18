@@ -1,136 +1,156 @@
-/**
- * @file Evaluate JavaScript code in Discord.
- * @author Ovyerus.
+/** 
+ * @file Improved eval command using V8 VMs to try and hide sensitive data.
+ * @author Ovyerus
  */
 
-// Helper variables for eval.
-
-/* eslint-disable no-unused-vars */
-const Eris = require('eris');
+const vm = require('vm');
 const util = require('util');
-const fs = require('fs');
-const cp = require('child_process');
-const path = require('path');
-const got = require('got');
-const IncomingMessage = require('http').IncomingMessage;
-const PassThrough = require('stream').PassThrough;
-/* eslint-enable */
+const {Stream} = require('stream');
 
 const FAIL_COL = 0xF44336;
 const SUCCESS_COL = 0x8BC34A;
-const REPLACE_REGEX = {};
+const PENDING_COL = 0xFFEB3B;
+const CODE_TEMPLATE = `
+(async () => {
+    {{code}}
+})().then(__vmDone__, __vmErr__);
+`;
+
+// Object to use as a context for the VM.
+let sandbox = {
+    Eris: require('eris'),
+    util,
+    fs: require('fs'),
+    cp: require('child_process'),
+    path: require('path'),
+    got: require('got'),
+    require,
+    process
+};
+
+exports.commands = ['eval'];
 
 exports.init = bot => {
-    REPLACE_REGEX.token = new RegExp(`${bot.token}`, 'gi');
-    Object.keys(bot.config).filter(key => /(key|token)/i.test(key)).forEach(key => {
-        REPLACE_REGEX[key] = new RegExp(bot.config[key], 'gi');
+    // Creates a Proxy around the bot object, in order to help protect token and config.
+    sandbox.bot = new Proxy(bot, {
+        get(target, prop) {
+            if (prop === 'token') return '<token hidden>';
+            else if (prop === 'config') {
+                let clone = Object.assign({}, target.config);
+                clone.general.token = '<token hidden>';
+                clone.general.redisURL = '<url hidden>';
+
+                delete clone.tokens;
+                delete clone.botlistTokens;
+
+                return clone;
+            } else return target[prop];
+        }
     });
 };
 
-exports.commands = [
-    'eval'
-];
-
 exports.eval = {
-    desc: 'Evaluate code in Discord.',
-    fullDesc: 'Used to evaluate JavaScript code in Discord. Mostly for debug purposes.',
+    desc: 'Run JS code.',
     owner: true,
     usage: '<code>',
     async main(bot, ctx) {
-        if (ctx.suffix.length === 0) return await ctx.createMessage('Please give arguments to evaluate.');
+        if (!ctx.suffix) return await ctx.createMessage('Please give some code to run.');
 
-        let {args, cmd, suffix, cleanSuffix, settings, guildBot, channel, guild, author} = ctx; // eslint-disable-line
+        let {args, cmd, suffix, cleanSuffix, settings, guildBot, channel, guild, author} = ctx;
+        let addReturn = !/^(return|throw)/.test(ctx.suffix.split(/;|\n/).map(v => v.trim()).slice(-1));
+        let fullCode = CODE_TEMPLATE.replace('{{code}}', addReturn ? 'return ' + ctx.suffix : ctx.suffix);
 
-        try {
-            let returned = eval(ctx.suffix);
-            let str = util.inspect(returned, {depth: 1}).replace(REPLACE_REGEX.token, '(token)');
+        // This is where stuff gets really weird.
+        // This merges the sandbox template above with some variables from the context object.
+        // Then it wraps that into a Proxy to prevent the needed variables from being overriden (that is __vmDone__ and __vmErr__).
+        let vmSandbox = new Proxy(Object.assign({}, sandbox, {args, cmd, suffix, cleanSuffix, settings, guildBot, channel, guild, author, ctx}, {
+            async __vmDone__(val) {
+                await handleResult(val, ctx, bot);
+            },
 
-            let embed = {
-                title: 'Evaluation Results',
-                color: SUCCESS_COL,
-                fields: [
-                    {name: 'Input', value: generateCodeblock(ctx.suffix)},
-                    {name: 'Output', value: generateCodeblock(str)}
-                ]
-            };
-
-            if (returned instanceof Promise) embed.fields[1].value = generateCodeblock('[object Promise]');
-
-            if (str.length < 1000) await sendEval(bot, ctx, embed, returned);
-            else {
-                let key = await bot.hastePost(str);
-                let url = `https://hastebin.com/${key}.js`;
-                embed.fields[1].value = `Output is too long to display nicely.\nOutput has been uploaded [here](${url})`;
-
-                await sendEval(bot, ctx, embed, returned);
+            async __vmErr__(err) {
+                await handleResult(err && err.message ? err.message : err, ctx, bot, true);
             }
-        } catch(err) {
-            logger.error(err.stack || err);
+        }), {
+            set(target, prop, val) {
+                if (['__vmDone__', '__vmErr__'].includes(prop)) throw new Error(`Cannot override ${prop}.`);
+                else target[prop] = val;
+        
+                return true;
+            }
+        });
 
-            let embed = {
-                title: 'Evaluation Results',
-                color: FAIL_COL,
-                fields: [
-                    {name: 'Input', value: generateCodeblock(ctx.suffix)},
-                    {name: 'Error', value: generateCodeblock(err)}
-                ]
-            };
-
-            await ctx.createMessage({embed});
-        }
+        // Runs the users' code in a VM, with the context specified above.
+        vm.runInContext(fullCode, vm.createContext(vmSandbox));
     }
 };
 
-function generateCodeblock(text) {
+function genCodeblock(text) {
     return `\`\`\`js\n${text}\n\`\`\``;
 }
 
-async function sendEval(bot, ctx, embed, returned) {
+async function handleResult(val, ctx, bot, isErr=false) {
+    if (val instanceof Stream && val.body) val = val.body;
+
+    let str = typeof val !== 'string' ? util.inspect(val, {depth: 1}) : val;
+    let oldVal = val;
+
+    let embed = {
+        title: 'Eval Result',
+        color: SUCCESS_COL,
+        fields: [
+            {name: 'Input', value: genCodeblock(ctx.suffix)},
+            {name: 'Success', value: genCodeblock(str)}
+        ]
+    };
+
+    if (val && val.then) {
+        embed.fields[1].name = 'Pending';
+        embed.fields[1].value = 'Pending Promise...';
+        embed.color = PENDING_COL;
+    } else if (str.length >= 1000) {
+        let key = await bot.hastePost(str);
+        let url = `https://hastebin.com/${key}.js`;
+        embed.fields[1].value = `Output is too long to display nicely.\nOutput has been uploaded [here](${url})`;
+    }
+
+    if (isErr) {
+        embed.fields[1].name = 'Error';
+        embed.color = FAIL_COL;
+    }
+
     let m = await ctx.createMessage({embed});
 
-    let strN;
+    // Handle nested promises/thenables.
+    while (val && val.then) {
+        try {
+            val = await val;
+        } catch(err) {
+            val = err;
+            isErr = true;
 
-    if ((returned instanceof IncomingMessage || returned instanceof PassThrough) && returned.requestUrl) {
-        strN = returned.headers['content-type'].split(';')[0] === 'application/json' ? util.inspect(JSON.parse(returned.body), {depth: 1}) : returned.body;
-    } else strN = util.inspect(returned, {depth: 1});
-
-    strN = strN.replace(REPLACE_REGEX.token, '(token)');
-
-    try {
-        if (strN.length >= 1000) {
-            let key = await bot.hastePost(strN);
-            let url = `https://hastebin.com/${key}.js`;
-
-            await m.edit({embed: {
-                title: 'Evaluation Results',
-                color: SUCCESS_COL,
-                fields: [
-                    {name: 'Input', value: generateCodeblock(ctx.suffix)},
-                    {name: 'Output', value: `Output is too long to display nicely.\nOutput has been uploaded [here](${url})`}
-                ]
-            }});
-        } else {
-            await m.edit({embed: {
-                title: 'Evaluation Results',
-                color: SUCCESS_COL,
-                fields: [
-                    {name: 'Input', value: generateCodeblock(ctx.suffix)},
-                    {name: 'Output', value: generateCodeblock(strN)}
-                ]
-            }});
-        }
-    } catch(err) {
-        if (err.req && err.req._headers.host === 'discordapp.com' && err.resp && err.resp.statusCode !== 404) throw err;
-        else {
-            logger.error(err.stack || err);
-            await m.edit({embed: {
-                title: 'Evaluation Results',
-                color: FAIL_COL,
-                fields: [
-                    {name: 'Input', value: generateCodeblock(ctx.suffix)},
-                    {name: 'Error', value: generateCodeblock(err)}
-                ]
-            }});
+            break;
         }
     }
+
+    if (val === oldVal) return;
+
+    str = util.inspect(val, {depth: 1});
+
+    if (isErr) {
+        embed.fields[1].name = 'Error';
+        embed.fields[1].value = val && val.message ? val.message : val;
+        embed.color = FAIL_COL; 
+    } else if (str.length >= 1000) {
+        let key = await bot.hastePost(str);
+        let url = `https://hastebin.com/${key}.js`;
+        embed.fields[1].value = `Output is too long to display nicely.\nOutput has been uploaded [here](${url})`;
+    } else embed.fiels[1].value = str;
+
+    if (!isErr) {
+        embed.fields[1].name = 'Success';
+        embed.color = SUCCESS_COL;
+    }
+
+    await m.edit({embed});
 }
