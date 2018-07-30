@@ -5,7 +5,7 @@
     "main": "src/bot.js",
     "engines": {
         "node": "9.x.x",
-        "npm": "^4.0.0"
+        "npm": "^6.0.0"
     },
     "scripts": {
         "postinstall": "npm i -g pm2 && node ./src/lib/modules/depPreloader.js --harmony",
