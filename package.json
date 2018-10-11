@@ -34,7 +34,7 @@
         "eris": "latest",
         "got": "^9.0.0",
         "node-opus": "^0.3.0",
-        "redite": "^1.1.0",
+        "redite": "^3.0.0",
         "yamljs": "^0.3.0"
     },
     "devDependencies": {
