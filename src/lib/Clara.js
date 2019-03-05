@@ -14,7 +14,7 @@ const Lookups = require(`${__dirname}/modules/Lookups`);
 
 /**
  * Main class for Clara.
- * 
+ *
  * @prop {String[]} admins Array of people who have owner-like permissions over the bot.
  * @prop {Boolean} allowCommandUse If commands can be run.
  * @prop {String[]} blacklist Array of people who cannot use the bot.
@@ -29,16 +29,16 @@ const Lookups = require(`${__dirname}/modules/Lookups`);
 class Clara extends Eris.Client {
     /**
      * Creates a new Clara instance.
-     * 
+     *
      * @param {ClaraConfig} config Configuration settings
      * @param {Object} options Eris client options.
      * @see https://abal.moe/Eris/docs/Client
      */
     constructor(config, options = {}) {
         if (!config && typeof config !== 'object') throw new TypeError('config is not an object.');
-        
+
         super(config.general.token, options);
-        
+
         this._currentlyAwaiting = {};
         this.lookups = new Lookups(this);
         this.localeManager = new LocaleManager();
@@ -77,7 +77,7 @@ class Clara extends Eris.Client {
 
     /**
      * Wait for a message from a user.
-     * 
+     *
      * @param {String} channelID ID of the channel to wait in.
      * @param {String} userID ID of the user to wait for.
      * @param {Function} [filter] Filter to apply on messages.
@@ -117,22 +117,22 @@ class Clara extends Eris.Client {
     async postGuildCount() {
         if (this.config.botlistTokens.dbots) {
             try {
-                await got(`https://bots.discord.pw/api/bots/${this.user.id}/stats`, {
+                await got(`https://discord.bots.gg/api/v1/bots/${this.user.id}/stats`, {
                     method: 'POST',
                     headers: {
                         Authorization: this.config.botlistTokens.dbots,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        server_count: this.guilds.size
+                        guildCount: this.guilds.size
                     })
                 });
             } catch(err) {
-                logger.error(`Error sending stats to bots.discord.pw:\n${err}`);
+                logger.error(`Error sending stats to discord.bots.gg:\n${err}`);
                 return;
             }
 
-            logger.info('Sent stats to bots.discord.pw.');
+            logger.info('Sent stats to discord.bots.gg.');
         }
 
         if (this.config.botlistTokens.dbl) {
@@ -159,7 +159,7 @@ class Clara extends Eris.Client {
 
     /**
      * POST something to Hastebin.
-     * 
+     *
      * @param {String} str Content to POST.
      * @returns {Promise<String>} Returned key.
      */
@@ -176,7 +176,7 @@ class Clara extends Eris.Client {
 
     /**
      * Check if a user has elevated bot permissions.
-     * 
+     *
      * @param {String} userID ID of the user to check.
      * @returns {Boolean} If the user has perms.
      */
@@ -186,7 +186,7 @@ class Clara extends Eris.Client {
 
     /**
      * Check if a user is blacklisted.
-     * 
+     *
      * @param {String} userID ID of the user to check.
      * @returns {Boolean} If the user is blacklisted.
      */
@@ -196,7 +196,7 @@ class Clara extends Eris.Client {
 
     /**
      * Gets settings from the database, and sets them if they don't exist.
-     * 
+     *
      * @returns {Object} Settings from the database.
      */
     async getDataSettings() {
@@ -219,7 +219,7 @@ class Clara extends Eris.Client {
 
     /**
      * Adds a prefix.
-     * 
+     *
      * @param {String} prefix Prefix to add.
      */
     async addPrefix(prefix) {
@@ -231,7 +231,7 @@ class Clara extends Eris.Client {
 
     /**
      * Removes a prefix.
-     * 
+     *
      * @param {String} prefix Prefix to remove.
      */
     async removePrefix(prefix) {
@@ -243,8 +243,8 @@ class Clara extends Eris.Client {
 
     /**
      * Add's a user as an admin.
-     * 
-     * @param {String} userID User to add as an admin. 
+     *
+     * @param {String} userID User to add as an admin.
      */
     async addAdmin(userID) {
         if (typeof userID !== 'string') throw new TypeError('userId is not a string.');
@@ -255,7 +255,7 @@ class Clara extends Eris.Client {
 
     /**
      * Removes a user as an admin.
-     * 
+     *
      * @param {String} userID User to remove as an admin.
      */
     async removeAdmin(userID) {
@@ -267,7 +267,7 @@ class Clara extends Eris.Client {
 
     /**
      * Adds a user to the blacklist.
-     * 
+     *
      * @param {String} userID User to add to the blacklist.
      */
     async addBlacklist(userID) {
@@ -279,7 +279,7 @@ class Clara extends Eris.Client {
 
     /**
      * Removes a user from the blacklist.
-     * 
+     *
      * @param {String} userID User to remove from the blacklist.
      */
     async removeBlacklist(userID) {
@@ -291,7 +291,7 @@ class Clara extends Eris.Client {
 
     /**
      * Marks a module as persistently unloaded.
-     * 
+     *
      * @param {String} mod Module to mark as unloaded.
      */
     async addUnloadedModule(mod) {
@@ -303,7 +303,7 @@ class Clara extends Eris.Client {
 
     /**
      * Unmarks a module as persistently unloaded.
-     * 
+     *
      * @param {String} mod Module to unmark as unloaded.
      */
     async removeUnloadedModule(mod) {
@@ -342,7 +342,7 @@ class Clara extends Eris.Client {
                 userlimits: {}
             }
         };
-        
+
         await this.db[guildID].set(settings);
         return settings;
     }
@@ -389,13 +389,13 @@ class Clara extends Eris.Client {
     async getUserSettings(userID) {
         if (typeof userID !== 'string') throw new TypeError('userID is not a string.');
         if (!await this.db.has(userID)) return await this.initUserSettings(userID);
-        
+
         return await this.db[userID].get;
     }
 
     /**
      * Check if the bot has a permission in a channel.
-     * 
+     *
      * @param {String} permission The permission to check.
      * @param {Eris.Channel} channel The channel to check.
      * @returns {Boolean} If the user has the permission.
@@ -410,11 +410,11 @@ class Clara extends Eris.Client {
     get commandFolders() {
         let cmdDirs = fs.readdirSync(this.commandsDir).map(d => ({[d]: fs.readdirSync(`${this.commandsDir}/${d}`)}));
         let allCmds = {};
-    
+
         // Go from an array of objects to an object of arrays.
         cmdDirs.forEach(d => Object.assign(allCmds, d));
         cmdDirs = cmdDirs.map(e => Object.keys(e)[0]);
-    
+
         // Turn folder names into proper paths for future ease (also make sure we only get folders).
         allCmds = Object.entries(allCmds).map(x => x[1].filter(y => fs.statSync(`${this.commandsDir}/${x[0]}/${y}`).isDirectory()));
         allCmds = allCmds.map((v, i) => v.map(x => `${this.commandsDir}/${cmdDirs[i]}/${x}`));
@@ -427,7 +427,7 @@ class Clara extends Eris.Client {
 /**
  * Configuration used for Clara instances.
  * @see config.example.yaml
- * 
+ *
  * @prop {Object} tokens Tokens used by APIs for different commands.
  * @prop {String} tokens.youtube
  * @prop {String} tokens.soundcloud If this is not set, this will be automatically scraped.
@@ -435,23 +435,23 @@ class Clara extends Eris.Client {
  * @prop {String} tokens.osu
  * @prop {String} tokens.saucenao
  * @prop {String} tokens.nasa
- * 
+ *
  * @prop {Object} botlistTokens Tokens used for sending stats to various bot list sites.
  * @prop {String} botlistTokens.dbl discordbots.org token.
  * @prop {String} botlistTokens.dbots bots.discord.pw token.
- * 
+ *
  * @prop {Object} development Various debugging options.
  * @prop {Boolean} development.debug
  * @prop {Boolean} development.promiseWarnings
- * 
+ *
  * @prop {Object} general Configuration options for the main bot.
  * @prop {String} general.ownerID
  * @prop {String} general.token
  * @prop {String} general.redisURL
  * @prop {String} general.mainPrefix
  * @prop {Number} general.maxShards
- * 
- * 
+ *
+ *
  * @prop {Object} discord Miscellaneous Discord-related options.
  * @prop {String} discord.status
  * @prop {Object} discord.game

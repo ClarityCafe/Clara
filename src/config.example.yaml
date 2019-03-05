@@ -12,7 +12,7 @@ tokens:
 botlistTokens:
   # Tokens used for sending stats to various bot lists
   dbl: '' # discordbots.org
-  dbots: '' # bots.discord.pw
+  dbots: '' # discord.bots.gg
 
 development:
   # Various debugging options
