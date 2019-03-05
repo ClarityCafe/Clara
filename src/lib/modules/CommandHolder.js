@@ -46,7 +46,7 @@ let _handlePermissions = Symbol();
 
 /**
  * Holds lots of commands and other shit.
- * 
+ *
  * @prop {Object} aliases Object mapping aliases to the name of their command.
  * @prop {Number} aliasesLength Amount of aliases currently registered.
  * @prop {String[]} allAliases Sorted list of all names of aliases.
@@ -62,7 +62,7 @@ class CommandHolder {
 
     /**
      * Create a command holder.
-     * 
+     *
      * @param {Eris.Client} bot An instance of an Eris client to use in module handling.
      * @throws {TypeError} Argument must be correct type.
      */
@@ -77,7 +77,7 @@ class CommandHolder {
 
     /**
      * Loads a module.
-     * 
+     *
      * @param {String} moduleName Name of the module.
      * @throws {TypeError} Argument must be correct type
      * @throws {Error} Module must not be loaded already.
@@ -115,7 +115,7 @@ class CommandHolder {
 
             if (!module.main.main) {
                 command.main = async (bot, ctx) => {
-                    let collect = []; 
+                    let collect = [];
                     let embed = {title: name};
 
                     for (let nam in command.subcommands) {
@@ -170,7 +170,7 @@ class CommandHolder {
 
     /**
      * Unloads a module.
-     * 
+     *
      * @param {String} moduleName Name of the module to unload.
      * @throws {TypeError} Argument must be correct type.
      * @throws {Error} Module must be loaded already.
@@ -198,7 +198,7 @@ class CommandHolder {
 
     /**
      * Reload a module.
-     * 
+     *
      * @param {String} moduleName Name of the module to reload.
      * @throws {TypeError} Argument must be correct type.
      * @throws {Error} Module must already be loaded.
@@ -216,7 +216,7 @@ class CommandHolder {
 
     /**
      * Get a command from the command object.
-     * 
+     *
      * @param {String} cmdName The name of the command to get.
      * @returns {?Object} Returns command object if it exists.
      */
@@ -226,7 +226,7 @@ class CommandHolder {
 
     /**
      * Run a command from the command object.
-     * 
+     *
      * @param {Context} ctx Context object to be passed to the command.
      */
     async runCommand(ctx) {
@@ -262,7 +262,7 @@ class CommandHolder {
 
     /**
      * Runs a supplied callback for each command.
-     * 
+     *
      * @param {Function} callback Function to run on each iteration. Gets two arguments: command object and command name.
      */
     forEach(callback) {
@@ -275,7 +275,7 @@ class CommandHolder {
 
     /**
      * Returns all the commands which meet the conditions in the callback.
-     * 
+     *
      * @param {Function} callback Function to use to filter. Gets two arguments: command object and command name.
      * @returns {Command[]} Filtered commands.
      */
@@ -293,7 +293,7 @@ class CommandHolder {
 
     /**
      * Check if a module exists in the modules object.
-     * 
+     *
      * @param {String} modName Name of the module to check.
      * @returns {Boolean} True if module exists.
      */
@@ -430,7 +430,7 @@ function loggerPrefix(bot, msg) {
 
 /**
  * A command.
- * 
+ *
  * @prop {String} desc Short description of what the command does.
  * @prop {Boolean} [fixed] Says if the command can be unloaded or not.
  * @prop {Function} main Function for when the command is run.
@@ -442,11 +442,9 @@ class Command { // eslint-disable-line
     constructor() {} // This is just for documentation purposes.
 }
 
-let _msg = Symbol();
 /**
  * Context to pass to a command.
- * 
- * @extends {Eris.Message}
+ *
  * @prop {String[]} args Array of command arguments.
  * @prop {String} cleanSuffix Suffix with resolved content.
  * @prop {Eris.Client} ctx.client The bot client, used when passing to external modules.
@@ -458,83 +456,35 @@ let _msg = Symbol();
  * @prop {Object} settings Settings for the guild.
  * @see http://eris.tachibana.erendale.abal.moe/Eris/docs/Message
  */
-class Context {
+class Context extends Eris.Message {
     /**
      * Create a context object.
-     * 
-     * @param {Eris.Message} msg Message to inherit from.
-     * @param {Eris.Client} bot Bot instance to help with some parsing.
-     * @param {Object} settings Settings to assign to context.
+     *
+     * @param {Object} data WS data to use.
+     * @param {Eris.Client} client Bot instance.
     */
-    constructor(msg, bot, settings) {
-        // Validate all objects are the types we want.
-        if (!(msg instanceof Eris.Message)) throw new TypeError('msg is not a message.');
-        if (!(bot instanceof Eris.Client)) throw new TypeError('bot is not a client.');
-        if (!settings || typeof settings !== 'object') throw new TypeError('settings is not an object.');
+    constructor(data, client)  {
+        super(data, client);
 
-        // Inherit properties from the message and assign it a private value.
-        Object.assign(this, msg);
-        this[_msg] = msg;
-
-        let cleaned = parsePrefix(msg.content, bot.prefixes);
-
-        let tmp = parseArgs(cleaned);
+        const tmp = parseArgs(parsePrefix(this.content, client.prefixes));
         this.args = tmp.args;
         this.cmd = tmp.cmd;
         this.suffix = tmp.suffix;
-        this.cleanSuffix = msg.content.split(this.cmd).slice(1).join(this.cmd).trim();
+        this.cleanSuffix = this.content.split(this.cmd).slice(1).join(this.cmd).trim();
 
-        this.guildBot = msg.channel.guild.members.get(bot.user.id);
-        this.settings = settings;
+        this.guildBot = this.guild ? this.guild.members.get(client.user.id) : null;
+        this.mentionStrings = this.content.match(/<@!?\d+>/g) || [];
 
-        // Get mention strings.
-        this.mentionStrings = msg.content.match(/<@!?\d+>/g) || [];
-        if (this.mentionStrings.length > 0) this.mentionStrings = this.mentionStrings.map(mntn => mntn.replace(/<@!?/, '').replace('>', ''));
-        if (msg.content.startsWith(`<@${this._client.user.id}>`) || msg.content.startsWith(`<@!${this._client.user.id}>`)) this.mentionStrings.shift();
-
-        // Rename _client.
-        this.client = this._client;
-        delete this._client;
-    }
-
-    // "Inheriting" methods from the message.
-    addReaction(reaction, userID) {
-        return this[_msg].addReaction(reaction, userID);
-    }
-
-    delete() {
-        return this[_msg].delete();
-    }
-
-    edit(content) {
-        return this[_msg].edit(content);
-    }
-
-    getReaction(reaction, limit) {
-        return this[_msg].getReaction(reaction, limit);
-    }
-
-    pin() {
-        return this[_msg].pin();
-    }
-
-    removeReaction(reaction, userID) {
-        return this[_msg].removeReaction(reaction, userID);
-    }
-
-    removeReactions() {
-        return this[_msg].removeReactions();
-    }
-
-    unpin() {
-        return this[_msg].unpin();
+        if (this.mentionStrings.length > 0)
+            this.mentionStrings = this.mentionStrings.map(mntn => mntn.replace(/<@!?/, '').replace('>', ''));
+        if (this.content.startsWith(`<@${this._client.user.id}>`) || this.content.startsWith(`<@!${this._client.user.id}>`))
+            this.mentionStrings.shift();
     }
 
     // Helper methods
-
     /**
      * Sends a message.
-     * 
+     *
      * @param {(String|Object)} content Content to send. If object, same as Eris options.
      * @param {Object} [file] File to send. Same as Eris file.
      * @param {String} [where=channel] Where to send the message. Either 'channel' or 'author'.
@@ -545,14 +495,14 @@ class Context {
     async createMessage(content, file, where='channel', replacers={}) {
         if (typeof where !== 'string') throw new TypeError('where is not a string.');
         if (!['channel', 'author'].includes(where)) throw new Error('where is an invalid place. Must either by `channel` or `author`');
-            
+
         if (content.embed && typeof content.embed.color !== 'number') content.embed.color = utils.randomColour();
         let locale = this.settings.locale;
 
         if (typeof content === 'string') {
-            content = this.client.localeManager.t(content, locale, replacers);
+            content = this._client.localeManager.t(content, locale, replacers);
         } else if (content.content || content.embed) {
-            if (content.content) content.content = this.client.localeManager.t(content, locale, replacers);
+            if (content.content) content.content = this._client.localeManager.t(content, locale, replacers);
 
             if (content.embed) {
                 for (let key in content.embed) {
@@ -561,20 +511,20 @@ class Context {
                     let item = content.embed[key];
 
                     if (['title', 'description'].includes(key)) {
-                        content.embed[key] = this.client.localeManager.t(item, locale, replacers);
+                        content.embed[key] = this._client.localeManager.t(item, locale, replacers);
                     } else if (key === 'author' && item.name) {
-                        content.embed[key].name = this.client.localeManager.t(item.name, locale, replacers);
+                        content.embed[key].name = this._client.localeManager.t(item.name, locale, replacers);
                     } else if (key === 'footer' && item.text) {
-                        content.embed[key].text = this.client.localeManager.t(item.text, locale, replacers);
+                        content.embed[key].text = this._client.localeManager.t(item.text, locale, replacers);
                     }
                 }
 
                 if (content.embed.fields) {
                     content.embed.fields.forEach((v, i, a) => {
-                        if (typeof v.name === 'string') a[i].name = this.client.localeManager.t(v.name, locale, replacers);
+                        if (typeof v.name === 'string') a[i].name = this._client.localeManager.t(v.name, locale, replacers);
                         else a[i].name = v.name.toString();
 
-                        if (typeof v.value === 'string') a[i].value = this.client.localeManager.t(v.value, locale, replacers);
+                        if (typeof v.value === 'string') a[i].value = this._client.localeManager.t(v.value, locale, replacers);
                         else a[i].value = v.value.toString();
                     });
                 }
@@ -592,7 +542,7 @@ class Context {
 
     /**
      * Check if a user has permission to run a command. Obeys channel permission overwrites.
-     * 
+     *
      * @param {String} permission The permission to check.
      * @param {String} [who=self] The user to check. Either 'self', 'author' or 'both'.
      * @returns {Boolean} If the user has the permission.
@@ -603,7 +553,7 @@ class Context {
         if (!['self', 'author', 'both'].includes(who)) return false;
 
         if (who === 'self') {
-            return this.channel.permissionsOf(this.client.user.id).has(permission);
+            return this.channel.permissionsOf(this._client.user.id).has(permission);
         } else if (who === 'author') {
             return this.channel.permissionsOf(this.author.id).has(permission);
         } else if (who === 'both') {
@@ -611,26 +561,13 @@ class Context {
         }
     }
 
-    // Message getter properties.
     get guild() {
         return this.channel.guild;
     }
 
-    get member() {
-        return this[_msg].member;
-    }
-
-    get cleanContent() {
-        return this[_msg].cleanContent;
-    }
-
-    get channelMentions() {
-        return this[_msg].channelMentions;
-    }
-
     /**
      * Flattens an embed into plain text.
-     * 
+     *
      * @static
      * @param {Object} embed Embed to flatten.
      * @returns {String} Flattened embed.
@@ -653,7 +590,7 @@ class Context {
             flattened += !f.name.match(/^`.*`$/) ? `**${f.name}**\n` : `${f.name}\n`;
             flattened += `${f.value}\n`;
         });
-    
+
         if (embed.footer && !embed.timestamp) {
             flattened += `${embed.footer.text}\n`;
         } else if (!embed.footer && embed.timestamp) {
