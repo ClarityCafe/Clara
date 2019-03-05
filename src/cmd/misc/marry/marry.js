@@ -30,7 +30,7 @@ exports.marry = {
             return await ctx.createMessage('marry-alreadyWed', null, 'channel', {
                 partner: utils.formatUsername(bot.users.get(ctx.settings.user.partner))
             });
-        } else if (await bot.db.has(user.id) && await bot.db[user.id].partner.get) {
+        } else if (await bot.db.has(user.id) && await bot.db[user.id].partner) {
             return await ctx.createMessage('marry-partnerIsMarried', null, 'channel', {
                 author: ctx.author.mention,
                 partner: utils.formatUsername(user)
@@ -51,7 +51,7 @@ exports.marry = {
                 author: ctx.author.mention
             });
         }
-            
+
         if (/^y(es)?$/i.test(msg.content)) {
             await bot.db[ctx.author.id].partner.set(user.id);
             await bot.db[user.id].partner.set(ctx.author.id);
@@ -61,7 +61,7 @@ exports.marry = {
                 partner: user.mention
             });
         }
-        
+
         if (/^no?$/i.test(msg.content)) {
             return await ctx.createMessage('marry-decline', null, 'channel', {
                 author: ctx.author.mention
@@ -115,7 +115,7 @@ exports.divorce = {
                 partner: user.mention
             });
         }
-        
+
         if (msg.content.replace(/\s+/g, '').toLowerCase().includes('no')) {
             return await ctx.createMessage('divorce-fail', null, 'channel', {
                 author: ctx.author.mention
@@ -138,8 +138,8 @@ exports.marrycheck = {
 
             if (!user) return;
 
-            if (await bot.db.has(user.id) && await bot.db[user.id].partner.get) {
-                let partner = bot.users.get(await bot.db[user.id].partner.get);
+            if (await bot.db.has(user.id) && await bot.db[user.id].partner) {
+                let partner = bot.users.get(await bot.db[user.id].partner);
 
                 return await ctx.createMessage('marrycheck-otherUser-hasPartner', null, 'channel', {
                     user: utils.formatUsername(user),
@@ -151,7 +151,7 @@ exports.marrycheck = {
                 });
             }
         }
-        
+
         if (ctx.settings.user.partner) {
             let partner = bot.users.get(ctx.settings.user.partner);
 
@@ -159,6 +159,6 @@ exports.marrycheck = {
                 partner: utils.formatUsername(partner)
             });
         } else return await ctx.createMessage('marrycheck-noPartner');
-        
+
     }
 };

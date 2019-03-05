@@ -200,7 +200,7 @@ class Clara extends Eris.Client {
      * @returns {Object} Settings from the database.
      */
     async getDataSettings() {
-        if (!await this.db.settings.get) {
+        if (!await this.db.settings) {
             await this.db.settings.set({
                 prefixes: [],
                 admins: [],
@@ -208,13 +208,13 @@ class Clara extends Eris.Client {
                 unloadedModules: []
             });
         } else {
-            let res = await this.db.settings.get;
+            let res = await this.db.settings;
             let noHave = ['prefixes', 'admins', 'blacklist', 'unloadedModules'].filter(v => !Object.keys(res).includes(v));
 
             for (let key of noHave) await this.db.settings[key].set([]);
         }
 
-        return this.db.settings.get;
+        return this.db.settings;
     }
 
     /**
@@ -321,7 +321,7 @@ class Clara extends Eris.Client {
     */
     async initGuildSettings(guildID) {
         if (typeof guildID !== 'string') throw new TypeError('guildID is not a string.');
-        if (await this.db.has(guildID)) return await this.db.guildID.get;
+        if (await this.db.has(guildID)) return await this.db.guildID;
 
         let settings = {
             id: guildID,
@@ -357,7 +357,7 @@ class Clara extends Eris.Client {
         if (typeof guildID !== 'string') throw new TypeError('guildID is not a string.');
         if (!await this.db.has(guildID)) return await this.initGuildSettings(guildID);
 
-        return await this.db[guildID].get;
+        return await this.db[guildID];
     }
 
     /**
@@ -368,7 +368,7 @@ class Clara extends Eris.Client {
     */
     async initUserSettings(userID) {
         if (typeof userID !== 'string') throw new TypeError('userID is not a string.');
-        if (await this.db.has(userID)) return await this.db[userID].get;
+        if (await this.db.has(userID)) return await this.db[userID];
 
         let settings = {
             id: userID,
@@ -390,7 +390,7 @@ class Clara extends Eris.Client {
         if (typeof userID !== 'string') throw new TypeError('userID is not a string.');
         if (!await this.db.has(userID)) return await this.initUserSettings(userID);
 
-        return await this.db[userID].get;
+        return await this.db[userID];
     }
 
     /**
