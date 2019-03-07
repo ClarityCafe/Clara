@@ -46,7 +46,7 @@ module.exports = bot => {
     // });
 
     bot.on('rawWS', async packet => {
-        if (packet.op !== GatewayOPCodes.EVENT || packet.t !== 'MESSAGE_CREATE' || !packet.d.content ||
+        if (!bot.allowCommandUse || packet.op !== GatewayOPCodes.EVENT || packet.t !== 'MESSAGE_CREATE' || !packet.d.content ||
             parsePrefix(packet.d.content, bot.prefixes) === packet.d.content) return;
 
         const ctx = new Context(packet.d, bot);
