@@ -38,7 +38,7 @@
         "yamljs": "^0.3.0"
     },
     "devDependencies": {
-        "eslint": "5.15.1",
+        "eslint": "5.15.2",
         "eslint-config-defaults": "9.0.0"
     }
 }
