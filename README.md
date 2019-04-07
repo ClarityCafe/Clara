@@ -10,13 +10,13 @@
 
 [Support us on Patreon!](https://www.patreon.com/capuccino) | [Discord Server](https://discord.gg/ZgQkCkm)
 
-
 # Running
-
 Go to the [Getting Started](https://github.com/ClarityMoe/Clara/wiki/Getting-Started) page in the wiki for full instructions.
 
-# Contributing
+## Don't Want to Host Clara Yourself?
+Don't worry! You can invite our official runtime of the bot, Kizuna AI, [here](https://discordapp.com/oauth2/authorize?client_id=245520198109495296&scope=bot).
 
+# Contributing
 Check out CONTRIBUTING.md for guidelines.
 
 # License
