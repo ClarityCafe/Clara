@@ -29,7 +29,7 @@ exports.main = {
     aliases: ['prune'],
     permissions: {both: 'manageMessages'},
     async main(bot, ctx) {
-        let num = Number(ctx.args[0]);
+        let num = Number(ctx.args[0]) + 1;
 
         if (!isNaN(num) && num <= 100 && num >= 1) await exports.all.main(bot, ctx);
         else {
