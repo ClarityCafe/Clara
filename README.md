@@ -8,7 +8,7 @@
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 
-[Support us on Patreon!](https://www.patreon.com/capuccino) | [Discord Server](https://discord.gg/ZgQkCkm)
+[Support us on Patreon!](https://www.patreon.com/capuccino) | [Discord Server](https://discord.gg/rmMTZue)
 
 # Running
 Go to the [Getting Started](https://github.com/ClarityMoe/Clara/wiki/Getting-Started) page in the wiki for full instructions.
