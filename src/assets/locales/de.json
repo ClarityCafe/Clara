@@ -1,0 +1,22 @@
+{
+    "user-noPerm": "Du brauchst die **{{perm}}**-Berechtigung um das zu tun.",
+    "bot-noPerm": "Ich habe die **{{perm}}**-Berechtigung nicht.",
+    "incorrectUsage": "Falsche Verwendung",
+    "exampleUsage": "Beispiel",
+    "id": "ID",
+    "yes": "Ja",
+    "no": "Nein",
+    "none": "Nichts",
+    "enabled": "Aktiviert",
+    "notFound": "Keine Ergebnisse gefunden.",
+    "userNotFound": "Benutzer nicht gefunden.",
+    "locales": {
+        "en-UK": "English (UK)",
+        "fr-CA": "French (Canada)",
+        "es": "Spanish",
+        "nl": "Dutch",
+        "jp": "Japanese",
+        "ru": "Russian",
+	"de": "Deutsch"
+    }
+}

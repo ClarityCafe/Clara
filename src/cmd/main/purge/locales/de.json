@@ -1,0 +1,14 @@
+{
+    "purge-footnote": "Achtung: Nachrichten, die älter als 2 Wochen sind, können nicht gelöscht werden..",
+    "purge-messages": "**{{amt}}** Nachricht(en) gelöscht.",
+    "purge-bots": "**{{amt}}** Bot-Nachricht(en) gelöscht.",
+    "purge-embeds": "**{{amt}}** Einbindungen gelöscht..",
+    "purge-codeblocks": "**{{amt}}** Codeblock/Codeblöcke gelöscht.",
+    "purge-attachments": "**{{amt}}** Anhänge gelöscht.",
+    "purge-images": "**{{amt}}** Bilder gelöscht.",
+    "purge-badRegex": "Ungültiges oder unsicheres regex.",
+    "purge-reactions": "Alle Reaktionen von **{{amt}}** Nachrichten gelöscht.",
+    "purge-notInLimit": "Du kannst nur `1` bis `100` Nachricht(en) löschen.",
+    "purge-notInLimit250": "Du kannst nur `1` bis `250` Nachricht(en) löschen.",
+    "purge-olderThan2Weeks": "Ich kann keine Nachrichten, die älter als 2 Wochen sind, löschen."
+}
