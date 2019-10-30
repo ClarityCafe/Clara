@@ -1,0 +1,10 @@
+{
+    "goodbye-enable": "Abschiedsnachrichten wurden aktiviert. Lege eine Nachricht und einen Kanal fest, damit ich Leute verabschiede.",
+    "goodbye-disable": "Abschiedsnachrichten wurden deaktiviert.",
+    "goodbye-setChan": "Kanal für Abschiedsnachrichten wurde auf <#{{id}}> gesetzt.",
+    "goodbye-noMsgArgs": "Bitte gib an, was ich als Abschiedsnachricht senden soll.",
+    "goodbye-setMsg": "Abschiedsnachricht festgelegt. Testnachricht wird gesendet.",
+    "goodbye-example1": "Aktiviere Abschidsnachrichten für den Server.\n\n",
+    "goodbye-example2": "Lege den Kanal für Abschiedsnachrichten fest.\nDu kannst auch den Kanal erwähnen, um ihn festzulgen.\n\n",
+    "goodbye-example3": "Lege den Text für die Abschiedsnachricht fest.\n`{{user}}` wird durch den vollständigen Benutzernamen (wie `Username#0001`) ersetzt,\n`{{name}}` nur durch den Benutzernamen."
+}
