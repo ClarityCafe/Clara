@@ -31,7 +31,7 @@
     "homepage": "https://github.com/ClarityMoe/Clara",
     "dependencies": {
         "bluebird": "^3.5.1",
-        "eris": "^0.10.0",
+        "eris": "^0.13.0",
         "got": "^10.0.0",
         "node-opus": "^0.3.0",
         "redite": "^3.0.2",
