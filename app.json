@@ -65,7 +65,7 @@
             "description": "Token used to log into Discord with.",
             "required": true
         },
-        "CLARA_GENERAL_MAINPREFIX": {
+        "CLARA_GENERAL_MAIN_PREFIX": {
             "description": "Initial, static prefix of the bot.",
             "required": true
         },
