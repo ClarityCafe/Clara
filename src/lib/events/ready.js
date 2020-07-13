@@ -20,7 +20,7 @@ module.exports = bot => {
                 await bot.localeManager.loadLocales(bot);
                 logger.info(`Loaded ${Object.keys(bot.localeManager.locales).length} locales.`);
 
-                // await require(path.resolve(__dirname, '../modules', 'loader'))(bot);
+                await require(path.resolve(__dirname, '../modules', 'loader'))(bot);
                 logger.info(`Loaded ${bot.commands.length} ${bot.commands.length === 1 ? 'command' : 'commands'}.`);
 
                 bot.loadCommands = false;
