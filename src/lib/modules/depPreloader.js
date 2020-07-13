@@ -65,7 +65,7 @@ for (let cmd of allCmdFolders) {
 
 if (allDeps.length) {
     logger.custom('pre-installer', `Installing the following dependencies for commands:\n\x1b[36m"${allDeps.join('", "')}"`);
-    cp.execSync(`npm i ${allDeps.join(' ')} --no-save`);
+    cp.execSync(`npm i ${allDeps.join(' ')} --save`);
 }
 
 logger.custom('pre-installer', 'Finished pre-installing command deps.');
