@@ -31,22 +31,10 @@
     "homepage": "https://github.com/ClarityMoe/Clara",
     "dependencies": {
         "bluebird": "^3.5.1",
-        "cheerio": "^1.0.0-rc.2",
         "eris": "^0.10.0",
         "got": "^10.0.0",
-        "iso-3166-1-alpha-2": "^1.0.0",
-        "l33tsp34k": "^1.0.5",
-        "malapi": "^0.0.3",
-        "markov-strings": "^1.4.0",
-        "mathjs": "^3.20.2",
-        "moment": "^2.17.1",
-        "osu": "^2.0.0",
         "redite": "^3.0.2",
-        "safe-regex": "1.1.0",
-        "sagiri": "^3.0.3",
-        "wolken": "^0.1.0",
-        "yamljs": "^0.3.0",
-        "yarn": "^1.22.4"
+        "yamljs": "^0.3.0"
     },
     "devDependencies": {
         "eslint": "5.16.0",
