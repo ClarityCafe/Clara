@@ -1,1 +1,1 @@
-worker: node src/bot --max-old-space-size=100
+worker: yarn postinstall && node src/bot --max-old-space-size=100
