@@ -49,8 +49,8 @@ module.exports = async bot => {
 
     if (allDeps.length !== 0) {
         logger.warn('CLARA-2019-0713: We no longer run preloading on init, this will be done on postinstall now.')
-        logger.custom('loader', `Installing following dependencies for commands: \x1b[36m"${allDeps.join(', ')}"`);
-        cp.execSync(`yarn add ${allDeps.join(' ')}`);
+        // logger.custom('loader', `Installing following dependencies for commands: \x1b[36m"${allDeps.join(', ')}"`);
+        // cp.execSync(`yarn add ${allDeps.join(' ')}`);
     }
 
     logger.custom('loader', 'Loading commands...');
