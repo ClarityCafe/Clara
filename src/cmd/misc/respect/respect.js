@@ -25,15 +25,3 @@ exports.f = {
         }
     }
 };
-
-exports.rip = {
-    desc: 'Rest in pieces.',
-    usage: '[thing]',
-    async main(bot, ctx) {
-        if (ctx.suffix) {
-            let url = encodeURI(`https://ripme.xyz/#${ctx.suffix}`);
-
-            await ctx.createMessage('rip-args', null, 'channel', {url});
-        } else await ctx.createMessage('rip');
-    }
-};
