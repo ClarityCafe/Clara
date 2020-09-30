@@ -10,6 +10,10 @@
 
 [Support us on Patreon!](https://www.patreon.com/capuccino) | [Discord Server](https://discord.gg/rmMTZue)
 
+# END OF LIFE
+
+Clara is now End-of-Life status. This repository is no longer accepting patches.
+
 # Running
 Go to the [Getting Started](https://github.com/ClarityMoe/Clara/wiki/Getting-Started) page in the wiki for full instructions.
 
